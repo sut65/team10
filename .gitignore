@@ -1,0 +1,5 @@
+#dep
+/frontend/node_modules/
+
+#database
+/backend/se-laundry.db
