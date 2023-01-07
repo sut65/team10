@@ -10,7 +10,7 @@ import (
 // POST /users
 func ListPaymenttypes(c *gin.Context) {
 	var Paymenttype entity.Paymenttype
-	if err := entity.DB().Raw("SELECT * FROM users").Scan(&Paymenttype).Error; err != nil {
+	if err := entity.DB().Raw("SELECT * FROM paymenttypes").Scan(&Paymenttype).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
