@@ -20,7 +20,21 @@ func SetupDatabase() {
 	}
 
 	// Migrate the schema
-	database.AutoMigrate(&User{})
+	database.AutoMigrate(
+
+		// Bill
+		&Paymenttype{},
+		&Bill{},
+	)
 	db = database
 
+	//Bill
+	Paymenttype1 := Paymenttype{
+		Type: "เก็บเงินปลายทาง",
+	}
+	Paymenttype2 := Paymenttype{
+		Type: "พร้อมเพย์",
+	}
+	db.Model(&Paymenttype{}).Create(&Paymenttype1)
+	db.Model(&Paymenttype{}).Create(&Paymenttype2)
 }
