@@ -7,7 +7,6 @@ import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from '@mui/icons-material/Cancel';
 import UpdateIcon from '@mui/icons-material/Update';
-import Box from '@mui/material/Box';
 
 /* combobox */
 import { TextField } from "@mui/material";
@@ -21,6 +20,8 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { Container } from "@mui/material";
 
 /* Interface */
+import { BrandInterface } from "../../models/Vehicle/BrandVehicle";
+import { EngineInterface } from "../../models/Vehicle/Engine";
 import { ReceiveInterface } from "../../models/Receive/Receive";
 function Receive() {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
@@ -30,7 +31,7 @@ function Receive() {
       <Container maxWidth="md">
         <Paper>
           <Grid sx={{padding:3}}>
-          <h1>Recieve</h1></Grid>
+          <h1>Vehicle</h1></Grid>
             <Grid container spacing={5}>
               <Grid
                 container
@@ -40,7 +41,7 @@ function Receive() {
                 }}
               >
                 <Grid item xs={3}>
-                  <h3>Bill ID</h3>
+                  <h3>Brand</h3>
                 </Grid>
                 <Grid item xs={5}>
                   <Autocomplete
@@ -49,11 +50,12 @@ function Receive() {
                     options={[0, 1]}
                     sx={{ width: 300 }}
                     renderInput={(params) => (
-                      <TextField {...params} label="Bill_ID" />
+                      <TextField {...params} label="Brand" />
                     )}
                   />
                 </Grid>
               </Grid>
+              
               <Grid
                 container
                 justifyContent={"center"}
@@ -62,56 +64,7 @@ function Receive() {
                 }}
               >
                 <Grid item xs={3}>
-                  <h3>Price</h3>
-                </Grid>
-                <Grid item xs={5}>
-                  <TextField
-                    fullWidth
-                    id="Bill_Price"
-                    label="Price"
-                    variant="outlined"
-                    defaultValue="0"
-                    value={250}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </Grid>
-              </Grid>
-              <Grid
-                container
-                justifyContent={"center"}
-                sx={{
-                  paddingY: 1,
-                }}
-              >
-                <Grid item xs={3}>
-                  <h3>Weight(kg)</h3>
-                </Grid>
-                <Grid item xs={5}>
-                  <TextField
-                    fullWidth
-                    id="Bill_Price"
-                    label="Weight"
-                    variant="outlined"
-                    defaultValue="0"
-                    value={5}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </Grid>
-              </Grid>
-
-              <Grid
-                container
-                justifyContent={"center"}
-                sx={{
-                  paddingY: 0,
-                }}
-              >
-                <Grid item xs={3}>
-                  <h3>Detergent</h3>
+                  <h3>Engine(Capasity)</h3>
                 </Grid>
                 <Grid item xs={5}>
                   <Autocomplete
@@ -120,7 +73,7 @@ function Receive() {
                     options={[0, 1]}
                     sx={{ width: 300 }}
                     renderInput={(params) => (
-                      <TextField {...params} label="Detergent" />
+                      <TextField {...params} label="Engine" />
                     )}
                   />
                 </Grid>
@@ -133,13 +86,13 @@ function Receive() {
                 }}
               >
                 <Grid item xs={3}>
-                  <h3>Detergent Quantity</h3>
+                  <h3>Model</h3>
                 </Grid>
                 <Grid item xs={5}>
                   <TextField
                     fullWidth
                     id="Bill_Price"
-                    label="Detergent Quantity"
+                    label="Model"
                     variant="outlined"
                     defaultValue="0"
                     InputProps={{
@@ -148,28 +101,7 @@ function Receive() {
                 </Grid>
               </Grid>
 
-              <Grid
-                container
-                justifyContent={"center"}
-                sx={{
-                  paddingY: 0,
-                }}
-              >
-                <Grid item xs={3}>
-                  <h3>Softener</h3>
-                </Grid>
-                <Grid item xs={5}>
-                  <Autocomplete
-                    disablePortal
-                    id="combo-box-demo"
-                    options={[0, 1]}
-                    sx={{ width: 300 }}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Softener" />
-                    )}
-                  />
-                </Grid>
-              </Grid>
+             
               <Grid
                 container
                 justifyContent={"center"}
@@ -178,13 +110,13 @@ function Receive() {
                 }}
               >
                 <Grid item xs={3}>
-                  <h3>Softener Quantity</h3>
+                  <h3>Registration</h3>
                 </Grid>
                 <Grid item xs={5}>
                   <TextField
                     fullWidth
                     id="Bill_Price"
-                    label="Softener Quantity"
+                    label="Registration"
                     variant="outlined"
                     defaultValue="0"
                     InputProps={{
@@ -200,7 +132,7 @@ function Receive() {
                 }}
               >
                 <Grid item xs={3}>
-                  <h3>Time Stamp</h3>
+                  <h3>Date Insulance</h3>
                 </Grid>
                 <Grid item xs={5}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>

@@ -13,6 +13,7 @@ import AppBarPrivate from "./components/AppBarPrivate";
 // import Appointment_UI from "./components/AppointmentCreate_UI";
 import Promotion from "./components/promotion/PromotionUI";
 import Home from "./components/Home";
+import Vehicle from "./components/Vehicle/VehiclrUI"
 
 export default function App() {
   const [token, setToken] = React.useState<String>("");
@@ -32,8 +33,9 @@ export default function App() {
   <Router>
     <div>
       <AppBarPrivate />
-        <Route exact  path="/" component={Home} />
-        <Route exact  path="/promotion/create" component={Promotion} />
+        {/* <Route exact  path="/" component={Home} /> */}
+        <Route exact  path="/" component={Vehicle} />
+        {/* <Route exact  path="/promotion/create" component={Promotion} /> */}
         {/* <Route path="/employee" element={<EmployeeTable_UI />} />
         <Route path="/patient" element={<Patient_UI />} />
         <Route path="/diagnostic" element={<Diagnostic_Table />} />

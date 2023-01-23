@@ -10,7 +10,7 @@ export interface VehicleInterface {
     Engine_ID : number,
     Engine : EngineInterface,
     ListModel : string,
-    Registeration:  number,
+    Registration:  number,
     Date_Insurance:   Date,
   
   }
