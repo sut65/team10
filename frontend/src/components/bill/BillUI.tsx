@@ -19,7 +19,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 import { Container } from "@mui/material";
-
+import LocalAtmIcon from '@mui/icons-material/LocalAtm';
 /* Interface */
 import { BillInterface } from "../../models/bill/IBill";
 import { PaymenttypeInterface } from "../../models/bill/IPaymenttype";
@@ -32,6 +32,7 @@ function Bill() {
 
   return (
       <Container maxWidth="md">
+        <LocalAtmIcon color="success" sx={{ fontSize: 80 }}/>
         <Paper>
           <Grid sx={{padding:2}}>
           <h1>Receipt</h1></Grid>
