@@ -66,21 +66,21 @@ type Employee struct {
 // 	Stock     []Stock `gorm:"foreignKey:Work_shift"`
 // }
 
-// type Stock struct {
-// 	gorm.Model
-// 	List_Number *uint
-// 	TypeID      *uint
-// 	Type        Type `gorm:"references:id"`
-// 	BrandID     *uint
-// 	Brand       Brand `gorm:"references:id"`
-// 	SizeID      *uint
-// 	Size        Size `gorm:"references:id"`
-// 	PersonalID  *uint
-// 	Employee    Employee `gorm:"references:id"`
-// 	Add_Number  *uint
-// 	Quantity    *uint
-// 	Time        time.Time
-// }
+type Stock struct {
+	gorm.Model
+	List_Number *uint
+	// 	TypeID      *uint
+	// 	Type        Type `gorm:"references:id"`
+	// 	BrandID     *uint
+	// 	Brand       Brand `gorm:"references:id"`
+	// 	SizeID      *uint
+	// 	Size        Size `gorm:"references:id"`
+	// 	PersonalID  *uint
+	// 	Employee    Employee `gorm:"references:id"`
+	// 	Add_Number  *uint
+	// 	Quantity    *uint
+	// 	Time        time.Time
+}
 
 /* -------------------------------------------------------------------------- */
 /*                                   Service                                  */
