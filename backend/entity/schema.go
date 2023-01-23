@@ -12,11 +12,75 @@ import (
 
 /* -------------------------------------------------------------------------- */
 /*                             Employee Management                            */
+type Gender struct {
+	gorm.Model
+	Gender_Name string
+	Employee    []Employee `gorm:"foreignKey:Gender"`
+}
+type Position struct {
+	gorm.Model
+	Position_Name string
+	Employee      []Employee `gorm:"foreignKey:Position"`
+}
+type WorkShift struct {
+	gorm.Model
+	Work_shift_Name string
+	Employee        []Employee `gorm:"foreignKey:Work_shift"`
+}
+
+type Employee struct {
+	gorm.Model
+	Personal_ID *uint
+	Username    string
+	Name        string
+	GenderID    *uint
+	Gender      Gender `gorm:"references:id"`
+	PositionID  *uint
+	Position    Position `gorm:"references:id"`
+	WorkShiftID *uint
+	WorkShift   WorkShift `gorm:"references:id"`
+	Stock       []Stock   `gorm:"foreignKey:Employee"`
+}
+
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------- */
-/*                     ระบบจัดการข้อมูลผงซักผ้า-น้ำยาปรับผ้านุ่ม                       */
+/*                     ระบบจัดการStork       */
 /* -------------------------------------------------------------------------- */
+// type Type struct {
+// 	gorm.Model
+// 	Type_Name string
+// 	Stock     []Stock `gorm:"foreignKey:Type"`
+// 	Brand     []Brand `gorm:"foreignKey:Type"`
+// }
+// type Brand struct {
+// 	gorm.Model
+// 	Band_Name string
+// 	TypeID    *uint
+// 	Type      Type    `gorm:"references:id"`
+// 	Stock     []Stock `gorm:"foreignKey:Band"`
+// }
+// type Size struct {
+// 	gorm.Model
+// 	Size_Name string
+// 	Stock     []Stock `gorm:"foreignKey:Work_shift"`
+// }
+
+// type Stock struct {
+// 	gorm.Model
+// 	List_Number *uint
+// 	TypeID      *uint
+// 	Type        Type `gorm:"references:id"`
+// 	BrandID     *uint
+// 	Brand       Brand `gorm:"references:id"`
+// 	SizeID      *uint
+// 	Size        Size `gorm:"references:id"`
+// 	PersonalID  *uint
+// 	Employee    Employee `gorm:"references:id"`
+// 	Add_Number  *uint
+// 	Quantity    *uint
+// 	Time        time.Time
+// }
 
 /* -------------------------------------------------------------------------- */
 /*                                   Service                                  */
