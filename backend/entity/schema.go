@@ -276,7 +276,7 @@ type Vehicle struct {
 	Engine_ID       *uint
 	Engine          Engine `gorm:"references:id"`
 	ListModel       string
-	Registeration   string
+	Registration    string
 	Time_Stamp      time.Time
 }
 
