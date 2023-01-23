@@ -92,39 +92,40 @@ type Stock struct {
 /* -------------------------------------------------------------------------- */
 
 type TypeWashing struct {
-	gorm.Model 
-	Type_washing     string 
-	Description      string 
-	Service []Service `gorm:"foreignKey:TypeWashing_ID"`
-  }
-  
-  type Delivery struct {
 	gorm.Model
-	Derivery_service      string
-	Delivery_price        uint8
-	Service []Service `gorm:"foreignKey:Delivery_ID"`
-  }
-  
-  type Weight struct {
+	Type_washing string
+	Description  string
+	Service      []Service `gorm:"foreignKey:TypeWashing_ID"`
+}
+
+type Delivery struct {
 	gorm.Model
-	Weight_net     string
-	Weight_price   uint8
-	Service []Service `gorm:"foreignKey:Weight_ID"`
-  }
-  
-  type Service struct {
+	Derivery_service string
+	Delivery_price   uint8
+	Service          []Service `gorm:"foreignKey:Delivery_ID"`
+}
+
+type Weight struct {
 	gorm.Model
-	TypeWashing_ID  *uint
-	TypeWashing     TypeWashing `gorm:"references:id"`
-  
-	Delivery_ID     *uint
-	Delivery        Delivery  `gorm:"references:id"`
-  
-	Weight_ID       *uint
-	Weight          Weight `gorm:"references:id"`
-  
-	Address      string
-  }
+	Weight_net   string
+	Weight_price uint8
+	Service      []Service `gorm:"foreignKey:Weight_ID"`
+}
+
+type Service struct {
+	gorm.Model
+	TypeWashing_ID *uint
+	TypeWashing    TypeWashing `gorm:"references:id"`
+
+	Delivery_ID *uint
+	Delivery    Delivery `gorm:"references:id"`
+
+	Weight_ID *uint
+	Weight    Weight `gorm:"references:id"`
+
+	Address string
+	Bill    []Bill `gorm:"foreignKey:Service_ID"`
+}
 
 /* -------------------------------------------------------------------------- */
 /*                                   Review                                   */
@@ -142,8 +143,8 @@ type Paymenttype struct {
 
 type Bill struct {
 	gorm.Model
-	Customer_ID *uint
-	//รอจาก customer
+	Service_ID     *uint
+	Service        Service `gorm:"references:id"`
 	QuotaCode_ID   *uint
 	QuotaCode      *QuotaCode `gorm:"references:id"`
 	Paymenttype_ID *uint
