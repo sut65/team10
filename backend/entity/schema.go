@@ -47,39 +47,39 @@ type Employee struct {
 /* -------------------------------------------------------------------------- */
 /*                     ระบบจัดการStork       */
 /* -------------------------------------------------------------------------- */
-// type Type struct {
-// 	gorm.Model
-// 	Type_Name string
-// 	Stock     []Stock `gorm:"foreignKey:Type"`
-// 	Brand     []Brand `gorm:"foreignKey:Type"`
-// }
-// type Brand struct {
-// 	gorm.Model
-// 	Band_Name string
-// 	TypeID    *uint
-// 	Type      Type    `gorm:"references:id"`
-// 	Stock     []Stock `gorm:"foreignKey:Band"`
-// }
-// type Size struct {
-// 	gorm.Model
-// 	Size_Name string
-// 	Stock     []Stock `gorm:"foreignKey:Work_shift"`
-// }
+type Type struct {
+	gorm.Model
+	Type_Name string
+	Stock     []Stock `gorm:"foreignKey:Type"`
+	Brand     []Brand `gorm:"foreignKey:Type"`
+}
+type Brand struct {
+	gorm.Model
+	Band_Name string
+	TypeID    *uint
+	Type      Type    `gorm:"references:id"`
+	Stock     []Stock `gorm:"foreignKey:Band"`
+}
+type Size struct {
+	gorm.Model
+	Size_Name string
+	Stock     []Stock `gorm:"foreignKey:Work_shift"`
+}
 
 type Stock struct {
 	gorm.Model
 	List_Number *uint
-	// 	TypeID      *uint
-	// 	Type        Type `gorm:"references:id"`
-	// 	BrandID     *uint
-	// 	Brand       Brand `gorm:"references:id"`
-	// 	SizeID      *uint
-	// 	Size        Size `gorm:"references:id"`
-	// 	PersonalID  *uint
-	// 	Employee    Employee `gorm:"references:id"`
-	// 	Add_Number  *uint
-	// 	Quantity    *uint
-	// 	Time        time.Time
+	TypeID      *uint
+	Type        Type `gorm:"references:id"`
+	BrandID     *uint
+	Brand       Brand `gorm:"references:id"`
+	SizeID      *uint
+	Size        Size `gorm:"references:id"`
+	PersonalID  *uint
+	Employee    Employee `gorm:"references:id"`
+	Add_Number  *uint
+	Quantity    *uint
+	Time        time.Time
 }
 
 /* -------------------------------------------------------------------------- */
