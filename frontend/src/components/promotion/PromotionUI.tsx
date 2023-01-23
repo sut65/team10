@@ -37,7 +37,7 @@ function Promotion() {
                                 options={[0, 1]}
                                 sx={{ width: 250 }}
                                 renderInput={(params) => (
-                                    <TextField {...params} label="Movie" />
+                                    <TextField {...params} label="Code Type" />
                                 )}
                             />
                         </Grid>
@@ -51,7 +51,7 @@ function Promotion() {
                                 options={[0, 1]}
                                 sx={{ width: 250 }}
                                 renderInput={(params) => (
-                                    <TextField {...params} label="Movie" />
+                                    <TextField {...params} label="Reason" />
                                 )}
                             />
                         </Grid>
@@ -71,7 +71,8 @@ function Promotion() {
                             <h3>Amount</h3>
                         </Grid>
                         <Grid item xs={4}>
-                            <TextField id="outlined-basic" label="Price" variant="outlined" />
+                            <TextField id="outlined-basic" label="Amount" variant="outlined" 
+                            inputProps={{ type: "number" }}/>
                         </Grid>
                     </Grid>
 
