@@ -116,6 +116,7 @@ type Bill struct {
 	Bill_Price     uint
 	Time_Stamp     time.Time
 	QuotaCode_FK   []QuotaCode `gorm:"foreignKey:Bill_ID"`
+	Receive        []Receive   `gorm:"foreignKey:Bill_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
