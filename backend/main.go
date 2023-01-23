@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/sut65/team10/controller"
+	controllerbill "github.com/sut65/team10/controller/bill"
 	"github.com/sut65/team10/entity"
 )
 
@@ -19,6 +20,14 @@ func main() {
 	r.POST("/users", controller.CreateUser)
 	r.PATCH("/users", controller.UpdateUser)
 	r.DELETE("/users/:id", controller.DeleteUser)
+
+	// Bill
+	r.GET("/bill", controllerbill.ListBills)
+	r.GET("/bill/:id", controllerbill.GetBill)
+	r.POST("/bills", controllerbill.CreateBill)
+	r.PATCH("/bills", controllerbill.UpdateBill)
+	// Paymenttype
+	r.GET("/paymenttype", controllerbill.ListPaymenttypes)
 
 	// Run the server
 
