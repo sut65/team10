@@ -3,6 +3,7 @@ package controller
 import (
 	"net/http"
 
+	govalidator "github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"github.com/sut65/team10/entity"
 )
@@ -13,21 +14,20 @@ func CreateBill(c *gin.Context) {
 	var bill entity.Bill
 	var quotacode entity.QuotaCode
 	var paymenttype entity.Paymenttype
-	//var customer entity.Customer
-	//var service entity.Service
+	var service entity.Service
 
 	if err := c.ShouldBindJSON(&bill); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	/*9: ค้นหา Service ด้วยไอดี
-	if tx := entity.DB().Where("id = ?", bill.Q_ID).First(&quotacode); tx.RowsAffected == 0 {
+	//9: ค้นหา Service ด้วยไอดี
+	if tx := entity.DB().Where("id = ?", bill.Service_ID).First(&service); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
 
 		return
 
-	}*/
+	}
 
 	//10: ค้นหา Quota ด้วยไอดี
 	if tx := entity.DB().Where("id = ?", bill.QuotaCode_ID).First(&quotacode); tx.RowsAffected == 0 {
@@ -44,14 +44,21 @@ func CreateBill(c *gin.Context) {
 		return
 
 	}
+	//12: สร้าง
 	b := entity.Bill{
-
-		//Customer_ID: bill.Customer_ID,
+		Service_ID:     bill.Service_ID,
 		QuotaCode_ID:   bill.QuotaCode_ID,
 		Paymenttype_ID: bill.Paymenttype_ID,
 		Bill_Price:     bill.Bill_Price,
-		//Time_Stamp:     bill.Date.local(),
+		Time_Stamp:     bill.Time_Stamp.Local(),
 	}
+
+	if _, err := govalidator.ValidateStruct(b); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	//13: บันทึก
 	if err := entity.DB().Create(&b).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
