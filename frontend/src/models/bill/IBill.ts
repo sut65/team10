@@ -1,9 +1,10 @@
 import { PaymenttypeInterface } from "./IPaymenttype";
 import { QuotaCodeInterface } from "../promotion/IQuotaCode";
+import { ServiceInterface } from "../service/IService";
 export interface BillInterface {
   ID: number,
-  Customer_ID: number,
-  //Customer:         CustomerInterface,
+  Service_ID: number,
+  Service:         ServiceInterface,
   Q_ID: number,
   QuotaCode:    QuotaCodeInterface,
   Paymenttype_ID:   number,
