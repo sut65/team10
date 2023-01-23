@@ -40,8 +40,8 @@ type Employee struct {
 	WorkShiftID *uint
 	WorkShift   WorkShift   `gorm:"references:id"`
 	Stock       []Stock     `gorm:"foreignKey:Employee"`
-	Vehicle     []Vehicle   `gorm:"foreignKey:Employee"`
-	Receive     []Receive   `gorm:"foreignKey:Employee"`
+	Vehicle     []Vehicle   `gorm:"foreignKey:Employee_ID"`
+	Receive     []Receive   `gorm:"foreignKey:Employee_ID"`
 	Promotion   []Promotion `gorm:"foreignKey:Employee_ID"`
 }
 
@@ -208,8 +208,8 @@ type Receive struct {
 	Det          Stock `gorm:"references:id"`
 	Sof_ID       *uint
 	Sof          Stock `gorm:"references:id"`
-	Det_quantity string
-	Sof_quantity string
+	Det_Quantity *uint
+	Sof_Quantity *uint
 	Time_Stamp   time.Time
 }
 
@@ -230,15 +230,15 @@ type Engine struct {
 }
 type Vehicle struct {
 	gorm.Model
-	Employee_ID   *uint
-	Employee      Employee `gorm:"references:id"`
-	Brand_ID      *uint
-	Brand         Brand_Vehicle `gorm:"references:id"`
-	Engine_ID     *uint
-	Engine        Engine `gorm:"references:id"`
-	ListModel     string
-	Registeration string
-	Time_Stamp    time.Time
+	Employee_ID     *uint
+	Employee        Employee `gorm:"references:id"`
+	BrandVehicle_ID *uint
+	BrandVehicle    Brand_Vehicle `gorm:"references:id"`
+	Engine_ID       *uint
+	Engine          Engine `gorm:"references:id"`
+	ListModel       string
+	Registeration   string
+	Time_Stamp      time.Time
 }
 
 /* -------------------------------------------------------------------------- */
