@@ -3,6 +3,7 @@ package controller
 import (
 	"net/http"
 
+	govalidator "github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"github.com/sut65/team10/entity"
 )
@@ -43,14 +44,21 @@ func CreateBill(c *gin.Context) {
 		return
 
 	}
+	//12: สร้าง
 	b := entity.Bill{
-
 		Service_ID:     bill.Service_ID,
 		QuotaCode_ID:   bill.QuotaCode_ID,
 		Paymenttype_ID: bill.Paymenttype_ID,
 		Bill_Price:     bill.Bill_Price,
 		Time_Stamp:     bill.Time_Stamp.Local(),
 	}
+
+	if _, err := govalidator.ValidateStruct(b); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	//13: บันทึก
 	if err := entity.DB().Create(&b).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
