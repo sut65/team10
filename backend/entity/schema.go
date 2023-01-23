@@ -41,6 +41,7 @@ type Employee struct {
 	WorkShift   WorkShift `gorm:"references:id"`
 	Stock       []Stock   `gorm:"foreignKey:Employee"`
 	Vehicle     []Vehicle `gorm:"foreignKey:Employee"`
+	Receive     []Receive `gorm:"foreignKey:Employee"`
 }
 
 /* -------------------------------------------------------------------------- */
@@ -161,6 +162,8 @@ type QuotaCode struct {
 //ระบบรับรายการผ้า
 type Receive struct {
 	gorm.Model
+	Employee_ID  *uint
+	Employee     Employee `gorm:"references:id"`
 	Bill_ID      *uint
 	Bill         *Bill `gorm:"references:id"`
 	Det_ID       *uint
