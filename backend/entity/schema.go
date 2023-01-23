@@ -80,6 +80,8 @@ type Stock struct {
 	Add_Number  *uint
 	Quantity    *uint
 	Time        time.Time
+	Det         []Receive `gorm:"foreignKey:Det_ID"`
+	Sof         []Receive `gorm:"foreignKey:Sof_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
@@ -104,13 +106,13 @@ type Bill struct {
 	gorm.Model
 	Customer_ID *uint
 	//รอจาก customer
-	Q_ID           *uint
+	QuotaCode_ID   *uint
 	QuotaCode      *QuotaCode `gorm:"references:id"`
 	Paymenttype_ID *uint
 	Paymenttype    Paymenttype `gorm:"references:id"`
 	Bill_Price     uint
 	Time_Stamp     time.Time
-	QuotaCode_FK   []QuotaCode `gorm:"foreignKey:Q_ID"`
+	QuotaCode_FK   []QuotaCode `gorm:"foreignKey:Bill_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
@@ -147,14 +149,27 @@ type QuotaCode struct {
 	gorm.Model
 	Promotion_ID *uint
 	Promotion    Promotion `gorm:"references:id"`
-	Q_ID         *uint
+	Bill_ID      *uint
 	Bill         *Bill  `gorm:"references:id"`
-	Bill_FK      []Bill `gorm:"foreignKey:Q_ID"`
+	Bill_FK      []Bill `gorm:"foreignKey:QuotaCode_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
-/*                                   Recive                                   */
+/*                                   Receive                                   */
 /* -------------------------------------------------------------------------- */
+//ระบบรับรายการผ้า
+type Receive struct {
+	gorm.Model
+	Bill_ID      *uint
+	Bill         *Bill `gorm:"references:id"`
+	Det_ID       *uint
+	Det          Stock `gorm:"references:id"`
+	Sof_ID       *uint
+	Sof          Stock `gorm:"references:id"`
+	Det_quantity string
+	Sof_quantity string
+	Time_Stamp   time.Time
+}
 
 /* -------------------------------------------------------------------------- */
 /*                                  Transport                                 */
