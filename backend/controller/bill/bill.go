@@ -30,7 +30,7 @@ func CreateBill(c *gin.Context) {
 	}*/
 
 	//10: ค้นหา Quota ด้วยไอดี
-	if tx := entity.DB().Where("id = ?", bill.Q_ID).First(&quotacode); tx.RowsAffected == 0 {
+	if tx := entity.DB().Where("id = ?", bill.QuotaCode_ID).First(&quotacode); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
 
 		return
@@ -47,7 +47,7 @@ func CreateBill(c *gin.Context) {
 	b := entity.Bill{
 
 		//Customer_ID: bill.Customer_ID,
-		Q_ID:           bill.Q_ID,
+		QuotaCode_ID:   bill.QuotaCode_ID,
 		Paymenttype_ID: bill.Paymenttype_ID,
 		Bill_Price:     bill.Bill_Price,
 		//Time_Stamp:     bill.Date.local(),
@@ -86,7 +86,7 @@ func ListBills(c *gin.Context) {
 
 }
 
-// PATCH /users
+// PATCH /bills
 
 func UpdateBill(c *gin.Context) {
 	var bill entity.Bill
