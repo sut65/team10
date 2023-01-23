@@ -40,6 +40,7 @@ type Employee struct {
 	WorkShiftID *uint
 	WorkShift   WorkShift `gorm:"references:id"`
 	Stock       []Stock   `gorm:"foreignKey:Employee"`
+	Vehicle     []Vehicle `gorm:"foreignKey:Employee"`
 }
 
 /* -------------------------------------------------------------------------- */
@@ -155,7 +156,7 @@ type QuotaCode struct {
 }
 
 /* -------------------------------------------------------------------------- */
-/*                                   Receive                                   */
+/*                                   Receive                                  */
 /* -------------------------------------------------------------------------- */
 //ระบบรับรายการผ้า
 type Receive struct {
@@ -172,8 +173,32 @@ type Receive struct {
 }
 
 /* -------------------------------------------------------------------------- */
-/*                                  Transport                                 */
+/*                                  Vehicle                                   */
 /* -------------------------------------------------------------------------- */
+//ระบบจัดการรถขนส่ง
+type Brand_Vehicle struct {
+	gorm.Model
+	Brand   string
+	Vehicle []Vehicle `gorm:"foreignKey:Brand_ID"`
+}
+
+type Engine struct {
+	gorm.Model
+	Engine  int
+	Vehicle []Vehicle `gorm:"foreignKey:Engine_ID"`
+}
+type Vehicle struct {
+	gorm.Model
+	Employee_ID   *uint
+	Employee      Employee `gorm:"references:id"`
+	Brand_ID      *uint
+	Brand         Brand_Vehicle `gorm:"references:id"`
+	Engine_ID     *uint
+	Engine        Engine `gorm:"references:id"`
+	ListModel     string
+	Registeration string
+	Time_Stamp    time.Time
+}
 
 /* -------------------------------------------------------------------------- */
 /*                           Complete (ผ้ารีบพับแพ๊ค)                            */
