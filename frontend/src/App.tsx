@@ -11,7 +11,7 @@ import AppBarPrivate from "./components/AppBarPrivate";
 // import Diagnostic_Entry from "./components/DiagnosticCreate";
 // import Dispensation from './components/Dispensation_UI';
 // import Appointment_UI from "./components/AppointmentCreate_UI";
-// import Bill_UI from './components/Bill_UI';
+import Promotion from "./components/promotion/PromotionUI";
 import Home from "./components/Home";
 
 export default function App() {
@@ -32,9 +32,9 @@ export default function App() {
   <Router>
     <div>
       <AppBarPrivate />
-        <Route path="/" component={Home} />
-        {/* <Route path="/employee/create" element={<Employee_entry />} />
-        <Route path="/employee" element={<EmployeeTable_UI />} />
+        <Route exact  path="/" component={Home} />
+        <Route exact  path="/promotion/create" component={Promotion} />
+        {/* <Route path="/employee" element={<EmployeeTable_UI />} />
         <Route path="/patient" element={<Patient_UI />} />
         <Route path="/diagnostic" element={<Diagnostic_Table />} />
         <Route path="/dispensation" element={<Dispensation />} />
