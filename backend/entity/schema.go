@@ -91,6 +91,41 @@ type Stock struct {
 /*                                   Service                                  */
 /* -------------------------------------------------------------------------- */
 
+type TypeWashing struct {
+	gorm.Model 
+	Type_washing     string 
+	Description      string 
+	Service []Service `gorm:"foreignKey:TypeWashing_ID"`
+  }
+  
+  type Delivery struct {
+	gorm.Model
+	Derivery_service      string
+	Delivery_price        uint8
+	Service []Service `gorm:"foreignKey:Delivery_ID"`
+  }
+  
+  type Weight struct {
+	gorm.Model
+	Weight_net     string
+	Weight_price   uint8
+	Service []Service `gorm:"foreignKey:Weight_ID"`
+  }
+  
+  type Service struct {
+	gorm.Model
+	TypeWashing_ID  *uint
+	TypeWashing     TypeWashing `gorm:"references:id"`
+  
+	Delivery_ID     *uint
+	Delivery        Delivery  `gorm:"references:id"`
+  
+	Weight_ID       *uint
+	Weight          Weight `gorm:"references:id"`
+  
+	Address      string
+  }
+
 /* -------------------------------------------------------------------------- */
 /*                                   Review                                   */
 /* -------------------------------------------------------------------------- */
