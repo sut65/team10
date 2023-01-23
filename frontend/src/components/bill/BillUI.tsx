@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useEffect } from "react";
 
 /* Grid */
 import { Paper } from "@mui/material";
@@ -26,10 +27,31 @@ import { PaymenttypeInterface } from "../../models/bill/IPaymenttype";
 function Bill() {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
   const [bill, setBill] = React.useState<Partial<BillInterface>>({});
-  const [payment_type_id, setPayment_Type_ID] = React.useState<
-    PaymenttypeInterface[]
-  >([]);
+  const [payment_type_id, setPayment_Type_ID] = React.useState<PaymenttypeInterface[]>([]);
 
+
+  const getPaymentType = async () => {
+    const apiUrl = "http://localhost:8080/paymenttype";
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        //Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    fetch(apiUrl, requestOptions)
+      .then((response) => response.json())
+      .then((res) => {
+        if (res.data) {
+          setPayment_Type_ID(res.data);
+        }
+      });
+  };
+
+  useEffect(() => {
+    getPaymentType();
+  }, []);
   return (
       <Container maxWidth="md">
         <LocalAtmIcon color="success" sx={{ fontSize: 80 }}/>
@@ -97,7 +119,7 @@ function Bill() {
                   <Autocomplete
                     disablePortal
                     id="combo-box-demo"
-                    options={[0, 1]}
+                    options={payment_type_id}
                     sx={{ width: 300 }}
                     renderInput={(params) => (
                       <TextField {...params} label="Movie" />
