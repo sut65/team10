@@ -12,7 +12,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from '@mui/icons-material/Cancel';
 import UpdateIcon from '@mui/icons-material/Update';
 
-
+import StorefrontIcon from '@mui/icons-material/Storefront';
 /* Datetimepicker */
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -21,7 +21,9 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 function Promotion() {
     const [date, setDate] = React.useState<Dayjs | null>(dayjs());
     return (
+
         <Container maxWidth="md">
+            <StorefrontIcon color="primary" sx={{ fontSize: 80 }}/>
             <Box>
                 <Paper>
                     <Grid sx={{ padding: 2 }}>
