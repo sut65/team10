@@ -38,10 +38,11 @@ type Employee struct {
 	PositionID  *uint
 	Position    Position `gorm:"references:id"`
 	WorkShiftID *uint
-	WorkShift   WorkShift `gorm:"references:id"`
-	Stock       []Stock   `gorm:"foreignKey:Employee"`
-	Vehicle     []Vehicle `gorm:"foreignKey:Employee"`
-	Receive     []Receive `gorm:"foreignKey:Employee"`
+	WorkShift   WorkShift   `gorm:"references:id"`
+	Stock       []Stock     `gorm:"foreignKey:Employee"`
+	Vehicle     []Vehicle   `gorm:"foreignKey:Employee"`
+	Receive     []Receive   `gorm:"foreignKey:Employee"`
+	Promotion   []Promotion `gorm:"foreignKey:Employee_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
@@ -142,9 +143,9 @@ type Promotion struct {
 	Price       uint
 	Amount      uint
 	Employee_ID *uint
-	//รอจาก Employee
-	Time_Stamp time.Time
-	QuotaCode  []QuotaCode `gorm:"foreignKey:Promotion_ID"`
+	Employee    Employee `gorm:"references:id"`
+	Time_Stamp  time.Time
+	QuotaCode   []QuotaCode `gorm:"foreignKey:Promotion_ID"`
 }
 
 type QuotaCode struct {
