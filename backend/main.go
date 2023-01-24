@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/sut65/team10/controller"
 	controllerbill "github.com/sut65/team10/controller/bill"
 	"github.com/sut65/team10/entity"
 )
@@ -14,12 +13,6 @@ func main() {
 	r.Use(CORSMiddleware())
 
 	// User Routes
-
-	r.GET("/users", controller.ListUsers)
-	r.GET("/user/:id", controller.GetUser)
-	r.POST("/users", controller.CreateUser)
-	r.PATCH("/users", controller.UpdateUser)
-	r.DELETE("/users/:id", controller.DeleteUser)
 
 	// Bill
 	r.GET("/bill", controllerbill.ListBills)

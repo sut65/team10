@@ -10,11 +10,6 @@ import (
 /*                               Register System                              */
 /* -------------------------------------------------------------------------- */
 //Cutomer
-type Gender struct {
-	gorm.Model
-	Gender_Name string
-	Customer    []Customer `gorm:"foreingnKey:Gender_ID"`
-}
 
 type Advertise struct {
 	gorm.Model
@@ -53,6 +48,7 @@ type Gender struct {
 	gorm.Model
 	Gender_Name string
 	Employee    []Employee `gorm:"foreignKey:Gender"`
+	Customer    []Customer `gorm:"foreingnKey:Gender_ID"`
 }
 type Position struct {
 	gorm.Model
@@ -62,7 +58,7 @@ type Position struct {
 type WorkShift struct {
 	gorm.Model
 	Work_shift_Name string
-	Employee        []Employee `gorm:"foreignKey:Work_shift"`
+	Employee        []Employee `gorm:"foreignKey:WorkShiftID"`
 }
 
 type Employee struct {
@@ -98,12 +94,12 @@ type Brand struct {
 	Band_Name string
 	TypeID    *uint
 	Type      Type    `gorm:"references:id"`
-	Stock     []Stock `gorm:"foreignKey:Band"`
+	Stock     []Stock `gorm:"foreignKey:BrandID"`
 }
 type Size struct {
 	gorm.Model
 	Size_Name string
-	Stock     []Stock `gorm:"foreignKey:Work_shift"`
+	Stock     []Stock `gorm:"foreignKey:SizeID"`
 }
 
 type Stock struct {
@@ -214,7 +210,7 @@ type Promotion struct {
 	Codetype_ID *uint
 	Codetype    Codetype `gorm:"references:id"`
 	Re_ID       *uint
-	Reason      Reason `gorm:"references:id"`
+	Re          Reason `gorm:"references:id"`
 	Price       uint
 	Amount      uint
 	Employee_ID *uint
@@ -258,7 +254,7 @@ type Receive struct {
 type Brand_Vehicle struct {
 	gorm.Model
 	Brand   string
-	Vehicle []Vehicle `gorm:"foreignKey:Brand_ID"`
+	Vehicle []Vehicle `gorm:"foreignKey:BrandVehicle_ID"`
 }
 
 type Engine struct {
