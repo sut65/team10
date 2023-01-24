@@ -1,16 +1,23 @@
 import { BillInterface } from "../bill/IBill";
+import { StocksInterface } from "../Stock/IStock";
+import { EmployeesInterface } from "../Employee/IEmployee";
 export interface ReceiveInterface {
   ID: number,
+
   Employee_ID: number,
-  //Employee:         EmployeeInterface,
+  Employee:         EmployeesInterface,
+  
   Bill_ID : number,
   Bill : BillInterface,
+
   Det_ID : number,
-  //Det : StockInerface,
+  Det : StocksInterface,
   Det_Quantity : number,
+
   Sof_ID : number,
-  //Sof : StockInerface,
+  Sof : StocksInterface,
   Sof_Quantity : number,
+
   Time_Stamp:   Date,
 
 }

@@ -1,7 +1,7 @@
 import { TypesInterface } from "./IType";
 import { EmployeesInterface } from "../Employee/IEmployee";
 import { SizesInterface } from "./ISize";
-import { BrandInterface } from "../Vehicle/BrandVehicle";
+import { BrandInterface } from "../vehicle/IBrandVehicle";
 
 export interface StocksInterface {
     [x: string]: any;
