@@ -8,7 +8,9 @@ import Delivery from "./components/delivery/DeliveryUI";
 import Confirmation from "./components/confirmation/ConfirmationUI";
 import Promotion from "./components/promotion/PromotionUI";
 import Home from "./components/Home";
-import Vehicle from "./components/Vehicle/VehiclrUI"
+import Vehicle from "./components/Vehicle/VehiclrUI";
+import Receive from "./components/Receive/ReceiveUI";
+import Bill from "./components/bill/BillUI";
 
 export default function App() {
   const [token, setToken] = React.useState<String>("");
@@ -29,7 +31,7 @@ export default function App() {
       style={{
         background:
           "linear-gradient(180deg, rgba(255,201,60,1) 0%, rgba(134,229,255,1) 80%, rgba(0,129,201,1) 100%)",
-        height: "100vh",
+        height: "100%",
         minHeight: "100vh",
       }}
     >
@@ -41,6 +43,9 @@ export default function App() {
           <Route exact path="/promotion/create" component={Promotion} />
           <Route exact path="/confirmation/create" component={Confirmation} />
           <Route exact path="/delivery/create" component={Delivery} />
+          <Route exact path="/bill/create" component={Bill} />
+          <Route exact path="/receive/create" component={Receive} />
+          <Route exact path="/vehicle/create" component={Vehicle} />
         </div>
       </Router>
     </div>
