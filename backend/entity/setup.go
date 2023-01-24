@@ -22,9 +22,57 @@ func SetupDatabase() {
 	// Migrate the schema
 	database.AutoMigrate(
 
+		//Cutomer
+		&Advertise{},
+		&Career{},
+		&Gender{},
+		&Customer{},
+
+		//Employee
+		&Position{},
+		&WorkShift{},
+		&Employee{},
+
+		//Stock
+		&Type{},
+		&Brand{},
+		&Size{},
+		&Stock{},
+
+		//Service
+		&TypeWashing{},
+		&Delivery{},
+		&Weight{},
+		&Service{},
+
+		//Form
+		&Satisfaction{},
+		&FormType{},
+		&Form{},
+
 		// Bill
 		&Paymenttype{},
 		&Bill{},
+
+		//Promotion
+		&Codetype{},
+		&Reason{},
+		&Promotion{},
+		&QuotaCode{},
+
+		//Receive
+		&Brand_Vehicle{},
+		&Engine{},
+		&Receive{},
+		&Vehicle{},
+
+		//Complete
+		&Packaging{},
+		&Complete{},
+
+		//Confirmation
+		&RecvType{},
+		&Confirmation{},
 	)
 	db = database
 
@@ -37,4 +85,10 @@ func SetupDatabase() {
 	}
 	db.Model(&Paymenttype{}).Create(&Paymenttype1)
 	db.Model(&Paymenttype{}).Create(&Paymenttype2)
+
+	Service1 := Service{
+		Address: "testbill",
+	}
+	db.Model(&Service{}).Create(&Service1)
+
 }
