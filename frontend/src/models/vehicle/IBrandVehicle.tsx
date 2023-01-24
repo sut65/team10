@@ -1,4 +1,4 @@
-export interface BrandInterface {
+export interface BrandVehicleInterface {
     ID:         number,
     Type:       string,    
 }

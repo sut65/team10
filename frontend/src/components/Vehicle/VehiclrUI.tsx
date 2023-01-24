@@ -20,8 +20,8 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { Container } from "@mui/material";
 
 /* Interface */
-import { BrandInterface } from "../../models/Vehicle/BrandVehicle";
-import { EngineInterface } from "../../models/Vehicle/Engine";
+import { BrandInterface } from "../../models/vehicle/IBrandVehicle";
+import { EngineInterface } from "../../models/vehicle/IEngine";
 import { ReceiveInterface } from "../../models/Receive/Receive";
 function Receive() {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
