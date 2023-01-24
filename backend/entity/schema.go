@@ -279,6 +279,26 @@ type Vehicle struct {
 /*                           Complete (ผ้ารีบพับแพ๊ค)                            */
 /* -------------------------------------------------------------------------- */
 
+type Packaging struct {
+	gorm.Model
+	Packaging_Type    string
+	Complete           []Complete `gorm:"foreingnKey:Packaging_ID"`
+  }
+  
+  type Complete struct {
+	gorm.Model
+	Complete_datetime      time.Time
+  
+	Employee_ID      *uint
+	Employee         Employee  `gorm:"references:id"`
+  
+	Receive_ID      *uint 
+	Receive         Receive  `gorm:"references:id"`
+  
+	Packaging_ID      *uint 
+	Packaging         Packaging  `gorm:"references:id"`
+  }
+  
 /* -------------------------------------------------------------------------- */
 /*                                Confirmation                                */
 /* -------------------------------------------------------------------------- */
