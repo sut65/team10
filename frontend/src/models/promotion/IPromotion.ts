@@ -1,6 +1,6 @@
 import { ReasonInterface } from "./IReason";
 import { CodetypeInterface } from "./ICodetype";
-import { EmployeeInterface } from "../employee/IEmployee";
+import { EmployeesInterface } from "../Employee/IEmployee";
 export interface PromotionInterface {
 
   ID: number,
@@ -15,6 +15,6 @@ export interface PromotionInterface {
   Amount: number,
 
   Employee_ID: number,
-  Employee:         EmployeeInterface,
+  Employee:         EmployeesInterface,
   Time_Stamp: Date,
 }
