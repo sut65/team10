@@ -100,7 +100,7 @@ function AppBarPrivate() {
                 <ListItemText primary="หน้าแรก" sx={{ padding: 1 }} />
               </ListItem>
 
-              <ListItem component={RouterLink} to="/employee">
+              <ListItem component={RouterLink} to="/employee/create">
                 {" "}
                 <BadgeIcon color="primary" />
                 <ListItemText
@@ -115,13 +115,13 @@ function AppBarPrivate() {
                 <ListItemText primary="โปรโมชั่น" sx={{ padding: 1 }} />
               </ListItem>
 
-              <ListItem component={RouterLink} to="/diagnostic">
+              <ListItem component={RouterLink} to="/receive/create">
                 {" "}
                 <CheckroomIcon color="primary" />
                 <ListItemText primary="รับรายการผ้า" sx={{ padding: 1 }} />
               </ListItem>
 
-              <ListItem component={RouterLink} to="/dispensation">
+              <ListItem component={RouterLink} to="/complete/create">
                 {" "}
                 <IronIcon color="primary" />
                 <ListItemText
@@ -130,13 +130,13 @@ function AppBarPrivate() {
                 />
               </ListItem>
 
-              <ListItem component={RouterLink} to="/appointment">
+              <ListItem component={RouterLink} to="/vehicle/create">
                 {" "}
                 <DirectionsCarIcon color="primary" />
                 <ListItemText primary="จัดการรถขนส่ง" sx={{ padding: 1 }} />
               </ListItem>
 
-              <ListItem component={RouterLink} to="/bill">
+              <ListItem component={RouterLink} to="/stock/create">
                 {" "}
                 <InventoryIcon color="primary" />
                 <ListItemText primary="Stock" sx={{ padding: 1 }} />

@@ -95,19 +95,19 @@ function AppBarPublic() {
                 <ListItemText primary="หน้าแรก" sx={{ padding: 1 }} />
               </ListItem>
 
-              <ListItem component={RouterLink} to="/employee">
+              <ListItem component={RouterLink} to="/review/create">
                 {" "}
                 <StarHalfIcon color="primary" />
                 <ListItemText primary="ประเมิน" sx={{ padding: 1 }} />
               </ListItem>
 
-              <ListItem component={RouterLink} to="/patient">
+              <ListItem component={RouterLink} to="/service/create">
                 {" "}
                 <LocalLaundryServiceIcon color="primary" />
                 <ListItemText primary="เลือกบริการ" sx={{ padding: 1 }} />
               </ListItem>
 
-              <ListItem component={RouterLink} to="/diagnostic">
+              <ListItem component={RouterLink} to="/bill/create">
                 {/* {เป็นระบบที่ต่อเนื่องจาก เลือกบริการ} */}{" "}
                 <PersonSearchIcon color="primary" />
                 <ListItemText
