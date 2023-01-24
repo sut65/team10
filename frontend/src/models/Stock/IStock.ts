@@ -1,5 +1,5 @@
 import { TypesInterface } from "./IType";
-import { EmployeesInterface } from "../employee/IEmployee";
+import { EmployeesInterface } from "../Employee/IEmployee";
 import { SizesInterface } from "./ISize";
 import { BrandInterface } from "../Vehicle/BrandVehicle";
 
