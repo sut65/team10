@@ -2,9 +2,9 @@ package controller
 
 import (
 
-	"github.com/sut65/team10/entity"
-	"github.com/gin-gonic/gin"
-    "net/http"
+             "github.com/sut65/team10/entity"
+           "github.com/gin-gonic/gin"
+           "net/http"
 
 )
 
@@ -16,6 +16,7 @@ func CreateFormType(c *gin.Context) {
 	if err := c.ShouldBindJSON(&formtype); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
+		
 	}
 
 	if err := entity.DB().Create(&formtype).Error; err != nil {
@@ -48,6 +49,9 @@ func ListFormTypes(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+<<<<<<< HEAD
 	
+=======
+>>>>>>> issue-124
 	c.JSON(http.StatusOK, gin.H{"data": formtype})
 }

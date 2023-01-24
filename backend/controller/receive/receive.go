@@ -28,7 +28,7 @@ func CreateReceive(c *gin.Context) {
 
 	}
 
-	//10: ค้นหา Det ด้วยไอดี
+	//9: ค้นหา Det ด้วยไอดี
 	if tx := entity.DB().Where("id = ?", receive.Det_ID).First(&stock); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
 
@@ -36,7 +36,7 @@ func CreateReceive(c *gin.Context) {
 
 	}
 
-	//11: ค้นหา Sof ด้วยไอดี
+	//10: ค้นหา Sof ด้วยไอดี
 	if tx := entity.DB().Where("id = ?", receive.Sof_ID).First(&stock); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
 
@@ -44,12 +44,14 @@ func CreateReceive(c *gin.Context) {
 
 	}
 
-	//12: สร้าง
+	//11: สร้าง
 	rec := entity.Receive{
-		Bill_ID:    receive.Bill_ID,
-		Det_ID:     receive.Det_ID,
-		Sof_ID:     receive.Sof_ID,
-		Time_Stamp: bill.Time_Stamp.Local(),
+		Bill_ID:      receive.Bill_ID,
+		Det_ID:       receive.Det_ID,
+		Sof_ID:       receive.Sof_ID,
+		Det_Quantity: receive.Det_Quantity,
+		Sof_Quantity: receive.Sof_Quantity,
+		Time_Stamp:   bill.Time_Stamp.Local(),
 	}
 
 	if _, err := govalidator.ValidateStruct(rec); err != nil {
@@ -57,7 +59,7 @@ func CreateReceive(c *gin.Context) {
 		return
 	}
 
-	//13: บันทึก
+	//12: บันทึก
 	if err := entity.DB().Create(&rec).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

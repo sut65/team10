@@ -272,7 +272,7 @@ type Vehicle struct {
 	Engine          Engine `gorm:"references:id"`
 	ListModel       string
 	Registration    string
-	Time_Stamp      time.Time
+	Time_Insulance  time.Time
 }
 
 /* -------------------------------------------------------------------------- */
@@ -281,23 +281,23 @@ type Vehicle struct {
 
 type Packaging struct {
 	gorm.Model
-	Packaging_Type    string
-	Complete           []Complete `gorm:"foreingnKey:Packaging_ID"`
-  }
-  
-  type Complete struct {
+	Packaging_Type string
+	Complete       []Complete `gorm:"foreingnKey:Packaging_ID"`
+}
+
+type Complete struct {
 	gorm.Model
-	Complete_datetime      time.Time
-  
-	Employee_ID      *uint
-	Employee         Employee  `gorm:"references:id"`
-  
-	Receive_ID      *uint 
-	Receive         Receive  `gorm:"references:id"`
-  
-	Packaging_ID      *uint 
-	Packaging         Packaging  `gorm:"references:id"`
-  }
+	Complete_datetime time.Time
+
+	Employee_ID *uint
+	Employee    Employee `gorm:"references:id"`
+
+	Receive_ID *uint
+	Receive    Receive `gorm:"references:id"`
+
+	Packaging_ID *uint
+	Packaging    Packaging `gorm:"references:id"`
+}
 
 /* -------------------------------------------------------------------------- */
 /*                                Confirmation                                */
@@ -324,30 +324,29 @@ type RecvType struct {
 /*                                  Delivery                                  */
 /* -------------------------------------------------------------------------- */
 
-
 /* -------------------------------------------------------------------------- */
 /*                                  Form                                      */
 /* -------------------------------------------------------------------------- */
 
 type Satisfaction struct {
 	gorm.Model
-	Satisfaction_name	string
-	Form	[]Form	`gorm:"foreignKey:SatisfactionID"`
+	Satisfaction_name string
+	Form              []Form `gorm:"foreignKey:SatisfactionID"`
 }
 
 type FormType struct {
 	gorm.Model
-	FormType_name	string	
-	Form	[]Form	`gorm:"foreignKey:FormTypeID"`
+	FormType_name string
+	Form          []Form `gorm:"foreignKey:FormTypeID"`
 }
 
 type Form struct {
 	gorm.Model
 	Comment string
 
-	SatisfactionID	*uint
-	Satisfaction	Satisfaction	`gorm:"references:ID"`
+	SatisfactionID *uint
+	Satisfaction   Satisfaction `gorm:"references:ID"`
 
-	FormTypeID	*uint
-	FormType	FormType	`gorm:"references:ID"`
+	FormTypeID *uint
+	FormType   FormType `gorm:"references:ID"`
 }
