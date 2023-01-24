@@ -13,7 +13,7 @@ import (
 func CreateService(c *gin.Context) {
 
 	var typewashing entity.TypeWashing
-	var delivery entity.Delivery
+	var delivery entity.DeliveryType
 	var weight entity.Weight
 	var service entity.Service
 
@@ -29,7 +29,7 @@ func CreateService(c *gin.Context) {
 	}
 
 	// 10. ค้นหา department ด้วย id
-	if tx := entity.DB().Where("id = ?", service.Delivery_ID).First(&delivery); tx.RowsAffected == 0 {
+	if tx := entity.DB().Where("id = ?", service.DeliveryType_ID).First(&delivery); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "delivery not found"})
 		return
 	}
@@ -44,7 +44,7 @@ func CreateService(c *gin.Context) {
 	// เป็น Asynchonus รันไม่คำนึงตามบรรทัด
 	sv := entity.Service{
 		TypeWashing:      typewashing,               
-		Delivery:   delivery,            
+		DeliveryType:   delivery,            
 		Weight:     weight,             
 		Address:     service.Address,              
 		                       // ตั้งค่าฟิลด์ Address
