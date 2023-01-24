@@ -20,12 +20,12 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { Container } from "@mui/material";
 
 /* Interface */
-import { BrandInterface } from "../../models/vehicle/IBrandVehicle";
+import { BrandVehicleInterface } from "../../models/vehicle/IBrandVehicle";
 import { EngineInterface } from "../../models/vehicle/IEngine";
-import { ReceiveInterface } from "../../models/Receive/Receive";
-function Receive() {
+import { VehicleInterface } from "../../models/vehicle/IVehicle";
+function Vehicle() {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
-  const [receive, setReceive] = React.useState<Partial<ReceiveInterface>>({});
+  const [receive, setReceive] = React.useState<Partial<VehicleInterface>>({});
 
   return (
       <Container maxWidth="md">
@@ -184,4 +184,4 @@ function Receive() {
       </Container>
   );
 }
-export default Receive;
+export default Vehicle;
