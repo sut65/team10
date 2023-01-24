@@ -16,6 +16,7 @@ func CreateFormType(c *gin.Context) {
 	if err := c.ShouldBindJSON(&formtype); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
+		
 	}
 
 	if err := entity.DB().Create(&formtype).Error; err != nil {
