@@ -21,7 +21,7 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { Container } from "@mui/material";
 
 /* Interface */
-import { ReceiveInterface } from "../../models/Receive/Receive";
+import { ReceiveInterface } from "../../models/receive/IReceive";
 function Receive() {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
   const [receive, setReceive] = React.useState<Partial<ReceiveInterface>>({});
