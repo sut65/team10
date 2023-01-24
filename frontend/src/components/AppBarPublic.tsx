@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MenuItem from "@mui/material/MenuItem";
-import LocalLaundryServiceIcon from "@mui/icons-material/LocalLaundryService";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Menu from "@mui/material/Menu";
 import List from "@mui/material/List";
@@ -14,12 +13,10 @@ import Drawer from "@mui/material/Drawer";
 import { makeStyles } from "@material-ui/core/styles";
 
 import IconButton from "@mui/material/IconButton";
-import VaccinesIcon from "@mui/icons-material/Vaccines";
-import AddToQueueIcon from "@mui/icons-material/AddToQueue";
+import StarHalfIcon from "@mui/icons-material/StarHalf";
+import LocalLaundryServiceIcon from "@mui/icons-material/LocalLaundryService";
+import DryCleaningIcon from "@mui/icons-material/DryCleaning";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
-import AirlineSeatFlatIcon from "@mui/icons-material/AirlineSeatFlat";
-import BadgeIcon from "@mui/icons-material/Badge";
 import HomeIcon from "@mui/icons-material/Home";
 
 //
@@ -56,11 +53,22 @@ function AppBarPublic() {
 
   return (
     <Box>
-      <AppBar position="static" color="primary">
+      <AppBar
+        position="static"
+        sx={{
+          background:
+            "linear-gradient(90deg, rgba(255,201,60,1) 51%, rgba(0,129,201,1) 100%)",
+        }}
+      >
         <Toolbar>
           <IconButton
             edge="start"
-            color="inherit"
+            sx={{
+              color: "black",
+              border: 1,
+              borderColor: "white",
+              borderWidth: 2,
+            }}
             aria-label="menu"
             onClick={() => setIsDrawerOpen(true)}
           >
@@ -68,7 +76,7 @@ function AppBarPublic() {
           </IconButton>
           <Grid container spacing={1}>
             <Grid>
-              <h3>Laundry Delivery </h3>
+              <h3 style={{ color: "black" }}>&nbsp; Laundry Delivery </h3>
             </Grid>
             <Grid alignItems="center">
               <h3>
@@ -81,25 +89,25 @@ function AppBarPublic() {
             {" "}
             {/* Tab Menu */}
             <List className={classes.drawer} sx={{ margin: 1, padding: 1 }}>
-              <ListItem button component={RouterLink} to="/">
+              <ListItem component={RouterLink} to="/">
                 {" "}
                 <HomeIcon color="primary" />
                 <ListItemText primary="หน้าแรก" sx={{ padding: 1 }} />
               </ListItem>
 
-              <ListItem button component={RouterLink} to="/employee">
+              <ListItem component={RouterLink} to="/employee">
                 {" "}
-                <BadgeIcon color="primary" />
+                <StarHalfIcon color="primary" />
                 <ListItemText primary="ประเมิน" sx={{ padding: 1 }} />
               </ListItem>
 
-              <ListItem button component={RouterLink} to="/patient">
+              <ListItem component={RouterLink} to="/patient">
                 {" "}
-                <AirlineSeatFlatIcon color="primary" />
+                <LocalLaundryServiceIcon color="primary" />
                 <ListItemText primary="เลือกบริการ" sx={{ padding: 1 }} />
               </ListItem>
 
-              <ListItem button component={RouterLink} to="/diagnostic">
+              <ListItem component={RouterLink} to="/diagnostic">
                 {/* {เป็นระบบที่ต่อเนื่องจาก เลือกบริการ} */}{" "}
                 <PersonSearchIcon color="primary" />
                 <ListItemText
@@ -108,9 +116,9 @@ function AppBarPublic() {
                 />
               </ListItem>
 
-              <ListItem button component={RouterLink} to="/dispensation">
+              <ListItem component={RouterLink} to="/confirmation/create">
                 {" "}
-                <VaccinesIcon color="primary" />
+                <DryCleaningIcon color="primary" />
                 <ListItemText primary="ยืนยันรับผ้า" sx={{ padding: 1 }} />
               </ListItem>
             </List>

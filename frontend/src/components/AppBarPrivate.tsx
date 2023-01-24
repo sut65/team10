@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MenuItem from "@mui/material/MenuItem";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Menu from "@mui/material/Menu";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -12,14 +11,15 @@ import ListItemText from "@mui/material/ListItemText";
 import Drawer from "@mui/material/Drawer";
 import { makeStyles } from "@material-ui/core/styles";
 
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import IconButton from "@mui/material/IconButton";
 import LockIcon from "@mui/icons-material/Lock";
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
-import CheckroomIcon from '@mui/icons-material/Checkroom';
-import IronIcon from '@mui/icons-material/Iron';
-import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
-import InventoryIcon from '@mui/icons-material/Inventory';
-import CarRentalIcon from '@mui/icons-material/CarRental';
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import CheckroomIcon from "@mui/icons-material/Checkroom";
+import IronIcon from "@mui/icons-material/Iron";
+import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import CarRentalIcon from "@mui/icons-material/CarRental";
 import BadgeIcon from "@mui/icons-material/Badge";
 import HomeIcon from "@mui/icons-material/Home";
 
@@ -56,11 +56,22 @@ function AppBarPrivate() {
 
   return (
     <Box>
-      <AppBar position="static" color="primary">
+      <AppBar
+        position="static"
+        sx={{
+          background:
+            "linear-gradient(90deg, rgba(255,201,60,1) 53%, rgba(91,192,248,1) 100%)",
+        }}
+      >
         <Toolbar>
           <IconButton
             edge="start"
-            color="inherit"
+            sx={{
+              color: "black",
+              border: 1,
+              borderColor: "white",
+              borderWidth: 2,
+            }}
             aria-label="menu"
             onClick={() => setIsDrawerOpen(true)}
           >
@@ -68,7 +79,9 @@ function AppBarPrivate() {
           </IconButton>
           <Grid container spacing={1}>
             <Grid>
-              <h3>Laundry Delivery (Private) </h3>
+              <h3 style={{ color: "black" }}>
+                &nbsp; Laundry Delivery (Private){" "}
+              </h3>
             </Grid>
             <Grid alignItems="center">
               <h3>
@@ -111,7 +124,10 @@ function AppBarPrivate() {
               <ListItem component={RouterLink} to="/dispensation">
                 {" "}
                 <IronIcon color="primary" />
-                <ListItemText primary="ยืนยันการผ้าซักเสร็จ" sx={{ padding: 1 }} />
+                <ListItemText
+                  primary="ยืนยันการผ้าซักเสร็จ"
+                  sx={{ padding: 1 }}
+                />
               </ListItem>
 
               <ListItem component={RouterLink} to="/appointment">
@@ -125,7 +141,7 @@ function AppBarPrivate() {
                 <InventoryIcon color="primary" />
                 <ListItemText primary="Stock" sx={{ padding: 1 }} />
               </ListItem>
-              <ListItem component={RouterLink} to="/bill">
+              <ListItem component={RouterLink} to="/delivery/create">
                 {" "}
                 <CarRentalIcon color="primary" />
                 <ListItemText primary="บันทึกการขนส่ง" sx={{ padding: 1 }} />
