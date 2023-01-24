@@ -2,15 +2,10 @@ import * as React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import AppBarPrivate from "./components/AppBarPrivate";
+import AppBarPublic from "./components/AppBarPublic";
 
-// import SignIn from "./components/SignIn_UI";
-// import Employee_entry from "./components/EmployeeData_UI";
-// import EmployeeTable_UI from "./components/EmployeeTable_UI";
-// import Patient_UI from './components/Patient_UI';
-// import Diagnostic_Table from "./components/Diagnostic";
-// import Diagnostic_Entry from "./components/DiagnosticCreate";
-// import Dispensation from './components/Dispensation_UI';
-// import Appointment_UI from "./components/AppointmentCreate_UI";
+import Delivery from "./components/delivery/DeliveryUI";
+import Confirmation from "./components/confirmation/ConfirmationUI";
 import Promotion from "./components/promotion/PromotionUI";
 import Home from "./components/Home";
 import Vehicle from "./components/Vehicle/VehiclrUI"
@@ -30,20 +25,24 @@ export default function App() {
   }
 
   return (
-  <Router>
-    <div>
-      <AppBarPrivate />
-        {/* <Route exact  path="/" component={Home} /> */}
-        <Route exact  path="/" component={Vehicle} />
-        {/* <Route exact  path="/promotion/create" component={Promotion} /> */}
-        {/* <Route path="/employee" element={<EmployeeTable_UI />} />
-        <Route path="/patient" element={<Patient_UI />} />
-        <Route path="/diagnostic" element={<Diagnostic_Table />} />
-        <Route path="/dispensation" element={<Dispensation />} />
-        <Route path="/appointment" element={<Appointment_UI />} />
-        <Route path="/Bill" element={<Bill_UI />} />
-        <Route path="/diagnostic/create" element={<Diagnostic_Entry />} /> */}
+    <div
+      style={{
+        background:
+          "linear-gradient(180deg, rgba(255,201,60,1) 0%, rgba(134,229,255,1) 80%, rgba(0,129,201,1) 100%)",
+        height: "100vh",
+        minHeight: "100vh",
+      }}
+    >
+      <Router>
+        <div>
+          <AppBarPublic />
+          <AppBarPrivate />
+          <Route exact path="/" component={Home} />
+          <Route exact path="/promotion/create" component={Promotion} />
+          <Route exact path="/confirmation/create" component={Confirmation} />
+          <Route exact path="/delivery/create" component={Delivery} />
+        </div>
+      </Router>
     </div>
-  </Router>
   );
 }
