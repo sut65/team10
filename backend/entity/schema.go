@@ -40,54 +40,56 @@ type Customer struct {
 
 	Career_ID *uint
 	Career    Career
+
+	Confirmation []Confirmation `gorm:"foreignKey:Customer_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
 /*                             Employee Management                            */
+/* -------------------------------------------------------------------------- */
 type Gender struct {
 	gorm.Model
 	Gender_Name string
-	Employee    []Employee `gorm:"foreignKey:Gender"`
+	Employee    []Employee `gorm:"foreignKey:Gender_ID"`
 	Customer    []Customer `gorm:"foreingnKey:Gender_ID"`
 }
 type Position struct {
 	gorm.Model
 	Position_Name string
-	Employee      []Employee `gorm:"foreignKey:Position"`
+	Employee      []Employee `gorm:"foreignKey:Position_ID"`
 }
 type WorkShift struct {
 	gorm.Model
 	Work_shift_Name string
-	Employee        []Employee `gorm:"foreignKey:WorkShiftID"`
+	Employee        []Employee `gorm:"foreignKey:WorkShift_ID"`
 }
 
 type Employee struct {
 	gorm.Model
-	Personal_ID *uint
-	Username    string
-	Name        string
-	GenderID    *uint
-	Gender      Gender `gorm:"references:id"`
-	PositionID  *uint
-	Position    Position `gorm:"references:id"`
-	WorkShiftID *uint
-	WorkShift   WorkShift   `gorm:"references:id"`
-	Stock       []Stock     `gorm:"foreignKey:Employee"`
-	Vehicle     []Vehicle   `gorm:"foreignKey:Employee_ID"`
-	Receive     []Receive   `gorm:"foreignKey:Employee_ID"`
-	Promotion   []Promotion `gorm:"foreignKey:Employee_ID"`
+	Personal_ID  *uint
+	Username     string
+	Name         string
+	Gender_ID    *uint
+	Gender       Gender `gorm:"references:id"`
+	Position_ID  *uint
+	Position     Position `gorm:"references:id"`
+	WorkShift_ID *uint
+	WorkShift    WorkShift   `gorm:"references:id"`
+	Stock        []Stock     `gorm:"foreignKey:Employee_ID"`
+	Vehicle      []Vehicle   `gorm:"foreignKey:Employee_ID"`
+	Receive      []Receive   `gorm:"foreignKey:Employee_ID"`
+	Promotion    []Promotion `gorm:"foreignKey:Employee_ID"`
+	Delivery     []Delivery  `gorm:"foreignKey:Employee_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
-
-/* -------------------------------------------------------------------------- */
-/*                     ระบบจัดการStork       */
+/*                                    Stock                                   */
 /* -------------------------------------------------------------------------- */
 type Type struct {
 	gorm.Model
 	Type_Name string
-	Stock     []Stock `gorm:"foreignKey:Type"`
-	Brand     []Brand `gorm:"foreignKey:Type"`
+	Stock     []Stock `gorm:"foreignKey:TypeID"`
+	Brand     []Brand `gorm:"foreignKey:TypeID"`
 }
 type Brand struct {
 	gorm.Model
@@ -111,7 +113,7 @@ type Stock struct {
 	Brand       Brand `gorm:"references:id"`
 	SizeID      *uint
 	Size        Size `gorm:"references:id"`
-	EmployeeID  *uint
+	Employee_ID *uint
 	Employee    Employee `gorm:"references:id"`
 	Add_number  *uint
 	Quantity    *uint
@@ -132,11 +134,11 @@ type TypeWashing struct {
 	Service      []Service `gorm:"foreignKey:TypeWashing_ID"`
 }
 
-type Delivery struct {
+type DeliveryType struct {
 	gorm.Model
-	Derivery_service string
-	Delivery_price   uint8
-	Service          []Service `gorm:"foreignKey:Delivery_ID"`
+	DeriveryType_service string
+	DeliveryType_price   uint8
+	Service              []Service `gorm:"foreignKey:DeliveryType_ID"`
 }
 
 type Weight struct {
@@ -151,8 +153,8 @@ type Service struct {
 	TypeWashing_ID *uint
 	TypeWashing    TypeWashing `gorm:"references:id"`
 
-	Delivery_ID *uint
-	Delivery    Delivery `gorm:"references:id"`
+	DeliveryType_ID *uint
+	DeliveryType    DeliveryType `gorm:"references:id"`
 
 	Weight_ID *uint
 	Weight    Weight `gorm:"references:id"`
@@ -296,6 +298,7 @@ type Vehicle struct {
 	ListModel       string
 	Registration    string
 	Time_Insulance  time.Time
+	Delivery        []Delivery `gorm:"foreignKey:Vehicle_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
@@ -320,6 +323,8 @@ type Complete struct {
 
 	Packaging_ID *uint
 	Packaging    Packaging `gorm:"references:id"`
+
+	Confirmation []Confirmation `gorm:"foreignKey:Complete_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
@@ -328,21 +333,40 @@ type Complete struct {
 type Confirmation struct {
 	gorm.Model
 	Complete_ID *uint
+	Complete    Complete `gorm:"references:id"`
 	Customer_ID *uint
-	//รอ Customer
+	Customer    Customer `gorm:"references:id"`
 	RecvTime    time.Time
 	RecvAddress string
 	RecvType_ID *uint
 	RecvType    RecvType `gorm:"references:id"`
 	Note        string
+	Delivery    []Delivery `gorm:"foreignKey:Confirmation_ID"`
 }
 
 type RecvType struct {
 	gorm.Model
-	RecvType_Name string
-	Confirmation  []Confirmation `gorm:"foreignKey:RecvType_ID"`
+	Name         string
+	Confirmation []Confirmation `gorm:"foreignKey:RecvType_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
 /*                                  Delivery                                  */
 /* -------------------------------------------------------------------------- */
+type Delivery struct {
+	gorm.Model
+	Delivery_Name   string
+	Employee_ID     *uint
+	Employee        Employee `gorm:"references:id"`
+	Confirmation_ID *uint
+	Confirmation    Confirmation `gorm:"references:id"`
+	Vehicle_ID      *uint
+	Vehicle         Vehicle `gorm:"references:id"`
+	Score           uint
+	Problem         string
+}
+
+// type Test struct {
+// 	gorm.Model
+// 	Name string
+// }
