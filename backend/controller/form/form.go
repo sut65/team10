@@ -49,5 +49,6 @@ func ListFormTypes(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	
 	c.JSON(http.StatusOK, gin.H{"data": formtype})
 }
