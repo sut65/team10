@@ -11,40 +11,40 @@ import (
 /* -------------------------------------------------------------------------- */
 //Cutomer
 type Gender struct {
-  gorm.Model
-  Gender_Name    string
-  Customer           []Customer `gorm:"foreingnKey:Gender_ID"`
+	gorm.Model
+	Gender_Name string
+	Customer    []Customer `gorm:"foreingnKey:Gender_ID"`
 }
 
 type Advertise struct {
-  gorm.Model
-  Advertise_Type    string
-  Customer           []Customer `gorm:"foreingnKey:Advertise_ID"`
+	gorm.Model
+	Advertise_Type string
+	Customer       []Customer `gorm:"foreingnKey:Advertise_ID"`
 }
 
 type Career struct {
-  gorm.Model
-  Career_Name    string
-  Customer           []Customer `gorm:"foreingnKey:Career_ID"`
+	gorm.Model
+	Career_Name string
+	Customer    []Customer `gorm:"foreingnKey:Career_ID"`
 }
 
 type Customer struct {
-  gorm.Model
-  Customer_Name                string `gorm:"uniqueIndex"`
-  Customer_Username            string `gorm:"uniqueIndex"`
-  Customer_Phone               string
-  Customer_Promptpay           string
-  Customer_Password            string
-  Customer_Address             string
+	gorm.Model
+	Customer_Name      string `gorm:"uniqueIndex"`
+	Customer_Username  string `gorm:"uniqueIndex"`
+	Customer_Phone     string
+	Customer_Promptpay string
+	Customer_Password  string
+	Customer_Address   string
 
-  Gender_ID      *uint
-  Gender         Gender
+	Gender_ID *uint
+	Gender    Gender
 
-  Advertise_ID      *uint 
-  Advertise         Advertise
+	Advertise_ID *uint
+	Advertise    Advertise
 
-  Career_ID      *uint 
-  Career         Career
+	Career_ID *uint
+	Career    Career
 }
 
 /* -------------------------------------------------------------------------- */
@@ -84,8 +84,6 @@ type Employee struct {
 
 /* -------------------------------------------------------------------------- */
 
-
-
 /* -------------------------------------------------------------------------- */
 /*                     ระบบจัดการStork       */
 /* -------------------------------------------------------------------------- */
@@ -119,6 +117,7 @@ type Stock struct {
 	Size        Size `gorm:"references:id"`
 	EmployeeID  *uint
 	Employee    Employee `gorm:"references:id"`
+	Add_number  *uint
 	Quantity    *uint
 	Time        time.Time
 	Det         []Receive `gorm:"foreignKey:Det_ID"`
