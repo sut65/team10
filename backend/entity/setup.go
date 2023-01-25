@@ -193,4 +193,133 @@ func SetupDatabase() {
 	db.Model(&Engine{}).Create(&Engine2)
 	db.Model(&Engine{}).Create(&Engine3)
 	db.Model(&Engine{}).Create(&Engine4)
+
+	//---------------------------------Customer-------------------------------------//
+//Advertise
+   Advertise1 := Advertise{
+	   Advertise_Type:   "เพื่อน",
+   }
+   db.Model(&Advertise{}).Create(&Advertise1)
+
+   Advertise2 := Advertise{
+	   Advertise_Type:   "facebook",
+   }
+   db.Model(&Advertise{}).Create(&Advertise2)
+
+   Advertise3 := Advertise{
+	   Advertise_Type:   "Line",
+   }
+   db.Model(&Advertise{}).Create(&Advertise3)
+
+   Advertise4 := Advertise{
+	   Advertise_Type:   "instagram",
+   }
+   db.Model(&Advertise{}).Create(&Advertise4)
+
+   Advertise5 := Advertise{
+	   Advertise_Type:   "Twitter",
+   }
+   db.Model(&Advertise{}).Create(&Advertise5)
+
+   Advertise6 := Advertise{
+	   Advertise_Type:   "อื่นๆ",
+   }
+   db.Model(&Advertise{}).Create(&Advertise6)
+
+//Career
+   Career1 := Career{
+	   Career_Name: "นักศึกษา",
+   }
+   db.Model(&Career{}).Create(&Career1)
+
+   Career2 := Career{
+	   Career_Name: "ทหาร",
+   }
+   db.Model(&Career{}).Create(&Career2)
+
+   Career3 := Career{
+	   Career_Name: "นักเรียน",
+   }
+   db.Model(&Career{}).Create(&Career3)
+
+   Career4 := Career{
+	   Career_Name: "ครู",
+   }
+   db.Model(&Career{}).Create(&Career4)
+
+   Career5 := Career{
+	   Career_Name: "แพทย์",
+   }
+   db.Model(&Career{}).Create(&Career5)
+
+   Career6 := Career{
+	   Career_Name: "อื่นๆ",
+   }
+   db.Model(&Career{}).Create(&Career6)
+
+//Customer 
+   Customer1 := Customer{
+	   Customer_Name: "สุดารัตน์  พร้อมจิตต์",
+	   Customer_Username: "Cream_9",
+	   Customer_Phone: "0967436705",
+	   Customer_Promptpay: "0912345265",
+	   Customer_Password:  "cream9",
+	   Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
+	   Gender:             female,
+	   Advertise:          Advertise1,
+	   Career:             Career1,
+   }
+   db.Model(&Customer{}).Create(&Customer1)
+
+   Customer2 := Customer{
+	   Customer_Name: "ปวีณา แจ่มดวง",
+	   Customer_Username: "MOD_MOD",
+	   Customer_Phone: "0612489105",
+	   Customer_Promptpay: "0854251253",
+	   Customer_Password:  "123123",
+	   Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ3 ห้อง3204",
+	   Gender:             female,
+	   Advertise:          Advertise1,
+	   Career:             Career2,
+   }
+   db.Model(&Customer{}).Create(&Customer2)
+
+   Customer3 := Customer{
+	   Customer_Name: "ณัฐพงศ์ จงจุลกลาง",
+	   Customer_Username: "NutSmall",
+	   Customer_Phone: "0815426489",
+	   Customer_Promptpay: "0652465258",
+	   Customer_Password:  "Nuttttt",
+	   Customer_Address:   "หอพักปันสุข มทส. ประตู1 ต. สุรนารี เมืองนครราชสีมา",
+	   Gender:             male,
+	   Advertise:          Advertise4,
+	   Career:             Career4,
+   }
+   db.Model(&Customer{}).Create(&Customer3)
+
+   Customer4 := Customer{
+	   Customer_Name: "เจนนี่ เค",
+	   Customer_Username: "Jenny_K.",
+	   Customer_Phone: "0631489577",
+	   Customer_Promptpay: "0685445358",
+	   Customer_Password:  "J7845",
+	   Customer_Address:   "อพาร์ทเม้นท์โกลด์เดนคีย์ กังสดาล ม.ขอนแก่น",
+	   Gender:             female,
+	   Advertise:          Advertise3,
+	   Career:             Career3,
+   }
+   db.Model(&Customer{}).Create(&Customer4)
+
+   Customer5 := Customer{
+	   Customer_Name: "เอ็มเจ",
+	   Customer_Username: "MJ-M",
+	   Customer_Phone: "0974851364",
+	   Customer_Promptpay: "0815479546",
+	   Customer_Password:  "78496",
+	   Customer_Address:   "โบ๊ทลากูล รีสอร์ท ถ.เทพกระษัตรี เกาะแก้ว เมืองภูเก็ต",
+	   Gender:             male,
+	   Advertise:          Advertise2,
+	   Career:             Career3,
+   }
+   db.Model(&Customer{}).Create(&Customer5)
 }
