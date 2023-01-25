@@ -1,8 +1,7 @@
 import { TypesInterface } from "./IType";
 import { EmployeesInterface } from "../Employee/IEmployee";
 import { SizesInterface } from "./ISize";
-import { BrandInterface } from "../vehicle/IBrandVehicle";
-
+import { BrandsInterface } from "./IBrand";
 export interface StocksInterface {
     [x: string]: any;
     ID: number,
@@ -14,7 +13,7 @@ export interface StocksInterface {
 
 	BrandID:       number,
 
-	Brand:			BrandInterface,
+	Brand:			BrandsInterface,
 
     SizeID:       number,
 
