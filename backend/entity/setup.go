@@ -148,5 +148,5 @@ func SetupDatabase() {
 		WorkShift:   W1,
 	}
 	db.Model(&Employee{}).Create(&E2)
-
+	// end emp //
 }
