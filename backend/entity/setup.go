@@ -76,6 +76,43 @@ func SetupDatabase() {
 	)
 	db = database
 
+	//employee
+	//position
+	po1 := Position{
+		Position_Name: "ผู้จัดการ",
+	}
+	db.Model(&Position{}).Create(&po1)
+
+	po2 := Position{
+		Position_Name: "พนักงาน",
+	}
+	db.Model(&Position{}).Create(&po2)
+	//gender
+	male := Gender{
+		Gender_Name: "Male",
+	}
+	db.Model(&Gender{}).Create(&male)
+
+	female := Gender{
+		Gender_Name: "Female",
+	}
+	db.Model(&Gender{}).Create(&female)
+	//workshift
+	W1 := WorkShift{
+		Work_shift_Name: "8.00 -17.00",
+	}
+	db.Model(&WorkShift{}).Create(&W1)
+
+	W2 := WorkShift{
+		Work_shift_Name: "17.00 - 24.00",
+	}
+	db.Model(&WorkShift{}).Create(&W2)
+
+	W3 := WorkShift{
+		Work_shift_Name: "24.00 - 8.00",
+	}
+	db.Model(&WorkShift{}).Create(&W3)
+
 	//Bill
 	Paymenttype1 := Paymenttype{
 		Type: "เก็บเงินปลายทาง",
@@ -90,5 +127,26 @@ func SetupDatabase() {
 		Address: "testbill",
 	}
 	db.Model(&Service{}).Create(&Service1)
+
+	E1 := Employee{
+		Personal_ID: "0000000000001",
+		Username:    "Phonnapha Saentangchai",
+		Name:        "พรนภา แสนต่างใจ",
+		Password:    "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK",
+		Gender:      female,
+		Position:    po1,
+		WorkShift:   W1,
+	}
+	db.Model(&Employee{}).Create(&E1)
+	E2 := Employee{
+		Personal_ID: "0000000000001",
+		Username:    "pubphee thee",
+		Name:        "พับพีร์ ธีร์",
+		Password:    "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK",
+		Gender:      female,
+		Position:    po1,
+		WorkShift:   W1,
+	}
+	db.Model(&Employee{}).Create(&E2)
 
 }
