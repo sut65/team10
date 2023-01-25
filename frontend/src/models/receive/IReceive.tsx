@@ -1,6 +1,7 @@
 import { BillInterface } from "../bill/IBill";
-import { StocksInterface } from "../Stock/IStock";
 import { EmployeesInterface } from "../Employee/IEmployee";
+import { DetergentInterface } from "./IDetergent";
+import { SoftenerInterface } from "./ISoftener";
 export interface ReceiveInterface {
   ID: number,
 
@@ -10,12 +11,12 @@ export interface ReceiveInterface {
   Bill_ID : number,
   Bill : BillInterface,
 
-  Det_ID : number,
-  Det : StocksInterface,
+  Detergent_ID : number,
+  Detergent : DetergentInterface,
   Det_Quantity : number,
 
-  Sof_ID : number,
-  Sof : StocksInterface,
+  Softener_ID : number,
+  Softener : SoftenerInterface,
   Sof_Quantity : number,
 
   Time_Stamp:   Date,
