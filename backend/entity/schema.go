@@ -121,8 +121,8 @@ type Stock struct {
 	Add_number  string
 	Quantity    string
 	Time        time.Time
-	Det         []Receive `gorm:"foreignKey:Det_ID"`
-	Sof         []Receive `gorm:"foreignKey:Sof_ID"`
+	Detergent   []Detergent `gorm:"foreignKey:Stock_ID"`
+	Softener    []Softener  `gorm:"foreignKey:Stock_ID"`
 }
 
 //end
@@ -260,16 +260,28 @@ type QuotaCode struct {
 /*                                   Receive                                  */
 /* -------------------------------------------------------------------------- */
 //ระบบรับรายการผ้า
+type Detergent struct {
+	gorm.Model
+	Stock_ID *uint
+	Stock    Stock     `gorm:"references:id"`
+	Receive  []Receive `gorm:"foreignKey:Detergent_ID"`
+}
+type Softener struct {
+	gorm.Model
+	Stock_ID *uint
+	Stock    Stock     `gorm:"references:id"`
+	Receive  []Receive `gorm:"foreignKey:Softener_ID"`
+}
 type Receive struct {
 	gorm.Model
 	Employee_ID  *uint
 	Employee     Employee `gorm:"references:id"`
 	Bill_ID      *uint
 	Bill         *Bill `gorm:"references:id"`
-	Det_ID       *uint
-	Det          Stock `gorm:"references:id"`
-	Sof_ID       *uint
-	Sof          Stock `gorm:"references:id"`
+	Detergent_ID *uint
+	Detergent    Detergent `gorm:"references:id"`
+	Softener_ID  *uint
+	Softener     Softener `gorm:"references:id"`
 	Det_Quantity *uint
 	Sof_Quantity *uint
 	Time_Stamp   time.Time
