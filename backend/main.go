@@ -7,6 +7,10 @@ import (
 	gender_controller "github.com/sut65/team10/controller/employee"
 	position_controller "github.com/sut65/team10/controller/employee"
 	workshift_controller "github.com/sut65/team10/controller/employee"
+	brand_controller "github.com/sut65/team10/controller/stock"
+	size_controller "github.com/sut65/team10/controller/stock"
+	stock_controller "github.com/sut65/team10/controller/stock"
+	type_controller "github.com/sut65/team10/controller/stock"
 	"github.com/sut65/team10/entity"
 )
 
@@ -39,6 +43,22 @@ func main() {
 	r.GET("/employees/:id", employee_controller.GetEmployee)
 	r.PATCH("/employees", employee_controller.UpdateEmployee)
 	r.DELETE("/employees/:id", employee_controller.DeleteEmployee)
+
+	//types
+	r.GET("/types", type_controller.ListTypes)
+
+	//sizes
+	r.GET("/sizes", size_controller.ListSizes)
+
+	//brand
+	r.GET("/brands", brand_controller.ListBrands)
+
+	//Stock
+	r.POST("/stocks", stock_controller.CreateStocks)
+	r.GET("/stocks", stock_controller.ListStocks)
+	r.GET("/stocks/:id", stock_controller.GetStocks)
+	r.PATCH("/stocks", stock_controller.UpdateStocks)
+	r.DELETE("/stocks/:id", stock_controller.DeleteStocks)
 
 	// Run the server
 
