@@ -3,6 +3,10 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	controllerbill "github.com/sut65/team10/controller/bill"
+	employee_controller "github.com/sut65/team10/controller/employee"
+	gender_controller "github.com/sut65/team10/controller/employee"
+	position_controller "github.com/sut65/team10/controller/employee"
+	workshift_controller "github.com/sut65/team10/controller/employee"
 	"github.com/sut65/team10/entity"
 )
 
@@ -21,6 +25,20 @@ func main() {
 	r.PATCH("/bills", controllerbill.UpdateBill)
 	// Paymenttype
 	r.GET("/paymenttype", controllerbill.ListPaymenttypes)
+	r.GET("/genders", gender_controller.ListGenders)
+
+	//position
+	r.GET("/positions", position_controller.ListPosition)
+
+	//workshift
+	r.GET("/workshifts", workshift_controller.ListWorkShift)
+
+	//Employee
+	r.POST("/employees", employee_controller.CreateEmployees)
+	r.GET("/employees", employee_controller.ListEmployees)
+	r.GET("/employees/:id", employee_controller.GetEmployee)
+	r.PATCH("/employees", employee_controller.UpdateEmployee)
+	r.DELETE("/employees/:id", employee_controller.DeleteEmployee)
 
 	// Run the server
 

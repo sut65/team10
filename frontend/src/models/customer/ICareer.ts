@@ -1,4 +1,4 @@
 export interface CareerInterface {
-    Career_ID:  number,
+    ID:  number,
     Career_Name:  string,
    }
