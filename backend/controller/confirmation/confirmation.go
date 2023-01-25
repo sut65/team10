@@ -57,6 +57,7 @@ func CreateConfirmation(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"data": con})
 }
 
+// wrong commit close
 // GET /confirmation/:id
 func GetConfirmation(c *gin.Context) {
 	var confirmation entity.Confirmation
