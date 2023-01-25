@@ -21,7 +21,7 @@ func CreateVehicle(c *gin.Context) {
 	}
 
 	//8: ค้นหา branvehicle ด้วยไอดี
-	if tx := entity.DB().Where("id = ?", vehicle.BrandVehicle_ID).First(&brandvehicle); tx.RowsAffected == 0 {
+	if tx := entity.DB().Where("id = ?", vehicle.Brand_Vehicle_ID).First(&brandvehicle); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
 
 		return
@@ -38,10 +38,10 @@ func CreateVehicle(c *gin.Context) {
 
 	//10: สร้าง
 	rec := entity.Vehicle{
-		BrandVehicle_ID: vehicle.BrandVehicle_ID,
+		Brand_Vehicle_ID: vehicle.Brand_Vehicle_ID,
 		Engine_ID:       vehicle.Engine_ID,
 		ListModel:       vehicle.ListModel,
-		Registration:    vehicle.Registration,
+		Vehicle_Rigis:    vehicle.Vehicle_Rigis,
 		Time_Insulance:  vehicle.Time_Insulance.Local(),
 	}
 
