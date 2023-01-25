@@ -4,16 +4,18 @@ import { ReceiveInterface } from "../receive/IReceive";
 
 export interface ComplertInterface {
 
-    Complete_ID: string,
+    ID: number,
     Complete_datetime: Date;
 
-    Employee_ID: string;
+    Employee_ID: number;
+    Name:   String;
     Employee: EmployeesInterface
 
-    Packaging_ID: string;
+    Packaging_ID: number;
+    Packaging_Type: string;
     Packaging: PackagingInterface
 
-    Receive_ID: string;
+    Receive_ID: number;
     Receive:  ReceiveInterface
    
    }

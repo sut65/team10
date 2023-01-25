@@ -1,6 +1,5 @@
 export interface PackagingInterface {
-
-    Packaging_ID: string,
+    ID: number,
     Packaging_Type: string;
    
    }
