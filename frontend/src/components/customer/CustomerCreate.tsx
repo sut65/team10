@@ -48,7 +48,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 
-function UserCreate() {
+function CustomerCreate() {
 
   const [date, setDate] = React.useState<Date | null>(null);
   const [customer, setCustomer] = React.useState<Partial<CustomerInterface>>({});
@@ -445,4 +445,4 @@ function UserCreate() {
 
 }
 
-export default UserCreate;
+export default CustomerCreate;
