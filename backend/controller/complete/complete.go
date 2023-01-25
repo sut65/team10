@@ -1,7 +1,6 @@
 package controller
 
 import (
-	
 	"github.com/sut65/team10/entity"
 
 	"github.com/gin-gonic/gin"
@@ -9,13 +8,18 @@ import (
 	"net/http"
 )
 
+type extendedComplete struct {
+	entity.Complete
+	Name    string
+}
+
 // POST /Complete
 
 func CreateComplete(c *gin.Context) {
 	var complete entity.Complete
 	var packaging entity.Packaging
 	var receive entity.Receive
-    var employee entity.Employee
+	var employee entity.Employee
 
 	if err := c.ShouldBindJSON(&complete); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -40,13 +44,13 @@ func CreateComplete(c *gin.Context) {
 		return
 	}
 
-	//create entity complete
+	//create entity customer
 	com := entity.Complete{
-		Employee:      employee,
-		Receive: receive,
-		Packaging: packaging,
+		Employee:          employee,
+		Receive:           receive,
+		Packaging:         packaging,
 		Complete_datetime: complete.Complete_datetime,
-	}	
+	}
 	if err := entity.DB().Create(&com).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -70,16 +74,36 @@ func GetComplete(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": complete})
 }
 
+func GetEmployeeName(c *gin.Context) {
+	var complete entity.Complete
+	id := c.Param("employee_id")
+
+	if err := entity.DB().Raw("SELECT * FROM completes WHERE employees_id = ?", id).Scan(&complete).Error; err != nil {
+
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+
+		return
+
+	}
+	c.JSON(http.StatusOK, gin.H{"data": complete})
+}
+
 // GET /Complete
 
-func ListCompletes(c *gin.Context) {
-	var completes []entity.Complete
-	if err := entity.DB().Raw("SELECT * FROM completes").Find(&completes).Error; err != nil {
+func ListComplete(c *gin.Context) {
+
+	var completes []extendedComplete
+
+	if err := entity.DB().Preload("Employees").Preload("Packagings").Preload("Receives").Preload("Completes").Raw("SELECT c.* , e.name FROM completes c JOIN employees e ON e.id = c.id").Scan(&completes).Error; err != nil {
+
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+
 		return
+
 	}
 
 	c.JSON(http.StatusOK, gin.H{"data": completes})
+
 }
 
 // DELETE /complete/:id
