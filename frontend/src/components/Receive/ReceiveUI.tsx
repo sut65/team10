@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 /* Grid */
-import { Paper } from "@mui/material";
+import { Paper, SelectChangeEvent } from "@mui/material";
 import { Grid } from "@mui/material";
 import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from '@mui/icons-material/Cancel';
 import UpdateIcon from '@mui/icons-material/Update';
 import Box from '@mui/material/Box';
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
 /* combobox */
 import { TextField } from "@mui/material";
@@ -22,14 +23,197 @@ import { Container } from "@mui/material";
 
 /* Interface */
 import { ReceiveInterface } from "../../models/receive/IReceive";
-function Receive() {
-  const [date, setDate] = React.useState<Dayjs | null>(dayjs());
-  const [receive, setReceive] = React.useState<Partial<ReceiveInterface>>({});
+import { BillInterface } from "../../models/bill/IBill";
+import { DetergentInterface } from "../../models/receive/IDetergent";
+import { SoftenerInterface } from "../../models/receive/ISoftener";
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
+const ReceiveCreate = () => {
+  const [receive, setReceive] = React.useState<Partial<ReceiveInterface>>({
+    Bill_ID: 0,
+    Detergent_ID: 0,
+    Softener_ID: 0,
+  });
+
+  const [bill, setBill] = React.useState<BillInterface[]>([]);
+  const [detergent, setDetergent] = React.useState<DetergentInterface[]>([]);
+  const [softener, setSoftener] = React.useState<SoftenerInterface[]>([]);
+  const [success, setSuccess] = React.useState(false);
+  const [error, setError] = React.useState(false);
+
+  //================================================================================================================//
+
+  const getBill = async () => {
+    const apiUrl = `http://localhost:8080/bills`;
+
+    const requestOptions = {
+      method: "GET",
+
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    };
+    //การกระทำ //json
+    fetch(apiUrl, requestOptions)
+      .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
+
+      .then((res) => {
+        console.log(res.data); //show ข้อมูล
+
+        if (res.data) {
+          setBill(res.data);
+        } else {
+          console.log("else");
+        }
+      });
+  };
+
+  const getDetergent = async () => {
+    const apiUrl = `http://localhost:8080/detergents`;
+
+    const requestOptions = {
+      method: "GET",
+
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    };
+    //การกระทำ //json
+    fetch(apiUrl, requestOptions)
+      .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
+
+      .then((res) => {
+        console.log(res.data); //show ข้อมูล
+
+        if (res.data) {
+          setDetergent(res.data);
+        } else {
+          console.log("else");
+        }
+      });
+  };
+
+  const getSoftener = async () => {
+    const apiUrl = `http://localhost:8080/softeners`;
+
+    const requestOptions = {
+      method: "GET",
+
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    };
+    //การกระทำ //json
+    fetch(apiUrl, requestOptions)
+      .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
+
+      .then((res) => {
+        console.log(res.data); //show ข้อมูล
+
+        if (res.data) {
+          setSoftener(res.data);
+        } else {
+          console.log("else");
+        }
+      });
+  };
+
+  //================================================================================================================//
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSuccess(false);
+    setError(false);
+  };
+
+  const handleInputChange = (
+    event: React.ChangeEvent<{ id?: string; value: any }>
+  ) => {
+    const id = event.target.id as keyof typeof ReceiveCreate;
+
+    const { value } = event.target;
+
+    setReceive({ ...receive, [id]: value });
+  };
+
+  const handleChange = (event: SelectChangeEvent<number>) => {
+    const name = event.target.name as keyof typeof receive;
+    setReceive({
+      ...receive,
+      [name]: event.target.value,
+    });
+  };
+
+  const requestOptionsGet = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  function submit() {
+    let data = {
+      Bill_ID: receive.Bill_ID,
+      Detergent: receive.Detergent_ID,
+      Det_Quantity: receive.Det_Quantity,
+      Softener: receive.Softener_ID,
+      Sof_Quantity: receive.Sof_Quantity,
+    };
+
+    //================================================================================================================//
+
+const apiUrl = "http://localhost:8080";
+
+const requestOptionsPost = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+};
+
+fetch(`${apiUrl}/receive`, requestOptionsPost)
+    .then((response) => response.json())
+    .then((res) => {
+        console.log(res)
+        if (res.data) {
+            setSuccess(true);
+        } else {
+            setError(true);
+        }
+    });
+}
+
+  //================================================================================================================//
+
+  useEffect(() => {
+    getBill();
+    getDetergent();
+    getSoftener();
+    submit();
+  }, []);
+
+  function setDate(newValue: DateConstructor | null) {
+    throw new Error("Function not implemented.");
+  }
 
   return (
       <Container maxWidth="md">
         <Paper>
-          <Grid sx={{padding:3}}>
+         <Grid sx={{padding:3}}>
           <h1>Recieve</h1></Grid>
             <Grid container spacing={5}>
               <Grid
@@ -197,7 +381,7 @@ function Receive() {
                 justifyContent={"center"}
                 sx={{
                   paddingY: 1,
-                }}
+               }}
               >
                 <Grid item xs={3}>
                   <h3>Time Stamp</h3>
@@ -207,9 +391,9 @@ function Receive() {
                     <DateTimePicker
                       label="DateTimePicker"
                       renderInput={(params) => <TextField {...params} />}
-                      value={date}
+                      value={Date}
                       onChange={(newValue) => {
-                        setDate(newValue);
+                      setDate(newValue);
                       }}
                     />
                   </LocalizationProvider>
@@ -252,4 +436,4 @@ function Receive() {
       </Container>
   );
 }
-export default Receive;
+export default ReceiveCreate;
