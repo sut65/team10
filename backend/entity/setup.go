@@ -149,4 +149,7 @@ func SetupDatabase() {
 	}
 	db.Model(&Employee{}).Create(&E2)
 	// end emp //
+
+	//receive//
+	//-------------------//
 }
