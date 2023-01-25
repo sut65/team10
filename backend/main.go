@@ -55,10 +55,10 @@ func main() {
 
 	//Stock
 	r.POST("/stocks", stock_controller.CreateStocks)
-	r.GET("/stocks", stock_controller.ListStocks)
-	r.GET("/stocks/:id", stock_controller.GetStocks)
-	r.PATCH("/stocks", stock_controller.UpdateStocks)
-	r.DELETE("/stocks/:id", stock_controller.DeleteStocks)
+	r.GET("/stocks", stock_controller.ListStock)
+	r.GET("/stocks/:id", stock_controller.GetStock)
+	r.PATCH("/stocks", stock_controller.UpdateStock)
+	r.DELETE("/stocks/:id", stock_controller.DeleteStock)
 
 	// Run the server
 
