@@ -61,9 +61,13 @@ func SetupDatabase() {
 		&QuotaCode{},
 
 		//Receive
+		&Detergent{},
+		&Softener{},
+		&Receive{},
+
+		//Vehicle
 		&Brand_Vehicle{},
 		&Engine{},
-		&Receive{},
 		&Vehicle{},
 
 		//Complete
