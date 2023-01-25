@@ -1,11 +1,11 @@
 package controller
 
 import (
-	"net/http"
-
-	govalidator "github.com/asaskevich/govalidator"
-	"github.com/gin-gonic/gin"
 	"github.com/sut65/team10/entity"
+
+	"github.com/gin-gonic/gin"
+
+	"net/http"
 )
 
 // POST /receives
@@ -29,7 +29,7 @@ func CreateReceive(c *gin.Context) {
 	}
 
 	//9: ค้นหา Det ด้วยไอดี
-	if tx := entity.DB().Where("id = ?", receive.Det_ID).First(&stock); tx.RowsAffected == 0 {
+	if tx := entity.DB().Where("id = ?", receive.Detergent_ID).First(&stock.Detergent); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
 
 		return
@@ -37,7 +37,7 @@ func CreateReceive(c *gin.Context) {
 	}
 
 	//10: ค้นหา Sof ด้วยไอดี
-	if tx := entity.DB().Where("id = ?", receive.Sof_ID).First(&stock); tx.RowsAffected == 0 {
+	if tx := entity.DB().Where("id = ?", receive.Softener_ID).First(&stock.Softener); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
 
 		return
@@ -47,16 +47,11 @@ func CreateReceive(c *gin.Context) {
 	//11: สร้าง
 	rec := entity.Receive{
 		Bill_ID:      receive.Bill_ID,
-		Det_ID:       receive.Det_ID,
-		Sof_ID:       receive.Sof_ID,
+		Detergent_ID: receive.Detergent_ID,
+		Softener_ID:  receive.Softener_ID,
 		Det_Quantity: receive.Det_Quantity,
 		Sof_Quantity: receive.Sof_Quantity,
 		Time_Stamp:   bill.Time_Stamp.Local(),
-	}
-
-	if _, err := govalidator.ValidateStruct(rec); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
 	}
 
 	//12: บันทึก
