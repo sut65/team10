@@ -66,15 +66,18 @@ type WorkShift struct {
 
 type Employee struct {
 	gorm.Model
-	Personal_ID  *uint
-	Username     string
+	Personal_ID  string `gorm:"uniqueIndex"`
+	Username     string `gorm:"uniqueIndex"`
 	Name         string
 	Gender_ID    *uint
 	Gender       Gender `gorm:"references:id"`
 	Position_ID  *uint
 	Position     Position `gorm:"references:id"`
 	WorkShift_ID *uint
-	WorkShift    WorkShift   `gorm:"references:id"`
+	WorkShift    WorkShift `gorm:"references:id"`
+	Phonnumber   string
+	Address      string
+	Password     string
 	Stock        []Stock     `gorm:"foreignKey:Employee_ID"`
 	Vehicle      []Vehicle   `gorm:"foreignKey:Employee_ID"`
 	Receive      []Receive   `gorm:"foreignKey:Employee_ID"`
@@ -106,7 +109,7 @@ type Size struct {
 
 type Stock struct {
 	gorm.Model
-	List_Number *uint
+	List_Number string `gorm:"uniqueIndex"`
 	TypeID      *uint
 	Type        Type `gorm:"references:id"`
 	BrandID     *uint
@@ -115,8 +118,8 @@ type Stock struct {
 	Size        Size `gorm:"references:id"`
 	Employee_ID *uint
 	Employee    Employee `gorm:"references:id"`
-	Add_number  *uint
-	Quantity    *uint
+	Add_number  string
+	Quantity    string
 	Time        time.Time
 	Det         []Receive `gorm:"foreignKey:Det_ID"`
 	Sof         []Receive `gorm:"foreignKey:Sof_ID"`
