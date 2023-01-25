@@ -152,4 +152,41 @@ func SetupDatabase() {
 
 	//receive//
 	//-------------------//
+
+	//Vehicle
+	//Brand_Vehicle
+	Brand_Vehicle1 := Brand_Vehicle{
+		Brand_Vehicle: "Yamaha",
+	}
+	Brand_Vehicle2 := Brand_Vehicle{
+		Brand_Vehicle: "Honda",
+	}
+	Brand_Vehicle3 := Brand_Vehicle{
+		Brand_Vehicle: "Vespa",
+	}
+	Brand_Vehicle4 := Brand_Vehicle{
+		Brand_Vehicle: "Suzuki",
+	}
+	db.Model(&Brand_Vehicle{}).Create(&Brand_Vehicle1)
+	db.Model(&Brand_Vehicle{}).Create(&Brand_Vehicle2)
+	db.Model(&Brand_Vehicle{}).Create(&Brand_Vehicle3)
+	db.Model(&Brand_Vehicle{}).Create(&Brand_Vehicle4)
+
+	//Engine
+	Engine1 := Engine{
+		Engine: "100",
+	}
+	Engine2 := Engine{
+		Engine: "110",
+	}
+	Engine3 := Engine{
+		Engine: "125",
+	}
+	Engine4 := Engine{
+		Engine: "150",
+	}
+	db.Model(&Engine{}).Create(&Engine1)
+	db.Model(&Engine{}).Create(&Engine2)
+	db.Model(&Engine{}).Create(&Engine3)
+	db.Model(&Engine{}).Create(&Engine4)
 }
