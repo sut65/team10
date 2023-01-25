@@ -3,7 +3,7 @@ import { AdvertiseInterface } from "./IAdvertise";
 import { GendersInterface } from "../Employee/IGender";
 
 export interface CustomerInterface {
-    Customer_ID:                 string,
+    ID:                 number,
     Customer_Name:                string ,
     Customer_Username:            string ,
     Customer_Phone:               string ,
@@ -11,13 +11,15 @@ export interface CustomerInterface {
     Customer_Password:           string ,
     Customer_Address:            string ,
  
-    Career_ID:  string;
+    Career_ID:  number;
     Career: CareerInterface
 
-    Advertise_ID: string;
+    Advertise_ID: number;
     Advertise: AdvertiseInterface
 
-    Gender_ID: string;
+    Gender_ID: number;
+    Gender_Name:   string;
     Gerder: GendersInterface
+
 
    }

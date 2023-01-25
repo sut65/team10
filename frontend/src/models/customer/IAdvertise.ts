@@ -1,4 +1,4 @@
 export interface AdvertiseInterface {
-    Advertise_ID:  string,
+    ID:  number,
     Advertise_Type:  string,
    }
