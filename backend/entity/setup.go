@@ -1,6 +1,8 @@
 package entity
 
 import (
+	"time"
+
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -322,4 +324,55 @@ func SetupDatabase() {
 	   Career:             Career3,
    }
    db.Model(&Customer{}).Create(&Customer5)
+
+   //---------------------------------Complete-------------------------------------//
+   	//Packaging
+	Packaging1 := Packaging{
+		Packaging_Type: "ถุงซิปล็อค",
+	}
+	db.Model(&Packaging{}).Create(&Packaging1)
+
+	Packaging2 := Packaging{
+		Packaging_Type: "กล่องขนาดเล็ก",
+	}
+	db.Model(&Packaging{}).Create(&Packaging2)
+
+	Packaging3 := Packaging{
+		Packaging_Type: "กล่องขนาดใหญ่",
+	}
+	db.Model(&Packaging{}).Create(&Packaging3)
+
+	Packaging4 := Packaging{
+		Packaging_Type: "อื่นๆ",
+	}
+	db.Model(&Packaging{}).Create(&Packaging4)
+
+	//complete
+	complete1 := Complete{
+		Model:             gorm.Model{},
+		Complete_datetime: time.Time{},
+		Employee:          E1,
+		Receive:           Receive1,
+		Packaging:         Packaging1,
+	}
+	db.Model(&Complete{}).Create(&complete1)
+
+	complete2 := Complete{
+		Model:             gorm.Model{},
+		Complete_datetime: time.Time{},
+		Employee:          E1,
+		Receive:           Receive2,
+		Packaging:         Packaging3,
+	}
+	db.Model(&Complete{}).Create(&complete2)
+
+	complete3 := Complete{
+		Model:             gorm.Model{},
+		Complete_datetime: time.Time{},
+		Employee:          E2,
+		Receive:           Receive1,
+		Packaging:         Packaging4,
+	}
+	db.Model(&Complete{}).Create(&complete3)
+
 }
