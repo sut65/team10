@@ -9,6 +9,43 @@ import (
 /* -------------------------------------------------------------------------- */
 /*                               Register System                              */
 /* -------------------------------------------------------------------------- */
+//Cutomer
+type Gender struct {
+  gorm.Model
+  Gender_Name    string
+  Customer           []Customer `gorm:"foreingnKey:Gender_ID"`
+}
+
+type Advertise struct {
+  gorm.Model
+  Advertise_Type    string
+  Customer           []Customer `gorm:"foreingnKey:Advertise_ID"`
+}
+
+type Career struct {
+  gorm.Model
+  Career_Name    string
+  Customer           []Customer `gorm:"foreingnKey:Career_ID"`
+}
+
+type Customer struct {
+  gorm.Model
+  Customer_Name                string `gorm:"uniqueIndex"`
+  Customer_Username            string `gorm:"uniqueIndex"`
+  Customer_Phone               string
+  Customer_Promptpay           string
+  Customer_Password            string
+  Customer_Address             string
+
+  Gender_ID      *uint
+  Gender         Gender
+
+  Advertise_ID      *uint 
+  Advertise         Advertise
+
+  Career_ID      *uint 
+  Career         Career
+}
 
 /* -------------------------------------------------------------------------- */
 /*                             Employee Management                            */
@@ -38,11 +75,16 @@ type Employee struct {
 	PositionID  *uint
 	Position    Position `gorm:"references:id"`
 	WorkShiftID *uint
-	WorkShift   WorkShift `gorm:"references:id"`
-	Stock       []Stock   `gorm:"foreignKey:Employee"`
+	WorkShift   WorkShift   `gorm:"references:id"`
+	Stock       []Stock     `gorm:"foreignKey:Employee"`
+	Vehicle     []Vehicle   `gorm:"foreignKey:Employee_ID"`
+	Receive     []Receive   `gorm:"foreignKey:Employee_ID"`
+	Promotion   []Promotion `gorm:"foreignKey:Employee_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
+
+
 
 /* -------------------------------------------------------------------------- */
 /*                     ระบบจัดการStork       */
@@ -79,12 +121,50 @@ type Stock struct {
 	Employee    Employee `gorm:"references:id"`
 	Quantity    *uint
 	Time        time.Time
+	Det         []Receive `gorm:"foreignKey:Det_ID"`
+	Sof         []Receive `gorm:"foreignKey:Sof_ID"`
 }
 
 //end
 /* -------------------------------------------------------------------------- */
 /*                                   Service                                  */
 /* -------------------------------------------------------------------------- */
+
+type TypeWashing struct {
+	gorm.Model
+	Type_washing string
+	Description  string
+	Service      []Service `gorm:"foreignKey:TypeWashing_ID"`
+}
+
+type Delivery struct {
+	gorm.Model
+	Derivery_service string
+	Delivery_price   uint8
+	Service          []Service `gorm:"foreignKey:Delivery_ID"`
+}
+
+type Weight struct {
+	gorm.Model
+	Weight_net   string
+	Weight_price uint8
+	Service      []Service `gorm:"foreignKey:Weight_ID"`
+}
+
+type Service struct {
+	gorm.Model
+	TypeWashing_ID *uint
+	TypeWashing    TypeWashing `gorm:"references:id"`
+
+	Delivery_ID *uint
+	Delivery    Delivery `gorm:"references:id"`
+
+	Weight_ID *uint
+	Weight    Weight `gorm:"references:id"`
+
+	Address string
+	Bill    []Bill `gorm:"foreignKey:Service_ID"`
+}
 
 /* -------------------------------------------------------------------------- */
 /*                                   Review                                   */
@@ -102,15 +182,16 @@ type Paymenttype struct {
 
 type Bill struct {
 	gorm.Model
-	Customer_ID *uint
-	//รอจาก customer
-	Q_ID           *uint
+	Service_ID     *uint
+	Service        Service `gorm:"references:id"`
+	QuotaCode_ID   *uint
 	QuotaCode      *QuotaCode `gorm:"references:id"`
 	Paymenttype_ID *uint
 	Paymenttype    Paymenttype `gorm:"references:id"`
 	Bill_Price     uint
 	Time_Stamp     time.Time
-	QuotaCode_FK   []QuotaCode `gorm:"foreignKey:Q_ID"`
+	QuotaCode_FK   []QuotaCode `gorm:"foreignKey:Bill_ID"`
+	Receive        []Receive   `gorm:"foreignKey:Bill_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
@@ -138,27 +219,66 @@ type Promotion struct {
 	Price       uint
 	Amount      uint
 	Employee_ID *uint
-	//รอจาก Employee
-	Time_Stamp time.Time
-	QuotaCode  []QuotaCode `gorm:"foreignKey:Promotion_ID"`
+	Employee    Employee `gorm:"references:id"`
+	Time_Stamp  time.Time
+	QuotaCode   []QuotaCode `gorm:"foreignKey:Promotion_ID"`
 }
 
 type QuotaCode struct {
 	gorm.Model
 	Promotion_ID *uint
 	Promotion    Promotion `gorm:"references:id"`
-	Q_ID         *uint
+	Bill_ID      *uint
 	Bill         *Bill  `gorm:"references:id"`
-	Bill_FK      []Bill `gorm:"foreignKey:Q_ID"`
+	Bill_FK      []Bill `gorm:"foreignKey:QuotaCode_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
-/*                                   Recive                                   */
+/*                                   Receive                                  */
 /* -------------------------------------------------------------------------- */
+//ระบบรับรายการผ้า
+type Receive struct {
+	gorm.Model
+	Employee_ID  *uint
+	Employee     Employee `gorm:"references:id"`
+	Bill_ID      *uint
+	Bill         *Bill `gorm:"references:id"`
+	Det_ID       *uint
+	Det          Stock `gorm:"references:id"`
+	Sof_ID       *uint
+	Sof          Stock `gorm:"references:id"`
+	Det_Quantity *uint
+	Sof_Quantity *uint
+	Time_Stamp   time.Time
+}
 
 /* -------------------------------------------------------------------------- */
-/*                                  Transport                                 */
+/*                                  Vehicle                                   */
 /* -------------------------------------------------------------------------- */
+//ระบบจัดการรถขนส่ง
+type Brand_Vehicle struct {
+	gorm.Model
+	Brand   string
+	Vehicle []Vehicle `gorm:"foreignKey:Brand_ID"`
+}
+
+type Engine struct {
+	gorm.Model
+	Engine  int
+	Vehicle []Vehicle `gorm:"foreignKey:Engine_ID"`
+}
+type Vehicle struct {
+	gorm.Model
+	Employee_ID     *uint
+	Employee        Employee `gorm:"references:id"`
+	BrandVehicle_ID *uint
+	BrandVehicle    Brand_Vehicle `gorm:"references:id"`
+	Engine_ID       *uint
+	Engine          Engine `gorm:"references:id"`
+	ListModel       string
+	Registration    string
+	Time_Stamp      time.Time
+}
 
 /* -------------------------------------------------------------------------- */
 /*                           Complete (ผ้ารีบพับแพ๊ค)                            */

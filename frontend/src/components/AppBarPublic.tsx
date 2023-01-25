@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MenuItem from "@mui/material/MenuItem";
-import LocalLaundryServiceIcon from '@mui/icons-material/LocalLaundryService';
+import LocalLaundryServiceIcon from "@mui/icons-material/LocalLaundryService";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Menu from "@mui/material/Menu";
 import List from "@mui/material/List";
@@ -30,7 +30,7 @@ import Grid from "@material-ui/core/Grid/Grid";
 
 const useStyles = makeStyles({
   drawer: {
-    width: 150,
+    width: 250,
   },
 });
 
@@ -70,7 +70,7 @@ function AppBarPublic() {
             <Grid>
               <h3>Laundry Delivery </h3>
             </Grid>
-            <Grid alignItems= "center">
+            <Grid alignItems="center">
               <h3>
                 <LocalLaundryServiceIcon />
               </h3>
@@ -80,54 +80,38 @@ function AppBarPublic() {
           <Drawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
             {" "}
             {/* Tab Menu */}
-            <List className={classes.drawer} sx={{ margin: 1, padding: 2 }}>
+            <List className={classes.drawer} sx={{ margin: 1, padding: 1 }}>
               <ListItem button component={RouterLink} to="/">
                 {" "}
-                {/* icon หน้าแรก */}
                 <HomeIcon color="primary" />
-                <ListItemText primary="หน้าแรก" sx={{ padding: 2 }} />
+                <ListItemText primary="หน้าแรก" sx={{ padding: 1 }} />
               </ListItem>
 
               <ListItem button component={RouterLink} to="/employee">
                 {" "}
-                {/* icon บุคลากร */}
                 <BadgeIcon color="primary" />
-                <ListItemText primary="บุคลากร" sx={{ padding: 2 }} />
+                <ListItemText primary="ประเมิน" sx={{ padding: 1 }} />
               </ListItem>
 
               <ListItem button component={RouterLink} to="/patient">
                 {" "}
-                {/* icon คนไข้ */}
                 <AirlineSeatFlatIcon color="primary" />
-                <ListItemText primary="คนไข้" sx={{ padding: 2 }} />
+                <ListItemText primary="เลือกบริการ" sx={{ padding: 1 }} />
               </ListItem>
 
               <ListItem button component={RouterLink} to="/diagnostic">
-                {" "}
-                {/* icon วินิจฉัย */}
+                {/* {เป็นระบบที่ต่อเนื่องจาก เลือกบริการ} */}{" "}
                 <PersonSearchIcon color="primary" />
-                <ListItemText primary="วินิจฉัย" sx={{ padding: 2 }} />
+                <ListItemText
+                  primary="ชำระค่าบริการ (Debug)"
+                  sx={{ padding: 1 }}
+                />
               </ListItem>
 
               <ListItem button component={RouterLink} to="/dispensation">
                 {" "}
-                {/* icon จ่ายยา */}
                 <VaccinesIcon color="primary" />
-                <ListItemText primary="สั่งจ่ายยา" sx={{ padding: 2 }} />
-              </ListItem>
-
-              <ListItem button component={RouterLink} to="/appointment">
-                {" "}
-                {/* icon ใบนัด */}
-                <AddToQueueIcon color="primary" />
-                <ListItemText primary="ใบนัด" sx={{ padding: 2 }} />
-              </ListItem>
-
-              <ListItem button component={RouterLink} to="/bill">
-                {" "}
-                {/* icon ออกบิล */}
-                <AttachMoneyIcon color="primary" />
-                <ListItemText primary="ออกบิล" sx={{ padding: 2 }} />
+                <ListItemText primary="ยืนยันรับผ้า" sx={{ padding: 1 }} />
               </ListItem>
             </List>
           </Drawer>
