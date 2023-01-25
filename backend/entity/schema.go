@@ -281,27 +281,27 @@ type Receive struct {
 //ระบบจัดการรถขนส่ง
 type Brand_Vehicle struct {
 	gorm.Model
-	Brand   string
-	Vehicle []Vehicle `gorm:"foreignKey:BrandVehicle_ID"`
+	Brand_Vehicle string
+	Vehicle       []Vehicle `gorm:"foreignKey:Brand_Vehicle_ID"`
 }
 
 type Engine struct {
 	gorm.Model
-	Engine  int
+	Engine  string
 	Vehicle []Vehicle `gorm:"foreignKey:Engine_ID"`
 }
 type Vehicle struct {
 	gorm.Model
-	Employee_ID     *uint
-	Employee        Employee `gorm:"references:id"`
-	BrandVehicle_ID *uint
-	BrandVehicle    Brand_Vehicle `gorm:"references:id"`
-	Engine_ID       *uint
-	Engine          Engine `gorm:"references:id"`
-	ListModel       string
-	Registration    string
-	Time_Insulance  time.Time
-	Delivery        []Delivery `gorm:"foreignKey:Vehicle_ID"`
+	Employee_ID      *uint
+	Employee         Employee `gorm:"references:id"`
+	Brand_Vehicle_ID *uint
+	Brand_Vehicle    Brand_Vehicle `gorm:"references:id"`
+	Engine_ID        *uint
+	Engine           Engine `gorm:"references:id"`
+	ListModel        string
+	Vehicle_Rigis    string
+	Time_Insulance   time.Time
+	Delivery         []Delivery `gorm:"foreignKey:Vehicle_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
