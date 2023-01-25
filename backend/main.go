@@ -3,6 +3,8 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	controllerbill "github.com/sut65/team10/controller/bill"
+	controllercomplete "github.com/sut65/team10/controller/complete"
+	controllerconfirmation "github.com/sut65/team10/controller/confirmation"
 	employee_controller "github.com/sut65/team10/controller/employee"
 	gender_controller "github.com/sut65/team10/controller/employee"
 	position_controller "github.com/sut65/team10/controller/employee"
@@ -60,6 +62,17 @@ func main() {
 	r.PATCH("/stocks", stock_controller.UpdateStock)
 	r.DELETE("/stocks/:id", stock_controller.DeleteStock)
 
+	// Confirmation
+	r.GET("/confirmation", controllerconfirmation.ListConfirmations)
+	r.GET("/confirmation/:id", controllerconfirmation.GetConfirmation)
+	r.POST("/confirmations", controllerconfirmation.CreateConfirmation)
+	r.PATCH("/confirmations", controllerconfirmation.UpdateConfirmation)
+
+	// Recvtype
+	r.GET("/recvtype", controllerconfirmation.ListRecvType)
+
+	//Complete
+	r.GET("/complete", controllercomplete.ListComplete)
 	// Run the server
 
 	r.Run()
@@ -72,7 +85,7 @@ func CORSMiddleware() gin.HandlerFunc {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, PATCH")
 
 		if c.Request.Method == "OPTIONS" {
 			c.AbortWithStatus(204)
