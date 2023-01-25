@@ -1,10 +1,13 @@
+import { CompleteInterface } from "../complete/IComplete";
+import { CustomerInterface } from "../customer/ICustomer";
 import { RecvTypeInterface } from "./IRecvType";
 
 export interface ConfirmationInterface {
   ID: number;
   Complete_ID: number;
+  Complete: CompleteInterface
   Customer_ID: number;
-  //Customer: CustomerInterface;
+  Customer: CustomerInterface;
   RecvTime: Date;
   RecvAddress: string;
   RecvType_ID: number;

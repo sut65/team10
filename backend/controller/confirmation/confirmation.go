@@ -42,11 +42,11 @@ func CreateConfirmation(c *gin.Context) {
 	// 12: สร้าง Confirmation
 	con := entity.Confirmation{
 		Complete:    complete,
-		RecvType:    recvtype,                 // โยงความสัมพันธ์กับ Entity Confirmation_Type
-		RecvTime:    confirmation.RecvTime,    // โยงความสัมพันธ์กับ Entity Disease
-		RecvAddress: confirmation.RecvAddress, // โยงความสัมพันธ์กับ Entity Patient
-		Customer:    customer,                 // โยงความสัมพันธ์กับ Entity Employee
-		Note:        confirmation.Note,        // ตั้งค่าฟิลด์ Symptom
+		RecvType:    recvtype,                      // โยงความสัมพันธ์กับ Entity Confirmation_Type
+		RecvTime:    confirmation.RecvTime.Local(), // โยงความสัมพันธ์กับ Entity Disease
+		RecvAddress: confirmation.RecvAddress,      // โยงความสัมพันธ์กับ Entity Patient
+		Customer:    customer,                      // โยงความสัมพันธ์กับ Entity Employee
+		Note:        confirmation.Note,             // ตั้งค่าฟิลด์ Symptom
 	}
 
 	// 13: บันทึก
@@ -71,7 +71,7 @@ func GetConfirmation(c *gin.Context) {
 // GET /confirmation
 func ListConfirmations(c *gin.Context) {
 	var confirmations []entity.Confirmation
-	if err := entity.DB().Preload("Confirmation_Type").Preload("Disease").Preload("Patient").Raw("SELECT * FROM confirmations").Find(&confirmations).Error; err != nil {
+	if err := entity.DB().Preload("RecvType").Raw("SELECT * FROM confirmations").Find(&confirmations).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -93,30 +93,24 @@ func DeleteConfirmation(c *gin.Context) {
 // PATCH /confirmations
 func UpdateConfirmation(c *gin.Context) {
 	var confirmation entity.Confirmation
+
 	if err := c.ShouldBindJSON(&confirmation); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if tx := entity.DB().Where("id = ?", confirmation.ID).First(&confirmation); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "confirmation not found"})
-		return
+	conf := entity.Confirmation{
+		RecvTime:    confirmation.RecvTime.Local(),
+		RecvAddress: confirmation.RecvAddress,
+		Note:        confirmation.Note,
+		RecvType_ID: confirmation.RecvType_ID,
 	}
 
-	if err := entity.DB().Save(&confirmation).Error; err != nil {
+	if err := entity.DB().Where("id = ?", confirmation.ID).Updates(&conf).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": confirmation})
-}
+	c.JSON(http.StatusOK, gin.H{"data": conf})
 
-func ListConfirmations_Bill(c *gin.Context) {
-	var confirmations []entity.Confirmation
-	if err := entity.DB().Preload("Employee").Preload("Confirmation_Type").Preload("Disease").Preload("Patient").Raw("SELECT * FROM (SELECT * FROM confirmations ORDER BY id DESC) AS x GROUP BY patient_id ").Find(&confirmations).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"data": confirmations})
 }
