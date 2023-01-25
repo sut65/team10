@@ -75,13 +75,13 @@ type Stock struct {
 	Brand       Brand `gorm:"references:id"`
 	SizeID      *uint
 	Size        Size `gorm:"references:id"`
-	PersonalID  *uint
+	EmployeeID  *uint
 	Employee    Employee `gorm:"references:id"`
-	Add_Number  *uint
 	Quantity    *uint
 	Time        time.Time
 }
 
+//end
 /* -------------------------------------------------------------------------- */
 /*                                   Service                                  */
 /* -------------------------------------------------------------------------- */
