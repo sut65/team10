@@ -139,10 +139,10 @@ func SetupDatabase() {
 	//Promotion
 	//-- Codetype
 	Codetype1 := Codetype{
-		Type: "วันหยุดนักขัตฤกษ์",
+		Type: "ส่วนลด",
 	}
 	Codetype2 := Codetype{
-		Type: "เทศกาลปีใหม่",
+		Type: "ส่งฟรี",
 	}
 	db.Model(&Codetype{}).Create(&Codetype1)
 	db.Model(&Codetype{}).Create(&Codetype2)
