@@ -172,25 +172,25 @@ type Service struct {
 
 type Satisfaction struct {
 	gorm.Model
-	Satisfaction_name string
-	Form              []Form `gorm:"foreignKey:SatisfactionID"`
+	Satisfaction_name	string
+	Form	[]Form	`gorm:"foreignKey:SatisfactionID"`
 }
 
 type FormType struct {
 	gorm.Model
-	FormType_name string
-	Form          []Form `gorm:"foreignKey:FormTypeID"`
+	FormType_name	string	
+	Form	[]Form	`gorm:"foreignKey:FormTypeID"`
 }
 
 type Form struct {
 	gorm.Model
 	Comment string
 
-	SatisfactionID *uint
-	Satisfaction   Satisfaction `gorm:"references:ID"`
+	SatisfactionID	*uint
+	Satisfaction	Satisfaction	`gorm:"references:id"`
 
-	FormTypeID *uint
-	FormType   FormType `gorm:"references:ID"`
+	FormTypeID	*uint
+	FormType	FormType	`gorm:"references:id"`
 }
 
 /* -------------------------------------------------------------------------- */
