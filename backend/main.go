@@ -35,6 +35,10 @@ func main() {
 	r.GET("/genders", gender_controller.ListGenders)
 
 	// Promotion
+	r.GET("/promotion", controllerpromotion.ListPromotions)
+	r.GET("/promotion/:id", controllerpromotion.GetPromotion)
+	r.POST("/promotions", controllerpromotion.CreatePromotion)
+	r.PATCH("/promotions", controllerpromotion.UpdatePromotion)
 	//--codetype
 	r.GET("/codetype", controllerpromotion.ListCodetypes)
 	//--reason
