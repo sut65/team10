@@ -199,17 +199,6 @@ func SetupDatabase() {
 	//db.Model(&Employee{}).Create(&E2)
 	// end emp //
 
-	//receive//
-	Receive1 := Receive{
-		Employee: E1,
-	}
-	Receive2 := Receive{
-		Employee: E1,
-	}
-	db.Model(&Receive{}).Create(&Receive1)
-	db.Model(&Receive{}).Create(&Receive2)
-	//-------------------//
-
 	//Vehicle
 	//Brand_Vehicle
 	Brand_Vehicle1 := Brand_Vehicle{
@@ -456,7 +445,7 @@ func SetupDatabase() {
 
 	db.Model(&Brand{}).Create(&B2)
 	stock1 := Stock{
-		List_Number: "11",
+		List_Number: "1",
 		Type:        t1,
 		Brand:       B2,
 		Size:        s1,
@@ -464,6 +453,17 @@ func SetupDatabase() {
 		Add_number:  "11",
 		Quantity:    "12",
 		Time:        time.Date(2022, 10, 23, 12, 30, 00, 00, time.Now().Local().Location())}
+	db.Model(&Stock{}).Create(&stock1)
+
+	stock2 := Stock{
+		List_Number: "2",
+		Type:        t2,
+		Brand:       B1,
+		Size:        s2,
+		Employee:    E1,
+		Add_number:  "11",
+		Quantity:    "15",
+		Time:        time.Date(2022, 10, 25, 12, 40, 00, 00, time.Now().Local().Location())}
 	db.Model(&Stock{}).Create(&stock1)
 
 	recvt1 := RecvType{
@@ -474,4 +474,57 @@ func SetupDatabase() {
 	}
 	db.Model(&RecvType{}).Create(&recvt1)
 	db.Model(&RecvType{}).Create(&recvt2)
+
+	//db.Model(&RecvType{}).Create(&recvt3)
+
+	//*********************---Bill---*******************//
+	Bill1 := Bill{
+		Service:    Service1,
+		Bill_Price: 250,
+	}
+	db.Model(&Bill{}).Create(&Bill1)
+
+	Detergent1 := Detergent{
+		Stock: stock1,
+	}
+	db.Model(&Detergent{}).Create(&Detergent1)
+
+	Softener1 := Softener{
+		Stock: stock2,
+	}
+	db.Model(&Softener{}).Create(&Softener1)
+	//receive//
+	Receive1 := Receive{
+		Employee:     E1,
+		Bill:         Bill1,
+		Detergent:    Detergent1,
+		Det_Quantity: 2,
+		Softener:     Softener1,
+		Sof_Quantity: 1,
+		Time_Stamp:   time.Date(2022, 10, 16, 12, 30, 00, 00, time.Now().Local().Location()),
+	}
+
+	Receive2 := Receive{
+		Employee:     E1,
+		Bill:         Bill1,
+		Detergent:    Detergent1,
+		Det_Quantity: 2,
+		Softener:     Softener1,
+		Sof_Quantity: 1,
+		Time_Stamp:   time.Date(2022, 10, 16, 12, 30, 00, 00, time.Now().Local().Location()),
+	}
+
+	Receive3 := Receive{
+		Employee:     E1,
+		Bill:         Bill1,
+		Detergent:    Detergent1,
+		Det_Quantity: 2,
+		Softener:     Softener1,
+		Sof_Quantity: 1,
+		Time_Stamp:   time.Date(2022, 10, 16, 12, 30, 00, 00, time.Now().Local().Location()),
+	}
+	db.Model(&Receive{}).Create(&Receive1)
+	db.Model(&Receive{}).Create(&Receive2)
+	db.Model(&Receive{}).Create(&Receive3)
+
 }
