@@ -230,15 +230,15 @@ type Codetype struct {
 type Reason struct {
 	gorm.Model
 	Reason    string
-	Promotion []Promotion `gorm:"foreignKey:Re_ID"`
+	Promotion []Promotion `gorm:"foreignKey:Reason_ID"`
 }
 
 type Promotion struct {
 	gorm.Model
 	Codetype_ID *uint
 	Codetype    Codetype `gorm:"references:id"`
-	Re_ID       *uint
-	Re          Reason `gorm:"references:id"`
+	Reason_ID   *uint
+	Reason      Reason `gorm:"references:id"`
 	Price       uint
 	Amount      uint
 	Employee_ID *uint

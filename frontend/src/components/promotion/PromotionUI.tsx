@@ -49,7 +49,8 @@ function Promotion() {
           Reason_ID: promotion.Reason_ID,
           Price: promotion.Price,
           Amount: promotion.Amount,
-          Employee_ID: Number(localStorage.getItem("uid")),
+          Employee_ID: 1,
+          //Employee_ID: Number(localStorage.getItem("uid")),
           Time_Stamp: date,
         };
 
@@ -63,7 +64,7 @@ function Promotion() {
           body: JSON.stringify(promotion_p),
         };
 
-        fetch(`${apiUrl}/promotion`, requestOptions)
+        fetch(`${apiUrl}/promotions`, requestOptions)
           .then((response) => response.json())
           .then((res) => {
             if (res.data) {
