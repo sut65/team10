@@ -172,25 +172,25 @@ type Service struct {
 
 type Satisfaction struct {
 	gorm.Model
-	Satisfaction_name	string
-	Form	[]Form	`gorm:"foreignKey:SatisfactionID"`
+	Satisfaction_name string
+	Form              []Form `gorm:"foreignKey:SatisfactionID"`
 }
 
 type FormType struct {
 	gorm.Model
-	FormType_name	string	
-	Form	[]Form	`gorm:"foreignKey:FormTypeID"`
+	FormType_name string
+	Form          []Form `gorm:"foreignKey:FormTypeID"`
 }
 
 type Form struct {
 	gorm.Model
 	Comment string
 
-	SatisfactionID	*uint
-	Satisfaction	Satisfaction	`gorm:"references:id"`
+	SatisfactionID *uint
+	Satisfaction   Satisfaction `gorm:"references:id"`
 
-	FormTypeID	*uint
-	FormType	FormType	`gorm:"references:id"`
+	FormTypeID *uint
+	FormType   FormType `gorm:"references:id"`
 }
 
 /* -------------------------------------------------------------------------- */
@@ -277,13 +277,13 @@ type Receive struct {
 	Employee_ID  *uint
 	Employee     Employee `gorm:"references:id"`
 	Bill_ID      *uint
-	Bill         *Bill `gorm:"references:id"`
+	Bill         Bill `gorm:"references:id"`
 	Detergent_ID *uint
 	Detergent    Detergent `gorm:"references:id"`
 	Softener_ID  *uint
 	Softener     Softener `gorm:"references:id"`
-	Det_Quantity *uint
-	Sof_Quantity *uint
+	Det_Quantity uint
+	Sof_Quantity uint
 	Time_Stamp   time.Time
 }
 
