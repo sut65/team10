@@ -74,7 +74,19 @@ function Bill() {
             }
           });
         }
-
+        
+    
+    const getQuotacode = async () => {
+      const apiUrl = "http://localhost:8080/quotacode";
+      const requestOptions = {
+        method: "GET",
+        headers: {
+          //Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+      };
+    }
+        
   const getPaymentType = async () => {
     const apiUrl = "http://localhost:8080/paymenttype";
     const requestOptions = {
@@ -97,6 +109,7 @@ function Bill() {
 
   useEffect(() => {
     getPaymentType();
+    getQuotacode();
   }, []);
   return (
       <Container maxWidth="md">
