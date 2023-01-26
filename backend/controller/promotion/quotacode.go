@@ -10,7 +10,7 @@ import (
 // POST /Quotacodes
 func ListQuotacode(c *gin.Context) {
 	var quotacode []entity.QuotaCode
-	if err := entity.DB().Raw("SELECT * FROM quota_codes WHERE bill_id is NULLGROUP BY promotion_id").Scan(&quotacode).Error; err != nil {
+	if err := entity.DB().Raw("SELECT * FROM quota_codes WHERE bill_id is NULL GROUP BY promotion_id").Scan(&quotacode).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
