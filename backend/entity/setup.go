@@ -527,4 +527,18 @@ func SetupDatabase() {
 	db.Model(&Receive{}).Create(&Receive2)
 	db.Model(&Receive{}).Create(&Receive3)
 
+	//======================================Service====================================//
+	TypeWashing1 := TypeWashing{
+		Model:             gorm.Model{},
+		Type_washing: "ซักรีดปกติ",
+		Description: "ก็แค่ซักรีดโว้ยย",
+	}
+	db.Model(&TypeWashing{}).Create(&TypeWashing1)
+
+	TypeWashing2 := TypeWashing{
+		Model:             gorm.Model{},
+		Type_washing: "ซักรีดน้ำหอม",
+		Description: "รีดเสร็จฉีดน้ำหอม",
+	}
+	db.Model(&TypeWashing{}).Create(&TypeWashing2)
 }
