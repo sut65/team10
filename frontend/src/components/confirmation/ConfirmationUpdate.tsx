@@ -11,11 +11,12 @@ import {
   Select,
 } from "@material-ui/core";
 import Autocomplete from "@mui/material/Autocomplete";
-import { Popover, Stack, TextField } from "@mui/material";
+import { Popover, Snackbar, Stack, TextField } from "@mui/material";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { Link as RouterLink } from "react-router-dom";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
 import SaveIcon from "@mui/icons-material/Save";
 import UpdateIcon from "@mui/icons-material/Update";
@@ -30,7 +31,15 @@ import { ConfirmationInterface } from "../../models/confirmation/IConfirmation";
 import { CompleteInterface } from "../../models/complete/IComplete";
 import ConfirmationUpdate from "./ConfirmationUpdate";
 import Receive from "../Receive/ReceiveUI";
-
+/* -------------------------------------------------------------------------- */
+/*                                    Style                                   */
+/* -------------------------------------------------------------------------- */
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 /* -------------------------------------------------------------------------- */
 /*                                    React                                   */
 /* -------------------------------------------------------------------------- */
@@ -47,7 +56,7 @@ function Confirmation() {
   const [confirmationTemp, setConfirmationTemp] = useState<
     ConfirmationInterface[]
   >([]);
-/* ---------------------------- Display in Update --------------------------- */
+  /* ---------------------------- Display in Update --------------------------- */
   const [confirmation_id, setConfirmation_ID] = useState<number | undefined>(
     undefined
   );
@@ -55,12 +64,15 @@ function Confirmation() {
     undefined
   );
   const [old_note, setOldNote] = useState<string | undefined>(undefined);
-  const [old_recv_type, setOldRecvType] = useState<string | undefined>(undefined);
+  const [old_recv_type, setOldRecvType] = useState<string | undefined>(
+    undefined
+  );
   const [old_recv_time, setOldRecvTime] = useState<any | undefined>(undefined);
 
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [noAccess, setNoAccess] = React.useState(false);
 
   /* ---------------------------------- Popup --------------------------------- */
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -107,6 +119,18 @@ function Confirmation() {
     const id = event.target.id as keyof typeof Confirmation;
     const { value } = event.target;
     setConfirmation({ ...confirmation, [id]: value });
+  };
+  /* -------------------------------- SnackBar -------------------------------- */
+  const handleCloseSnackBar = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSuccess(false);
+    setError(false);
+    setNoAccess(false);
   };
   /* -------------------------------------------------------------------------- */
   /*                                  GET Data                                  */
@@ -176,6 +200,9 @@ function Confirmation() {
         }
       });
   }
+  /* -------------------------------------------------------------------------- */
+  /*                                  HTML CSS                                  */
+  /* -------------------------------------------------------------------------- */
   return (
     <div style={{ background: "rgba(255,201,60,1)" }}>
       <div
@@ -190,6 +217,37 @@ function Confirmation() {
         Confirmation Updator
       </div>
       <Grid container>
+        <Snackbar
+          open={success}
+          autoHideDuration={3000}
+          onClose={handleCloseSnackBar}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert onClose={handleCloseSnackBar} severity="success">
+            <div>Update successfully</div>
+            <div>Refresh to see changes</div>
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={error}
+          autoHideDuration={3000}
+          onClose={handleCloseSnackBar}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert onClose={handleCloseSnackBar} severity="error">
+            Failed "{errorMessage}"
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={noAccess}
+          autoHideDuration={3000}
+          onClose={handleCloseSnackBar}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert onClose={handleCloseSnackBar} severity="error">
+            คุณไม่มีสิทธิการเข้าถึง
+          </Alert>
+        </Snackbar>
         <Grid xs={6}>
           <Stack paddingLeft={2}>
             <Paper style={{ background: "rgba(255,201,60,1)" }}>
@@ -265,13 +323,21 @@ function Confirmation() {
                   Saved Infomation
                 </div>
                 <div>Receive Address</div>
-                <div style={{ background: "#feefd1", color: "#0081C9" }}>&#8205;{old_recv_address}</div>
+                <div style={{ background: "#feefd1", color: "#0081C9" }}>
+                  &#8205;{old_recv_address}
+                </div>
                 <div>Receive Method</div>
-                <div style={{ background: "#feefd1", color: "#0081C9" }}>&#8205;{old_recv_type}</div>
+                <div style={{ background: "#feefd1", color: "#0081C9" }}>
+                  &#8205;{old_recv_type}
+                </div>
                 <div>Receive Time</div>
-                <div style={{ background: "#feefd1", color: "#0081C9" }}>&#8205;{old_recv_time}</div>
+                <div style={{ background: "#feefd1", color: "#0081C9" }}>
+                  &#8205;{old_recv_time}
+                </div>
                 <div>Note</div>
-                <div style={{ background: "#feefd1", color: "#0081C9" }}>&#8205;{old_note}</div>
+                <div style={{ background: "#feefd1", color: "#0081C9" }}>
+                  &#8205;{old_note}
+                </div>
               </Box>
             </Paper>
           </Stack>
