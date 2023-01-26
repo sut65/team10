@@ -17,6 +17,10 @@ import (
 	size_controller "github.com/sut65/team10/controller/stock"
 	stock_controller "github.com/sut65/team10/controller/stock"
 	type_controller "github.com/sut65/team10/controller/stock"
+	Service_controller "github.com/sut65/team10/controller/service"
+	WashingType_controller "github.com/sut65/team10/controller/service"
+	Weight_controller "github.com/sut65/team10/controller/service"
+	DeliveryType_controller "github.com/sut65/team10/controller/service"
 	"github.com/sut65/team10/entity"
 )
 
@@ -108,6 +112,28 @@ func main() {
 	r.GET("/satisfactions", Satisfaction_controller.ListSatisfactions)
 	r.GET("/satisfaction/:id", Satisfaction_controller.GetSatisfaction)
 	r.POST("/satisfactions", Satisfaction_controller.CreateSatisfaction)
+
+	//service
+	r.GET("/services", Service_controller.ListServices)
+	r.GET("/service/:id", Service_controller.GetService)
+	r.POST("/services", Service_controller.CreateService)
+	r.DELETE("/services/:id", Service_controller.DeleteService)
+	r.PATCH("/services", Service_controller.UpdateService)
+
+	//washingType
+	r.GET("/washingtypes", WashingType_controller.ListTypeWashings)
+	r.GET("/washingtype/:id", WashingType_controller.GetTypeWashing)
+	r.POST("/washingtypes", WashingType_controller.CreateTypeWashings)
+
+	//weight
+	r.GET("/weights", Weight_controller.ListWeights)
+	r.GET("/weight/:id", Weight_controller.GetWeight)
+	r.POST("/weights", Weight_controller.CreateWeights)
+
+	//deliverytype
+	r.GET("/deliverytypes", DeliveryType_controller.ListDeliverys)
+	r.GET("/deliverytypes/:id", DeliveryType_controller.GetDelivery)
+	r.POST("/deliverytypes", DeliveryType_controller.CreateDeliverys)
 	// Run the server
 
 	r.Run()
