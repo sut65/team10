@@ -81,6 +81,7 @@ func main() {
 	r.GET("/confirmation/:id", controllerconfirmation.GetConfirmation)
 	r.POST("/confirmations", controllerconfirmation.CreateConfirmation)
 	r.PATCH("/confirmations", controllerconfirmation.UpdateConfirmation)
+	r.GET("/c_complete", controllerconfirmation.ListComplete)
 
 	// Recvtype
 	r.GET("/recvtype", controllerconfirmation.ListRecvType)
