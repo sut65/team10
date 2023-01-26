@@ -14,6 +14,9 @@ import (
 	size_controller "github.com/sut65/team10/controller/stock"
 	stock_controller "github.com/sut65/team10/controller/stock"
 	type_controller "github.com/sut65/team10/controller/stock"
+	Form_controller"github.com/sut65/team10/controller/form"
+	FormType_controller"github.com/sut65/team10/controller/form"
+	Satisfaction_controller"github.com/sut65/team10/controller/form"
 	"github.com/sut65/team10/entity"
 )
 
@@ -84,6 +87,23 @@ func main() {
 
 	//Complete
 	r.GET("/complete", controllercomplete.ListComplete)
+
+	//Form
+	r.GET("/forms", Form_controller.ListForms)
+  	r.GET("/form/:id", Form_controller.GetForm)
+ 	r.POST("/forms", Form_controller.CreateForm)
+	r.DELETE("/forms/:id", Form_controller.DeleteForm)
+	r.PATCH("/forms", Form_controller.UpdateForm)
+
+	//Form_Type
+	r.GET("/formtypes", FormType_controller.ListFormTypes)
+  	r.GET("/formtype/:id", FormType_controller.GetFormType)
+  	r.POST("/formtypes", FormType_controller.CreateFormType)
+
+  //Satisfaction
+    r.GET("/satisfactions", Satisfaction_controller.ListSatisfactions)
+  	r.GET("/satisfaction/:id", Satisfaction_controller.GetSatisfaction)
+  	r.POST("/satisfactions", Satisfaction_controller.CreateSatisfaction)
 	// Run the server
 
 	r.Run()
@@ -96,7 +116,7 @@ func CORSMiddleware() gin.HandlerFunc {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, PATCH")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, PATCH, DELETE")
 
 		if c.Request.Method == "OPTIONS" {
 			c.AbortWithStatus(204)
