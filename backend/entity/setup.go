@@ -467,15 +467,11 @@ func SetupDatabase() {
 	db.Model(&Stock{}).Create(&stock1)
 
 	recvt1 := RecvType{
-		Name: "TypeA",
+		Name: "Hand To Hand",
 	}
 	recvt2 := RecvType{
-		Name: "TypeB",
-	}
-	recvt3 := RecvType{
-		Name: "TypeC",
+		Name: "Less Touch",
 	}
 	db.Model(&RecvType{}).Create(&recvt1)
 	db.Model(&RecvType{}).Create(&recvt2)
-	db.Model(&RecvType{}).Create(&recvt3)
 }
