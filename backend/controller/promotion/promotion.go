@@ -37,8 +37,8 @@ func CreatePromotion(c *gin.Context) {
 
 	}
 
-	//10: ค้นหา Quota ด้วยไอดี
-	if tx := entity.DB().Where("id = ?", promotion.Re_ID).First(&reason); tx.RowsAffected == 0 {
+	//10: ค้นหา Reason ด้วยไอดี
+	if tx := entity.DB().Where("id = ?", promotion.Reason_ID).First(&reason); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
 
 		return
@@ -48,7 +48,7 @@ func CreatePromotion(c *gin.Context) {
 	//12: สร้าง
 	p := entity.Promotion{
 		Codetype_ID: promotion.Codetype_ID,
-		Re_ID:       promotion.Re_ID,
+		Reason_ID:   promotion.Reason_ID,
 		Price:       promotion.Price,
 		Amount:      promotion.Amount,
 		Employee_ID: promotion.Employee_ID,
