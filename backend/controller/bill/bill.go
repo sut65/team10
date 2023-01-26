@@ -83,7 +83,7 @@ func GetBill(c *gin.Context) {
 // GET /bills
 
 func ListBills(c *gin.Context) {
-	var bill entity.Bill
+	var bill []entity.Bill
 	if err := entity.DB().Raw("SELECT * FROM bills").Scan(&bill).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

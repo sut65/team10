@@ -9,7 +9,7 @@ import (
 
 // POST /users
 func ListReasons(c *gin.Context) {
-	var Reason entity.Reason
+	var Reason []entity.Reason
 	if err := entity.DB().Raw("SELECT * FROM reasons").Scan(&Reason).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

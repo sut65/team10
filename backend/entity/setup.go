@@ -120,6 +120,7 @@ func SetupDatabase() {
 	db.Model(&WorkShift{}).Create(&W3)
 
 	//Bill
+	//--Paymenttype
 	Paymenttype1 := Paymenttype{
 		Type: "เก็บเงินปลายทาง",
 	}
@@ -129,10 +130,48 @@ func SetupDatabase() {
 	db.Model(&Paymenttype{}).Create(&Paymenttype1)
 	db.Model(&Paymenttype{}).Create(&Paymenttype2)
 
+	//-- Service
 	Service1 := Service{
 		Address: "testbill",
 	}
 	db.Model(&Service{}).Create(&Service1)
+
+	//Promotion
+	//-- Codetype
+	Codetype1 := Codetype{
+		Type: "ส่วนลด",
+	}
+	Codetype2 := Codetype{
+		Type: "ส่งฟรี",
+	}
+	db.Model(&Codetype{}).Create(&Codetype1)
+	db.Model(&Codetype{}).Create(&Codetype2)
+
+	//-- Reason
+	Reason1 := Reason{
+		Reason: "วันหยุดนักขัตฤกษ์",
+	}
+	Reason2 := Reason{
+		Reason: "เทศกาลปีใหม่",
+	}
+	Reason3 := Reason{
+		Reason: "เทศกาล Xmas",
+	}
+	Reason4 := Reason{
+		Reason: "วันฉลองครบรอบร้าน",
+	}
+	Reason5 := Reason{
+		Reason: "วันพิเศษประจำเดือน",
+	}
+	Reason6 := Reason{
+		Reason: "อื่นๆ",
+	}
+	db.Model(&Reason{}).Create(&Reason1)
+	db.Model(&Reason{}).Create(&Reason2)
+	db.Model(&Reason{}).Create(&Reason3)
+	db.Model(&Reason{}).Create(&Reason4)
+	db.Model(&Reason{}).Create(&Reason5)
+	db.Model(&Reason{}).Create(&Reason6)
 
 	E1 := Employee{
 		Personal_ID: "0000000000001",
@@ -145,7 +184,7 @@ func SetupDatabase() {
 		Address:     "มทส",
 		Password:    "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK",
 	}
-	db.Model(&Employee{}).Create(&E1)
+	//db.Model(&Employee{}).Create(&E1)
 	E2 := Employee{
 		Personal_ID: "0000000000001",
 		Username:    "pubphee thee",
@@ -157,7 +196,7 @@ func SetupDatabase() {
 		Address:     "SUT",
 		Password:    "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK",
 	}
-	db.Model(&Employee{}).Create(&E2)
+	//db.Model(&Employee{}).Create(&E2)
 	// end emp //
 
 	//receive//
@@ -271,7 +310,7 @@ func SetupDatabase() {
 	}
 	db.Model(&Career{}).Create(&Career6)
 
-	//Customer
+	// Customer
 	Customer1 := Customer{
 		Customer_Name:      "สุดารัตน์  พร้อมจิตต์",
 		Customer_Username:  "Cream_9",
@@ -364,8 +403,8 @@ func SetupDatabase() {
 		Model:             gorm.Model{},
 		Complete_datetime: time.Time{},
 		Employee:          E1,
-		Receive:           Receive1,
-		Packaging:         Packaging1,
+		// Receive:           Receive1,
+		Packaging: Packaging1,
 	}
 	db.Model(&Complete{}).Create(&complete1)
 
@@ -373,8 +412,8 @@ func SetupDatabase() {
 		Model:             gorm.Model{},
 		Complete_datetime: time.Time{},
 		Employee:          E1,
-		Receive:           Receive2,
-		Packaging:         Packaging3,
+		// Receive:           Receive2,
+		Packaging: Packaging3,
 	}
 	db.Model(&Complete{}).Create(&complete2)
 
@@ -382,8 +421,8 @@ func SetupDatabase() {
 		Model:             gorm.Model{},
 		Complete_datetime: time.Time{},
 		Employee:          E2,
-		Receive:           Receive1,
-		Packaging:         Packaging4,
+		// Receive:           Receive1,
+		Packaging: Packaging4,
 	}
 	db.Model(&Complete{}).Create(&complete3)
 	t1 := Type{

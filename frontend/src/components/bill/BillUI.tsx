@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from '@mui/icons-material/Cancel';
 import UpdateIcon from '@mui/icons-material/Update';
+import { Snackbar, Alert } from "@mui/material";
 
 /* combobox */
 import { TextField } from "@mui/material";
@@ -27,9 +28,65 @@ import { PaymenttypeInterface } from "../../models/bill/IPaymenttype";
 function Bill() {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
   const [bill, setBill] = React.useState<Partial<BillInterface>>({});
-  const [payment_type_id, setPayment_Type_ID] = React.useState<PaymenttypeInterface[]>([]);
+  const [paymenttype, setPaymenttpye] = React.useState<PaymenttypeInterface[]>([]);
 
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
 
+  //แสดงการ Alert
+  const handleClose = ( // AlertBar
+        event?: React.SyntheticEvent | Event,
+        reason?: string
+    ) => {
+        if (reason === "clickaway") {
+            return;
+        }
+        setSuccess(false);
+        setError(false);
+    };
+
+  function submit() {
+        let bill_p = {
+          Service_ID: Number(localStorage.getItem("uid")),
+          Q_ID: bill.Q_ID,
+          Payment_Type_ID: bill.Paymenttype_ID,
+          Bill_Price: 20,
+          Time_Stamp: date,
+        };
+
+        const apiUrl = "http://localhost:8080";
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(bill_p),
+        };
+
+        fetch(`${apiUrl}/bill`, requestOptions)
+          .then((response) => response.json())
+          .then((res) => {
+            if (res.data) {
+              setSuccess(true);
+            } else {
+              setError(true);
+            }
+          });
+        }
+        
+    
+    const getQuotacode = async () => {
+      const apiUrl = "http://localhost:8080/quotacode";
+      const requestOptions = {
+        method: "GET",
+        headers: {
+          //Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+      };
+    }
+        
   const getPaymentType = async () => {
     const apiUrl = "http://localhost:8080/paymenttype";
     const requestOptions = {
@@ -43,17 +100,39 @@ function Bill() {
     fetch(apiUrl, requestOptions)
       .then((response) => response.json())
       .then((res) => {
+        console.log(res)
         if (res.data) {
-          setPayment_Type_ID(res.data);
+          setPaymenttpye(res.data);
         }
       });
   };
 
   useEffect(() => {
     getPaymentType();
+    getQuotacode();
   }, []);
   return (
       <Container maxWidth="md">
+        <Snackbar // บันทึกสำเร็จ
+                open={success}
+                autoHideDuration={3000}
+                onClose={handleClose}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
+                <Alert onClose={handleClose} severity="success">              
+                    บันทึกข้อมูลสำเร็จ
+                </Alert>
+            </Snackbar>
+
+            <Snackbar // บันทึกไม่สำเร็จ
+                open={error} 
+                autoHideDuration={3000} 
+                onClose={handleClose} 
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
+                <Alert onClose={handleClose} severity="error">
+                    บันทึกข้อมูลไม่สำเร็จ
+                </Alert>
+            </Snackbar>
+
         <LocalAtmIcon color="success" sx={{ fontSize: 80 }}/>
         <Paper>
           <Grid sx={{padding:2}}>
@@ -116,14 +195,35 @@ function Bill() {
                   <h3>Payment Type</h3>
                 </Grid>
                 <Grid item xs={5}>
-                  <Autocomplete
-                    disablePortal
-                    id="combo-box-demo"
-                    options={payment_type_id}
-                    sx={{ width: 300 }}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Movie" />
-                    )}
+                <Autocomplete
+                    id="paymenttype-auto"
+                    options={paymenttype}
+                    fullWidth
+                    size="medium"
+                    onChange={(event: any, value) => {
+                      setBill({ ...bill, Paymenttype_ID: value?.ID }); //Just Set ID to interface
+                    }}
+                    getOptionLabel={(option: any) =>
+                      `${option.Type}`
+                    } //filter value
+                    renderInput={(params) => {
+                      return (
+                        <TextField
+                          {...params}
+                          variant="outlined"
+                          placeholder="Search..."
+                        />
+                      );
+                    }}
+                    renderOption={(props: any, option: any) => {
+                      return (
+                        <li
+                          {...props}
+                          value={`${option.ID}`}
+                          key={`${option.ID}`}
+                        >{`${option.Type}`}</li>
+                      ); //display value
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -203,6 +303,7 @@ function Bill() {
                 <Button
                   variant="contained"
                   color="success"
+                  onClick={submit}
                   endIcon={<SaveIcon />}
                 >
                   commit
