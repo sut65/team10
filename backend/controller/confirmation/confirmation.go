@@ -115,3 +115,14 @@ func UpdateConfirmation(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": conf})
 
 }
+
+// GET /c_completes
+func ListComplete(c *gin.Context) {
+	var complete []entity.Complete
+	if err := entity.DB().Raw("SELECT * FROM completes").Find(&complete).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": complete})
+}

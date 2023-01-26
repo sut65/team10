@@ -11,7 +11,8 @@ import {
   Select,
 } from "@material-ui/core";
 import Autocomplete from "@mui/material/Autocomplete";
-import { Popover, Stack, TextField } from "@mui/material";
+import { Popover, Snackbar, Stack, TextField } from "@mui/material";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
@@ -29,7 +30,15 @@ import { RecvTypeInterface } from "../../models/confirmation/IRecvType";
 import { ConfirmationInterface } from "../../models/confirmation/IConfirmation";
 import { CompleteInterface } from "../../models/complete/IComplete";
 import ConfirmationUpdate from "./ConfirmationUpdate";
-
+/* -------------------------------------------------------------------------- */
+/*                                    Style                                   */
+/* -------------------------------------------------------------------------- */
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 /* -------------------------------------------------------------------------- */
 /*                                    React                                   */
 /* -------------------------------------------------------------------------- */
@@ -47,6 +56,7 @@ function Confirmation() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [noAccess, setNoAccess] = React.useState(false);
 
   /* ---------------------------------- Popup --------------------------------- */
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -73,6 +83,18 @@ function Confirmation() {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  /* -------------------------------- SnackBar -------------------------------- */
+  const handleCloseSnackBar = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSuccess(false);
+    setError(false);
+    setNoAccess(false);
   };
   /* ------------------------------- DatePicker ------------------------------- */
   const handleDateTime = (newValue: Dayjs | null) => {
@@ -110,11 +132,12 @@ function Confirmation() {
   };
 
   const getComplete = async () => {
-    fetch(`${apiUrl}/complete`, requestOptions)
+    fetch(`${apiUrl}/c_complete`, requestOptions)
       .then((response) => response.json())
       .then((res) => {
         if (res.data) {
           setComplete(res.data);
+          console.log(res.data)
         } else {
           console.log("else");
         }
@@ -149,15 +172,12 @@ function Confirmation() {
   async function submit() {
     let data = {
       Complete_ID: convertType(confirmation.Complete_ID),
-      //Complete_ID: convertType("1"), //Test Complete_ID
       RecvType_ID: convertType(confirmation.RecvType_ID),
       RecvAddress: confirmation.RecvAddress,
       RecvTime: recvtime,
       Note: confirmation.Note,
-      //Customer_ID: Number(localStorage.getItem("uid")),
-      Customer_ID: Number(3),//Debug
+      Customer_ID: Number(localStorage.getItem("uid")),
     };
-    console.log(data);
     const requestOptionsPost = {
       method: "POST",
       headers: {
@@ -172,7 +192,6 @@ function Confirmation() {
         if (res.data) {
           setSuccess(true);
           setErrorMessage("");
-          //AutoPageSwap();
         } else {
           setError(true);
           setErrorMessage(res.error);
@@ -180,11 +199,41 @@ function Confirmation() {
       });
   }
   /* -------------------------------------------------------------------------- */
-  /*                                PATCH Update                                */
+  /*                                  HTML CSS                                  */
   /* -------------------------------------------------------------------------- */
   return (
     <Box flexGrow={1} paddingTop={2}>
       <Container maxWidth="md">
+        <Snackbar
+          open={success}
+          autoHideDuration={3000}
+          onClose={handleCloseSnackBar}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert onClose={handleCloseSnackBar} severity="success">
+            Save successfully
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={error}
+          autoHideDuration={3000}
+          onClose={handleCloseSnackBar}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert onClose={handleCloseSnackBar} severity="error">
+            Failed "{errorMessage}"
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={noAccess}
+          autoHideDuration={3000}
+          onClose={handleCloseSnackBar}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert onClose={handleCloseSnackBar} severity="error">
+            คุณไม่มีสิทธิการเข้าถึง
+          </Alert>
+        </Snackbar>
         <Paper style={{ background: "rgba(0, 0, 0, 0.2)" }}>
           <h2 style={{ textAlign: "center", paddingTop: 20, color: "white" }}>
             Confirmation
@@ -286,27 +335,40 @@ function Confirmation() {
                       >
                         Receive Method
                       </div>
-                      <FormControl fullWidth variant="outlined" size="small">
-                        <Select
-                          native
-                          value={confirmation.RecvType_ID + ""}
-                          id="controllable-states-demo"
-                          onChange={handleChange}
-                          inputProps={{
-                            name: "RecvType_ID",
-                          }}
-                          style={{ background: "#feefd1" }}
-                        >
-                          <option aria-label="None" value="">
-                            Please select
-                          </option>
-                          {recvtype.map((item: RecvTypeInterface) => (
-                            <option value={item.ID} key={item.ID}>
-                              {item.Name}
-                            </option>
-                          ))}
-                        </Select>
-                      </FormControl>
+                      <Autocomplete
+                        id="recvtype-autocomplete"
+                        options={recvtype}
+                        fullWidth
+                        size="small"
+                        style={{ background: "#feefd1" }}
+                        onChange={(event: any, value) => {
+                          //Get ID from ...interface
+                          setConfirmation({
+                            ...confirmation,
+                            RecvType_ID: value?.ID,
+                          }); //Just Set ID to interface
+                        }}
+                        sx={{ bgcolor: "#feefd1" }}
+                        getOptionLabel={(option: any) => `${option.Name}`} //filter value
+                        renderInput={(params) => {
+                          return (
+                            <TextField
+                              {...params}
+                              variant="outlined"
+                              placeholder="Search..."
+                            />
+                          );
+                        }}
+                        renderOption={(props: any, option: any) => {
+                          return (
+                            <li
+                              {...props}
+                              value={`${option.ID}`}
+                              key={`${option.ID}`}
+                            >{`${option.Name}`}</li>
+                          ); //display value
+                        }}
+                      />
                     </Stack>
                     <Stack>
                       <div style={{ fontSize: "15px", fontWeight: "bold" }}>
@@ -369,7 +431,7 @@ function Confirmation() {
                         <Popover
                           id={id}
                           open={open}
-                          sx={{paddingBottom: 20}}
+                          sx={{ paddingBottom: 20 }}
                           anchorEl={anchorEl}
                           marginThreshold={50}
                           onClose={handleClose}
@@ -378,7 +440,7 @@ function Confirmation() {
                             horizontal: "left",
                           }}
                         >
-                          <ConfirmationUpdate/>
+                          <ConfirmationUpdate />
                         </Popover>
                       </div>
                       <Button
