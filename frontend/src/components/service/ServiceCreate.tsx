@@ -1,11 +1,11 @@
 import * as React from "react";
 import {Box,  Button,  Container,Divider,  FormControl,  Grid,  MenuItem,  Paper,  Select,  SelectChangeEvent,  Snackbar,  TextField,} from "@mui/material";
 import { useEffect, useState } from "react";
-import {  DeliveryInterface,  ServiceInterface,  WeightInterface,} from "../models/IService";
+import {  DeliveryInterface,  ServiceInterface,  WeightInterface,} from "../../models/service/IService";
 import Typography from "@mui/material/Typography";
 import { ThemeContext } from "@emotion/react";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-import { TypeWashingInterface } from "../models/IService";
+import { TypeWashingInterface } from "../../models/service/IService";
 import { Link as RouterLink } from "react-router-dom";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(

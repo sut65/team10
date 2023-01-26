@@ -2,7 +2,7 @@ import { EmployeesInterface } from "../Employee/IEmployee";
 import { PackagingInterface } from "./IPackagink";
 import { ReceiveInterface } from "../receive/IReceive";
 
-export interface ComplertInterface {
+export interface CompleteInterface {
 
     ID: number,
     Complete_datetime: Date;
