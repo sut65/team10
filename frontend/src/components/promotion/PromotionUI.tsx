@@ -63,7 +63,7 @@ function Promotion() {
           body: JSON.stringify(promotion_p),
         };
 
-        fetch(`${apiUrl}/bill`, requestOptions)
+        fetch(`${apiUrl}/promotion`, requestOptions)
           .then((response) => response.json())
           .then((res) => {
             if (res.data) {
@@ -194,7 +194,7 @@ function Promotion() {
                         setPromotion({ ...promotion, Reason_ID: value?.ID }); //Just Set ID to interface
                     }}
                     getOptionLabel={(option: any) =>
-                      `${option.Type}`
+                      `${option.Reason}`
                     } //filter value
                     renderInput={(params) => {
                       return (
@@ -211,7 +211,7 @@ function Promotion() {
                           {...props}
                           value={`${option.ID}`}
                           key={`${option.ID}`}
-                        >{`${option.Type}`}</li>
+                        >{`${option.Reason}`}</li>
                       ); //display value
                     }}
                   />
@@ -271,6 +271,7 @@ function Promotion() {
                         <Button
                             variant="contained"
                             color="success"
+                            onClick={submit}
                             endIcon={<SaveIcon />}
                         >
                             commit
