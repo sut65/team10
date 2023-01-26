@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 /* Grid */
-import { Paper } from "@mui/material";
-import { Grid } from "@mui/material";
+
+import { Grid, Paper, SelectChangeEvent, Snackbar } from "@mui/material";
 import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from '@mui/icons-material/Cancel';
 import UpdateIcon from '@mui/icons-material/Update';
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
 /* combobox */
 import { TextField } from "@mui/material";
@@ -23,12 +24,168 @@ import { Container } from "@mui/material";
 import { BrandVehicleInterface } from "../../models/vehicle/IBrandVehicle";
 import { EngineInterface } from "../../models/vehicle/IEngine";
 import { VehicleInterface } from "../../models/vehicle/IVehicle";
-function Vehicle() {
-  const [date, setDate] = React.useState<Dayjs | null>(dayjs());
-  const [receive, setReceive] = React.useState<Partial<VehicleInterface>>({});
 
-  return (
-      <Container maxWidth="md">
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
+const VehicleCreate = () => {
+  const [vehicle, setVehicle] = React.useState<Partial<VehicleInterface>>({
+    BrandVehicle_ID: 0,
+    Engine_ID: 0,
+  });
+
+  const [brandvehicle, setBrandvehicle] = React.useState<BrandVehicleInterface[]>([]);
+  const [engine, setEngine] = React.useState<EngineInterface[]>([]);
+  const [success, setSuccess] = React.useState(false);
+  const [error, setError] = React.useState(false);
+
+  //================================================================================================================//
+
+  const getBranVehicle = async () => {
+    const apiUrl = `http://localhost:8080/brandvehicles`;
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    fetch(apiUrl, requestOptions)
+      .then((response) => response.json()) 
+      .then((res) => {
+        console.log(res.data);
+        if (res.data) {
+          setBrandvehicle(res.data);
+        } else {
+          console.log("else");
+        }
+      });
+  };
+
+  const getEngine = async () => {
+    const apiUrl = `http://localhost:8080/engines`;
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    fetch(apiUrl, requestOptions)
+      .then((response) => response.json()) 
+      .then((res) => {
+        console.log(res.data); 
+        if (res.data) {
+          setEngine(res.data);
+        } else {
+          console.log("else");
+        }
+      });
+  };
+
+  //================================================================================================================//
+
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSuccess(false);
+    setError(false);
+  };
+
+  const handleInputChange = (
+    event: React.ChangeEvent<{ id?: string; value: any }>
+  ) => {
+    const id = event.target.id as keyof typeof VehicleCreate;
+    const { value } = event.target;
+    setVehicle({ ...vehicle, [id]: value });
+  };
+
+  const handleChange = (event: SelectChangeEvent<number>) => {
+    const name = event.target.name as keyof typeof vehicle;
+    setVehicle({
+      ...vehicle,
+      [name]: event.target.value,
+    });
+  };
+
+  const requestOptionsGet = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  function submit() {
+    let data = {
+      BrandVehicleID: vehicle.BrandVehicle_ID,
+      EngineID: vehicle.Engine_ID,
+      ListModel: vehicle.ListModel,
+      Vehicle_Regis: vehicle.Vehicle_Regis,
+    };
+
+//================================================================================================================//
+
+const apiUrl = "http://localhost:8080";
+const requestOptionsPost = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+};
+
+fetch(`${apiUrl}/receive`, requestOptionsPost)
+    .then((response) => response.json())
+    .then((res) => {
+        console.log(res)
+        if (res.data) {
+            setSuccess(true);
+        } else {
+            setError(true);
+        }
+    });
+}
+
+//================================================================================================================//
+
+  React.useEffect(() => {
+    getBranVehicle();
+    getEngine();
+    submit();
+  }, []);
+
+return (
+<Container maxWidth="md">
+<Snackbar // บันทึกสำเร็จ
+        open={success}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
+        <Alert onClose={handleClose} severity="success">              
+            บันทึกข้อมูลสำเร็จ
+        </Alert>
+    </Snackbar>
+
+    <Snackbar // บันทึกไม่สำเร็จ
+        open={error} 
+        autoHideDuration={3000} 
+        onClose={handleClose} 
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
+        <Alert onClose={handleClose} severity="error">
+            บันทึกข้อมูลไม่สำเร็จ
+        </Alert>
+    </Snackbar>
+
+        {/* <Location color="success" sx={{ fontSize: 80 }}/> */}
         <Paper>
           <Grid sx={{padding:3}}>
           <h1>Vehicle</h1></Grid>
@@ -135,13 +292,13 @@ function Vehicle() {
                   <h3>Date Insulance</h3>
                 </Grid>
                 <Grid item xs={5}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DateTimePicker
                       label="DateTimePicker"
                       renderInput={(params) => <TextField {...params} />}
-                      value={date}
+                      value={Date}
                       onChange={(newValue) => {
-                        setDate(newValue);
+                      //setDate(newValue);
                       }}
                     />
                   </LocalizationProvider>
@@ -184,4 +341,4 @@ function Vehicle() {
       </Container>
   );
 }
-export default Vehicle;
+export default VehicleCreate;
