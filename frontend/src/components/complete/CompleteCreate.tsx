@@ -25,7 +25,7 @@ import Snackbar from "@mui/material/Snackbar";
 
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
-import { ComplertInterface } from "../../models/complete/IComplete";
+import { CompleteInterface } from "../../models/complete/IComplete";
 
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 
@@ -56,7 +56,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 function CompleteCreate() {
 
  const [date, setDate] = React.useState<Date | null>(null);
- const [complete, setComplete] = React.useState<Partial<ComplertInterface>>({});
+ const [complete, setComplete] = React.useState<Partial<CompleteInterface>>({});
  const [employee, setEmployee] = React.useState<EmployeesInterface[]>([]);
  const [receive, setReceive] = React.useState<ReceiveInterface[]>([]);
  const [packaging, setPackaging] = React.useState<PackagingInterface[]>([]);
