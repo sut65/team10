@@ -9,14 +9,14 @@ import (
 	gender_controller "github.com/sut65/team10/controller/employee"
 	position_controller "github.com/sut65/team10/controller/employee"
 	workshift_controller "github.com/sut65/team10/controller/employee"
+	FormType_controller "github.com/sut65/team10/controller/form"
+	Form_controller "github.com/sut65/team10/controller/form"
+	Satisfaction_controller "github.com/sut65/team10/controller/form"
 	controllerpromotion "github.com/sut65/team10/controller/promotion"
 	brand_controller "github.com/sut65/team10/controller/stock"
 	size_controller "github.com/sut65/team10/controller/stock"
 	stock_controller "github.com/sut65/team10/controller/stock"
 	type_controller "github.com/sut65/team10/controller/stock"
-	Form_controller"github.com/sut65/team10/controller/form"
-	FormType_controller"github.com/sut65/team10/controller/form"
-	Satisfaction_controller"github.com/sut65/team10/controller/form"
 	"github.com/sut65/team10/entity"
 )
 
@@ -46,6 +46,9 @@ func main() {
 	r.GET("/codetype", controllerpromotion.ListCodetypes)
 	//--reason
 	r.GET("/reason", controllerpromotion.ListReasons)
+	//--quotacode
+	r.GET("/quotacode", controllerpromotion.ListQuotacode)
+	r.PATCH("/quotacodes", controllerpromotion.UpdatePromotion)
 
 	//position
 	r.GET("/positions", position_controller.ListPosition)
@@ -91,20 +94,20 @@ func main() {
 
 	//Form
 	r.GET("/forms", Form_controller.ListForms)
-  	r.GET("/form/:id", Form_controller.GetForm)
- 	r.POST("/forms", Form_controller.CreateForm)
+	r.GET("/form/:id", Form_controller.GetForm)
+	r.POST("/forms", Form_controller.CreateForm)
 	r.DELETE("/forms/:id", Form_controller.DeleteForm)
 	r.PATCH("/forms", Form_controller.UpdateForm)
 
 	//Form_Type
 	r.GET("/formtypes", FormType_controller.ListFormTypes)
-  	r.GET("/formtype/:id", FormType_controller.GetFormType)
-  	r.POST("/formtypes", FormType_controller.CreateFormType)
+	r.GET("/formtype/:id", FormType_controller.GetFormType)
+	r.POST("/formtypes", FormType_controller.CreateFormType)
 
-  //Satisfaction
-    r.GET("/satisfactions", Satisfaction_controller.ListSatisfactions)
-  	r.GET("/satisfaction/:id", Satisfaction_controller.GetSatisfaction)
-  	r.POST("/satisfactions", Satisfaction_controller.CreateSatisfaction)
+	//Satisfaction
+	r.GET("/satisfactions", Satisfaction_controller.ListSatisfactions)
+	r.GET("/satisfaction/:id", Satisfaction_controller.GetSatisfaction)
+	r.POST("/satisfactions", Satisfaction_controller.CreateSatisfaction)
 	// Run the server
 
 	r.Run()
