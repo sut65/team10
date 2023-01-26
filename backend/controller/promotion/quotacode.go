@@ -10,7 +10,7 @@ import (
 // POST /users
 func ListQuotacode(c *gin.Context) {
 	var quotacode []entity.QuotaCode
-	if err := entity.DB().Raw("SELECT * FROM Quotacodes").Scan(&quotacode).Error; err != nil {
+	if err := entity.DB().Raw("SELECT * FROM quotacodes").Scan(&quotacode).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
