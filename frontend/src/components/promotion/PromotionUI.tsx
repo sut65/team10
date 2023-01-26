@@ -3,6 +3,7 @@ import { useEffect } from "react";
 /* Grid */
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
+import { Snackbar, Alert } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { Container } from "@mui/system";
 import TextField from '@mui/material/TextField';
@@ -29,7 +30,18 @@ function Promotion() {
     const [reason, setReason] = React.useState<ReasonInterface[]>([]);
 
     const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(false);
+    const [error, setError] = useState(false);
+
+    const handleClose = ( // AlertBar
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+) => {
+    if (reason === "clickaway") {
+        return;
+    }
+    setSuccess(false);
+    setError(false);
+};
 
     function submit() {
         let promotion_p = {
@@ -110,6 +122,25 @@ function Promotion() {
 
         <Container maxWidth="md">
             <StorefrontIcon color="primary" sx={{ fontSize: 80 }}/>
+            <Snackbar // บันทึกสำเร็จ
+                open={success}
+                autoHideDuration={3000}
+                onClose={handleClose}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
+                <Alert onClose={handleClose} severity="success">              
+                    บันทึกข้อมูลสำเร็จ
+                </Alert>
+            </Snackbar>
+
+            <Snackbar // บันทึกไม่สำเร็จ
+                open={error} 
+                autoHideDuration={3000} 
+                onClose={handleClose} 
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
+                <Alert onClose={handleClose} severity="error">
+                    บันทึกข้อมูลไม่สำเร็จ
+                </Alert>
+            </Snackbar>
             <Box>
                 <Paper>
                     <Grid sx={{ padding: 2 }}>
