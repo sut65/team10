@@ -30,7 +30,7 @@ func GetSatisfaction(c *gin.Context) {
 
 	var satisfaction entity.Satisfaction
 
-	id := c.Param("formtype_id")
+	id := c.Param("satisfaction_id")
 
 	if err := entity.DB().Raw("SELECT * FROM satisfactions WHERE satisfaction_id = ?", id).Scan(&satisfaction).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
