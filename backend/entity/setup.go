@@ -161,6 +161,14 @@ func SetupDatabase() {
 	// end emp //
 
 	//receive//
+	Receive1 := Receive{
+		Employee: E1,
+	}
+	Receive2 := Receive{
+		Employee: E1,
+	}
+	db.Model(&Receive{}).Create(&Receive1)
+	db.Model(&Receive{}).Create(&Receive2)
 	//-------------------//
 
 	//Vehicle
@@ -419,4 +427,16 @@ func SetupDatabase() {
 		Time:        time.Date(2022, 10, 23, 12, 30, 00, 00, time.Now().Local().Location())}
 	db.Model(&Stock{}).Create(&stock1)
 
+	recvt1 := RecvType{
+		Name: "TypeA",
+	}
+	recvt2 := RecvType{
+		Name: "TypeB",
+	}
+	recvt3 := RecvType{
+		Name: "TypeC",
+	}
+	db.Model(&RecvType{}).Create(&recvt1)
+	db.Model(&RecvType{}).Create(&recvt2)
+	db.Model(&RecvType{}).Create(&recvt3)
 }
