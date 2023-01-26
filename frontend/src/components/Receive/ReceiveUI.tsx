@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 /* Grid */
-import { Paper, SelectChangeEvent } from "@mui/material";
+import { FormControl, MenuItem, Paper, Select, SelectChangeEvent } from "@mui/material";
 import { Grid } from "@mui/material";
 import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
@@ -26,6 +26,7 @@ import { ReceiveInterface } from "../../models/receive/IReceive";
 import { BillInterface } from "../../models/bill/IBill";
 import { DetergentInterface } from "../../models/receive/IDetergent";
 import { SoftenerInterface } from "../../models/receive/ISoftener";
+import Bill from "../bill/BillUI";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -52,22 +53,18 @@ const ReceiveCreate = () => {
 
   const getBill = async () => {
     const apiUrl = `http://localhost:8080/bills`;
-
     const requestOptions = {
       method: "GET",
-
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
     };
-    //การกระทำ //json
+
     fetch(apiUrl, requestOptions)
-      .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
-
+      .then((response) => response.json()) 
       .then((res) => {
-        console.log(res.data); //show ข้อมูล
-
+        console.log(res.data);
         if (res.data) {
           setBill(res.data);
         } else {
@@ -78,22 +75,18 @@ const ReceiveCreate = () => {
 
   const getDetergent = async () => {
     const apiUrl = `http://localhost:8080/detergents`;
-
     const requestOptions = {
       method: "GET",
-
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
     };
-    //การกระทำ //json
+
     fetch(apiUrl, requestOptions)
-      .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
-
+      .then((response) => response.json()) 
       .then((res) => {
-        console.log(res.data); //show ข้อมูล
-
+        console.log(res.data); 
         if (res.data) {
           setDetergent(res.data);
         } else {
@@ -104,22 +97,18 @@ const ReceiveCreate = () => {
 
   const getSoftener = async () => {
     const apiUrl = `http://localhost:8080/softeners`;
-
     const requestOptions = {
       method: "GET",
-
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
     };
-    //การกระทำ //json
+
     fetch(apiUrl, requestOptions)
-      .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
-
+      .then((response) => response.json()) 
       .then((res) => {
-        console.log(res.data); //show ข้อมูล
-
+        console.log(res.data); 
         if (res.data) {
           setSoftener(res.data);
         } else {
@@ -145,9 +134,7 @@ const ReceiveCreate = () => {
     event: React.ChangeEvent<{ id?: string; value: any }>
   ) => {
     const id = event.target.id as keyof typeof ReceiveCreate;
-
     const { value } = event.target;
-
     setReceive({ ...receive, [id]: value });
   };
 
@@ -175,10 +162,9 @@ const ReceiveCreate = () => {
       Sof_Quantity: receive.Sof_Quantity,
     };
 
-    //================================================================================================================//
+//================================================================================================================//
 
 const apiUrl = "http://localhost:8080";
-
 const requestOptionsPost = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -197,20 +183,19 @@ fetch(`${apiUrl}/receive`, requestOptionsPost)
     });
 }
 
-  //================================================================================================================//
+//================================================================================================================//
 
-  useEffect(() => {
+  React.useEffect(() => {
     getBill();
     getDetergent();
     getSoftener();
     submit();
   }, []);
 
-  function setDate(newValue: DateConstructor | null) {
-    throw new Error("Function not implemented.");
-  }
-
-  return (
+function setDate(newValue: DateConstructor | null) {
+  throw new Error("Function not implemented.");
+}
+return (
       <Container maxWidth="md">
         <Paper>
          <Grid sx={{padding:3}}>
@@ -230,7 +215,7 @@ fetch(`${apiUrl}/receive`, requestOptionsPost)
                   <Autocomplete
                     disablePortal
                     id="combo-box-demo"
-                    options={[0, 1]}
+                    options={[bill]}
                     sx={{ width: 300 }}
                     renderInput={(params) => (
                       <TextField {...params} label="Bill_ID" />
@@ -246,62 +231,13 @@ fetch(`${apiUrl}/receive`, requestOptionsPost)
                 }}
               >
                 <Grid item xs={3}>
-                  <h3>Price</h3>
-                </Grid>
-                <Grid item xs={5}>
-                  <TextField
-                    fullWidth
-                    id="Bill_Price"
-                    label="Price"
-                    variant="outlined"
-                    defaultValue="0"
-                    value={250}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </Grid>
-              </Grid>
-              <Grid
-                container
-                justifyContent={"center"}
-                sx={{
-                  paddingY: 1,
-                }}
-              >
-                <Grid item xs={3}>
-                  <h3>Weight(kg)</h3>
-                </Grid>
-                <Grid item xs={5}>
-                  <TextField
-                    fullWidth
-                    id="Bill_Price"
-                    label="Weight"
-                    variant="outlined"
-                    defaultValue="0"
-                    value={5}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </Grid>
-              </Grid>
-
-              <Grid
-                container
-                justifyContent={"center"}
-                sx={{
-                  paddingY: 0,
-                }}
-              >
-                <Grid item xs={3}>
                   <h3>Detergent</h3>
                 </Grid>
                 <Grid item xs={5}>
                   <Autocomplete
                     disablePortal
                     id="combo-box-demo"
-                    options={[0, 1]}
+                    options={[detergent]}
                     sx={{ width: 300 }}
                     renderInput={(params) => (
                       <TextField {...params} label="Detergent" />
@@ -322,7 +258,7 @@ fetch(`${apiUrl}/receive`, requestOptionsPost)
                 <Grid item xs={5}>
                   <TextField
                     fullWidth
-                    id="Bill_Price"
+                    id="Detergent Quantity"
                     label="Detergent Quantity"
                     variant="outlined"
                     defaultValue="0"
@@ -346,7 +282,7 @@ fetch(`${apiUrl}/receive`, requestOptionsPost)
                   <Autocomplete
                     disablePortal
                     id="combo-box-demo"
-                    options={[0, 1]}
+                    options={[softener]}
                     sx={{ width: 300 }}
                     renderInput={(params) => (
                       <TextField {...params} label="Softener" />
@@ -367,7 +303,7 @@ fetch(`${apiUrl}/receive`, requestOptionsPost)
                 <Grid item xs={5}>
                   <TextField
                     fullWidth
-                    id="Bill_Price"
+                    id="Softener Quantity"
                     label="Softener Quantity"
                     variant="outlined"
                     defaultValue="0"

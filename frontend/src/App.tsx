@@ -8,9 +8,10 @@ import Delivery from "./components/delivery/DeliveryUI";
 import Confirmation from "./components/confirmation/ConfirmationUI";
 import Promotion from "./components/promotion/PromotionUI";
 import Home from "./components/Home";
-import Vehicle from "./components/Vehicle/VehiclrUI";
-import Receive from "./components/Receive/ReceiveUI";
+import Vehicle from "./components/vehicle/VehiclrUI";
+import ReceiveCreate from "./components/receive/ReceiveUI";
 import Bill from "./components/bill/BillUI";
+import CompleteCreate from "./components/complete/CompleteCreate";
 
 export default function App() {
   const [token, setToken] = React.useState<String>("");
@@ -44,8 +45,9 @@ export default function App() {
           <Route exact path="/confirmation/create" component={Confirmation} />
           <Route exact path="/delivery/create" component={Delivery} />
           <Route exact path="/bill/create" component={Bill} />
-          <Route exact path="/receive/create" component={Receive} />
+          <Route exact path="/receive/create" component={ReceiveCreate} />
           <Route exact path="/vehicle/create" component={Vehicle} />
+          <Route exact path="/complete/create" component={CompleteCreate} />
         </div>
       </Router>
     </div>
