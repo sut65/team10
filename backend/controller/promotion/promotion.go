@@ -96,7 +96,7 @@ func GetPromotion(c *gin.Context) {
 // GET /promotions
 
 func ListPromotions(c *gin.Context) {
-	var promotion entity.Promotion
+	var promotion []entity.Promotion
 	if err := entity.DB().Raw("SELECT * FROM promotions").Scan(&promotion).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
