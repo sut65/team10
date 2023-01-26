@@ -6,10 +6,13 @@ import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import LocalLaundryServiceIcon from '@mui/icons-material/LocalLaundryService';
+import PasswordIcon from '@mui/icons-material/Password';
+import PersonIcon from '@mui/icons-material/Person';
 import Typography from "@mui/material/Typography";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
+import { Link as RouterLink } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { SigninInterface } from "../models/ISignin";
 
@@ -29,15 +32,17 @@ function SignIn() {
 
   async function Login(data: SigninInterface) {
     const apiUrl = "http://localhost:8080";
-    console.log(data)
+    console.log(data);
 
-//============================================== Start step 2 โหลดข้อมูลพนักงาน(Personal_ID) ==============================================
+    /* -------------------------------------------------------------------------- */
+    /*                               Load User Data                               */
+    /* -------------------------------------------------------------------------- */
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     };
-  
+
     let res = await fetch(`${apiUrl}/login`, requestOptions)
       .then((response) => response.json())
       .then((res) => {
@@ -51,12 +56,13 @@ function SignIn() {
           return false;
         }
       });
-      
+
     return res;
   }
 
-//============================================== END step 2 โหลดข้อมูลพนักงาน(Personal_ID) ==============================================
-
+  /* -------------------------------------------------------------------------- */
+  /*                                   Handler                                  */
+  /* -------------------------------------------------------------------------- */
   const handleInputChange = (
     event: React.ChangeEvent<{ id?: string; value: any }>
   ) => {
@@ -74,6 +80,18 @@ function SignIn() {
     }
     setSuccess(false);
     setError(false);
+  };
+
+  const signup_page = async () => {
+    let res = await Login(signin);
+    if (res) {
+      setSuccess(true);
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } else {
+      setError(true);
+    }
   };
 
   const submit = async () => {
@@ -111,7 +129,7 @@ function SignIn() {
             Username หรือ รหัสผ่านไม่ถูกต้อง
           </Alert>
         </Snackbar>
-        
+
         <CssBaseline />
         <Grid
           item
@@ -119,7 +137,8 @@ function SignIn() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: "url(https://images-prod.anothermag.com/1050/azure/another-prod/370/6/376268.jpg)",
+            backgroundImage:
+              "url(https://images-prod.anothermag.com/1050/azure/another-prod/370/6/376268.jpg)",
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"
@@ -129,7 +148,19 @@ function SignIn() {
             backgroundPosition: "center",
           }}
         />
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+        <Grid
+          item
+          xs={12}
+          sm={8}
+          md={5}
+          component={Paper}
+          elevation={6}
+          square
+          sx={{
+            background:
+              "linear-gradient(180deg, rgba(255,201,60,1) 16%, rgba(91,192,248,1) 100%)",
+          }}
+        >
           <Box
             sx={{
               my: 8,
@@ -140,8 +171,8 @@ function SignIn() {
               alignSelf: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-              <LockOutlinedIcon />
+            <Avatar variant="rounded" sx={{ m: 1, bgcolor: "#86E5FF" }}>
+              <LocalLaundryServiceIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
               Sign in
@@ -155,6 +186,7 @@ function SignIn() {
                 label="Personal_ID"
                 name="Personal_ID"
                 autoComplete="Personal_ID"
+                sx ={{background: "#FAF0D7"}}
                 autoFocus
                 value={signin.Personal_ID || ""}
                 onChange={handleInputChange}
@@ -168,18 +200,32 @@ function SignIn() {
                 type="password"
                 id="Password"
                 autoComplete="current-password"
+                sx ={{background: "#FAF0D7"}}
                 value={signin.Password || ""}
                 onChange={handleInputChange}
               />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-                onClick={submit}
-              >
-                Sign In
-              </Button>
+              <Grid container justifyContent={"center"} spacing={2}>
+                <Grid marginX={2}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2, background: "#FFC93C" }}
+                    onClick={submit}
+                  >
+                    Sign In
+                  </Button>
+                </Grid>
+                <Grid marginX={2}>
+                  <Button
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2, background: "#5BC0F8" }}
+                    onClick={signup_page}
+                    href="/customer/create"
+                  >
+                    Sign Up
+                  </Button>
+                </Grid>
+              </Grid>
             </Box>
           </Box>
         </Grid>
