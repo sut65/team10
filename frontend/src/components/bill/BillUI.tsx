@@ -195,14 +195,35 @@ function Bill() {
                   <h3>Payment Type</h3>
                 </Grid>
                 <Grid item xs={5}>
-                  <Autocomplete
-                    disablePortal
-                    id="combo-box-demo"
+                <Autocomplete
+                    id="paymenttype-auto"
                     options={paymenttype}
-                    sx={{ width: 300 }}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Movie" />
-                    )}
+                    fullWidth
+                    size="medium"
+                    onChange={(event: any, value) => {
+                      setBill({ ...bill, Paymenttype_ID: value?.ID }); //Just Set ID to interface
+                    }}
+                    getOptionLabel={(option: any) =>
+                      `${option.Type}`
+                    } //filter value
+                    renderInput={(params) => {
+                      return (
+                        <TextField
+                          {...params}
+                          variant="outlined"
+                          placeholder="Search..."
+                        />
+                      );
+                    }}
+                    renderOption={(props: any, option: any) => {
+                      return (
+                        <li
+                          {...props}
+                          value={`${option.ID}`}
+                          key={`${option.ID}`}
+                        >{`${option.Type}`}</li>
+                      ); //display value
+                    }}
                   />
                 </Grid>
               </Grid>
