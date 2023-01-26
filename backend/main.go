@@ -9,6 +9,7 @@ import (
 	gender_controller "github.com/sut65/team10/controller/employee"
 	position_controller "github.com/sut65/team10/controller/employee"
 	workshift_controller "github.com/sut65/team10/controller/employee"
+	controllerpromotion "github.com/sut65/team10/controller/promotion"
 	brand_controller "github.com/sut65/team10/controller/stock"
 	size_controller "github.com/sut65/team10/controller/stock"
 	stock_controller "github.com/sut65/team10/controller/stock"
@@ -29,9 +30,15 @@ func main() {
 	r.GET("/bill/:id", controllerbill.GetBill)
 	r.POST("/bills", controllerbill.CreateBill)
 	r.PATCH("/bills", controllerbill.UpdateBill)
-	// Paymenttype
+	// --Paymenttype
 	r.GET("/paymenttype", controllerbill.ListPaymenttypes)
 	r.GET("/genders", gender_controller.ListGenders)
+
+	// Promotion
+	//--codetype
+	r.GET("/codetype", controllerpromotion.ListCodetypes)
+	//--reason
+	r.GET("/reason", controllerpromotion.ListReasons)
 
 	//position
 	r.GET("/positions", position_controller.ListPosition)
