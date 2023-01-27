@@ -65,7 +65,7 @@ function Bill() {
         const requestOptions = {
           method: "POST",
           headers: {
-            //Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(bill_p),
@@ -88,7 +88,7 @@ function Bill() {
           const requestOptions = {
             method: "GET",
             headers: {
-              //Authorization: `Bearer ${localStorage.getItem("token")}`,
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
               "Content-Type": "application/json",
             },
           };
@@ -108,7 +108,7 @@ function Bill() {
     const requestOptions = {
       method: "GET",
       headers: {
-        //Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
     };
