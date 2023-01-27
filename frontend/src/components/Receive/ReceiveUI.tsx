@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
+import { useEffect } from "react";
 
 /* Grid */
-import { Alert, Box, FormControl, MenuItem, Paper, Select, SelectChangeEvent, Snackbar } from "@mui/material";
-import { Grid } from "@mui/material";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import { Snackbar, Alert } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import { Container } from "@mui/system";
 import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from '@mui/icons-material/Cancel';
 import UpdateIcon from '@mui/icons-material/Update';
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-import StorefrontIcon from '@mui/icons-material/Storefront';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 /* combobox */
 import { TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -18,14 +22,14 @@ import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { Container } from "@mui/material";
+
 
 /* Interface */
 import { ReceiveInterface } from "../../models/receive/IReceive";
 import { BillInterface } from "../../models/bill/IBill";
 import { DetergentInterface } from "../../models/receive/IDetergent";
 import { SoftenerInterface } from "../../models/receive/ISoftener";
-import Bill from "../bill/BillUI";
+
 
 function ReceiveCreate (){
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
@@ -53,6 +57,7 @@ function ReceiveCreate (){
 
 function submit() {
   let receive_data = {
+    Employee_ID: 1,
     Bill_ID: receive.Bill_ID,
     Detergent: receive.Detergent_ID,
     Det_Quantity: receive.Det_Quantity,
@@ -62,21 +67,22 @@ function submit() {
   };
 
 const apiUrl = "http://localhost:8080";
-const requestOptionsPost = {
+const requestOptions = {
   method: "POST",
-  headers: { "Content-Type": "application/json" },
+  headers: {  Authorization: `Bearer ${localStorage.getItem("token")}`,
+  "Content-Type": "application/json" },
   body: JSON.stringify(receive_data),
 };
 
-fetch(`${apiUrl}/receive`, requestOptionsPost)
+fetch(`${apiUrl}/receives`, requestOptions)
   .then((response) => response.json())
   .then((res) => {
-      console.log(res)
-      if (res.data) {
-          setSuccess(true);
-      } else {
-          setError(true);
-      }
+    if (res.data) {
+      setSuccess(true);
+      console.log(res.data)
+    } else {
+      setError(true);
+    }
   });
 }
   // const getBill = async () => {
@@ -106,7 +112,7 @@ fetch(`${apiUrl}/receive`, requestOptionsPost)
     const requestOptions = {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        //Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
     };
@@ -122,11 +128,11 @@ fetch(`${apiUrl}/receive`, requestOptionsPost)
   };
 
   const getSoftener = async () => {
-    const apiUrl = `http://localhost:8080/softeners`;
+    const apiUrl = `http://localhost:8080/softener`;
     const requestOptions = {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        //Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
     };
@@ -189,6 +195,7 @@ fetch(`${apiUrl}/receive`, requestOptionsPost)
 
 return (
       <Container maxWidth="md">
+              
               <Snackbar // บันทึกสำเร็จ
                 open={success}
                 autoHideDuration={3000}
@@ -210,8 +217,11 @@ return (
             </Snackbar>
             <Box>
                 <Paper>
-                    <Grid sx={{ padding: 3 }}>
-                        <h1>RECEIVE</h1></Grid>
+                    <Grid container spacing={0} sx={{ paddingX: 0
+                     }}>
+                    <h1>RECEIVE</h1> <AddShoppingCartIcon color="success" sx={{ fontSize: 70 }}/>
+                    </Grid>
+
                         <Grid
                         container
                         justifyContent={"center"}
@@ -250,7 +260,7 @@ return (
                           value={`${option.ID}`}
                           key={`${option.ID}`}
                         >{`${option.Bill}`}</li>
-                      ); 
+                      ); //display value
                     }}
                   />
                   </Grid>
@@ -277,7 +287,7 @@ return (
                     }}
                     getOptionLabel={(option: any) =>
                       `${option.Detergent}`
-                    }
+                    } //filter value
                     renderInput={(params) => {
                       return (
                         <TextField
@@ -294,12 +304,12 @@ return (
                           value={`${option.ID}`}
                           key={`${option.ID}`}
                         >{`${option.Detergent}`}</li>
-                      );
+                      ); //display value
                     }}
                   />
                   </Grid>
                         </Grid>
-                                <Grid
+              <Grid
                 container
                 justifyContent={"center"}
                 sx={{
@@ -311,13 +321,13 @@ return (
                   </Grid>
                 <Grid item xs={5}>
                   <TextField
-                    fullWidth
+                   
                     id="Detergent Quantity"
-                    label="Detergent Quantity"
+                    label="Quantity"
                     variant="outlined"
                     defaultValue=" "
-                    InputProps={{
-                    }}
+                    onChange={(event) => setDet_Quantity(Number(event.target.value))}
+                    inputProps={{ type: "number" }}
                   />
                 </Grid>
               </Grid>
@@ -342,7 +352,7 @@ return (
                     }}
                     getOptionLabel={(option: any) =>
                       `${option.Softener}`
-                    } 
+                    } //filter value
                     renderInput={(params) => {
                       return (
                         <TextField
@@ -359,7 +369,7 @@ return (
                           value={`${option.ID}`}
                           key={`${option.ID}`}
                         >{`${option.Softener}`}</li>
-                      ); 
+                      ); //display value
                     }}
                   />
                   </Grid>
@@ -372,17 +382,17 @@ return (
                 }}
               >
                <Grid item xs={3}>
-                  <h3>Detergent Quantity</h3>
+                  <h3>Sotener Quantity</h3>
                   </Grid>
                 <Grid item xs={5}>
                   <TextField
-                    fullWidth
-                    id="Detergent Quantity"
-                    label="Detergent Quantity"
+                   
+                    id="Sotener Quantity"
+                    label="Quantity"
                     variant="outlined"
                     defaultValue=" "
-                    InputProps={{
-                    }}
+                    onChange={(event) => setSof_Quantity(Number(event.target.value))}
+                    inputProps={{ type: "number" }}
                   />
                 </Grid>
               </Grid>
