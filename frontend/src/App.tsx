@@ -1,5 +1,5 @@
 import * as React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import AppBarPrivate from "./components/AppBarPrivate";
 import AppBarPublic from "./components/AppBarPublic";
@@ -9,10 +9,11 @@ import Confirmation from "./components/confirmation/ConfirmationUI";
 import Promotion from "./components/promotion/PromotionUI";
 import Home from "./components/Home";
 import Vehicle from "./components/Vehicle/VehiclrUI";
-import ReceiveCreate from "./components/Receive/ReceiveUI";
+import ReceiveCreate from "./components/Receive/ReceiveCreate";
 import Bill from "./components/bill/BillUI";
 import CompleteCreate from "./components/complete/CompleteCreate";
 import SignIn from "./components/SignIn_UI";
+import CustomerCreate from "./components/customer/CustomerCreate";
 
 export default function App() {
   const [token, setToken] = React.useState<String>("");
@@ -25,7 +26,15 @@ export default function App() {
   }, []);
 
   // if (!token) {
-  //   return <SignIn />;
+  //   return (
+  //     <div>
+  //       <SignIn/>
+  //       <Routes>
+  //         <Route path=":id" element={<UserProfile />} />
+  //         <Route path="me" element={<OwnUserProfile />} />
+  //       </Routes>
+  //     </div>
+  //   );
   // }
 
   return (
@@ -37,20 +46,21 @@ export default function App() {
         minHeight: "100vh",
       }}
     >
-      <Router>
+      <BrowserRouter>
         <div>
           <AppBarPublic />
           <AppBarPrivate />
-          <Route exact path="/" component={Home} />
-          <Route exact path="/promotion/create" component={Promotion} />
-          <Route exact path="/confirmation/create" component={Confirmation} />
-          <Route exact path="/delivery/create" component={Delivery} />
-          <Route exact path="/bill/create" component={Bill} />
-          <Route exact path="/receive/create" component={ReceiveCreate} />
-          <Route exact path="/vehicle/create" component={Vehicle} />
-          <Route exact path="/complete/create" component={CompleteCreate} />
+          <Routes>
+            <Route path="/" element={<Home/>} />
+            <Route path="/promotion/create" element={<Promotion/>} />
+            <Route path="/confirmation/create" element={<Confirmation/>} />
+            <Route path="/delivery/create" element={<Delivery/>} />
+            <Route path="/bill/create" element={<Bill/>} />
+            <Route path="/receive/create" element={<ReceiveCreate/>} />
+            <Route path="/vehicle/create" element={<Vehicle/>} />
+          </Routes>
         </div>
-      </Router>
+      </BrowserRouter>
     </div>
   );
 }

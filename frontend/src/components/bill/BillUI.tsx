@@ -25,10 +25,16 @@ import LocalAtmIcon from '@mui/icons-material/LocalAtm';
 /* Interface */
 import { BillInterface } from "../../models/bill/IBill";
 import { PaymenttypeInterface } from "../../models/bill/IPaymenttype";
+import { QuotaCodeInterface } from "../../models/promotion/IQuotaCode";
+import { ServiceInterface } from "../../models/service/IService";
+//test
+import { PromotionInterface } from "../../models/promotion/IPromotion";
 function Bill() {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
   const [bill, setBill] = React.useState<Partial<BillInterface>>({});
-  const [paymenttype, setPaymenttpye] = React.useState<PaymenttypeInterface[]>([]);
+  const [paymenttype, setPaymenttype] = React.useState<PaymenttypeInterface[]>([]);
+  const [quotacode, setQuotacode] = React.useState<QuotaCodeInterface[]>([]);
+  const [service, setService] = React.useState<ServiceInterface[]>([]);
 
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -76,16 +82,25 @@ function Bill() {
         }
         
     
-    const getQuotacode = async () => {
-      const apiUrl = "http://localhost:8080/quotacode";
-      const requestOptions = {
-        method: "GET",
-        headers: {
-          //Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "application/json",
-        },
-      };
-    }
+        const getQuotacode = async () => {
+          const apiUrl = "http://localhost:8080/quotacode";
+          const requestOptions = {
+            method: "GET",
+            headers: {
+              //Authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            },
+          };
+      
+          fetch(apiUrl, requestOptions)
+            .then((response) => response.json())
+            .then((res) => {
+              console.log(res)
+              if (res.data) {
+                setQuotacode(res.data);
+              }
+            });
+        };
         
   const getPaymentType = async () => {
     const apiUrl = "http://localhost:8080/paymenttype";
@@ -102,10 +117,33 @@ function Bill() {
       .then((res) => {
         console.log(res)
         if (res.data) {
-          setPaymenttpye(res.data);
+          setPaymenttype(res.data);
         }
       });
   };
+
+    // const getService = async () => {
+    //   const requestOptions = {
+    //     method: "GET",
+    //     headers: {
+    //       //Authorization: `Bearer ${localStorage.getItem("token")}`,
+    //       "Content-Type": "application/json",
+    //     },
+    //   };
+    //   let uid = localStorage.getItem("uid");
+    //   fetch(`http://localhost:8080/service/${uid}`, requestOptions)
+    //     .then((response) => response.json())
+    //     .then((res) => {
+    //        = res.data.ID
+    //       if (res.data) {
+    //         setService(res.data);
+    //       } else {
+    //         console.log("else");
+    //       }
+    //     });
+    // };
+
+  
 
   useEffect(() => {
     getPaymentType();
@@ -149,14 +187,35 @@ function Bill() {
                   <h3>Service ID</h3>
                 </Grid>
                 <Grid item xs={5}>
-                  <Autocomplete
-                    disablePortal
-                    id="combo-box-demo"
-                    options={[0, 1]}
-                    sx={{ width: 300 }}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Movie" />
-                    )}
+                <Autocomplete
+                    id="service-auto"
+                    options={service}
+                    fullWidth
+                    size="medium"
+                    onChange={(event: any, value) => {
+                      setBill({ ...bill, Service_ID: value?.ID }); //Just Set ID to interface
+                    }}
+                    getOptionLabel={(option: any) =>
+                      `${option.ID}`
+                    } //filter value
+                    renderInput={(params) => {
+                      return (
+                        <TextField
+                          {...params}
+                          variant="outlined"
+                          placeholder="Search..."
+                        />
+                      );
+                    }}
+                    renderOption={(props: any, option: any) => {
+                      return (
+                        <li
+                          {...props}
+                          value={`${option.ID}`}
+                          key={`${option.ID}`}
+                        >{`${option.ID}`}</li>
+                      ); //display value
+                    }}
                   />
                 </Grid>
               </Grid>
@@ -172,14 +231,35 @@ function Bill() {
                   <h3>Promotion</h3>
                 </Grid>
                 <Grid item xs={5}>
-                  <Autocomplete
-                    disablePortal
-                    id="combo-box-demo"
-                    options={[0, 1]}
-                    sx={{ width: 300 }}
-                    renderInput={(params) => (
-                      <TextField {...params} label="Movie" />
-                    )}
+                <Autocomplete
+                    id="quotacode-auto"
+                    options={quotacode}
+                    fullWidth
+                    size="medium"
+                    onChange={(event: any, value) => {
+                      setBill({ ...bill, Q_ID: value?.ID }); //Just Set ID to interface
+                    }}
+                    getOptionLabel={(option: any) =>
+                      `${option.Promotion.Codetype.Type}`
+                    } //filter value
+                    renderInput={(params) => {
+                      return (
+                        <TextField
+                          {...params}
+                          variant="outlined"
+                          placeholder="Search..."
+                        />
+                      );
+                    }}
+                    renderOption={(props: any, option: any) => {
+                      return (
+                        <li
+                          {...props}
+                          value={`${option.ID}`}
+                          key={`${option.ID}`}
+                        >{`${option.Promotion.Codetype.Type}`}</li>
+                      ); //display value
+                    }}
                   />
                 </Grid>
               </Grid>

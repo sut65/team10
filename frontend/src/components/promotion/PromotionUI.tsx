@@ -28,6 +28,8 @@ function Promotion() {
     const [promotion, setPromotion] = React.useState<Partial<PromotionInterface>>({});
     const [codetype, setCodetype] = React.useState<CodetypeInterface[]>([]);
     const [reason, setReason] = React.useState<ReasonInterface[]>([]);
+    const [price, setPrice] = React.useState<number | null>(null);
+    const [amount, setAmount] = React.useState<number | null>(null);
 
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
@@ -47,8 +49,8 @@ function Promotion() {
         let promotion_p = {
           Codetype_ID: promotion.Codetype_ID,
           Reason_ID: promotion.Reason_ID,
-          Price: promotion.Price,
-          Amount: promotion.Amount,
+          Price: price,
+          Amount: amount,
           Employee_ID: 1,
           //Employee_ID: Number(localStorage.getItem("uid")),
           Time_Stamp: date,
@@ -69,6 +71,7 @@ function Promotion() {
           .then((res) => {
             if (res.data) {
               setSuccess(true);
+              console.log(res.data)
             } else {
               setError(true);
             }
@@ -224,7 +227,13 @@ function Promotion() {
                             <h3>Price</h3>
                         </Grid>
                         <Grid item xs={4}>
-                            <TextField id="outlined-basic" label="Price" variant="outlined" />
+                            <TextField 
+                            id="outlined-basic" 
+                            label="Price" 
+                            variant="outlined" 
+                            defaultValue =  "0"
+                            onChange={(event) => setPrice(Number(event.target.value))}
+                            />
                         </Grid>
                     </Grid>
 
@@ -233,7 +242,11 @@ function Promotion() {
                             <h3>Amount</h3>
                         </Grid>
                         <Grid item xs={4}>
-                            <TextField id="outlined-basic" label="Amount" variant="outlined" 
+                            <TextField 
+                            id="outlined-basic" 
+                            label="Amount" 
+                            variant="outlined" 
+                            onChange={(event) => setAmount(Number(event.target.value))}
                             inputProps={{ type: "number" }}/>
                         </Grid>
                     </Grid>

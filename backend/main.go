@@ -9,14 +9,18 @@ import (
 	gender_controller "github.com/sut65/team10/controller/employee"
 	position_controller "github.com/sut65/team10/controller/employee"
 	workshift_controller "github.com/sut65/team10/controller/employee"
+	FormType_controller "github.com/sut65/team10/controller/form"
+	Form_controller "github.com/sut65/team10/controller/form"
+	Satisfaction_controller "github.com/sut65/team10/controller/form"
 	controllerpromotion "github.com/sut65/team10/controller/promotion"
 	brand_controller "github.com/sut65/team10/controller/stock"
 	size_controller "github.com/sut65/team10/controller/stock"
 	stock_controller "github.com/sut65/team10/controller/stock"
 	type_controller "github.com/sut65/team10/controller/stock"
-	Form_controller"github.com/sut65/team10/controller/form"
-	FormType_controller"github.com/sut65/team10/controller/form"
-	Satisfaction_controller"github.com/sut65/team10/controller/form"
+	Service_controller "github.com/sut65/team10/controller/service"
+	WashingType_controller "github.com/sut65/team10/controller/service"
+	Weight_controller "github.com/sut65/team10/controller/service"
+	DeliveryType_controller "github.com/sut65/team10/controller/service"
 	"github.com/sut65/team10/entity"
 )
 
@@ -46,6 +50,9 @@ func main() {
 	r.GET("/codetype", controllerpromotion.ListCodetypes)
 	//--reason
 	r.GET("/reason", controllerpromotion.ListReasons)
+	//--quotacode
+	r.GET("/quotacode", controllerpromotion.ListQuotacode)
+	r.PATCH("/quotacodes", controllerpromotion.UpdatePromotion)
 
 	//position
 	r.GET("/positions", position_controller.ListPosition)
@@ -81,6 +88,7 @@ func main() {
 	r.GET("/confirmation/:id", controllerconfirmation.GetConfirmation)
 	r.POST("/confirmations", controllerconfirmation.CreateConfirmation)
 	r.PATCH("/confirmations", controllerconfirmation.UpdateConfirmation)
+	r.GET("/c_complete", controllerconfirmation.ListComplete)
 
 	// Recvtype
 	r.GET("/recvtype", controllerconfirmation.ListRecvType)
@@ -90,20 +98,42 @@ func main() {
 
 	//Form
 	r.GET("/forms", Form_controller.ListForms)
-  	r.GET("/form/:id", Form_controller.GetForm)
- 	r.POST("/forms", Form_controller.CreateForm)
+	r.GET("/form/:id", Form_controller.GetForm)
+	r.POST("/forms", Form_controller.CreateForm)
 	r.DELETE("/forms/:id", Form_controller.DeleteForm)
 	r.PATCH("/forms", Form_controller.UpdateForm)
 
 	//Form_Type
 	r.GET("/formtypes", FormType_controller.ListFormTypes)
-  	r.GET("/formtype/:id", FormType_controller.GetFormType)
-  	r.POST("/formtypes", FormType_controller.CreateFormType)
+	r.GET("/formtype/:id", FormType_controller.GetFormType)
+	r.POST("/formtypes", FormType_controller.CreateFormType)
 
-  //Satisfaction
-    r.GET("/satisfactions", Satisfaction_controller.ListSatisfactions)
-  	r.GET("/satisfaction/:id", Satisfaction_controller.GetSatisfaction)
-  	r.POST("/satisfactions", Satisfaction_controller.CreateSatisfaction)
+	//Satisfaction
+	r.GET("/satisfactions", Satisfaction_controller.ListSatisfactions)
+	r.GET("/satisfaction/:id", Satisfaction_controller.GetSatisfaction)
+	r.POST("/satisfactions", Satisfaction_controller.CreateSatisfaction)
+
+	//service
+	r.GET("/services", Service_controller.ListServices)
+	r.GET("/service/:id", Service_controller.GetService)
+	r.POST("/services", Service_controller.CreateService)
+	r.DELETE("/services/:id", Service_controller.DeleteService)
+	r.PATCH("/services", Service_controller.UpdateService)
+
+	//washingType
+	r.GET("/washingtypes", WashingType_controller.ListTypeWashings)
+	r.GET("/washingtype/:id", WashingType_controller.GetTypeWashing)
+	r.POST("/washingtypes", WashingType_controller.CreateTypeWashings)
+
+	//weight
+	r.GET("/weights", Weight_controller.ListWeights)
+	r.GET("/weight/:id", Weight_controller.GetWeight)
+	r.POST("/weights", Weight_controller.CreateWeights)
+
+	//deliverytype
+	r.GET("/deliverytypes", DeliveryType_controller.ListDeliverys)
+	r.GET("/deliverytypes/:id", DeliveryType_controller.GetDelivery)
+	r.POST("/deliverytypes", DeliveryType_controller.CreateDeliverys)
 	// Run the server
 
 	r.Run()

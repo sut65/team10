@@ -68,14 +68,13 @@ func CreatePromotion(c *gin.Context) {
 	// func gen Quotacode
 	for i := 0; i < int(promotion.Amount); i++ {
 		q := entity.QuotaCode{
-			Promotion_ID: &promotion.ID,
+			Promotion_ID: &p.ID,
 		}
 		if err := entity.DB().Create(&q).Error; err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 	}
-
 	c.JSON(http.StatusOK, gin.H{"data": p})
 
 }
@@ -97,10 +96,18 @@ func GetPromotion(c *gin.Context) {
 
 func ListPromotions(c *gin.Context) {
 	var promotion []entity.Promotion
-	if err := entity.DB().Raw("SELECT * FROM promotions").Scan(&promotion).Error; err != nil {
+	if err := entity.DB().Preload("Codetype").Raw("SELECT * FROM promotions").Find(&promotion).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	// q := entity.{
+	// 	Promotion_ID: &p,
+	// }
+	// if err := entity.DB().Create(&q).Error; err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	// 	return
+	// }
 
 	c.JSON(http.StatusOK, gin.H{"data": promotion})
 
