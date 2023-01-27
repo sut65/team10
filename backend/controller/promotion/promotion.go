@@ -96,10 +96,18 @@ func GetPromotion(c *gin.Context) {
 
 func ListPromotions(c *gin.Context) {
 	var promotion []entity.Promotion
-	if err := entity.DB().Raw("SELECT * FROM promotions").Scan(&promotion).Error; err != nil {
+	if err := entity.DB().Preload("Codetype").Raw("SELECT * FROM promotions").Find(&promotion).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	// q := entity.{
+	// 	Promotion_ID: &p,
+	// }
+	// if err := entity.DB().Create(&q).Error; err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	// 	return
+	// }
 
 	c.JSON(http.StatusOK, gin.H{"data": promotion})
 
