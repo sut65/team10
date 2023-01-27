@@ -15,6 +15,9 @@ import (
 	Satisfaction_controller "github.com/sut65/team10/controller/form"
 	login_controller "github.com/sut65/team10/controller/login"
 	controllerpromotion "github.com/sut65/team10/controller/promotion"
+	controllerdetergent "github.com/sut65/team10/controller/receive"
+	controllerreceive "github.com/sut65/team10/controller/receive"
+	controllersoftener "github.com/sut65/team10/controller/receive"
 	DeliveryType_controller "github.com/sut65/team10/controller/service"
 	Service_controller "github.com/sut65/team10/controller/service"
 	WashingType_controller "github.com/sut65/team10/controller/service"
@@ -23,6 +26,9 @@ import (
 	size_controller "github.com/sut65/team10/controller/stock"
 	stock_controller "github.com/sut65/team10/controller/stock"
 	type_controller "github.com/sut65/team10/controller/stock"
+	controllerbrandvehicle "github.com/sut65/team10/controller/vehicle"
+	controllerengine "github.com/sut65/team10/controller/vehicle"
+	controllervehicle "github.com/sut65/team10/controller/vehicle"
 	"github.com/sut65/team10/entity"
 	middlewares "github.com/sut65/team10/middlewares"
 )
@@ -119,6 +125,31 @@ func main() {
 			p.GET("/formtypes", FormType_controller.ListFormTypes)
 			p.GET("/formtype/:id", FormType_controller.GetFormType)
 			p.POST("/formtypes", FormType_controller.CreateFormType)
+
+			// Receive
+			r.GET("/receive", controllerreceive.ListReceives)
+			r.GET("/receive/:id", controllerreceive.GetReceive)
+			r.POST("/receives", controllerreceive.CreateReceive)
+			r.PATCH("/receives", controllerreceive.UpdateReceive)
+			//detergent
+			r.GET("/detergents", controllerdetergent.ListDetergents)
+			r.GET("/detergent/:id", controllerdetergent.GetDetergent)
+			r.POST("/detergents", controllerdetergent.CreateDetergents)
+			//softener
+			r.GET("/softeners", controllersoftener.ListSofteners)
+			r.GET("/softener/:id", controllersoftener.GetSoftener)
+			r.POST("/softeners", controllersoftener.Createsofteners)
+
+			// Vehicle
+			r.GET("/vehicle", controllervehicle.ListVehicle)
+			r.GET("/vehicle/:id", controllervehicle.GetVehicle)
+			r.POST("/vehicles", controllervehicle.CreateVehicle)
+			r.PATCH("/vehicles", controllervehicle.UpdateVehicle)
+			//brandvehicle
+			r.GET("/brandvehicles", controllerbrandvehicle.ListBrand_Vehicles)
+
+			//engine
+			r.GET("/engines", controllerengine.ListEngines)
 
 			//service
 			p.GET("/services", Service_controller.ListServices)
