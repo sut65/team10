@@ -28,7 +28,9 @@ import (
 	type_controller "github.com/sut65/team10/controller/stock"
 	controllerbrandvehicle "github.com/sut65/team10/controller/vehicle"
 	controllerengine "github.com/sut65/team10/controller/vehicle"
-	controllervehicle "github.com/sut65/team10/controller/vehicle"
+	controllervehicle"github.com/sut65/team10/controller/vehicle"
+	Packging_controller "github.com/sut65/team10/controller/complete"
+
 	"github.com/sut65/team10/entity"
 	middlewares "github.com/sut65/team10/middlewares"
 )
@@ -161,8 +163,18 @@ func main() {
 			p.GET("/deliverytypes/:id", DeliveryType_controller.GetDelivery)
 			p.POST("/deliverytypes", DeliveryType_controller.CreateDeliverys)
 
-			//Complete
-			p.GET("/complete", controllercomplete.ListComplete)
+			 //complete
+            r.GET("/completes", controllercomplete.ListComplete)
+            r.GET("/complete/:id", controllercomplete.GetComplete)
+            r.POST("/completes", controllercomplete.CreateComplete)
+            r.PATCH("/completes", controllercomplete.UpdateComplete)
+            r.DELETE("/completes/:id", controllercomplete.DeleteComplete)
+
+            //packagink
+            r.GET("/packagings", Packging_controller.ListPackaging)
+            r.GET("/packaging/:id", Packging_controller.GetPackaging)
+            r.POST("/packagings", Packging_controller.CreatePackaging)
+            r.DELETE("/packagings/:id", Packging_controller.DeletePackaging)
 
 			//Form
 			p.GET("/forms", Form_controller.ListForms)

@@ -64,7 +64,7 @@ function CompleteCreate() {
  const [error, setError] = React.useState(false);
 
  const getPackaging = async () => {
-  const apiUrl = `http://localhost:8080/packaginks`;
+  const apiUrl = `http://localhost:8080/packagings`;
   const requestOptions = {
     method: "GET",
 
@@ -90,7 +90,7 @@ function CompleteCreate() {
 
 
 const getEmployee = async () => {
-  const apiUrl = `http://localhost:8080/employee/1`;
+  const apiUrl = `http://localhost:8080/employees`;
 
   const requestOptions = {
     method: "GET",

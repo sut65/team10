@@ -3,6 +3,8 @@ package controller
 import (
 	"github.com/sut65/team10/entity"
 
+	"gorm.io/gorm"
+
 	"github.com/gin-gonic/gin"
 
 	"net/http"
@@ -10,7 +12,7 @@ import (
 
 type extendedComplete struct {
 	entity.Complete
-	Name    string
+	Name string
 }
 
 // POST /Complete
@@ -46,6 +48,7 @@ func CreateComplete(c *gin.Context) {
 
 	//create entity customer
 	com := entity.Complete{
+		Model:             gorm.Model{ID: complete.ID},
 		Employee:          employee,
 		Receive:           receive,
 		Packaging:         packaging,
@@ -62,9 +65,9 @@ func CreateComplete(c *gin.Context) {
 // GET /Complete/:id
 func GetComplete(c *gin.Context) {
 	var complete entity.Complete
-	id := c.Param("completes_id")
+	id := c.Param("id")
 
-	if err := entity.DB().Raw("SELECT * FROM completes WHERE completes_id = ?", id).Scan(&complete).Error; err != nil {
+	if err := entity.DB().Raw("SELECT * FROM completes WHERE id = ?", id).Scan(&complete).Error; err != nil {
 
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 
@@ -76,9 +79,9 @@ func GetComplete(c *gin.Context) {
 
 func GetEmployeeName(c *gin.Context) {
 	var complete entity.Complete
-	id := c.Param("employee_id")
+	id := c.Param("id")
 
-	if err := entity.DB().Raw("SELECT * FROM completes WHERE employees_id = ?", id).Scan(&complete).Error; err != nil {
+	if err := entity.DB().Raw("SELECT * FROM completes WHERE id = ?", id).Scan(&complete).Error; err != nil {
 
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 
@@ -94,7 +97,7 @@ func ListComplete(c *gin.Context) {
 
 	var completes []extendedComplete
 
-	if err := entity.DB().Preload("Employees").Preload("Packagings").Preload("Receives").Preload("Completes").Raw("SELECT c.* , e.name FROM completes c JOIN employees e ON e.id = c.id").Scan(&completes).Error; err != nil {
+	if err := entity.DB().Preload("Employees").Preload("Packagings").Preload("Receives").Preload("Completes").Raw("SELECT c.* , e.employee_name FROM completes c JOIN employees e ON e.id = c.id").Scan(&completes).Error; err != nil {
 
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 
@@ -108,45 +111,65 @@ func ListComplete(c *gin.Context) {
 
 // DELETE /complete/:id
 
-// func DeleteComplete(c *gin.Context) {
-//            id := c.Param("id")
-//            if tx := entity.DB().Exec("DELETE FROM completes WHERE id = ?", id); tx.RowsAffected == 0 {
+func DeleteComplete(c *gin.Context) {
+	id := c.Param("id")
+	if tx := entity.DB().Exec("DELETE FROM completes WHERE id = ?", id); tx.RowsAffected == 0 {
 
-//                   c.JSON(http.StatusBadRequest, gin.H{"error": "complete not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "complete not found"})
 
-//                   return
-//            }
-//            c.JSON(http.StatusOK, gin.H{"data": id})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": id})
 
-// }
+}
 
 // PATCH /Complete
+func UpdateComplete(c *gin.Context) {
 
-// func UpdateComplete(c *gin.Context) {
+	var complete entity.Complete
+	var packaging entity.Packaging
+	var receive entity.Receive
+	var employee entity.Employee
 
-// 	var complete entity.Complete
+	if err := c.ShouldBindJSON(&complete); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error not access": err.Error()})
+		return
+	}
 
-// 	if err := c.ShouldBindJSON(&complete); err != nil {
+	//ค้นหา packaging ด้วย id
+	if tx := entity.DB().Where("id = ?", complete.Packaging_ID).First(&packaging); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "packaging not found"})
+		return
+	}
+	//ค้นหา receive ด้วย id
+	if tx := entity.DB().Where("id = ?", complete.Receive_ID).First(&receive); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "receive not found"})
+		return
+	}
+	//ค้นหา employee ด้วย id
+	if tx := entity.DB().Where("id = ?", complete.Employee_ID).First(&employee); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "employee not found"})
+		return
+	}
+	//ค้นหา complete ด้วย id
+	if tx := entity.DB().Where("id = ?", complete.ID).First(&complete); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "complete not found"})
+		return
+	}
 
-// 		   c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	//update entity complete
+	updatecom := entity.Complete{
+		Model:             gorm.Model{ID: complete.ID},
+		Employee:          employee,
+		Receive:           receive,
+		Packaging:         packaging,
+		Complete_datetime: complete.Complete_datetime,
+	}
+	//update customer
+	if err := entity.DB().Save(&updatecom).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": updatecom})
 
-// 		   return
-
-// 	}
-// 	if tx := entity.DB().Where("id = ?", complete.Complete_ID).First(&complete); tx.RowsAffected == 0 {
-
-// 		   c.JSON(http.StatusBadRequest, gin.H{"error": "Complete not found"})
-
-// 		   return
-
-// 	}
-// 	if err := entity.DB().Save(&complete).Error; err != nil {
-
-// 		   c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-
-// 		   return
-
-// 	}
-// 	c.JSON(http.StatusOK, gin.H{"data": complete})
-
-// }
+}
