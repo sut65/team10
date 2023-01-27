@@ -114,42 +114,30 @@ func main() {
 			// Recvtype
 			p.GET("/recvtype", controllerconfirmation.ListRecvType)
 
-			//Form
-			p.GET("/forms", Form_controller.ListForms)
-			p.GET("/form/:id", Form_controller.GetForm)
-			p.POST("/forms", Form_controller.CreateForm)
-			p.DELETE("/forms/:id", Form_controller.DeleteForm)
-			p.PATCH("/forms", Form_controller.UpdateForm)
-
-			//Form_Type
-			p.GET("/formtypes", FormType_controller.ListFormTypes)
-			p.GET("/formtype/:id", FormType_controller.GetFormType)
-			p.POST("/formtypes", FormType_controller.CreateFormType)
-
 			// Receive
-			r.GET("/receive", controllerreceive.ListReceives)
-			r.GET("/receive/:id", controllerreceive.GetReceive)
-			r.POST("/receives", controllerreceive.CreateReceive)
-			r.PATCH("/receives", controllerreceive.UpdateReceive)
+			p.GET("/receive", controllerreceive.ListReceives)
+			p.GET("/receive/:id", controllerreceive.GetReceive)
+			p.POST("/receives", controllerreceive.CreateReceive)
+			p.PATCH("/receives", controllerreceive.UpdateReceive)
 			//detergent
-			r.GET("/detergents", controllerdetergent.ListDetergents)
-			r.GET("/detergent/:id", controllerdetergent.GetDetergent)
-			r.POST("/detergents", controllerdetergent.CreateDetergents)
+			p.GET("/detergents", controllerdetergent.ListDetergents)
+			p.GET("/detergent/:id", controllerdetergent.GetDetergent)
+			p.POST("/detergents", controllerdetergent.CreateDetergents)
 			//softener
-			r.GET("/softeners", controllersoftener.ListSofteners)
-			r.GET("/softener/:id", controllersoftener.GetSoftener)
-			r.POST("/softeners", controllersoftener.Createsofteners)
+			p.GET("/softeners", controllersoftener.ListSofteners)
+			p.GET("/softener/:id", controllersoftener.GetSoftener)
+			p.POST("/softeners", controllersoftener.Createsofteners)
 
 			// Vehicle
-			r.GET("/vehicle", controllervehicle.ListVehicle)
-			r.GET("/vehicle/:id", controllervehicle.GetVehicle)
-			r.POST("/vehicles", controllervehicle.CreateVehicle)
-			r.PATCH("/vehicles", controllervehicle.UpdateVehicle)
+			p.GET("/vehicle", controllervehicle.ListVehicle)
+			p.GET("/vehicle/:id", controllervehicle.GetVehicle)
+			p.POST("/vehicles", controllervehicle.CreateVehicle)
+			p.PATCH("/vehicles", controllervehicle.UpdateVehicle)
 			//brandvehicle
-			r.GET("/brandvehicles", controllerbrandvehicle.ListBrand_Vehicles)
+			p.GET("/brandvehicles", controllerbrandvehicle.ListBrand_Vehicles)
 
 			//engine
-			r.GET("/engines", controllerengine.ListEngines)
+			p.GET("/engines", controllerengine.ListEngines)
 
 			//service
 			p.GET("/services", Service_controller.ListServices)

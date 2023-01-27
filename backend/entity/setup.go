@@ -464,7 +464,7 @@ func SetupDatabase() {
 		Add_number:  "11",
 		Quantity:    "15",
 		Time:        time.Date(2022, 10, 25, 12, 40, 00, 00, time.Now().Local().Location())}
-	db.Model(&Stock{}).Create(&stock1)
+	db.Model(&Stock{}).Create(&stock2)
 
 	/* -------------------------------- RecvType -------------------------------- */
 	recvt1 := RecvType{

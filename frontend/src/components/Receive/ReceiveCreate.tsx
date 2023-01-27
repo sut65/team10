@@ -215,11 +215,12 @@ return (
                     บันทึกข้อมูลไม่สำเร็จ
                 </Alert>
             </Snackbar>
-            <Box>
-                <Paper>
-                    <Grid container spacing={0} sx={{ paddingX: 0
+            <Box sx={{ padding: 2
                      }}>
-                    <h1>RECEIVE</h1> <AddShoppingCartIcon color="success" sx={{ fontSize: 70 }}/>
+                <Paper>
+                    <Grid container spacing={0} sx={{ padding: 2
+                     }}>
+                    <h1>RECEIVE<AddShoppingCartIcon color="success" sx={{ fontSize: 200 }}/></h1> 
                     </Grid>
 
                         <Grid

@@ -23,7 +23,7 @@ func CreateDetergents(c *gin.Context) {
 }
 
 // GET /detergent/:id
-func GeteDetergent(c *gin.Context) {
+func GetDetergent(c *gin.Context) {
 	var detergent entity.Detergent
 	id := c.Param("weight_id")
 	if err := entity.DB().Raw("SELECT * FROM weights WHERE weight_id = ?", id).Scan(&detergent).Error; err != nil {
