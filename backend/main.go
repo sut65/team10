@@ -124,12 +124,9 @@ func main() {
 			p.PATCH("/receives", controllerreceive.UpdateReceive)
 			//detergent
 			p.GET("/detergents", controllerdetergent.ListDetergents)
-			p.GET("/detergent/:id", controllerdetergent.GetDetergent)
-			p.POST("/detergents", controllerdetergent.CreateDetergents)
+
 			//softener
 			p.GET("/softeners", controllersoftener.ListSofteners)
-			p.GET("/softener/:id", controllersoftener.GetSoftener)
-			p.POST("/softeners", controllersoftener.Createsofteners)
 
 			// Vehicle
 			p.GET("/vehicle", controllervehicle.ListVehicle)

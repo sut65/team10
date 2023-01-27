@@ -9,7 +9,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from '@mui/icons-material/Cancel';
 import UpdateIcon from '@mui/icons-material/Update';
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import MopedIcon from '@mui/icons-material/Moped';
 
 /* combobox */
 import { TextField } from "@mui/material";
@@ -63,7 +63,7 @@ const requestOptionsPost = {
     body: JSON.stringify(data),
 };
 
-fetch(`${apiUrl}/receive`, requestOptionsPost)
+fetch(`${apiUrl}/vehicle`, requestOptionsPost)
     .then((response) => response.json())
     .then((res) => {
         console.log(res)
@@ -189,7 +189,7 @@ fetch(`${apiUrl}/receive`, requestOptionsPost)
               <Paper>
                   <Grid container spacing={0} sx={{ padding: 2
                    }}>
-                  <h1>RECEIVE<AddShoppingCartIcon color="success" sx={{ fontSize: 200 }}/></h1> 
+                  <h1>VEHICLE<MopedIcon color="action" sx={{ fontSize: 200 }}/></h1> 
                   </Grid>
 
                       <Grid

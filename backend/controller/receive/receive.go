@@ -69,7 +69,7 @@ func CreateReceive(c *gin.Context) {
 func GetReceive(c *gin.Context) {
 	var receive entity.Receive
 	id := c.Param("id")
-	if err := entity.DB().Raw("SELECT * FROM bills WHERE id = ?", id).Scan(&receive).Error; err != nil {
+	if err := entity.DB().Raw("SELECT * FROM receives WHERE id = ?", id).Scan(&receive).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -80,8 +80,8 @@ func GetReceive(c *gin.Context) {
 // GET /receives
 
 func ListReceives(c *gin.Context) {
-	var receive entity.Receive
-	if err := entity.DB().Raw("SELECT * FROM bills").Scan(&receive).Error; err != nil {
+	var receive []entity.Receive
+	if err := entity.DB().Raw("SELECT * FROM receives").Scan(&receive).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
