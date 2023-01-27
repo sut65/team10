@@ -286,7 +286,9 @@ type Receive struct {
 	Det_Quantity uint
 	Sof_Quantity uint
 	Time_Stamp   time.Time
+
 	Complete     []Complete `gorm:"foreignKey:Receive_ID"`
+
 }
 
 /* -------------------------------------------------------------------------- */

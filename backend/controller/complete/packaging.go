@@ -33,9 +33,9 @@ func CreatePackaging(c *gin.Context) {
 // GET /Packaging/:id
 func GetPackaging(c *gin.Context) {
 	var packaging entity.Packaging
-	id := c.Param("packagings_id")
+	id := c.Param("id")
 
-	if err := entity.DB().Raw("SELECT * FROM packagings WHERE packagings_id = ?", id).Scan(&packaging).Error; err != nil {
+	if err := entity.DB().Raw("SELECT * FROM packagings WHERE id = ?", id).Scan(&packaging).Error; err != nil {
 
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 
@@ -49,7 +49,7 @@ func GetPackaging(c *gin.Context) {
 
 func ListPackaging(c *gin.Context) {
 	var packagings []entity.Packaging
-	if err := entity.DB().Raw("SELECT * FROM completes").Find(&packagings).Error; err != nil {
+	if err := entity.DB().Raw("SELECT * FROM packagings").Find(&packagings).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -59,17 +59,17 @@ func ListPackaging(c *gin.Context) {
 
 // DELETE /Packaging/:id
 
-// func DeletePackaging(c *gin.Context) {
-//            id := c.Param("id")
-//            if tx := entity.DB().Exec("DELETE FROM packagings WHERE id = ?", id); tx.RowsAffected == 0 {
+func DeletePackaging(c *gin.Context) {
+	id := c.Param("id")
+	if tx := entity.DB().Exec("DELETE FROM packagings WHERE id = ?", id); tx.RowsAffected == 0 {
 
-//                   c.JSON(http.StatusBadRequest, gin.H{"error": "complete not found"})
+		   c.JSON(http.StatusBadRequest, gin.H{"error": "packaging not found"})
 
-//                   return
-//            }
-//            c.JSON(http.StatusOK, gin.H{"data": id})
+		   return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": id})
 
-// }
+}
 
 // PATCH /Packaging
 
