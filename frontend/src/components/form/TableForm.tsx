@@ -12,7 +12,7 @@ import TableRow from "@mui/material/TableRow";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
-import { FormInterface } from "../../models/form/IForm;
+import { FormInterface } from "../../models/form/IForm";
 import { useNavigate } from "react-router-dom";
 
 export default function FormTable() {
