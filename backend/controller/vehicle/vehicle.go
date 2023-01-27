@@ -39,10 +39,10 @@ func CreateVehicle(c *gin.Context) {
 	//10: สร้าง
 	rec := entity.Vehicle{
 		Brand_Vehicle_ID: vehicle.Brand_Vehicle_ID,
-		Engine_ID:       vehicle.Engine_ID,
-		ListModel:       vehicle.ListModel,
+		Engine_ID:        vehicle.Engine_ID,
+		ListModel:        vehicle.ListModel,
 		Vehicle_Rigis:    vehicle.Vehicle_Rigis,
-		Time_Insulance:  vehicle.Time_Insulance.Local(),
+		Time_Insulance:   vehicle.Time_Insulance.Local(),
 	}
 
 	if _, err := govalidator.ValidateStruct(rec); err != nil {
@@ -64,7 +64,7 @@ func CreateVehicle(c *gin.Context) {
 func GetVehicle(c *gin.Context) {
 	var vehicle entity.Vehicle
 	id := c.Param("id")
-	if err := entity.DB().Raw("SELECT * FROM bills WHERE id = ?", id).Scan(&vehicle).Error; err != nil {
+	if err := entity.DB().Raw("SELECT * FROM vehicles WHERE id = ?", id).Scan(&vehicle).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -75,8 +75,8 @@ func GetVehicle(c *gin.Context) {
 // GET /receives
 
 func ListVehicle(c *gin.Context) {
-	var vehicle entity.Vehicle
-	if err := entity.DB().Raw("SELECT * FROM bills").Scan(&vehicle).Error; err != nil {
+	var vehicle []entity.Vehicle
+	if err := entity.DB().Raw("SELECT * FROM vehicles").Scan(&vehicle).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

@@ -9,8 +9,8 @@ import (
 
 // POST /engines
 func ListEngines(c *gin.Context) {
-	var engine entity.Engine
-	if err := entity.DB().Raw("SELECT * FROM reasons").Scan(&engine).Error; err != nil {
+	var engine []entity.Engine
+	if err := entity.DB().Raw("SELECT * FROM engines").Scan(&engine).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
