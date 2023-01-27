@@ -1,12 +1,36 @@
 import * as React from "react";
-import {Box,  Button,  Container,Divider,  FormControl,  Grid,  MenuItem,  Paper,  Select,  SelectChangeEvent,  Snackbar,  TextField,} from "@mui/material";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Card,
+  CardContent,
+  Container,
+  Divider,
+  FormControl,
+  Grid,
+  MenuItem,
+  Paper,
+  Select,
+  SelectChangeEvent,
+  Snackbar,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+} from "@mui/material";
 import { useEffect, useState } from "react";
-import {  DeliveryInterface,  ServiceInterface,  WeightInterface,} from "../../models/service/IService";
+import {DeliveryInterface,ServiceInterface,WeightInterface,} from "../../models/service/IService";
 import Typography from "@mui/material/Typography";
 import { ThemeContext } from "@emotion/react";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import { TypeWashingInterface } from "../../models/service/IService";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -17,21 +41,42 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 const ServiceCreate = () => {
+  const params = useParams();
+  const navigate = useNavigate();
+
   const [service, setService] = React.useState<Partial<ServiceInterface>>({
     TypeWashing_ID: 0,
     Weight_ID: 0,
     Delivery_ID: 0,
   });
-
+  const [service1, setService1] = React.useState<ServiceInterface[]>([]);
   const [typewashing, setTypewashing] = React.useState<TypeWashingInterface[]>(
     []
   );
+  // const [pricejoin, setPricejoin] = React.useState<PriceInterface[]>([]);
   const [delivery, setDelivery] = React.useState<DeliveryInterface[]>([]);
   const [weight, setWeight] = React.useState<WeightInterface[]>([]);
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
 
   //================================================================================================================//
+  const apiUrl = "http://localhost:8080";
+
+  const getServices = async () => {
+    const requestOptions = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+    fetch(`${apiUrl}/services`, requestOptions)
+      .then((response) => response.json())
+      .then((res) => {
+        if (res.data) {
+          setService1(res.data);
+          console.log(res.data);
+          // window.location.reload();
+        }
+      });
+  };
 
   const getTypeWashing = async () => {
     const apiUrl = `http://localhost:8080/typewashings`;
@@ -111,6 +156,26 @@ const ServiceCreate = () => {
       });
   };
 
+  const requestOptions = {
+    method: "GET",
+
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
+  };
+// let sum
+// let cal: ( value_cal: number) => number =
+//   function ( value_cal: number) {
+//     sum = 0;
+//     for(let i=0;i<price.length;i++){
+//       if(price[i] == Number(value_cal)){
+//         sum += washsing[i]+weightprice[i]+deliveryprice[i]
+//       }
+//     }
+//     return sum;
+//   };
+
   //================================================================================================================//
 
   const handleClose = (
@@ -142,15 +207,24 @@ const ServiceCreate = () => {
     });
   };
 
-  const requestOptionsGet = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
+  const ServiceDelete = async (ID: number) => {
+    const requestOptions = {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    };
+    fetch(`${apiUrl}/services/${ID}`, requestOptions)
+      .then((response) => response.json())
+      .then((res) => {
+        if (res.data) {
+          window.location.reload();
+        }
+      });
   };
 
   function submit() {
+
     let data = {
+      ID: service.ID,
       TypeWashing_ID: service.TypeWashing_ID,
       Weight_ID: service.Weight_ID,
       Address: service.Address,
@@ -173,6 +247,7 @@ fetch(`${apiUrl}/services`, requestOptionsPost)
         console.log(res)
         if (res.data) {
             setSuccess(true);
+            window.location.reload();
         } else {
             setError(true);
         }
@@ -185,12 +260,13 @@ fetch(`${apiUrl}/services`, requestOptionsPost)
     getTypeWashing();
     getWeight();
     getDelivery();
-    submit();
+    getServices();
   }, []);
+
 
   return (
     <div>
-      <Container maxWidth="md">
+      <Container maxWidth="md" sx={{ p: 3 }}>
         <div>
           <Snackbar
             open={success}
@@ -208,7 +284,41 @@ fetch(`${apiUrl}/services`, requestOptionsPost)
               บันทึกข้อมูลไม่สำเร็จ
             </Alert>
           </Snackbar>
-          <Paper>
+
+          <Paper variant="elevation">
+            <Grid container spacing={2} sx={{ padding: 2 }}>
+              <Grid item xs={4}>
+                <Card sx={{ minWidth: 275 }}>
+                  <CardContent>
+                    {/* <TextField
+                    disabled
+                      id="Description"
+                      variant="outlined"
+                      type="string"
+                      size="medium"
+                      sx={{fontFamily:'Mitr-Regular'}}
+                      defaultValue={service?.Description}  
+                      value={service?.TypeWashing_ID}
+                    ></TextField> */}
+                  </CardContent>
+                </Card>
+              </Grid>
+
+              <Grid item xs={4}>
+                <Card sx={{ minWidth: 275 }}>
+                  <CardContent></CardContent>
+                </Card>
+              </Grid>
+
+              <Grid item xs={4}>
+                <Card sx={{ minWidth: 275 }}>
+                  <CardContent></CardContent>
+                </Card>
+              </Grid>
+            </Grid>
+          </Paper>
+
+          <Paper variant="elevation">
             <Box
               display="flex"
               maxWidth="lg"
@@ -281,7 +391,7 @@ fetch(`${apiUrl}/services`, requestOptionsPost)
                         width: 450,
                       },
                     }}
-                    sx={{fontFamily:'Mitr-Regular'}}  
+                    sx={{ fontFamily: "Mitr-Regular" }}
                     multiline
                     value={service.Address}
                     onChange={handleInputChange}
@@ -289,8 +399,8 @@ fetch(`${apiUrl}/services`, requestOptionsPost)
                 </FormControl>
               </Grid>
 
-              <Grid item xs={8}>
-                <p>น้ำหนัก</p>
+              <Grid item xs={7.5}>
+                <p>การจัดส่ง</p>
                 <FormControl fullWidth variant="outlined">
                   <Select
                     sx={{ width: 300 }}
@@ -310,17 +420,25 @@ fetch(`${apiUrl}/services`, requestOptionsPost)
               </Grid>
 
               <Grid item xs={4}>
-                <p>ราคา</p>
-                <TextField
-                  disabled
-                  inputProps={{
-                    style: {
-                      width: 240,
-                    },
-                  }}
-                >
-                  ราคา
-                </TextField>
+                <FormControl fullWidth variant="outlined">
+                  <p>ราคา</p>
+                  <TextField
+                    disabled
+                    id="Price"
+                    variant="outlined"
+                    type="string"
+                    size="medium"
+                    inputProps={{
+                      style: {
+                        width: 470,
+                      },
+                    }}
+                    sx={{ fontFamily: "Mitr-Regular" }}
+                    multiline
+                    value={[]}
+                    onChange={handleInputChange}
+                  />
+                </FormControl>
               </Grid>
 
               <Grid item xs={12}>
@@ -338,6 +456,85 @@ fetch(`${apiUrl}/services`, requestOptionsPost)
                 </Button>
               </Grid>
             </Grid>
+          </Paper>
+          <Paper variant="elevation" square={true}>
+            <Box
+              display="flex"
+              maxWidth="lg"
+              sx={{
+                marginTop: 2,
+              }}
+            >
+              <Box sx={{ paddingX: 2, paddingY: 1 }}>
+                <Typography
+                  component="h2"
+                  variant="h6"
+                  color="primary"
+                  gutterBottom
+                  mt={2}
+                  align="center"
+                >
+                  {/* <h2>ระบบเลือกบริการ</h2> */}
+                </Typography>
+              </Box>
+            </Box>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 400, p: 2 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>ID</TableCell>
+                    <TableCell align="right">TypeWashingID</TableCell>
+                    <TableCell align="right">WeightID</TableCell>
+                    <TableCell align="right">Address</TableCell>
+                    <TableCell align="right">Delivery</TableCell>
+                    <TableCell align="right">Price</TableCell>
+                    {/* <TableCell align="right">Action</TableCell> */}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {service1.map((row) => (
+                    <TableRow
+                      key={row.ID}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {row.ID}
+                      </TableCell>
+                      <TableCell align="right">{row.TypeWashing_ID}</TableCell>
+                      <TableCell align="right">{row.Weight_ID}</TableCell>
+                      <TableCell align="right">{row.Address}</TableCell>
+                      <TableCell align="right">{row.Delivery_ID}</TableCell>
+                      <TableCell align="right">{row.Price}</TableCell>
+                      <TableCell align="right">
+                        <ButtonGroup
+                          variant="outlined"
+                          aria-lable="outlined button group"
+                        >
+                          <Button
+                            variant="outlined"
+                            startIcon={<DeleteIcon />}
+                            onClick={() => ServiceDelete(row.ID)}
+                            color="error"
+                            size="small"
+                          >
+                            Delete
+                          </Button>
+                          <Button
+                            variant="contained"
+                            color="success"
+                            onClick={() =>
+                              navigate({ pathname: `/service/${row.ID}` })
+                            }
+                          >
+                            แก้ไข
+                          </Button>
+                        </ButtonGroup>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Paper>
         </div>
       </Container>

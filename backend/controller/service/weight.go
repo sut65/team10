@@ -26,8 +26,8 @@ func CreateWeights(c *gin.Context) {
 // GET /user/:id
 func GetWeight(c *gin.Context) {
 	var user entity.Weight
-	id := c.Param("weight_id")
-	if err := entity.DB().Raw("SELECT * FROM weights WHERE weight_id = ?", id).Scan(&user).Error; err != nil {
+	id := c.Param("id")
+	if err := entity.DB().Raw("SELECT * FROM weights WHERE id = ?", id).Scan(&user).Error; err != nil {
 		   c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		   return
 	}

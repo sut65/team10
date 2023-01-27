@@ -26,8 +26,8 @@ func CreateDeliverys(c *gin.Context) {
 // GET /user/:id
 func GetDelivery(c *gin.Context) {
 	var user entity.DeliveryType
-	id := c.Param("delivery_id")
-	if err := entity.DB().Raw("SELECT * FROM deliveries WHERE delivery_id = ?", id).Scan(&user).Error; err != nil {
+	id := c.Param("id")
+	if err := entity.DB().Raw("SELECT * FROM deliveries WHERE id = ?", id).Scan(&user).Error; err != nil {
 		   c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		   return
 	}
