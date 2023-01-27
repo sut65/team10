@@ -5,6 +5,7 @@ import (
 	controllerbill "github.com/sut65/team10/controller/bill"
 	controllercomplete "github.com/sut65/team10/controller/complete"
 	controllerconfirmation "github.com/sut65/team10/controller/confirmation"
+	controllercustomer "github.com/sut65/team10/controller/customer"
 	employee_controller "github.com/sut65/team10/controller/employee"
 	gender_controller "github.com/sut65/team10/controller/employee"
 	position_controller "github.com/sut65/team10/controller/employee"
@@ -12,16 +13,24 @@ import (
 	FormType_controller "github.com/sut65/team10/controller/form"
 	Form_controller "github.com/sut65/team10/controller/form"
 	Satisfaction_controller "github.com/sut65/team10/controller/form"
+	login_controller "github.com/sut65/team10/controller/login"
 	controllerpromotion "github.com/sut65/team10/controller/promotion"
+	controllerdetergent "github.com/sut65/team10/controller/receive"
+	controllerreceive "github.com/sut65/team10/controller/receive"
+	controllersoftener "github.com/sut65/team10/controller/receive"
+	DeliveryType_controller "github.com/sut65/team10/controller/service"
+	Service_controller "github.com/sut65/team10/controller/service"
+	WashingType_controller "github.com/sut65/team10/controller/service"
+	Weight_controller "github.com/sut65/team10/controller/service"
 	brand_controller "github.com/sut65/team10/controller/stock"
 	size_controller "github.com/sut65/team10/controller/stock"
 	stock_controller "github.com/sut65/team10/controller/stock"
 	type_controller "github.com/sut65/team10/controller/stock"
-	Service_controller "github.com/sut65/team10/controller/service"
-	WashingType_controller "github.com/sut65/team10/controller/service"
-	Weight_controller "github.com/sut65/team10/controller/service"
-	DeliveryType_controller "github.com/sut65/team10/controller/service"
+	controllerbrandvehicle "github.com/sut65/team10/controller/vehicle"
+	controllerengine "github.com/sut65/team10/controller/vehicle"
+	controllervehicle "github.com/sut65/team10/controller/vehicle"
 	"github.com/sut65/team10/entity"
+	middlewares "github.com/sut65/team10/middlewares"
 )
 
 func main() {
@@ -30,114 +39,163 @@ func main() {
 	r := gin.Default()
 	r.Use(CORSMiddleware())
 
-	// User Routes
+	//SignIn
+	r.POST("/Clogin", login_controller.CLogin)
+	r.POST("/Elogin", login_controller.ELogin)
 
-	// Bill
-	r.GET("/bill", controllerbill.ListBills)
-	r.GET("/bill/:id", controllerbill.GetBill)
-	r.POST("/bills", controllerbill.CreateBill)
-	r.PATCH("/bills", controllerbill.UpdateBill)
-	// --Paymenttype
-	r.GET("/paymenttype", controllerbill.ListPaymenttypes)
+	//SignUp
+	r.GET("/customer", controllercustomer.ListCustomer)
+	r.GET("/customer/:id", controllercustomer.GetCustomer)
+	r.POST("/customers", controllercustomer.CreateCustomer)
+	r.GET("/careers", controllercustomer.ListCareer)
+	r.GET("/advertises", controllercustomer.ListAdvertise)
 	r.GET("/genders", gender_controller.ListGenders)
 
-	// Promotion
-	r.GET("/promotion", controllerpromotion.ListPromotions)
-	r.GET("/promotion/:id", controllerpromotion.GetPromotion)
-	r.POST("/promotions", controllerpromotion.CreatePromotion)
-	r.PATCH("/promotions", controllerpromotion.UpdatePromotion)
-	//--codetype
-	r.GET("/codetype", controllerpromotion.ListCodetypes)
-	//--reason
-	r.GET("/reason", controllerpromotion.ListReasons)
-	//--quotacode
-	r.GET("/quotacode", controllerpromotion.ListQuotacode)
-	r.PATCH("/quotacodes", controllerpromotion.UpdatePromotion)
+	router := r.Group("")
+	{
+		p := router.Use(middlewares.Authorizes())
+		{ // Bill
+			p.GET("/bill", controllerbill.ListBills)
+			p.GET("/bill/:id", controllerbill.GetBill)
+			p.POST("/bills", controllerbill.CreateBill)
+			p.PATCH("/bills", controllerbill.UpdateBill)
+			// --Paymenttype
+			p.GET("/paymenttype", controllerbill.ListPaymenttypes)
 
-	//position
-	r.GET("/positions", position_controller.ListPosition)
+			// Promotion
+			p.GET("/promotion", controllerpromotion.ListPromotions)
+			p.GET("/promotion/:id", controllerpromotion.GetPromotion)
+			p.POST("/promotions", controllerpromotion.CreatePromotion)
+			p.PATCH("/promotions", controllerpromotion.UpdatePromotion)
+			//--codetype
+			p.GET("/codetype", controllerpromotion.ListCodetypes)
+			//--reason
+			p.GET("/reason", controllerpromotion.ListReasons)
+			//--quotacode
+			p.GET("/quotacode", controllerpromotion.ListQuotacode)
+			p.PATCH("/quotacodes", controllerpromotion.UpdatePromotion)
 
-	//workshift
-	r.GET("/workshifts", workshift_controller.ListWorkShift)
+			//position
+			p.GET("/positions", position_controller.ListPosition)
 
-	//Employee
-	r.POST("/employees", employee_controller.CreateEmployees)
-	r.GET("/employees", employee_controller.ListEmployees)
-	r.GET("/employees/:id", employee_controller.GetEmployee)
-	r.PATCH("/employees", employee_controller.UpdateEmployee)
-	r.DELETE("/employees/:id", employee_controller.DeleteEmployee)
+			//workshift
+			p.GET("/workshifts", workshift_controller.ListWorkShift)
 
-	//types
-	r.GET("/types", type_controller.ListTypes)
+			//Employee
+			p.POST("/employees", employee_controller.CreateEmployees)
+			p.GET("/employees", employee_controller.ListEmployees)
+			p.GET("/employees/:id", employee_controller.GetEmployee)
+			p.PATCH("/employees", employee_controller.UpdateEmployee)
+			p.DELETE("/employees/:id", employee_controller.DeleteEmployee)
 
-	//sizes
-	r.GET("/sizes", size_controller.ListSizes)
+			//types
+			p.GET("/types", type_controller.ListTypes)
 
-	//brand
-	r.GET("/brands", brand_controller.ListBrands)
+			//sizes
+			p.GET("/sizes", size_controller.ListSizes)
 
-	//Stock
-	r.POST("/stocks", stock_controller.CreateStocks)
-	r.GET("/stocks", stock_controller.ListStock)
-	r.GET("/stocks/:id", stock_controller.GetStock)
-	r.PATCH("/stocks", stock_controller.UpdateStock)
-	r.DELETE("/stocks/:id", stock_controller.DeleteStock)
+			//brand
+			p.GET("/brands", brand_controller.ListBrands)
 
-	// Confirmation
-	r.GET("/confirmation", controllerconfirmation.ListConfirmations)
-	r.GET("/confirmation/:id", controllerconfirmation.GetConfirmation)
-	r.POST("/confirmations", controllerconfirmation.CreateConfirmation)
-	r.PATCH("/confirmations", controllerconfirmation.UpdateConfirmation)
-	r.GET("/c_complete", controllerconfirmation.ListComplete)
+			//Stock
+			p.POST("/stocks", stock_controller.CreateStocks)
+			p.GET("/stocks", stock_controller.ListStock)
+			p.GET("/stocks/:id", stock_controller.GetStock)
+			p.PATCH("/stocks", stock_controller.UpdateStock)
+			p.DELETE("/stocks/:id", stock_controller.DeleteStock)
 
-	// Recvtype
-	r.GET("/recvtype", controllerconfirmation.ListRecvType)
+			// Confirmation
+			p.GET("/confirmation", controllerconfirmation.ListConfirmations)
+			p.GET("/confirmation/:id", controllerconfirmation.GetConfirmation)
+			p.POST("/confirmations", controllerconfirmation.CreateConfirmation)
+			p.PATCH("/confirmations", controllerconfirmation.UpdateConfirmation)
+			p.GET("/c_complete", controllerconfirmation.ListComplete)
 
-	//Complete
-	r.GET("/complete", controllercomplete.ListComplete)
+			// Recvtype
+			p.GET("/recvtype", controllerconfirmation.ListRecvType)
 
-	//Form
-	r.GET("/forms", Form_controller.ListForms)
-	r.GET("/form/:id", Form_controller.GetForm)
-	r.POST("/forms", Form_controller.CreateForm)
-	r.DELETE("/forms/:id", Form_controller.DeleteForm)
-	r.PATCH("/forms", Form_controller.UpdateForm)
+			//Form
+			p.GET("/forms", Form_controller.ListForms)
+			p.GET("/form/:id", Form_controller.GetForm)
+			p.POST("/forms", Form_controller.CreateForm)
+			p.DELETE("/forms/:id", Form_controller.DeleteForm)
+			p.PATCH("/forms", Form_controller.UpdateForm)
 
-	//Form_Type
-	r.GET("/formtypes", FormType_controller.ListFormTypes)
-	r.GET("/formtype/:id", FormType_controller.GetFormType)
-	r.POST("/formtypes", FormType_controller.CreateFormType)
+			//Form_Type
+			p.GET("/formtypes", FormType_controller.ListFormTypes)
+			p.GET("/formtype/:id", FormType_controller.GetFormType)
+			p.POST("/formtypes", FormType_controller.CreateFormType)
 
-	//Satisfaction
-	r.GET("/satisfactions", Satisfaction_controller.ListSatisfactions)
-	r.GET("/satisfaction/:id", Satisfaction_controller.GetSatisfaction)
-	r.POST("/satisfactions", Satisfaction_controller.CreateSatisfaction)
+			// Receive
+			r.GET("/receive", controllerreceive.ListReceives)
+			r.GET("/receive/:id", controllerreceive.GetReceive)
+			r.POST("/receives", controllerreceive.CreateReceive)
+			r.PATCH("/receives", controllerreceive.UpdateReceive)
+			//detergent
+			r.GET("/detergents", controllerdetergent.ListDetergents)
+			r.GET("/detergent/:id", controllerdetergent.GetDetergent)
+			r.POST("/detergents", controllerdetergent.CreateDetergents)
+			//softener
+			r.GET("/softeners", controllersoftener.ListSofteners)
+			r.GET("/softener/:id", controllersoftener.GetSoftener)
+			r.POST("/softeners", controllersoftener.Createsofteners)
 
-	//service
-	r.GET("/services", Service_controller.ListServices)
-	r.GET("/service/:id", Service_controller.GetService)
-	r.POST("/services", Service_controller.CreateService)
-	r.DELETE("/services/:id", Service_controller.DeleteService)
-	r.PATCH("/services", Service_controller.UpdateService)
+			// Vehicle
+			r.GET("/vehicle", controllervehicle.ListVehicle)
+			r.GET("/vehicle/:id", controllervehicle.GetVehicle)
+			r.POST("/vehicles", controllervehicle.CreateVehicle)
+			r.PATCH("/vehicles", controllervehicle.UpdateVehicle)
+			//brandvehicle
+			r.GET("/brandvehicles", controllerbrandvehicle.ListBrand_Vehicles)
 
-	//washingType
-	r.GET("/washingtypes", WashingType_controller.ListTypeWashings)
-	r.GET("/washingtype/:id", WashingType_controller.GetTypeWashing)
-	r.POST("/washingtypes", WashingType_controller.CreateTypeWashings)
+			//engine
+			r.GET("/engines", controllerengine.ListEngines)
 
-	//weight
-	r.GET("/weights", Weight_controller.ListWeights)
-	r.GET("/weight/:id", Weight_controller.GetWeight)
-	r.POST("/weights", Weight_controller.CreateWeights)
+			//service
+			p.GET("/services", Service_controller.ListServices)
+			p.GET("/service/:id", Service_controller.GetService)
+			p.POST("/services", Service_controller.CreateService)
+			p.DELETE("/services/:id", Service_controller.DeleteService)
+			p.PATCH("/services", Service_controller.UpdateService)
 
-	//deliverytype
-	r.GET("/deliverytypes", DeliveryType_controller.ListDeliverys)
-	r.GET("/deliverytypes/:id", DeliveryType_controller.GetDelivery)
-	r.POST("/deliverytypes", DeliveryType_controller.CreateDeliverys)
-	// Run the server
+			//washingType
+			p.GET("/washingtypes", WashingType_controller.ListTypeWashings)
+			p.GET("/washingtype/:id", WashingType_controller.GetTypeWashing)
+			p.POST("/washingtypes", WashingType_controller.CreateTypeWashings)
 
-	r.Run()
+			//weight
+			p.GET("/weights", Weight_controller.ListWeights)
+			p.GET("/weight/:id", Weight_controller.GetWeight)
+			p.POST("/weights", Weight_controller.CreateWeights)
 
+			//deliverytype
+			p.GET("/deliverytypes", DeliveryType_controller.ListDeliverys)
+			p.GET("/deliverytypes/:id", DeliveryType_controller.GetDelivery)
+			p.POST("/deliverytypes", DeliveryType_controller.CreateDeliverys)
+
+			//Complete
+			p.GET("/complete", controllercomplete.ListComplete)
+
+			//Form
+			p.GET("/forms", Form_controller.ListForms)
+			p.GET("/form/:id", Form_controller.GetForm)
+			p.POST("/forms", Form_controller.CreateForm)
+			p.DELETE("/forms/:id", Form_controller.DeleteForm)
+			p.PATCH("/forms", Form_controller.UpdateForm)
+
+			//Form_Type
+			p.GET("/formtypes", FormType_controller.ListFormTypes)
+			p.GET("/formtype/:id", FormType_controller.GetFormType)
+			p.POST("/formtypes", FormType_controller.CreateFormType)
+
+			//Satisfaction
+			p.GET("/satisfactions", Satisfaction_controller.ListSatisfactions)
+			p.GET("/satisfaction/:id", Satisfaction_controller.GetSatisfaction)
+			p.POST("/satisfactions", Satisfaction_controller.CreateSatisfaction)
+
+		}
+	}
+	r.Run() // Run the server
 }
 
 func CORSMiddleware() gin.HandlerFunc {

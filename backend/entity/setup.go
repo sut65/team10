@@ -466,6 +466,7 @@ func SetupDatabase() {
 		Time:        time.Date(2022, 10, 25, 12, 40, 00, 00, time.Now().Local().Location())}
 	db.Model(&Stock{}).Create(&stock1)
 
+	/* -------------------------------- RecvType -------------------------------- */
 	recvt1 := RecvType{
 		Name: "Hand To Hand",
 	}
@@ -529,16 +530,16 @@ func SetupDatabase() {
 
 	//======================================Service====================================//
 	TypeWashing1 := TypeWashing{
-		Model:             gorm.Model{},
+		Model:        gorm.Model{},
 		Type_washing: "ซักรีดปกติ",
-		Description: "ก็แค่ซักรีดโว้ยย",
+		Description:  "ก็แค่ซักรีดโว้ยย",
 	}
 	db.Model(&TypeWashing{}).Create(&TypeWashing1)
 
 	TypeWashing2 := TypeWashing{
-		Model:             gorm.Model{},
+		Model:        gorm.Model{},
 		Type_washing: "ซักรีดน้ำหอม",
-		Description: "รีดเสร็จฉีดน้ำหอม",
+		Description:  "รีดเสร็จฉีดน้ำหอม",
 	}
 	db.Model(&TypeWashing{}).Create(&TypeWashing2)
 }
