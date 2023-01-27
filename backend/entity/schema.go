@@ -83,6 +83,7 @@ type Employee struct {
 	Receive      []Receive   `gorm:"foreignKey:Employee_ID"`
 	Promotion    []Promotion `gorm:"foreignKey:Employee_ID"`
 	Delivery     []Delivery  `gorm:"foreignKey:Employee_ID"`
+	Complete     []Complete  `gorm:"foreignKey:Employee_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
@@ -285,6 +286,7 @@ type Receive struct {
 	Det_Quantity uint
 	Sof_Quantity uint
 	Time_Stamp   time.Time
+	Complete         []Complete `gorm:"foreignKey:Receive_Id"`
 }
 
 /* -------------------------------------------------------------------------- */
