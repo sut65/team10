@@ -5,7 +5,7 @@ export interface BillInterface {
   ID: number,
   Service_ID: number,
   Service:         ServiceInterface,
-  Q_ID: number,
+  QuotaCode_ID: number,
   QuotaCode:    QuotaCodeInterface,
   Paymenttype_ID:   number,
   Paymenttype:  PaymenttypeInterface,

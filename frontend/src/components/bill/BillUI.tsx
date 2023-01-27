@@ -53,9 +53,10 @@ function Bill() {
 
   function submit() {
         let bill_p = {
-          Service_ID: Number(localStorage.getItem("uid")),
-          Q_ID: bill.Q_ID,
-          Payment_Type_ID: bill.Paymenttype_ID,
+          Service_ID: 1,
+          //Service_ID: Number(localStorage.getItem("uid")),
+          QuotaCode_ID: bill.QuotaCode_ID,
+          Paymenttype_ID: bill.Paymenttype_ID,
           Bill_Price: 20,
           Time_Stamp: date,
         };
@@ -64,13 +65,13 @@ function Bill() {
         const requestOptions = {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            //Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(bill_p),
         };
 
-        fetch(`${apiUrl}/bill`, requestOptions)
+        fetch(`${apiUrl}/bills`, requestOptions)
           .then((response) => response.json())
           .then((res) => {
             if (res.data) {
@@ -237,7 +238,7 @@ function Bill() {
                     fullWidth
                     size="medium"
                     onChange={(event: any, value) => {
-                      setBill({ ...bill, Q_ID: value?.ID }); //Just Set ID to interface
+                      setBill({ ...bill, QuotaCode_ID: value?.ID }); //Just Set ID to interface
                     }}
                     getOptionLabel={(option: any) =>
                       `${option.Promotion.Codetype.Type}`
