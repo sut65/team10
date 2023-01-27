@@ -27,6 +27,8 @@ import { BillInterface } from "../../models/bill/IBill";
 import { PaymenttypeInterface } from "../../models/bill/IPaymenttype";
 import { QuotaCodeInterface } from "../../models/promotion/IQuotaCode";
 import { ServiceInterface } from "../../models/service/IService";
+//test
+import { PromotionInterface } from "../../models/promotion/IPromotion";
 function Bill() {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
   const [bill, setBill] = React.useState<Partial<BillInterface>>({});
@@ -141,6 +143,8 @@ function Bill() {
     //     });
     // };
 
+  
+
   useEffect(() => {
     getPaymentType();
     getQuotacode();
@@ -236,7 +240,7 @@ function Bill() {
                       setBill({ ...bill, Q_ID: value?.ID }); //Just Set ID to interface
                     }}
                     getOptionLabel={(option: any) =>
-                      `${option.ID}`
+                      `${option.Promotion.Codetype.Type}`
                     } //filter value
                     renderInput={(params) => {
                       return (
@@ -253,7 +257,7 @@ function Bill() {
                           {...props}
                           value={`${option.ID}`}
                           key={`${option.ID}`}
-                        >{`${option.ID}`}</li>
+                        >{`${option.Promotion.Codetype.Type}`}</li>
                       ); //display value
                     }}
                   />
