@@ -8,35 +8,10 @@ import (
 	"net/http"
 )
 
-// POST /detergents
-func CreateDetergents(c *gin.Context) {
-	var detergent entity.Detergent
-	if err := c.ShouldBindJSON(&detergent); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	if err := entity.DB().Create(&detergent).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{"data": detergent})
-}
-
-// GET /detergent/:id
-func GetDetergent(c *gin.Context) {
-	var detergent entity.Detergent
-	id := c.Param("weight_id")
-	if err := entity.DB().Raw("SELECT * FROM weights WHERE weight_id = ?", id).Scan(&detergent).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{"data": detergent})
-}
-
-// GET /users
+// GET /detergents
 func ListDetergents(c *gin.Context) {
 	var detergent []entity.Weight
-	if err := entity.DB().Raw("SELECT * FROM weights").Scan(&detergent).Error; err != nil {
+	if err := entity.DB().Raw("SELECT * FROM detergents").Scan(&detergent).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
