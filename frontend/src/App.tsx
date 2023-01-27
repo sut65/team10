@@ -9,7 +9,7 @@ import Confirmation from "./components/confirmation/ConfirmationUI";
 import Promotion from "./components/promotion/PromotionUI";
 import Home from "./components/Home";
 import Vehicle from "./components/Vehicle/VehiclrUI";
-import ReceiveCreate from "./components/Receive/ReceiveUI";
+import ReceiveCreate from "./components/Receive/ReceiveCreate";
 import Bill from "./components/bill/BillUI";
 import CompleteCreate from "./components/complete/CompleteCreate";
 import SignIn from "./components/SignIn_UI";
