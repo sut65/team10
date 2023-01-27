@@ -8,7 +8,7 @@ export interface VehicleInterface {
     Employee_ID: number,
     Employee:         EmployeesInterface,
 
-    BrandVehicle_ID : number,
+    Brand_Vehicle_ID : number,
     BrandVehicle: BrandVehicleInterface,
 
     Engine_ID : number,
