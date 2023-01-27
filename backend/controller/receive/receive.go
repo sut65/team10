@@ -13,7 +13,8 @@ import (
 func CreateReceive(c *gin.Context) {
 	var receive entity.Receive
 	var bill entity.Bill
-	var stock entity.Stock
+	var detergent entity.Detergent
+	var softener entity.Softener
 
 	if err := c.ShouldBindJSON(&receive); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -29,7 +30,7 @@ func CreateReceive(c *gin.Context) {
 	}
 
 	//9: ค้นหา Det ด้วยไอดี
-	if tx := entity.DB().Where("id = ?", receive.Detergent_ID).First(&stock.Detergent); tx.RowsAffected == 0 {
+	if tx := entity.DB().Where("id = ?", receive.Detergent_ID).First(&detergent); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
 
 		return
@@ -37,7 +38,7 @@ func CreateReceive(c *gin.Context) {
 	}
 
 	//10: ค้นหา Sof ด้วยไอดี
-	if tx := entity.DB().Where("id = ?", receive.Softener_ID).First(&stock.Softener); tx.RowsAffected == 0 {
+	if tx := entity.DB().Where("id = ?", receive.Softener_ID).First(&softener); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
 
 		return
