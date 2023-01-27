@@ -108,18 +108,6 @@ func main() {
 			// Recvtype
 			p.GET("/recvtype", controllerconfirmation.ListRecvType)
 
-			//Form
-			p.GET("/forms", Form_controller.ListForms)
-			p.GET("/form/:id", Form_controller.GetForm)
-			p.POST("/forms", Form_controller.CreateForm)
-			p.DELETE("/forms/:id", Form_controller.DeleteForm)
-			p.PATCH("/forms", Form_controller.UpdateForm)
-
-			//Form_Type
-			p.GET("/formtypes", FormType_controller.ListFormTypes)
-			p.GET("/formtype/:id", FormType_controller.GetFormType)
-			p.POST("/formtypes", FormType_controller.CreateFormType)
-
 			//service
 			p.GET("/services", Service_controller.ListServices)
 			p.GET("/service/:id", Service_controller.GetService)
