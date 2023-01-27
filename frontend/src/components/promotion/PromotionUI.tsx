@@ -12,7 +12,9 @@ import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from '@mui/icons-material/Cancel';
 import UpdateIcon from '@mui/icons-material/Update';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
+import { Link as RouterLink } from "react-router-dom";
 import StorefrontIcon from '@mui/icons-material/Storefront';
 /* Datetimepicker */
 import dayjs, { Dayjs } from "dayjs";
@@ -23,6 +25,8 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { CodetypeInterface } from "../../models/promotion/ICodetype";
 import { ReasonInterface } from "../../models/promotion/IReason";
 import { PromotionInterface } from "../../models/promotion/IPromotion";
+
+import PromotionTable_UI from "./PromotiontableUI";
 function Promotion() {
     const [date, setDate] = React.useState<Dayjs | null>(dayjs());
     const [promotion, setPromotion] = React.useState<Partial<PromotionInterface>>({});
@@ -51,8 +55,7 @@ function Promotion() {
           Reason_ID: promotion.Reason_ID,
           Price: price,
           Amount: amount,
-          Employee_ID: 1,
-          //Employee_ID: Number(localStorage.getItem("uid")),
+          Employee_ID: Number(localStorage.getItem("uid")),
           Time_Stamp: date,
         };
 
@@ -83,7 +86,7 @@ function Promotion() {
         const requestOptions = {
           method: "GET",
           headers: {
-            //Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "application/json",
           },
         };
@@ -103,7 +106,7 @@ function Promotion() {
         const requestOptions = {
           method: "GET",
           headers: {
-            //Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "application/json",
           },
         };
@@ -274,6 +277,8 @@ function Promotion() {
                     <Grid item xs={5}
                     >
                         <Button
+                        component={RouterLink}
+                        to="/"
                             variant="contained"
                             color="error"
                             endIcon={<CancelIcon />}
@@ -281,7 +286,17 @@ function Promotion() {
                             cancel
                         </Button>
                     </Grid>
-                    <Grid container item xs={7} direction='row-reverse'>
+                    <Grid item xs={5}
+                    >
+                        <Button
+                            variant="contained"
+                            color="warning"
+                            endIcon={<UpdateIcon />}
+                        >
+                            update
+                        </Button>
+                    </Grid>
+                    <Grid container item xs={2} direction='row-reverse'>
                         <Button
                             variant="contained"
                             color="success"
@@ -291,8 +306,18 @@ function Promotion() {
                             commit
                         </Button>
                     </Grid>
+                    <Grid container item xs={6.8} direction='row-reverse'>
+                        <Button
+                            variant="contained"
+                            color="error"
+                            endIcon={<DeleteForeverIcon />}
+                        >
+                            delete
+                        </Button>
+                    </Grid>
                 </Grid>
             </Box>
+            <PromotionTable_UI />
         </Container>
     );
 }
