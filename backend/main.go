@@ -54,7 +54,10 @@ func main() {
 	router := r.Group("")
 	{
 		p := router.Use(middlewares.Authorizes())
-		{ // Bill
+		{
+			// Customer
+			p.PATCH("/customers", controllercustomer.UpdateCustomer)
+			// Bill
 			p.GET("/bill", controllerbill.ListBills)
 			p.GET("/bill/:id", controllerbill.GetBill)
 			p.POST("/bills", controllerbill.CreateBill)
