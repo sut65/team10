@@ -33,6 +33,8 @@ function VehicleCreate  () {
   const [vehicle, setVehicle] = React.useState<Partial<VehicleInterface>>({});
   const [brandvehicle, setBrandvehicle] = React.useState<BrandVehicleInterface[]>([]);
   const [engine, setEngine] = React.useState<EngineInterface[]>([]);
+  const [listmodel, setListModel] = React.useState<string | null>(null);
+  const [vehicle_regis, setVehicle_Regis] = React.useState<string | null>(null);
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
 
@@ -47,12 +49,15 @@ function VehicleCreate  () {
     setError(false);
   };
   function submit() {
-    let data = {
+    let vehicle_data = {
+      Employee_ID: 1,
       Brand_Vehicle_ID: vehicle.Brand_Vehicle_ID,
-      EngineID: vehicle.Engine_ID,
-      ListModel: vehicle.ListModel,
-      Vehicle_Regis: vehicle.Vehicle_Regis,
+      Engine_ID: vehicle.Engine_ID,
+      ListModel: listmodel,
+      Vehicle_Regis: vehicle_regis,
+      Time_Insulance:date,
     };
+    console.log(vehicle_data)
 
 //================================================================================================================//
 
@@ -60,10 +65,10 @@ const apiUrl = "http://localhost:8080";
 const requestOptionsPost = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
+    body: JSON.stringify(vehicle_data),
 };
 
-fetch(`${apiUrl}/vehicle`, requestOptionsPost)
+fetch(`${apiUrl}/vehicles`, requestOptionsPost)
     .then((response) => response.json())
     .then((res) => {
         console.log(res)
@@ -74,8 +79,6 @@ fetch(`${apiUrl}/vehicle`, requestOptionsPost)
         }
     });
 }
-
-
 //   const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 //   props,
 
@@ -86,7 +89,7 @@ fetch(`${apiUrl}/vehicle`, requestOptionsPost)
 
   //================================================================================================================//
 
-  const getBranVehicle = async () => {
+  const getBran_Vehicle = async () => {
     const apiUrl = `http://localhost:8080/brandvehicles`;
     const requestOptions = {
       method: "GET",
@@ -127,16 +130,13 @@ fetch(`${apiUrl}/vehicle`, requestOptionsPost)
   };
 
   //================================================================================================================//
-
-
-
-  const handleInputChange = (
-    event: React.ChangeEvent<{ id?: string; value: any }>
-  ) => {
-    const id = event.target.id as keyof typeof VehicleCreate;
-    const { value } = event.target;
-    setVehicle({ ...vehicle, [id]: value });
-  };
+  // const handleInputChange = (
+  //   event: React.ChangeEvent<{ id?: string; value: any }>
+  // ) => {
+  //   const id = event.target.id as keyof typeof VehicleCreate;
+  //   const { value } = event.target;
+  //   setVehicle({ ...vehicle, [id]: value });
+  // };
 
   // const handleChange = (event: SelectChangeEvent<number>) => {
   //   const name = event.target.name as keyof typeof vehicle;
@@ -152,13 +152,10 @@ fetch(`${apiUrl}/vehicle`, requestOptionsPost)
   //     "Content-Type": "application/json",
   //   },
   // };
-
-
-
 //================================================================================================================//
 
   useEffect(() => {
-    getBranVehicle();
+    getBran_Vehicle();
     getEngine();
   }, []);
 
@@ -296,7 +293,7 @@ fetch(`${apiUrl}/vehicle`, requestOptionsPost)
                   label="Model"
                   variant="outlined"
                   defaultValue=""
-                  onChange={handleInputChange}
+                  onChange={(event) => setListModel(String(event.target.value))}
                 />
               </Grid>
             </Grid>
@@ -318,7 +315,7 @@ fetch(`${apiUrl}/vehicle`, requestOptionsPost)
                   label="Registrantion"
                   variant="outlined"
                   defaultValue=""
-                  onChange={handleInputChange}
+                  onChange={(event) => setVehicle_Regis(String(event.target.value))}
                 />
               </Grid>
             </Grid>
