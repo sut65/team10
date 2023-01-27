@@ -14,12 +14,20 @@ func CreateVehicle(c *gin.Context) {
 	var vehicle entity.Vehicle
 	var brandvehicle entity.Brand_Vehicle
 	var engine entity.Engine
+	var employee entity.Employee
 
 	if err := c.ShouldBindJSON(&vehicle); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
+	// ค้นหา Employee ด้วยไอดี
+	if tx := entity.DB().Where("id = ?", vehicle.Employee_ID).First(&employee); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
+
+		return
+
+	}
 	//8: ค้นหา branvehicle ด้วยไอดี
 	if tx := entity.DB().Where("id = ?", vehicle.Brand_Vehicle_ID).First(&brandvehicle); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
@@ -38,6 +46,7 @@ func CreateVehicle(c *gin.Context) {
 
 	//10: สร้าง
 	rec := entity.Vehicle{
+		Employee_ID:      vehicle.Employee_ID,
 		Brand_Vehicle_ID: vehicle.Brand_Vehicle_ID,
 		Engine_ID:        vehicle.Engine_ID,
 		ListModel:        vehicle.ListModel,

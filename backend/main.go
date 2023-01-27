@@ -133,7 +133,7 @@ func main() {
 			// Vehicle
 			p.GET("/vehicle", controllervehicle.ListVehicle)
 			p.GET("/vehicle/:id", controllervehicle.GetVehicle)
-			p.POST("/vehicle", controllervehicle.CreateVehicle)
+			p.POST("/vehicles", controllervehicle.CreateVehicle)
 			p.PATCH("/vehicle", controllervehicle.UpdateVehicle)
 			//brandvehicle
 			p.GET("/brandvehicles", controllerbrandvehicle.ListBrand_Vehicles)
