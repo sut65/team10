@@ -14,6 +14,7 @@ import Bill from "./components/bill/BillUI";
 import CompleteCreate from "./components/complete/CompleteCreate";
 import SignIn from "./components/SignIn_UI";
 import CustomerCreate from "./components/customer/CustomerCreate";
+import UpdateCustomer from "./components/customer/UpdateCustomer";
 import NotFound from "./components/NotFound";
 
 export default function App() {
@@ -64,6 +65,7 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/confirmation/create" element={<Confirmation />} />
               <Route path="/bill/create" element={<Bill />} />
+              <Route path="/customer/update" element={<UpdateCustomer />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>

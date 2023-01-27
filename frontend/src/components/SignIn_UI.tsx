@@ -14,7 +14,6 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { SigninInterface } from "../models/ISignin";
 import Checkbox from "@mui/material/Checkbox/Checkbox";
 import { FormControlLabel, FormGroup } from "@mui/material";
-import { getValue } from "@mui/system";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -92,7 +91,7 @@ function SignIn() {
   const handleChangeCheckBox = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
     if (event.target.checked === true) {
-      setUserText("Personal ID");
+      setUserText("Employee Username");
     } else {
       setUserText("Username");
     }

@@ -150,7 +150,7 @@ function AppBarPublic() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleClose} component={RouterLink} to="/customer/update">
                   <Person />
                   <div>&nbsp;{localStorage.getItem("username")}</div>
                 </MenuItem>{" "}

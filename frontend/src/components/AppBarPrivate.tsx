@@ -175,7 +175,7 @@ function AppBarPrivate() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleClose} component={RouterLink} to="/employee/update">
                   <Person />
                   <div>&nbsp;{localStorage.getItem("username")}</div>
                 </MenuItem>{" "}
