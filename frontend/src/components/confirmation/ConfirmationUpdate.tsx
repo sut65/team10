@@ -30,7 +30,7 @@ import { RecvTypeInterface } from "../../models/confirmation/IRecvType";
 import { ConfirmationInterface } from "../../models/confirmation/IConfirmation";
 import { CompleteInterface } from "../../models/complete/IComplete";
 import ConfirmationUpdate from "./ConfirmationUpdate";
-import Receive from "../Receive/ReceiveUI";
+import Receive from "../Receive/ReceiveCreate";
 /* -------------------------------------------------------------------------- */
 /*                                    Style                                   */
 /* -------------------------------------------------------------------------- */
