@@ -1,15 +1,19 @@
 export interface ServiceInterface {
     ID: number,
     Address: string;
+    Price:  number;
    
     Weight_ID: number;
+    Weight_price: number;
     Weight: WeightInterface
    
     TypeWashing_ID: number;
     Type_washing: string;
+    Description: string;
     TypeWashing:TypeWashingInterface
    
     Delivery_ID: number;
+    Delivery_price: number;
     Devilery:DeliveryInterface
    
 }

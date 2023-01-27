@@ -26,8 +26,8 @@ func CreateTypeWashings(c *gin.Context) {
 // GET /user/:id
 func GetTypeWashing(c *gin.Context) {
 	var user entity.TypeWashing
-	id := c.Param("type_washing_id")
-	if err := entity.DB().Raw("SELECT * FROM Type_Washings WHERE type_washing_id = ?", id).Scan(&user).Error; err != nil {
+	id := c.Param("id")
+	if err := entity.DB().Raw("SELECT * FROM Type_Washings WHERE id = ?", id).Scan(&user).Error; err != nil {
 		   c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		   return
 	}
