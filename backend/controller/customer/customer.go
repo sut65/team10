@@ -2,6 +2,7 @@ package controller
 
 import (
 	"github.com/sut65/team10/entity"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 
 	"github.com/gin-gonic/gin"
@@ -37,6 +38,13 @@ func CreateCustomer(c *gin.Context) {
 		return
 	}
 
+	// Encrypt Password Before save to database
+	hashPassword, err := bcrypt.GenerateFromPassword([]byte(customers.Customer_Password), 14)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "error hashing password"})
+		return
+	}
+
 	//create entity customer
 	cus := entity.Customer{
 		Model:              gorm.Model{ID: customers.ID},
@@ -47,7 +55,7 @@ func CreateCustomer(c *gin.Context) {
 		Customer_Username:  customers.Customer_Username,
 		Customer_Phone:     customers.Customer_Phone,
 		Customer_Promptpay: customers.Customer_Promptpay,
-		Customer_Password:  customers.Customer_Password,
+		Customer_Password:  string(hashPassword),
 		Customer_Address:   customers.Customer_Address,
 	}
 	//save customer

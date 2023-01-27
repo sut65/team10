@@ -6,15 +6,15 @@ import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import LocalLaundryServiceIcon from '@mui/icons-material/LocalLaundryService';
-import PasswordIcon from '@mui/icons-material/Password';
-import PersonIcon from '@mui/icons-material/Person';
+import LocalLaundryServiceIcon from "@mui/icons-material/LocalLaundryService";
 import Typography from "@mui/material/Typography";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
-import { Link as RouterLink } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { SigninInterface } from "../models/ISignin";
+import Checkbox from "@mui/material/Checkbox/Checkbox";
+import { FormControlLabel, FormGroup } from "@mui/material";
+import { getValue } from "@mui/system";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -29,28 +29,35 @@ function SignIn() {
   const [signin, setSignin] = useState<Partial<SigninInterface>>({});
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+  const [checked, setChecked] = useState(false);
+  const [usertext, setUserText] = useState("Username");
 
+  /* -------------------------------------------------------------------------- */
+  /*                               Load User Data                               */
+  /* -------------------------------------------------------------------------- */
   async function Login(data: SigninInterface) {
     const apiUrl = "http://localhost:8080";
-    console.log(data);
+    let usertypeCheck = "";
+    if (checked === false) {
+      usertypeCheck = "C";
+    } else {
+      usertypeCheck = "E";
+    }
 
-    /* -------------------------------------------------------------------------- */
-    /*                               Load User Data                               */
-    /* -------------------------------------------------------------------------- */
+    console.log(data);
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     };
-
-    let res = await fetch(`${apiUrl}/login`, requestOptions)
+    let res = await fetch(`${apiUrl}/${usertypeCheck}login`, requestOptions)
       .then((response) => response.json())
       .then((res) => {
         if (res.data) {
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("uid", res.data.id);
-          localStorage.setItem("personal_id", res.data.personal_id);
-          localStorage.setItem("positionid", res.data.positionid);
+          localStorage.setItem("username", res.data.username);
+          localStorage.setItem("usertype", res.data.usertype);
           return res.data;
         } else {
           return false;
@@ -82,18 +89,17 @@ function SignIn() {
     setError(false);
   };
 
-  const signup_page = async () => {
-    let res = await Login(signin);
-    if (res) {
-      setSuccess(true);
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+  const handleChangeCheckBox = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+    if (event.target.checked === true) {
+      setUserText("Personal ID");
     } else {
-      setError(true);
+      setUserText("Username");
     }
   };
-
+  /* -------------------------------------------------------------------------- */
+  /*                               Const for call                               */
+  /* -------------------------------------------------------------------------- */
   const submit = async () => {
     let res = await Login(signin);
     if (res) {
@@ -126,7 +132,7 @@ function SignIn() {
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
           <Alert onClose={handleClose} severity="error">
-            Username หรือ รหัสผ่านไม่ถูกต้อง
+            {usertext} หรือ Password ผิด 
           </Alert>
         </Snackbar>
 
@@ -182,13 +188,13 @@ function SignIn() {
                 margin="normal"
                 required
                 fullWidth
-                id="Personal_ID"
-                label="Personal_ID"
-                name="Personal_ID"
-                autoComplete="Personal_ID"
-                sx ={{background: "#FAF0D7"}}
+                id="Username"
+                label={usertext}
+                name="Username"
+                autoComplete="Username"
+                sx={{ background: "#FAF0D7" }}
                 autoFocus
-                value={signin.Personal_ID || ""}
+                value={signin.Username || ""}
                 onChange={handleInputChange}
               />
               <TextField
@@ -200,11 +206,25 @@ function SignIn() {
                 type="password"
                 id="Password"
                 autoComplete="current-password"
-                sx ={{background: "#FAF0D7"}}
+                sx={{ background: "#FAF0D7" }}
                 value={signin.Password || ""}
                 onChange={handleInputChange}
               />
               <Grid container justifyContent={"center"} spacing={2}>
+                <Grid>
+                  <FormGroup>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          sx={{ mt: 3, mb: 2 }}
+                          checked={checked}
+                          onChange={handleChangeCheckBox}
+                        />
+                      }
+                      label="an Employee?"
+                    />
+                  </FormGroup>
+                </Grid>
                 <Grid marginX={2}>
                   <Button
                     type="submit"
@@ -219,7 +239,6 @@ function SignIn() {
                   <Button
                     variant="contained"
                     sx={{ mt: 3, mb: 2, background: "#5BC0F8" }}
-                    onClick={signup_page}
                     href="/customer/create"
                   >
                     Sign Up

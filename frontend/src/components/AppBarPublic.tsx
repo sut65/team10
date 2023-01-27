@@ -18,12 +18,12 @@ import LocalLaundryServiceIcon from "@mui/icons-material/LocalLaundryService";
 import DryCleaningIcon from "@mui/icons-material/DryCleaning";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import HomeIcon from "@mui/icons-material/Home";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 
 //
 import { Link as RouterLink } from "react-router-dom";
 import Grid from "@material-ui/core/Grid/Grid";
-
-//import { EmployeesInterface } from '../models/employee/IEmployee';
+import { Person } from "@material-ui/icons";
 
 const useStyles = makeStyles({
   drawer: {
@@ -76,7 +76,7 @@ function AppBarPublic() {
           </IconButton>
           <Grid container spacing={1}>
             <Grid>
-              <h3 style={{ color: "black" }}>&nbsp; Laundry Delivery </h3>
+              <h3 style={{ color: "black" }}>&nbsp; Laundry Delivery &nbsp;</h3>
             </Grid>
             <Grid alignItems="center">
               <h3>
@@ -151,11 +151,12 @@ function AppBarPublic() {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}>
-                  {localStorage.getItem("personal_id")}
+                  <Person />
+                  <div>&nbsp;{localStorage.getItem("username")}</div>
                 </MenuItem>{" "}
-                {/*รหัสหมอ*/}
                 <MenuItem onClick={signout} component={RouterLink} to="/">
-                  Logout
+                  <ExitToAppIcon />
+                  <div>&nbsp;Sign Out</div>
                 </MenuItem>
               </Menu>
             </div>
