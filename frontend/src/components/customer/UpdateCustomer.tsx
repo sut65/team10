@@ -43,7 +43,7 @@ function UpdateCustomer () {
   const [customer, setCustomer] = React.useState<Partial<CustomerInterface>>({});
   const [advertise, setAdvertise] = React.useState<AdvertiseInterface[]>([]);
   const [career, setCareer] = React.useState<CareerInterface[]>([]);
-  const [gender, setGender] = React.useState<GenderInterface[]>([]);
+  const [gender, setGender] = React.useState<GendersInterface[]>([]);
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
   const handleClose = (
