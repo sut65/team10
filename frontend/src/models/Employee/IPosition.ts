@@ -1,7 +1,4 @@
 export interface PositionsInterface {
-
-    ID: number,
-
-    Position_Name: string,
-  }
-  
+  ID: number;
+  Position_Name: string;
+}

@@ -10,7 +10,7 @@ import (
 // GET /Workshift/:id //last ver
 func ListWorkShift(c *gin.Context) {
 	var workshift []entity.WorkShift
-	if err := entity.DB().Raw("SELECT * FROM workshifts").Scan(&workshift).Error; err != nil {
+	if err := entity.DB().Raw("SELECT * FROM work_shifts").Scan(&workshift).Error; err != nil {
 
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 

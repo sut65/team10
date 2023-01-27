@@ -175,28 +175,28 @@ func SetupDatabase() {
 
 	E1 := Employee{
 		Personal_ID: "0000000000001",
-		Username:    "Phonnapha Saentangchai",
+		Username:    "pnp1",
 		Name:        "พรนภา แสนต่างใจ",
 		Gender:      female,
 		Position:    po1,
 		WorkShift:   W1,
 		Phonnumber:  "0650235616",
 		Address:     "มทส",
-		Password:    "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK",
+		Password:    "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234
 	}
-	//db.Model(&Employee{}).Create(&E1)
+	db.Model(&Employee{}).Create(&E1)
 	E2 := Employee{
-		Personal_ID: "0000000000001",
-		Username:    "pubphee thee",
+		Personal_ID: "0000000000002",
+		Username:    "pubthee",
 		Name:        "พับพีร์ ธีร์",
 		Gender:      female,
 		Position:    po1,
 		WorkShift:   W1,
 		Phonnumber:  "0650235617",
 		Address:     "SUT",
-		Password:    "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK",
+		Password:    "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234
 	}
-	//db.Model(&Employee{}).Create(&E2)
+	db.Model(&Employee{}).Create(&E2)
 	// end emp //
 
 	//Vehicle
@@ -523,7 +523,7 @@ func SetupDatabase() {
 		Complete_datetime: time.Time{},
 		Employee:          E1,
 		Receive:           Receive2,
-		Packaging: Packaging1,
+		Packaging:         Packaging1,
 	}
 	db.Model(&Complete{}).Create(&complete1)
 
@@ -532,7 +532,7 @@ func SetupDatabase() {
 		Complete_datetime: time.Time{},
 		Employee:          E1,
 		Receive:           Receive1,
-		Packaging: Packaging3,
+		Packaging:         Packaging3,
 	}
 	db.Model(&Complete{}).Create(&complete2)
 
@@ -541,7 +541,7 @@ func SetupDatabase() {
 		Complete_datetime: time.Time{},
 		Employee:          E2,
 		Receive:           Receive3,
-		Packaging: Packaging4,
+		Packaging:         Packaging4,
 	}
 	db.Model(&Complete{}).Create(&complete3)
 }

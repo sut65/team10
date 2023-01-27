@@ -81,7 +81,7 @@ func ELogin(c *gin.Context) {
 		return
 	}
 	//** 3: ค้นหาด้วยเลขบัตรประชาชน(Personal_ID) */ // ตรวจสอบว่ามี Personal ID ที่กรอกมาหรือไม่
-	if err := entity.DB().Raw("SELECT * FROM employees WHERE personal_id = ?", payload.Username).Scan(&employee).Error; err != nil {
+	if err := entity.DB().Raw("SELECT * FROM employees WHERE username = ?", payload.Username).Scan(&employee).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -104,7 +104,7 @@ func ELogin(c *gin.Context) {
 		ExpirationHours: 24,
 	}
 
-	signedToken, err := jwtWrapper.GenerateToken(employee.Personal_ID)
+	signedToken, err := jwtWrapper.GenerateToken(employee.Username)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "error signing token"})
 		return
@@ -113,7 +113,7 @@ func ELogin(c *gin.Context) {
 	tokenResponse := LoginResponse{
 		Token:    signedToken,
 		ID:       employee.ID,
-		Username: employee.Personal_ID,
+		Username: employee.Username,
 		UserType: "employee",
 	}
 

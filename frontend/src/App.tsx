@@ -16,6 +16,8 @@ import SignIn from "./components/SignIn_UI";
 import CustomerCreate from "./components/customer/CustomerCreate";
 import UpdateCustomer from "./components/customer/UpdateCustomer";
 import NotFound from "./components/NotFound";
+import EmployeeTable from "./components/employee/EmployeeTable";
+import EmployeeUpdate_UI from "./components/employee/EmployeeUpdate_UI";
 
 export default function App() {
   const [token, setToken] = React.useState<String>("");
@@ -93,6 +95,9 @@ export default function App() {
               <Route path="/receive/create" element={<ReceiveCreate />} />
               <Route path="/vehicle/create" element={<Vehicle />} />
               <Route path="/complete/create" element={<CompleteCreate />} />
+              <Route path="/employee" element={<EmployeeTable />} />
+              {/* <Route path="/employee/create" element={<EmployeeCreate_UI />} /> */}
+              <Route path="/employee/update" element={<EmployeeUpdate_UI />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
