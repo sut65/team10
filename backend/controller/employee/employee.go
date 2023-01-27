@@ -117,7 +117,7 @@ func GetEmployee(c *gin.Context) {
 func ListEmployees(c *gin.Context) {
 	var employees []entity.Employee
 
-	if err := entity.DB().Preload("Gender").Preload("Position").Preload("Workshift").Raw("SELECT * FROM employees").Find(&employees).Error; err != nil {
+	if err := entity.DB().Preload("Gender").Preload("WorkShift").Raw("SELECT * FROM employees").Find(&employees).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -125,23 +125,43 @@ func ListEmployees(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": employees})
 }
 func UpdateEmployee(c *gin.Context) {
-	var employees entity.Employee
-	if err := c.ShouldBindJSON(&employees); err != nil {
+	var employee entity.Employee
+
+	if err := c.ShouldBindJSON(&employee); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if tx := entity.DB().Where("id = ?", employees.ID).First(&employees); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "employees not found"})
-		return
+	//Check if password field is not empty(update password)
+	//if empty it just skip generate hash
+	if employee.Password != "" {
+		hashPassword, err := bcrypt.GenerateFromPassword([]byte(employee.Password), 14)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "error hashing password"})
+			return
+
+		}
+		employee.Password = string(hashPassword)
 	}
 
-	if err := entity.DB().Save(&employees).Error; err != nil {
+	emp := entity.Employee{
+		Gender:      employee.Gender,
+		Username:    employee.Username,
+		Personal_ID: employee.Personal_ID,
+		Name:        employee.Name,
+		Position:    employee.Position,
+		Phonnumber:  employee.Phonnumber,
+		Address:     employee.Address,
+		Password:    employee.Password,
+		WorkShift:   employee.WorkShift,
+	}
+
+	if err := entity.DB().Where("id = ?", employee.ID).Updates(&emp).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": employees})
+	c.JSON(http.StatusOK, gin.H{"data": emp})
 
 }
 func DeleteEmployee(c *gin.Context) {

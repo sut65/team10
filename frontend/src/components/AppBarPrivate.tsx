@@ -100,7 +100,7 @@ function AppBarPrivate() {
                 <ListItemText primary="หน้าแรก" sx={{ padding: 1 }} />
               </ListItem>
 
-              <ListItem component={RouterLink} to="/employee/create">
+              <ListItem component={RouterLink} to="/employee">
                 {" "}
                 <BadgeIcon color="primary" />
                 <ListItemText
@@ -175,7 +175,11 @@ function AppBarPrivate() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose} component={RouterLink} to="/employee/update">
+                <MenuItem
+                  onClick={handleClose}
+                  component={RouterLink}
+                  to="/employee/update"
+                >
                   <Person />
                   <div>&nbsp;{localStorage.getItem("username")}</div>
                 </MenuItem>{" "}

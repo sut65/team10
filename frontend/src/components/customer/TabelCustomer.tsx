@@ -26,7 +26,7 @@ export default function CustomerTable() {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
-    fetch(`${apiUrl}/customers`, requestOptions)
+    fetch(`${apiUrl}/customer`, requestOptions)
       .then((response) => response.json())
       .then((res) => {
         if (res.data) {
@@ -42,7 +42,7 @@ export default function CustomerTable() {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
     };
-    fetch(`${apiUrl}/customers/${ID}`, requestOptions)
+    fetch(`${apiUrl}/customer/${ID}`, requestOptions)
       .then((response) => response.json())
       .then((res) => {
         if (res.data) {
@@ -107,7 +107,7 @@ export default function CustomerTable() {
 
                     <TableCell align="right">
                       <ButtonGroup variant="outlined" aria-lable="outlined button group">
-                        <Button onClick={() => navigate({ pathname: `/update/${row.ID}` })} variant="contained"
+                        <Button onClick={() => navigate({ pathname: `/customer/update/${row.ID}` })} variant="contained"
                           >Edit</Button>
                         <Button onClick={() => CustomerDelete(row.ID)} color="error">Delete</Button>
                       </ButtonGroup>

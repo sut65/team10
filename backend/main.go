@@ -46,8 +46,8 @@ func main() {
 	r.POST("/Elogin", login_controller.ELogin)
 
 	//SignUp
-	r.GET("/customer", controllercustomer.ListCustomer)
-	r.GET("/customer/:id", controllercustomer.GetCustomer)
+	// r.GET("/customer", controllercustomer.ListCustomer)
+	// r.GET("/customer/:id", controllercustomer.GetCustomer)
 	r.POST("/customers", controllercustomer.CreateCustomer)
 	r.GET("/careers", controllercustomer.ListCareer)
 	r.GET("/advertises", controllercustomer.ListAdvertise)
