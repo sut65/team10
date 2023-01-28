@@ -133,13 +133,14 @@ func UpdateStock(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": stocks})
 
 }
-func DeleteStock(c *gin.Context) {
+func AddStock (c *gin.Context) {
+	var stocks entity.Stock
 	id := c.Param("id")
-	if tx := entity.DB().Exec("DELETE FROM stocks WHERE id = ?", id); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "stocks not found"})
+
+	if err := entity.DB().Raw("UPDATE stocks SET quantity = add_number+quantity WHERE stock.id", id).Scan(&stocks).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": id})
-
+	c.JSON(http.StatusOK, gin.H{"data": stocks})
 }
