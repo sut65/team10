@@ -57,6 +57,9 @@ func CreatePromotion(c *gin.Context) {
 		Employee_ID: promotion.Employee_ID,
 		Time_Stamp:  promotion.Time_Stamp.Local(),
 	}
+	b := entity.Bill{
+		Model: gorm.Model{ID: 0},
+	}
 
 	if _, err := govalidator.ValidateStruct(p); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -72,6 +75,7 @@ func CreatePromotion(c *gin.Context) {
 	for i := 0; i < int(promotion.Amount); i++ {
 		q := entity.QuotaCode{
 			Promotion_ID: &p.ID,
+			Bill_ID:      &b.ID,
 		}
 		if err := entity.DB().Create(&q).Error; err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
