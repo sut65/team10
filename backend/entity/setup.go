@@ -131,6 +131,7 @@ func SetupDatabase() {
 	db.Model(&Paymenttype{}).Create(&Paymenttype2)
 
 	//Promotion
+
 	//-- Codetype
 	Codetype1 := Codetype{
 		Type: "ส่วนลด",
@@ -140,6 +141,15 @@ func SetupDatabase() {
 	}
 	db.Model(&Codetype{}).Create(&Codetype1)
 	db.Model(&Codetype{}).Create(&Codetype2)
+
+	//-- Codetype
+
+	Promotion1 := Promotion{
+		Codetype: Codetype1,
+		Price:    50,
+	}
+
+	db.Model(&Promotion{}).Create(&Promotion1)
 
 	//-- Reason
 	Reason1 := Reason{
@@ -455,10 +465,22 @@ func SetupDatabase() {
 	db.Model(&Service{}).Create(&Service1)
 
 	Bill1 := Bill{
+		Bill_Price: 30,
+	}
+	db.Model(&Bill{}).Create(&Bill1) //สร้างบิล
+
+	QuotaCode1 := QuotaCode{
+		Promotion: Promotion1,
+		Bill:      &Bill1,
+	}
+	db.Model(&QuotaCode{}).Create(&QuotaCode1) //สร้าง Quota
+
+	Bill11 := Bill{
 		Service:    Service1,
+		QuotaCode:  &QuotaCode1,
 		Bill_Price: 250,
 	}
-	db.Model(&Bill{}).Create(&Bill1)
+	db.Model(&Bill{}).Where("id = ?", 1).Updates(&Bill11)
 
 	//receive//
 	Detergent1 := Detergent{

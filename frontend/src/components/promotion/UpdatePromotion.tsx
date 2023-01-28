@@ -107,7 +107,7 @@ function UpdatePromotion() {
   }, []);
   return (
 
-    <Container maxWidth="md">
+    <Container maxWidth="xl">
       <StorefrontIcon color="primary" sx={{ fontSize: 80 }} />
       <Snackbar // บันทึกสำเร็จ
         open={success}
@@ -135,9 +135,9 @@ function UpdatePromotion() {
             </Grid>
             <Grid container spacing={2} sx={{ paddingX: 2 }}>
             <Grid item xs={2}>
-              <h3>Promotion_ID</h3>
+              <h3>ID</h3>
             </Grid>
-            <Grid item xs={4} >
+            <Grid item xs={10} >
               <Autocomplete
                 id="promption-auto"
                 options={promotion_id}
@@ -191,7 +191,7 @@ function UpdatePromotion() {
             <Grid item xs={2}>
               <h3>Date Time</h3>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={10}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateTimePicker
                   label="DateTimePicker"
@@ -210,7 +210,7 @@ function UpdatePromotion() {
           <Grid item xs={5}
           >
           </Grid>
-          <Grid container item xs={2} direction='row-reverse'>
+          <Grid container item xs={7} direction='row-reverse'>
             <Button
               variant="contained"
               color="warning"
