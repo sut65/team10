@@ -1,0 +1,90 @@
+package controller
+
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/sut65/team10/entity"
+)
+
+// POST /delivery
+func CreateDelivery(c *gin.Context) {
+
+	var delivery entity.Delivery
+	var vehicle entity.Vehicle
+	var confirmation entity.Confirmation
+	var employee entity.Employee
+
+	// ผลลัพธ์ที่ได้จากขั้นตอนที่ 8 จะถูก bind เข้าตัวแปร delivery
+	if err := c.ShouldBindJSON(&delivery); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// 9: ค้นหา recvtype ด้วย id
+	if tx := entity.DB().Where("id = ?", delivery.Vehicle_ID).First(&vehicle); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "recvtype not found"})
+		return
+	}
+
+	// 10: ค้นหา disease ด้วย id
+	if tx := entity.DB().Where("id = ?", delivery.Confirmation_ID).First(&confirmation); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "complete not found"})
+		return
+	}
+
+	// 10: ค้นหา disease ด้วย id
+	if tx := entity.DB().Where("id = ?", delivery.Employee_ID).First(&employee); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "customer not found"})
+		return
+	}
+
+	// 12: สร้าง Delivery
+	d := entity.Delivery{
+		Confirmation: confirmation,
+		Vehicle:      vehicle,
+		Employee:     employee,
+		Score:        delivery.Score,
+		Problem:      delivery.Problem,
+	}
+
+	// 13: บันทึก
+	if err := entity.DB().Create(&d).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusCreated, gin.H{"data": d})
+}
+
+// GET /delivery/:id
+func GetDelivery(c *gin.Context) {
+	var delivery entity.Delivery
+	id := c.Param("id")
+	if tx := entity.DB().Where("id = ?", id).First(&delivery); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "delivery not found"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": delivery})
+}
+
+// GET /delivery
+func ListDeliverys(c *gin.Context) {
+	var deliverys []entity.Delivery
+	if err := entity.DB().Preload("RecvType").Raw("SELECT * FROM deliverys").Find(&deliverys).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": deliverys})
+}
+
+// DELETE /deliverys/:id
+func DeleteDelivery(c *gin.Context) {
+	id := c.Param("id")
+	if tx := entity.DB().Exec("DELETE FROM deliverys WHERE id = ?", id); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "delivery not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": id})
+}
