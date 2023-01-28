@@ -84,18 +84,32 @@ function Promotion() {
       });
   }
 
+  const DeletePromotion = async (ID: number) => {
+    const requestOptions = {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    };
+    fetch(`http://localhost:8080/promotions/${ID}`, requestOptions)
+      .then((response) => response.json())
+      .then((res) => {
+        if (res.data) {
+          window.location.reload();
+        }
+      });
+  };
 
 
   const handleClickPopover = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
+
   const handleClosePopover = () => {
     setAnchorEl(null);
   };
 
   const open = Boolean(anchorEl);
-  const popover1 = open ? "simple-popover" : undefined;
+  const popover = open ? "simple-popover" : undefined;
 
   const getCodetype = async () => {
     const apiUrl = "http://localhost:8080/codetype";
@@ -304,13 +318,13 @@ function Promotion() {
           </Grid>
           <Grid item xs={5}
           >
-            <Button aria-describedby={popover1} variant="contained" color="warning"
+            <Button aria-describedby={popover} variant="contained" color="warning"
               endIcon={<UpdateIcon />}
               onClick={handleClickPopover}>
               update
             </Button>
             <Popover
-              id={popover1}
+              id={popover}
               open={open}
               anchorEl={anchorEl}
               sx={{ paddingBottom: 20 }}
@@ -336,13 +350,26 @@ function Promotion() {
             </Button>
           </Grid>
           <Grid container item xs={6.8} direction='row-reverse'>
-            <Button
-              variant="contained"
-              color="error"
+
+          <Button aria-describedby={popover} variant="contained" color="error"
               endIcon={<DeleteForeverIcon />}
-            >
+              onClick={handleClickPopover}>
               delete
             </Button>
+            <Popover
+              id={popover}
+              open={open}
+              anchorEl={anchorEl}
+              sx={{ paddingBottom: 20 }}
+              marginThreshold={80}
+              onClose={handleClosePopover}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+            >
+              <Typography sx={{ p: 2 }}>Delete Promotion</Typography>
+            </Popover>
           </Grid>
         </Grid>
         <PromotionTable_UI />
