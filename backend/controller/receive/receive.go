@@ -61,7 +61,7 @@ func CreateReceive(c *gin.Context) {
 		Softener_ID:  receive.Softener_ID,
 		Det_Quantity: receive.Det_Quantity,
 		Sof_Quantity: receive.Sof_Quantity,
-		Time_Stamp:   bill.Time_Stamp.Local(),
+		Time_Stamp:   receive.Time_Stamp.Local(),
 	}
 
 	//12: บันทึก
