@@ -316,8 +316,8 @@ function Promotion() {
                         </Button>
                     </Grid>
                 </Grid>
+                <PromotionTable_UI />
             </Box>
-            <PromotionTable_UI />
         </Container>
     );
 }
