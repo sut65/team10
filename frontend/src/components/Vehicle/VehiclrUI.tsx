@@ -59,38 +59,31 @@ function VehicleCreate  () {
     };
     console.log(vehicle_data)
 
-//================================================================================================================//
-
 const apiUrl = "http://localhost:8080";
-const requestOptionsPost = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(vehicle_data),
+const requestOptions = {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(vehicle_data),
 };
 
-fetch(`${apiUrl}/vehicles`, requestOptionsPost)
-    .then((response) => response.json())
-    .then((res) => {
-        console.log(res)
-        if (res.data) {
-            setSuccess(true);
-        } else {
-            setError(true);
-        }
-    });
+fetch(`${apiUrl}/vehicle`, requestOptions)
+  .then((response) => response.json())
+  .then((res) => {
+    if (res.data) {
+      setSuccess(true);
+      console.log(res.data)
+    } else {
+      setError(true);
+    }
+  });
 }
-//   const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-//   props,
-
-//   ref
-// ) {
-//   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-// });
-
-  //================================================================================================================//
+//===============================================================================================================//
 
   const getBran_Vehicle = async () => {
-    const apiUrl = `http://localhost:8080/brandvehicles`;
+    const apiUrl = `http://localhost:8080/brand_vehicles`;
     const requestOptions = {
       method: "GET",
       headers: {
@@ -129,31 +122,7 @@ fetch(`${apiUrl}/vehicles`, requestOptionsPost)
       });
   };
 
-  //================================================================================================================//
-  // const handleInputChange = (
-  //   event: React.ChangeEvent<{ id?: string; value: any }>
-  // ) => {
-  //   const id = event.target.id as keyof typeof VehicleCreate;
-  //   const { value } = event.target;
-  //   setVehicle({ ...vehicle, [id]: value });
-  // };
-
-  // const handleChange = (event: SelectChangeEvent<number>) => {
-  //   const name = event.target.name as keyof typeof vehicle;
-  //   setVehicle({
-  //     ...vehicle,
-  //     [name]: event.target.value,
-  //   });
-  // };
-
-  // const requestOptionsGet = {
-  //   method: "GET",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  // };
-//================================================================================================================//
-
+  
   useEffect(() => {
     getBran_Vehicle();
     getEngine();

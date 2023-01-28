@@ -12,8 +12,8 @@ import (
 
 func CreateVehicle(c *gin.Context) {
 	var vehicle entity.Vehicle
-	var brandvehicle entity.Brand_Vehicle
-	var engine entity.Engine
+	var brand_vehicles entity.Brand_Vehicle
+	var engines entity.Engine
 	var employee entity.Employee
 
 	if err := c.ShouldBindJSON(&vehicle); err != nil {
@@ -29,7 +29,7 @@ func CreateVehicle(c *gin.Context) {
 
 	}
 	//8: ค้นหา branvehicle ด้วยไอดี
-	if tx := entity.DB().Where("id = ?", vehicle.Brand_Vehicle_ID).First(&brandvehicle); tx.RowsAffected == 0 {
+	if tx := entity.DB().Where("id = ?", vehicle.Brand_Vehicle_ID).First(&brand_vehicles); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
 
 		return
@@ -37,7 +37,7 @@ func CreateVehicle(c *gin.Context) {
 	}
 
 	//9: ค้นหา engine ด้วยไอดี
-	if tx := entity.DB().Where("id = ?", vehicle.Engine_ID).First(&engine); tx.RowsAffected == 0 {
+	if tx := entity.DB().Where("id = ?", vehicle.Engine_ID).First(&engines); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
 
 		return
@@ -83,14 +83,14 @@ func GetVehicle(c *gin.Context) {
 
 // GET /receives
 
-func ListVehicle(c *gin.Context) {
-	var vehicle []entity.Vehicle
-	if err := entity.DB().Raw("SELECT * FROM vehicles").Scan(&vehicle).Error; err != nil {
+func ListVehicles(c *gin.Context) {
+	var vehicles []entity.Vehicle
+	if err := entity.DB().Raw("SELECT * FROM vehicles").Scan(&vehicles).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": vehicle})
+	c.JSON(http.StatusOK, gin.H{"data": vehicles})
 
 }
 

@@ -9,12 +9,12 @@ import (
 
 // POST /engines
 func ListEngines(c *gin.Context) {
-	var engine []entity.Engine
-	if err := entity.DB().Raw("SELECT * FROM engines").Scan(&engine).Error; err != nil {
+	var engines []entity.Engine
+	if err := entity.DB().Raw("SELECT * FROM engines").Scan(&engines).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": engine})
+	c.JSON(http.StatusOK, gin.H{"data": engines})
 
 }
