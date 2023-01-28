@@ -361,22 +361,22 @@ return (
               </Grid>
 
               <Grid item xs={3}>
-                  <h3>Time Stamp</h3>
-                </Grid>
-                        <Grid item xs={5}>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DateTimePicker
-                                    label="DateTimePicker"
-                                    renderInput={(params) => <TextField {...params} />}
-                                    value={date}
-                                    onChange={(newValue) => {
-                                        setDate(newValue);
-                                    }}
-                                />
-                            </LocalizationProvider>
-                        </Grid>
-                    </Grid>
-                </Paper>
+                <h3>Time Stamp</h3>
+              </Grid>
+                      <Grid item xs={5}>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <DateTimePicker
+                                  label="DateTimePicker"
+                                  renderInput={(params) => <TextField {...params} />}
+                                  value={date}
+                                  onChange={(newValue) => {
+                                      setDate(newValue);
+                                  }}
+                              />
+                          </LocalizationProvider>
+                      </Grid>
+                  </Grid>
+              </Paper>
                 <Grid container spacing={4}
                     sx={{ paddingY: 1 }}>
                     <Grid item xs={6}
