@@ -271,6 +271,7 @@ function Promotion() {
                 id="outlined-basic"
                 label="Amount"
                 variant="outlined"
+                defaultValue="0"
                 onChange={(event) => setAmount(Number(event.target.value))}
                 inputProps={{ type: "number" }} />
             </Grid>
