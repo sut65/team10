@@ -23,7 +23,7 @@ func CreateDelivery(c *gin.Context) {
 
 	// 9: ค้นหา recvtype ด้วย id
 	if tx := entity.DB().Where("id = ?", delivery.Vehicle_ID).First(&vehicle); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "recvtype not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "vehicle not found"})
 		return
 	}
 
@@ -70,7 +70,7 @@ func GetDelivery(c *gin.Context) {
 // GET /delivery
 func ListDeliverys(c *gin.Context) {
 	var deliverys []entity.Delivery
-	if err := entity.DB().Preload("RecvType").Raw("SELECT * FROM deliverys").Find(&deliverys).Error; err != nil {
+	if err := entity.DB().Raw("SELECT * FROM deliveries").Find(&deliverys).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -81,7 +81,7 @@ func ListDeliverys(c *gin.Context) {
 // DELETE /deliverys/:id
 func DeleteDelivery(c *gin.Context) {
 	id := c.Param("id")
-	if tx := entity.DB().Exec("DELETE FROM deliverys WHERE id = ?", id); tx.RowsAffected == 0 {
+	if tx := entity.DB().Exec("DELETE FROM deliveries WHERE id = ?", id); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "delivery not found"})
 		return
 	}

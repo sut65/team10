@@ -276,7 +276,7 @@ function Stock_UI() {
                 <Autocomplete
                   id="brand-autocomplete"
                   options={brand}
-                  onChange3={(event: any, value: { ID: any; }) => {
+                  onChange={(event: any, value: { ID: any; }) => {
                     setStock({ ...stock, BrandID: value?.ID }); //Just Set ID to interface
                   }}
                   getOptionLabel={(option: any) => `${option.Brand_Name}`} //filter value
@@ -316,7 +316,7 @@ function Stock_UI() {
                 <Autocomplete
                   id="type-autocomplete"
                   options={type}
-                  onChange2={(event: any, value: { ID: any; }) => {
+                  onChange={(event: any, value: { ID: any; }) => {
                     setStock({ ...stock, TypeID: value?.ID }); //Just Set ID to interface
                   }}
                   getOptionLabel={(option: any) => `${option.Type_Name}`} //filter value
@@ -342,38 +342,6 @@ function Stock_UI() {
               </Grid>
             </Grid>
 
-            <Grid item xs={2}>
-                <p>Type:</p>
-              </Grid>
-              <Grid item xs={6}>
-                <Autocomplete
-                  id="size-autocomplete"
-                  options={type}
-                  onChange1={(event: any, value: { ID: any; }) => {
-                    setStock({ ...stock, SizeID: value?.ID }); //Just Set ID to interface
-                  }}
-                  getOptionLabel={(option: any) => `${option.Size_Name}`} //filter value
-                  renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => {
-                    return (
-                      <TextField
-                        {...params}
-                        variant="outlined"
-                        placeholder="Search..."
-                      />
-                    );
-                  }}
-                  renderOption={(props: any, option: any) => {
-                    return (
-                      <li
-                        {...props}
-                        value={`${option.ID}`}
-                        key={`${option.ID}`}
-                      >{`${option.SizeName}`}</li>
-                    ); //display value
-                  }}
-                />
-              </Grid>
-            </Grid>
 
             <Grid
               container
@@ -389,7 +357,7 @@ function Stock_UI() {
                 <Autocomplete
                   id="employee-autocomplete"
                   options={employee}
-                  onChange4={(event: any, value: { ID: any; }) => {
+                  onChange={(event: any, value: { ID: any; }) => {
                     setStock({ ...stock, EmployeeID: value?.ID }); //Just Set ID to interface
                   }}
                   getOptionLabel={(option: any) =>

@@ -31,6 +31,7 @@ import { ConfirmationInterface } from "../../models/confirmation/IConfirmation";
 import { CompleteInterface } from "../../models/complete/IComplete";
 import { DeliveryInterface } from "../../models/delivery/IDelivery";
 import Confirmation from "../confirmation/ConfirmationUpdate";
+import { VehicleInterface } from "../../models/vehicle/IVehicle";
 /* -------------------------------------------------------------------------- */
 /*                                    Style                                   */
 /* -------------------------------------------------------------------------- */
@@ -50,6 +51,16 @@ function Delivery() {
   /* ---------------------------------- main ---------------------------------- */
   const [delivery, setDelivery] = useState<Partial<DeliveryInterface>>({});
   const [confirmation, setConfirmation] = useState<ConfirmationInterface[]>([]);
+  const [vehicle, setVehicle] = useState<VehicleInterface[]>([]);
+
+  const [cust_name, setCustomerName] = useState<string | undefined>(undefined);
+  const [conf_recvAddress, setRecvAdress] = useState<string | undefined>(
+    undefined
+  );
+  const [conf_recvTime, setRecvTime] = useState<any | undefined>(undefined);
+  const [conf_recvType, setRecvType] = useState<string | undefined>(undefined);
+  const [conf_note, setNote] = useState<string | undefined>(undefined);
+
   /* ------------------------------- error text ------------------------------- */
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -58,6 +69,14 @@ function Delivery() {
   /* -------------------------------------------------------------------------- */
   /*                                   Driver                                   */
   /* -------------------------------------------------------------------------- */
+  const apiUrl = "http://localhost:8080";
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
+  };
   /* -------------------------------- SnackBar -------------------------------- */
   const handleCloseSnackBar = (
     event?: React.SyntheticEvent | Event,
@@ -74,15 +93,13 @@ function Delivery() {
   const handleInputChange = (
     event: React.ChangeEvent<{ id?: string; value: any }>
   ) => {
-    const id = event.target.id as keyof typeof Confirmation;
+    const id = event.target.id as keyof typeof Delivery;
     const { value } = event.target;
-    setConfirmation({ ...confirmation, [id]: value });
+    setDelivery({ ...delivery, [id]: value });
   };
+
   /* -------------------------------------------------------------------------- */
   /*                                 POST Submit                                */
-  /* -------------------------------------------------------------------------- */
-  /* -------------------------------------------------------------------------- */
-  /*                                 PUSH Submit                                */
   /* -------------------------------------------------------------------------- */
   const convertType = (data: string | number | undefined) => {
     let val = typeof data === "string" ? parseInt(data) : data;
@@ -91,12 +108,11 @@ function Delivery() {
 
   async function submit() {
     let data = {
-      Complete_ID: convertType(confirmation.Complete_ID),
-      RecvType_ID: convertType(confirmation.RecvType_ID),
-      RecvAddress: confirmation.RecvAddress,
-      RecvTime: recvtime,
-      Note: confirmation.Note,
-      Customer_ID: Number(localStorage.getItem("uid")),
+      Confirmation_ID: convertType(delivery.Confirmation_ID),
+      Vehicle_ID: convertType(delivery.Vehicle_ID),
+      Employee_ID: Number(localStorage.getItem("uid")),
+      Score: convertType(delivery.Score),
+      Problem: delivery.Problem,
     };
     const requestOptionsPost = {
       method: "POST",
@@ -106,7 +122,7 @@ function Delivery() {
       },
       body: JSON.stringify(data),
     };
-    fetch(`${apiUrl}/confirmations`, requestOptionsPost)
+    fetch(`${apiUrl}/delivery`, requestOptionsPost)
       .then((response) => response.json())
       .then((res) => {
         if (res.data) {
@@ -118,6 +134,49 @@ function Delivery() {
         }
       });
   }
+  /* -------------------------------------------------------------------------- */
+  /*                                     GET                                    */
+  /* -------------------------------------------------------------------------- */
+  const getDelivery = async () => {
+    fetch(`${apiUrl}/delivery`, requestOptions)
+      .then((response) => response.json())
+      .then((res) => {
+        if (res.data) {
+          setDelivery(res.data);
+        } else {
+          console.log("else");
+        }
+      });
+  };
+  const getConfirmation = async () => {
+    fetch(`${apiUrl}/confirmation`, requestOptions)
+      .then((response) => response.json())
+      .then((res) => {
+        if (res.data) {
+          setConfirmation(res.data);
+        } else {
+          console.log("else");
+        }
+      });
+  };
+
+  const getVehicle = async () => {
+    fetch(`${apiUrl}/vehicles`, requestOptions)
+      .then((response) => response.json())
+      .then((res) => {
+        if (res.data) {
+          setVehicle(res.data);
+        } else {
+          console.log("else");
+        }
+      });
+  };
+
+  useEffect(() => {
+    getDelivery();
+    getVehicle();
+    getConfirmation();
+  }, []);
   /* -------------------------------------------------------------------------- */
   /*                                  HTML CSS                                  */
   /* -------------------------------------------------------------------------- */
@@ -163,15 +222,54 @@ function Delivery() {
               <Stack paddingLeft={2}>
                 <Paper style={{ background: "rgba(255,201,60,1)" }}>
                   <Box paddingLeft={2} paddingBottom={2}>
-                    <div style={{ fontSize: "15px", fontWeight: "bold" }}>
+                    <div
+                      style={{
+                        fontSize: "15px",
+                        fontWeight: "bold",
+                        textAlign: "center",
+                      }}
+                    >
                       Customer Info
                     </div>
-                    <Stack>[Customer ID]</Stack>
-                    <Stack>[Customer Name]</Stack>
-                    <Stack>[Customer RecvAddress]</Stack>
-                    <Stack>[Customer RecvTime]</Stack>
-                    <Stack>[Customer RecvMethod]</Stack>
-                    <Stack>[Customer Note]</Stack>
+                    <Box paddingRight={2} paddingX={2}>
+                      <Paper
+                        elevation={10}
+                        style={{ background: "rgba(255,201,60,1)" }}
+                      >
+                        <Box padding={2}>
+                          <div>Name Surname</div>
+                          <div
+                            style={{ background: "#feefd1", color: "#0081C9" }}
+                          >
+                            &#8205;{cust_name}
+                          </div>
+                          <div>Receive Address</div>
+                          <div
+                            style={{ background: "#feefd1", color: "#0081C9" }}
+                          >
+                            &#8205;{conf_recvAddress}
+                          </div>
+                          <div>Receive Method</div>
+                          <div
+                            style={{ background: "#feefd1", color: "#0081C9" }}
+                          >
+                            &#8205;{conf_recvType}
+                          </div>
+                          <div>Receive Time</div>
+                          <div
+                            style={{ background: "#feefd1", color: "#0081C9" }}
+                          >
+                            &#8205;{conf_recvTime}
+                          </div>
+                          <div>Note</div>
+                          <div
+                            style={{ background: "#feefd1", color: "#0081C9" }}
+                          >
+                            &#8205;{conf_note}
+                          </div>
+                        </Box>
+                      </Paper>
+                    </Box>
                   </Box>
                   <Box paddingX={2} paddingBottom={2}>
                     Confirmation ID
@@ -186,10 +284,16 @@ function Delivery() {
                         setDelivery({
                           ...delivery,
                           Confirmation_ID: value?.ID,
-                        }); //Just Set ID to interface
+                        });
+                        setCustomerName(value?.Customer.Customer_Name);
+                        setRecvAdress(value?.RecvAddress);
+                        setRecvTime(value?.RecvTime);
+                        setRecvType(value?.RecvType.Name);
+                        setNote(value?.Note);
+                        //Just Set ID to interface
                       }}
                       sx={{ bgcolor: "#feefd1" }}
-                      getOptionLabel={(option: any) => `${option.Name}`} //filter value
+                      getOptionLabel={(option: any) => `${option.ID}`} //filter value
                       renderInput={(params) => {
                         return (
                           <TextField
@@ -205,7 +309,7 @@ function Delivery() {
                             {...props}
                             value={`${option.ID}`}
                             key={`${option.ID}`}
-                          >{`${option.Name}`}</li>
+                          >{`${option.ID}`}</li>
                         ); //display value
                       }}
                     />
@@ -220,7 +324,7 @@ function Delivery() {
                     Vehicle
                     <Autocomplete
                       id="vehicle-autocomplete"
-                      options={confirmation}
+                      options={vehicle}
                       fullWidth
                       size="small"
                       style={{ background: "#feefd1" }}
@@ -228,11 +332,11 @@ function Delivery() {
                         //Get ID from ...interface
                         setDelivery({
                           ...delivery,
-                          Confirmation_ID: value?.ID,
+                          Vehicle_ID: value?.ID,
                         }); //Just Set ID to interface
                       }}
                       sx={{ bgcolor: "#feefd1" }}
-                      getOptionLabel={(option: any) => `${option.Name}`} //filter value
+                      getOptionLabel={(option: any) => `${option.ID}`} //filter value
                       renderInput={(params) => {
                         return (
                           <TextField
@@ -248,26 +352,23 @@ function Delivery() {
                             {...props}
                             value={`${option.ID}`}
                             key={`${option.ID}`}
-                          >{`${option.Name}`}</li>
+                          >{`${option.ID}`}</li>
                         ); //display value
                       }}
                     />
                   </Box>
                   <Box paddingX={2} paddingBottom={2}>
-                    Score
+                    <div>Score</div>
                     <FormControl fullWidth variant="outlined">
                       <TextField
-                        id="scorenumber"
+                        id="Score"
                         variant="outlined"
-                        type="string"
                         size="medium"
-                        multiline={false}
-                        minRows={1}
-                        maxRows={1}
-                        placeholder="Input Score 1-5"
+                        placeholder="Score"
                         value={delivery.Score || ""}
                         onChange={handleInputChange}
                         sx={{ bgcolor: "#feefd1" }}
+                        inputProps={{ type: "number" }}
                       />
                     </FormControl>
                   </Box>
@@ -275,7 +376,7 @@ function Delivery() {
                     Problem
                     <FormControl fullWidth variant="outlined">
                       <TextField
-                        id="problemtext"
+                        id="Problem"
                         variant="outlined"
                         type="string"
                         size="medium"
