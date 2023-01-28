@@ -19,6 +19,17 @@ func ListQuotacode(c *gin.Context) {
 
 }
 
+func ListQuotacodefull(c *gin.Context) {
+	var quotacode []entity.QuotaCode
+	if err := entity.DB().Preload("Promotion.Codetype").Raw("SELECT * FROM quota_codes").Find(&quotacode).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": quotacode})
+
+}
+
 func UpdateQuotacode(c *gin.Context) {
 	var quotacode entity.QuotaCode
 	if err := c.ShouldBindJSON(&quotacode); err != nil {

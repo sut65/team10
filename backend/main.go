@@ -78,6 +78,7 @@ func main() {
 			p.GET("/reason", controllerpromotion.ListReasons)
 			//--quotacode
 			p.GET("/quotacode", controllerpromotion.ListQuotacode)
+			p.GET("/quotacodes", controllerpromotion.ListQuotacodefull) //Full
 			p.PATCH("/quotacodes", controllerpromotion.UpdatePromotion)
 
 			//position
