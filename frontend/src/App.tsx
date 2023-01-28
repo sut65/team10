@@ -23,6 +23,8 @@ import StockTable from "./components/stock/StockTable";
 import StockUpdate_UI from "./components/stock/StockUpdat";
 import FormTable from "./components/form/TableForm";
 import ServiceTable from "./components/service/TableService";
+import ServiceCreate from "./components/service/ServiceCreate";
+import ServiceUpdate from "./components/service/UpdateService";
 
 export default function App() {
   const [token, setToken] = React.useState<String>("");
@@ -72,9 +74,11 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/confirmation/create" element={<Confirmation />} />
               <Route path="/bill/create" element={<Bill />} />
+              <Route path="/service/create" element={<ServiceCreate />} />
               <Route path="/customer/update" element={<UpdateCustomer />} />
               <Route path="/form" element={<FormTable />} />
               <Route path="/service" element={<ServiceTable />} />
+              <Route path="/service/:id" element={<ServiceUpdate />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>

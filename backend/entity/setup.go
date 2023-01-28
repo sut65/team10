@@ -570,7 +570,7 @@ func SetupDatabase() {
 
 	//Delivery
 
-	TypeWashing3 := TypeWashing{
+		TypeWashing3 := TypeWashing{
 		Model:             gorm.Model{},
 		Type_washing:      "ซักอบ",
 		Description:       "ซักเสร็จ แล้วนำไปอบ",

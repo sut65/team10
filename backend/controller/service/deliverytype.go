@@ -27,7 +27,7 @@ func CreateDeliverys(c *gin.Context) {
 func GetDelivery(c *gin.Context) {
 	var user entity.DeliveryType
 	id := c.Param("id")
-	if err := entity.DB().Raw("SELECT * FROM deliveries WHERE id = ?", id).Scan(&user).Error; err != nil {
+	if err := entity.DB().Raw("SELECT * FROM delivery_Types WHERE id = ?", id).Scan(&user).Error; err != nil {
 		   c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		   return
 	}
@@ -37,7 +37,7 @@ func GetDelivery(c *gin.Context) {
 // GET /users
 func ListDeliverys(c *gin.Context) {
 	var deliverytype []entity.DeliveryType
-	if err := entity.DB().Raw("SELECT * FROM deliveries").Scan(&deliverytype).Error; err != nil {
+	if err := entity.DB().Raw("SELECT * FROM delivery_Types").Scan(&deliverytype).Error; err != nil {
 		   c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		   return
 	}

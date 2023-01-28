@@ -11,7 +11,7 @@ import (
 
 //POST /users
 func CreateService(c *gin.Context) {
-
+	var customer entity.Customer
 	var typewashing entity.TypeWashing
 	var deliverytype entity.DeliveryType
 	var weight entity.Weight
@@ -23,6 +23,11 @@ func CreateService(c *gin.Context) {
 		return
 	}
 
+		if tx := entity.DB().Where("id = ?", service.Customer_ID).First(&customer); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "typewashing not found"})
+		return
+	}
+
 	if tx := entity.DB().Where("id = ?", service.TypeWashing_ID).First(&typewashing); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "typewashing not found"})
 		return
@@ -30,7 +35,7 @@ func CreateService(c *gin.Context) {
 
 	// 10. ค้นหา department ด้วย id
 	if tx := entity.DB().Where("id = ?", service.DeliveryType_ID).First(&deliverytype); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "delivery not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "deliverytype not found"})
 		return
 	}
 
@@ -47,7 +52,8 @@ func CreateService(c *gin.Context) {
 		TypeWashing:      typewashing,               
 		DeliveryType:   deliverytype,            
 		Weight:     weight,             
-		Address:     service.Address,              
+		Address:     service.Address,
+		Customer:	customer,          
 		                       // ตั้งค่าฟิลด์ Address
 	}
 
@@ -75,7 +81,7 @@ func ListServices(c *gin.Context) {
 
 	var service []entity.Service
 
-	if err := entity.DB().Preload("TypeWashing").Preload("Delivery").Preload("Weight").Raw("SELECT * FROM services").Find(&service).Error; err != nil {
+	if err := entity.DB().Preload("TypeWashing").Preload("DeliveryType").Preload("Weight").Raw("SELECT * FROM services").Find(&service).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -98,6 +104,7 @@ func UpdateService(c *gin.Context) {
 	var deliverytype entity.DeliveryType
 	var weight entity.Weight
 	var service entity.Service
+	var customer entity.Customer
 
 	if err := c.ShouldBindJSON(&service); err != nil {
 		   c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -106,6 +113,10 @@ func UpdateService(c *gin.Context) {
 	var upAddress = service.Address
 
 	if tx := entity.DB().Where("id = ?", service.TypeWashing_ID).First(&typewashing); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "typewashing not found"})
+		return
+	}
+			if tx := entity.DB().Where("id = ?", service.Customer_ID).First(&customer); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "typewashing not found"})
 		return
 	}
@@ -130,7 +141,8 @@ func UpdateService(c *gin.Context) {
 		TypeWashing:      typewashing,               
 		DeliveryType:   deliverytype,            
 		Weight:     weight,             
-		Address:     upAddress,              
+		Address:     upAddress,
+		Customer:	customer,               
 		                       // ตั้งค่าฟิลด์ Address
 	}
 

@@ -151,9 +151,9 @@ func main() {
 			p.PATCH("/services", Service_controller.UpdateService)
 
 			//washingType
-			p.GET("/washingtypes", WashingType_controller.ListTypeWashings)
-			p.GET("/washingtype/:id", WashingType_controller.GetTypeWashing)
-			p.POST("/washingtypes", WashingType_controller.CreateTypeWashings)
+			p.GET("/typewashings", WashingType_controller.ListTypeWashings)
+			p.GET("/typewashing/:id", WashingType_controller.GetTypeWashing)
+			p.POST("/typewashings", WashingType_controller.CreateTypeWashings)
 
 			//weight
 			p.GET("/weights", Weight_controller.ListWeights)
