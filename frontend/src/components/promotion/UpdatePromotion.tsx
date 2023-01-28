@@ -28,8 +28,7 @@ import { ReasonInterface } from "../../models/promotion/IReason";
 import { PromotionInterface } from "../../models/promotion/IPromotion";
 
 import PromotionTable_UI from "./PromotiontableUI";
-import UpdatePromotion from "./UpdatePromotion";
-function Promotion() {
+function UpdatePromotion() {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
   const [promotion, setPromotion] = React.useState<Partial<PromotionInterface>>({});
   const [codetype, setCodetype] = React.useState<CodetypeInterface[]>([]);
@@ -52,8 +51,8 @@ function Promotion() {
     setError(false);
   };
 
-  function submit() {
-    let promotion_p = {
+  function update() {
+    let promotion_u = {
       Codetype_ID: promotion.Codetype_ID,
       Reason_ID: promotion.Reason_ID,
       Price: price,
@@ -62,14 +61,14 @@ function Promotion() {
       Time_Stamp: date,
     };
 
-    const apiUrl = "http://localhost:8080";
+    const apiUrl = "http://localhost:8080/promotions"; //ส่งขอบันทึก
     const requestOptions = {
-      method: "POST",
+      method: "PATCH",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(promotion_p),
+      body: JSON.stringify(promotion_u),
     };
 
     fetch(`${apiUrl}/promotions`, requestOptions)
@@ -292,63 +291,21 @@ function Promotion() {
           sx={{ paddingY: 2 }}>
           <Grid item xs={5}
           >
-            <Button
-              component={RouterLink}
-              to="/"
-              variant="contained"
-              color="error"
-              endIcon={<CancelIcon />}
-            >
-              cancel
-            </Button>
-          </Grid>
-          <Grid item xs={5}
-          >
-            <Button aria-describedby={popover1} variant="contained" color="warning"
-              endIcon={<UpdateIcon />}
-              onClick={handleClickPopover}>
-              update
-            </Button>
-            <Popover
-              id={popover1}
-              open={open}
-              anchorEl={anchorEl}
-              sx={{ paddingBottom: 20 }}
-              marginThreshold={80}
-              onClose={handleClosePopover}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-            >
-              <UpdatePromotion />
-              <Typography sx={{ p: 2 }}>Update Promotion</Typography>
-            </Popover>
           </Grid>
           <Grid container item xs={2} direction='row-reverse'>
             <Button
               variant="contained"
-              color="success"
-              onClick={submit}
+              color="warning"
+              onClick={update}
               endIcon={<SaveIcon />}
             >
-              commit
-            </Button>
-          </Grid>
-          <Grid container item xs={6.8} direction='row-reverse'>
-            <Button
-              variant="contained"
-              color="error"
-              endIcon={<DeleteForeverIcon />}
-            >
-              delete
+              update
             </Button>
           </Grid>
         </Grid>
-        <PromotionTable_UI />
       </Box>
     </Container>
   );
 }
 
-export default Promotion;
+export default UpdatePromotion;
