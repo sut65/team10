@@ -8,7 +8,7 @@ import Delivery from "./components/delivery/DeliveryUI";
 import Confirmation from "./components/confirmation/ConfirmationUI";
 import Promotion from "./components/promotion/PromotionUI";
 import Home from "./components/Home";
-import Vehicle from "./components/Vehicle/VehiclrUI";
+import Vehicle from "./components/Vehicle/VehicleUI";
 import ReceiveCreate from "./components/Receive/ReceiveCreate";
 import Bill from "./components/bill/BillUI";
 import CompleteCreate from "./components/complete/CompleteCreate";
@@ -21,7 +21,8 @@ import EmployeeUpdate_UI from "./components/employee/EmployeeUpdate_UI";
 import Stock_UI from "./components/stock/Stock_UI";
 import StockTable from "./components/stock/StockTable";
 import StockUpdate_UI from "./components/stock/StockUpdat";
-
+import FormTable from "./components/form/TableForm";
+import ServiceTable from "./components/service/TableService";
 
 export default function App() {
   const [token, setToken] = React.useState<String>("");
@@ -72,6 +73,8 @@ export default function App() {
               <Route path="/confirmation/create" element={<Confirmation />} />
               <Route path="/bill/create" element={<Bill />} />
               <Route path="/customer/update" element={<UpdateCustomer />} />
+              <Route path="/form" element={<FormTable />} />
+              <Route path="/service" element={<ServiceTable />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>

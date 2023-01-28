@@ -136,7 +136,7 @@ function AppBarPrivate() {
                 <ListItemText primary="จัดการรถขนส่ง" sx={{ padding: 1 }} />
               </ListItem>
 
-              <ListItem component={RouterLink} to="/stock/create">
+              <ListItem component={RouterLink} to="/stock">
                 {" "}
                 <InventoryIcon color="primary" />
                 <ListItemText primary="Stock" sx={{ padding: 1 }} />
