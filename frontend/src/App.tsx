@@ -77,7 +77,7 @@ export default function App() {
               <Route path="/service/create" element={<ServiceCreate />} />
               <Route path="/customer/update" element={<UpdateCustomer />} />
               <Route path="/form" element={<FormTable />} />
-              <Route path="/service" element={<ServiceTable />} />
+              <Route path="/service" element={<ServiceCreate />} />
               <Route path="/service/:id" element={<ServiceUpdate />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

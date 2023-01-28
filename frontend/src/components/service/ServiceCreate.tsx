@@ -45,9 +45,9 @@ const ServiceCreate = () => {
   const navigate = useNavigate();
 
   const [service, setService] = React.useState<Partial<ServiceInterface>>({
-    TypeWashing_ID: 0,
-    Weight_ID: 0,
-    DeliveryType_ID: 0,
+    // TypeWashing_ID: 0,
+    // Weight_ID: 0,
+    // DeliveryType_ID: 0,
   });
   const [service1, setService1] = React.useState<ServiceInterface[]>([]);
   const [typewashing, setTypewashing] = React.useState<TypeWashingInterface[]>(
