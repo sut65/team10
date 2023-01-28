@@ -546,58 +546,55 @@ func SetupDatabase() {
 	}
 	db.Model(&Complete{}).Create(&complete3)
 
-<<<<<<< HEAD
 	//Delivery
-}
-=======
-		TypeWashing3 := TypeWashing{
+
+	TypeWashing3 := TypeWashing{
 		Model:             gorm.Model{},
-		Type_washing: "ซักอบ",
-		Description:  "ซักเสร็จ แล้วนำไปอบ",
+		Type_washing:      "ซักอบ",
+		Description:       "ซักเสร็จ แล้วนำไปอบ",
 		TypeWashing_Price: 100,
 	}
 	db.Model(&TypeWashing{}).Create(&TypeWashing3)
 
-		Weight1 := Weight{
-		Model:             gorm.Model{},
-		Weight_net: "ไม่เกิน 3 กิโลกรัม",
+	Weight1 := Weight{
+		Model:        gorm.Model{},
+		Weight_net:   "ไม่เกิน 3 กิโลกรัม",
 		Weight_price: 0,
 	}
 	db.Model(&Weight{}).Create(&Weight1)
 
-		Weight2 := Weight{
-		Model:             gorm.Model{},
-		Weight_net: "ไม่เกิน 5 กิโลกรัม",
+	Weight2 := Weight{
+		Model:        gorm.Model{},
+		Weight_net:   "ไม่เกิน 5 กิโลกรัม",
 		Weight_price: 10,
 	}
 	db.Model(&Weight{}).Create(&Weight2)
 
-		Weight3 := Weight{
-		Model:             gorm.Model{},
-		Weight_net: "ไม่เกิน 7 กิโลกรัม",
+	Weight3 := Weight{
+		Model:        gorm.Model{},
+		Weight_net:   "ไม่เกิน 7 กิโลกรัม",
 		Weight_price: 15,
 	}
 	db.Model(&Weight{}).Create(&Weight3)
 
-		DeliveryType1 := DeliveryType{
-		Model:             gorm.Model{},
+	DeliveryType1 := DeliveryType{
+		Model:                gorm.Model{},
 		DeriveryType_service: "ส่งด่วน",
-		DeliveryType_price: 10,
+		DeliveryType_price:   10,
 	}
 	db.Model(&DeliveryType{}).Create(&DeliveryType1)
 
-		DeliveryType2 := DeliveryType{
-		Model:             gorm.Model{},
+	DeliveryType2 := DeliveryType{
+		Model:                gorm.Model{},
 		DeriveryType_service: "ส่งด่วนมาก",
-		DeliveryType_price: 20,
+		DeliveryType_price:   20,
 	}
 	db.Model(&DeliveryType{}).Create(&DeliveryType2)
 
-		DeliveryType3 := DeliveryType{
-		Model:             gorm.Model{},
+	DeliveryType3 := DeliveryType{
+		Model:                gorm.Model{},
 		DeriveryType_service: "ส่งด่วนมากมากกกกกกกกกกก",
-		DeliveryType_price: 50,
+		DeliveryType_price:   50,
 	}
 	db.Model(&DeliveryType{}).Create(&DeliveryType3)
 }
->>>>>>> 728f666 (Modified Service - close #205)
