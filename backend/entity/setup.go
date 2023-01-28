@@ -471,14 +471,14 @@ func SetupDatabase() {
 
 	QuotaCode1 := QuotaCode{
 		Promotion: Promotion1,
-		Bill:      &Bill1,
+		Bill_ID:   &Bill1.ID,
 	}
 	db.Model(&QuotaCode{}).Create(&QuotaCode1) //สร้าง Quota
 
 	Bill11 := Bill{
-		Service:    Service1,
-		QuotaCode:  &QuotaCode1,
-		Bill_Price: 250,
+		Service:      Service1,
+		QuotaCode_ID: &QuotaCode1.ID,
+		Bill_Price:   250,
 	}
 	db.Model(&Bill{}).Where("id = ?", 1).Updates(&Bill11)
 

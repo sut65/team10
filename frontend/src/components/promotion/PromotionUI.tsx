@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import { Snackbar, Alert } from "@mui/material";
-import { ButtonGroup, Popover, Typography } from "@mui/material";
+import {  Popover, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { Container } from "@mui/system";
 import TextField from '@mui/material/TextField';
@@ -13,7 +13,6 @@ import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from '@mui/icons-material/Cancel';
 import UpdateIcon from '@mui/icons-material/Update';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import { Link as RouterLink } from "react-router-dom";
 import StorefrontIcon from '@mui/icons-material/Storefront';
@@ -40,6 +39,10 @@ function Promotion() {
 
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+
+  function timeout(delay: number) {
+    return new Promise( res => setTimeout(res, delay) );
+}
 
   const handleClose = ( // AlertBar
     event?: React.SyntheticEvent | Event,
@@ -74,29 +77,18 @@ function Promotion() {
 
     fetch(`${apiUrl}/promotions`, requestOptions)
       .then((response) => response.json())
-      .then((res) => {
+      .then(async (res) => {
         if (res.data) {
           setSuccess(true);
           console.log(res.data)
+          await timeout(1000); //for 1 sec delay
+          window.location.reload(); 
         } else {
           setError(true);
         }
       });
   }
 
-  const DeletePromotion = async (ID: number) => {
-    const requestOptions = {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-    };
-    fetch(`http://localhost:8080/promotions/${ID}`, requestOptions)
-      .then((response) => response.json())
-      .then((res) => {
-        if (res.data) {
-          window.location.reload();
-        }
-      });
-  };
 
 
   const handleClickPopover = (event: React.MouseEvent<HTMLButtonElement>) => {
