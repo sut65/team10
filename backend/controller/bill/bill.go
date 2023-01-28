@@ -84,7 +84,7 @@ func GetBill(c *gin.Context) {
 
 func ListBills(c *gin.Context) {
 	var bill []entity.Bill
-	if err := entity.DB().Preload("Service").Preload("QuotaCode").Preload("Paymenttype").Raw("SELECT * FROM bills").Find(&bill).Error; err != nil {
+	if err := entity.DB().Preload("Service.Customer").Preload("QuotaCode").Preload("Paymenttype").Raw("SELECT * FROM bills").Find(&bill).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
