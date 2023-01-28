@@ -325,7 +325,7 @@ type Vehicle struct {
 	Engine           Engine `gorm:"references:id"`
 	ListModel        string
 	Vehicle_Rigis    string
-	Time_Insulance   time.Time
+	Date_Insulance   time.Time
 	Delivery         []Delivery `gorm:"foreignKey:Vehicle_ID"`
 }
 

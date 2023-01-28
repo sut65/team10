@@ -51,7 +51,7 @@ func CreateVehicle(c *gin.Context) {
 		Engine_ID:        vehicle.Engine_ID,
 		ListModel:        vehicle.ListModel,
 		Vehicle_Rigis:    vehicle.Vehicle_Rigis,
-		Time_Insulance:   vehicle.Time_Insulance.Local(),
+		Date_Insulance:   vehicle.Date_Insulance.Local(),
 	}
 
 	if _, err := govalidator.ValidateStruct(rec); err != nil {
