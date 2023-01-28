@@ -72,7 +72,7 @@ func GetConfirmation(c *gin.Context) {
 // GET /confirmation
 func ListConfirmations(c *gin.Context) {
 	var confirmations []entity.Confirmation
-	if err := entity.DB().Preload("RecvType").Raw("SELECT * FROM confirmations").Find(&confirmations).Error; err != nil {
+	if err := entity.DB().Preload("RecvType").Preload("Customer").Preload("Complete").Raw("SELECT * FROM confirmations").Find(&confirmations).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

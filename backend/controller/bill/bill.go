@@ -6,6 +6,7 @@ import (
 	govalidator "github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"github.com/sut65/team10/entity"
+	"gorm.io/gorm"
 )
 
 // POST /bills
@@ -84,7 +85,7 @@ func GetBill(c *gin.Context) {
 
 func ListBills(c *gin.Context) {
 	var bill []entity.Bill
-	if err := entity.DB().Preload("Service").Preload("QuotaCode").Preload("Paymenttype").Raw("SELECT * FROM bills").Find(&bill).Error; err != nil {
+	if err := entity.DB().Preload("Service.Customer").Preload("QuotaCode").Preload("Paymenttype").Raw("SELECT * FROM bills").Find(&bill).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -97,21 +98,40 @@ func ListBills(c *gin.Context) {
 
 func UpdateBill(c *gin.Context) {
 	var bill entity.Bill
+	var paymenttype entity.Paymenttype
+
 	if err := c.ShouldBindJSON(&bill); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if tx := entity.DB().Where("id = ?", bill.ID).First(&bill); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
+	//ค้นหา id paymenttype
+	if tx := entity.DB().Where("id = ?", bill.Paymenttype_ID).First(&paymenttype); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "paymenttype not found"})
+
 		return
+
 	}
 
-	if err := entity.DB().Save(&bill).Error; err != nil {
+	if tx := entity.DB().Where("id = ?", bill.ID).First(&bill); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "bill not found"})
+
+		return
+
+	}
+
+	//12: สร้าง
+	u_b := entity.Bill{
+		Model:          gorm.Model{ID: bill.ID},
+		Paymenttype_ID: bill.Paymenttype_ID,
+		Time_Stamp:     bill.Time_Stamp.Local(),
+	}
+
+	if err := entity.DB().Where("id = ?", bill.ID).Updates(&u_b).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": bill})
+	c.JSON(http.StatusOK, gin.H{"data": u_b})
 
 }

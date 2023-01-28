@@ -7,6 +7,7 @@ import (
 	controllercomplete "github.com/sut65/team10/controller/complete"
 	controllerconfirmation "github.com/sut65/team10/controller/confirmation"
 	controllercustomer "github.com/sut65/team10/controller/customer"
+	delivery_controller "github.com/sut65/team10/controller/delivery"
 	employee_controller "github.com/sut65/team10/controller/employee"
 	gender_controller "github.com/sut65/team10/controller/employee"
 	position_controller "github.com/sut65/team10/controller/employee"
@@ -194,6 +195,10 @@ func main() {
 			p.GET("/satisfactions", Satisfaction_controller.ListSatisfactions)
 			p.GET("/satisfaction/:id", Satisfaction_controller.GetSatisfaction)
 			p.POST("/satisfactions", Satisfaction_controller.CreateSatisfaction)
+
+			p.GET("/delivery/:id", delivery_controller.GetDelivery)
+			p.GET("/delivery", delivery_controller.ListDeliverys)
+			p.POST("/delivery", delivery_controller.CreateDelivery)
 
 		}
 	}

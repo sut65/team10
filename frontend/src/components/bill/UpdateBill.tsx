@@ -6,12 +6,8 @@ import Box from "@mui/material/Box";
 import { Paper } from "@mui/material";
 import { Grid } from "@mui/material";
 import Button from "@mui/material/Button";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from '@mui/icons-material/Cancel';
 import UpdateIcon from '@mui/icons-material/Update';
 import { Snackbar, Alert } from "@mui/material";
-import Popover from '@mui/material/Popover';
-import Typography from '@mui/material/Typography';
 
 /* combobox */
 import { TextField } from "@mui/material";
@@ -31,15 +27,12 @@ import { PaymenttypeInterface } from "../../models/bill/IPaymenttype";
 import { QuotaCodeInterface } from "../../models/promotion/IQuotaCode";
 import { ServiceInterface } from "../../models/service/IService";
 import BillTable_UI from "./BillTable";
-//test
-import BillUpdate from "./UpdateBill";
-function Bill() {
+function BillUpdate() {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
   const [bill, setBill] = React.useState<Partial<BillInterface>>({});
   const [paymenttype, setPaymenttype] = React.useState<PaymenttypeInterface[]>([]);
   const [quotacode, setQuotacode] = React.useState<QuotaCodeInterface[]>([]);
   const [service, setService] = React.useState<ServiceInterface[]>([]);
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -48,17 +41,6 @@ function Bill() {
   function timeout(delay: number) {
     return new Promise( res => setTimeout(res, delay) );
 }
-
-  const handleClickpop = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClosepop = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
-  const pop1 = open ? 'simple-popover' : undefined;
 
   //แสดงการ Alert
   const handleClose = ( // AlertBar
@@ -72,59 +54,39 @@ function Bill() {
         setError(false);
     };
 
-  function submit() {
-        let bill_p = {
-          Service_ID: 1,
-          //Service_ID: Number(localStorage.getItem("uid")),
-          QuotaCode_ID: bill.QuotaCode_ID,
-          Paymenttype_ID: bill.Paymenttype_ID,
-          Bill_Price: 20,
+    function update() {
+        let bill_u = {
+          ID: bill.ID,
+          Paymenttype: bill.Paymenttype_ID,
           Time_Stamp: date,
         };
-
-        const apiUrl = "http://localhost:8080";
+    
         const requestOptions = {
-          method: "POST",
+          method: "PATCH",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(bill_p),
+          body: JSON.stringify(bill_u),
         };
-
-        fetch(`${apiUrl}/bills`, requestOptions)
+        console.log(bill_u);
+        console.log(JSON.stringify(bill_u));
+    
+        fetch(`http://localhost:8080/bills`, requestOptions)
           .then((response) => response.json())
           .then(async (res) => {
+            console.log(res);
             if (res.data) {
               setSuccess(true);
               await timeout(1000); //for 1 sec delay
-              window.location.reload(); 
+              window.location.reload();     
+              
             } else {
               setError(true);
+              console.log(res.data);
             }
           });
-        }
-        
-    
-        const getQuotacode = async () => {
-          const apiUrl = "http://localhost:8080/quotacode";
-          const requestOptions = {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "Content-Type": "application/json",
-            },
-          };
-      
-          fetch(apiUrl, requestOptions)
-            .then((response) => response.json())
-            .then((res) => {
-              console.log(res)
-              if (res.data) {
-                setQuotacode(res.data);
-              }
-            });
-        };
+      }
         
   const getPaymentType = async () => {
     const apiUrl = "http://localhost:8080/paymenttype";
@@ -142,6 +104,25 @@ function Bill() {
         console.log(res)
         if (res.data) {
           setPaymenttype(res.data);
+        }
+      });
+  };
+  const getBill = async () => {
+    const apiUrl = "http://localhost:8080/bill";
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    fetch(apiUrl, requestOptions)
+      .then((response) => response.json())
+      .then((res) => {
+        console.log(res)
+        if (res.data) {
+          setBill(res.data);
         }
       });
   };
@@ -171,7 +152,7 @@ function Bill() {
 
   useEffect(() => {
     getPaymentType();
-    getQuotacode();
+    getBill();
   }, []);
   return (
       <Container maxWidth="md">
@@ -200,7 +181,7 @@ function Bill() {
         <Paper>
           <Grid sx={{padding:2}}>
           <h1>Receipt</h1></Grid>
-            <Grid container spacing={5}>
+            <Grid container spacing={2}>
               <Grid
                 container
                 justifyContent={"center"}
@@ -253,50 +234,6 @@ function Bill() {
                 }}
               >
                 <Grid item xs={3}>
-                  <h3>Promotion</h3>
-                </Grid>
-                <Grid item xs={5}>
-                <Autocomplete
-                    id="quotacode-auto"
-                    options={quotacode}
-                    fullWidth
-                    size="medium"
-                    onChange={(event: any, value) => {
-                      setBill({ ...bill, QuotaCode_ID: value?.ID }); //Just Set ID to interface
-                    }}
-                    getOptionLabel={(option: any) =>
-                      `${option.Promotion.Codetype.Type}`
-                    } //filter value
-                    renderInput={(params) => {
-                      return (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          placeholder="Search..."
-                        />
-                      );
-                    }}
-                    renderOption={(props: any, option: any) => {
-                      return (
-                        <li
-                          {...props}
-                          value={`${option.ID}`}
-                          key={`${option.ID}`}
-                        >{`${option.Promotion.Codetype.Type}`}</li>
-                      ); //display value
-                    }}
-                  />
-                </Grid>
-              </Grid>
-
-              <Grid
-                container
-                justifyContent={"center"}
-                sx={{
-                  paddingY: 2,
-                }}
-              >
-                <Grid item xs={3}>
                   <h3>Payment Type</h3>
                 </Grid>
                 <Grid item xs={5}>
@@ -332,7 +269,6 @@ function Bill() {
                   />
                 </Grid>
               </Grid>
-
               <Grid
                 container
                 justifyContent={"center"}
@@ -340,32 +276,7 @@ function Bill() {
                   paddingY: 2,
                 }}
               >
-                <Grid item xs={3}>
-                  <h3>Price</h3>
-                </Grid>
-                <Grid item xs={5}>
-                  <TextField
-                    fullWidth
-                    id="Bill_Price"
-                    label="Bill_Price"
-                    variant="outlined"
-                    defaultValue="0"
-                    value={5}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </Grid>
-              </Grid>
-
-              <Grid
-                container
-                justifyContent={"center"}
-                sx={{
-                  paddingY: 2,
-                }}
-              >
-                <Grid item xs={3}>
+              <Grid item xs={3}>
                   <h3>Date Time</h3>
                 </Grid>
                 <Grid item xs={5}>
@@ -380,58 +291,24 @@ function Bill() {
                     />
                   </LocalizationProvider>
                 </Grid>
-              </Grid>
+            </Grid>
             </Grid>
         </Paper>
-        <Grid container spacing={2}
+        <Grid container spacing={1}
         sx={{paddingY:2}}>
-                <Grid item xs={5} 
-                >
+                <Grid container item xs={12}  direction='row-reverse'>
                 <Button
                   variant="contained"
-                  color="error"
-                  endIcon={<CancelIcon />}
+                  color="warning"
+                  onClick={update}
+                  endIcon={<UpdateIcon />}
                 >
-                  cancel
-                </Button> 
-                </Grid>
-                <Grid item xs={2}>
-                <div>
-                <Button aria-describedby={pop1} variant="contained" color="warning" onClick={handleClickpop}
-                endIcon={<UpdateIcon />}
-                >
-                  Update
-                </Button>
-                <Popover
-                  id={pop1}
-                  open={open}
-                  anchorEl={anchorEl}
-                  onClose={handleClosepop}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                  }
-                }
-                >
-                  < BillUpdate/>
-                  <Typography sx={{ p: 2 }}>Update Bill</Typography>
-                </Popover>
-              </div>
-                </Grid>
-                <Grid container item xs={5}  direction='row-reverse'>
-                <Button
-                  variant="contained"
-                  color="success"
-                  onClick={submit}
-                  endIcon={<SaveIcon />}
-                >
-                  commit
+                  update
                 </Button> 
                 </Grid>
               </Grid>
-              <BillTable_UI />
               </Box>
       </Container>
   );
 }
-export default Bill;
+export default BillUpdate;
