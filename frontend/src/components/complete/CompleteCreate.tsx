@@ -30,7 +30,9 @@ import { CompleteInterface } from "../../models/complete/IComplete";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import CancelIcon from '@mui/icons-material/Cancel';
+import SaveIcon from "@mui/icons-material/Save";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { ReceiveInterface } from "../../models/receive/IReceive";
 import { PackagingInterface } from "../../models/complete/IPackagink";
@@ -38,6 +40,7 @@ import { EmployeesInterface } from "../../models/Employee/IEmployee";
 import { Autocomplete, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import UpdateIcon from "@mui/icons-material/Update";
 import dayjs, { Dayjs } from "dayjs";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -62,7 +65,7 @@ function CompleteCreate() {
  const [packaging, setPackaging] = React.useState<PackagingInterface[]>([]);
  const [success, setSuccess] = React.useState(false);
  const [error, setError] = React.useState(false);
-
+ const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
  const getPackaging = async () => {
   const apiUrl = `http://localhost:8080/packagings`;
   const requestOptions = {
@@ -114,6 +117,48 @@ const getEmployee = async () => {
       }
     });
 };
+
+// Fetch member from current user's student id.
+const getEmployeeByID = async () => {
+  const apiUrl = `http://localhost:8080`;
+  // get student id from local storage.
+  let uid = localStorage.getItem("customer_uid");
+  let uid2 = localStorage.getItem("employee_uid");
+
+  const requestOptions = {
+    method: "GET",
+
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  if (uid == null){
+    fetch(`${apiUrl}/employee/${uid2}`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+        if (res.data) {
+            complete.Employee_ID = res.data.Employee_ID;
+
+        }
+    });
+  }
+  else{
+    fetch(`${apiUrl}/employee/${uid}`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+        if (res.data) {
+          complete.Employee_ID = res.data.Employee_ID;
+
+        }
+    });
+  }
+  
+    
+  
+};
+
   /* ------------------------------- DatePicker ------------------------------- */
   const handleDateTime = (newValue: Dayjs | null) => {
     setComplete_datetime(newValue);
@@ -130,6 +175,10 @@ const getEmployee = async () => {
    setError(false);
 
  };
+ const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  setAnchorEl(event.currentTarget);
+};
+
 
  const handleInputChange = (
   event: React.ChangeEvent<{ id?: string; value: any }>
@@ -189,6 +238,7 @@ function submit() {
      useEffect(() => {
       getPackaging();
       getEmployee();
+      getEmployeeByID();
 
             }, []);
  
@@ -197,73 +247,37 @@ function submit() {
 
    <Container maxWidth="md">
 
-     <Snackbar
-
+<Snackbar
        open={success}
-
-       autoHideDuration={6000}
-
+       autoHideDuration={3000}
        onClose={handleClose}
-
        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-
      >
-
        <Alert onClose={handleClose} severity="success">
-
          บันทึกข้อมูลสำเร็จ
-
        </Alert>
-
      </Snackbar>
 
-     <Snackbar open={error} autoHideDuration={6000} onClose={handleClose}>
-
-       <Alert onClose={handleClose} severity="error">
-
+     <Snackbar
+       open={success}
+       autoHideDuration={3000}
+       onClose={handleClose}
+       anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+     >
+       <Alert onClose={handleClose} severity="success">
          บันทึกข้อมูลไม่สำเร็จ
-
        </Alert>
-
      </Snackbar>
-
+     <Box sx={{ padding: 2
+                     }}>
      <Paper>
-
-       <Box
-
-         display="flex"
-
-         sx={{
-
-           marginTop: 2,
-
-         }}
-
-       >
-
-         <Box sx={{ paddingX: 2, paddingY: 1 }}>
-
-           <Typography
-
-             component="h2"
-
-             variant="h6"
-
-             color="primary"
-
-             gutterBottom
-
-           >
-
-             Complete
-
-           </Typography>
-
-         </Box>
-
-       </Box>
+                    <Grid container spacing={0} sx={{ padding: 2
+                     }}>
+                    <h1>COMPLETE<TaskAltIcon color="success" sx={{ fontSize: 100 }}/></h1> 
+                    </Grid>
 
        <Divider />
+    
        
        <Grid container spacing={1} sx={{ padding: 5 }}>
         <Grid item xs={6}>
@@ -276,6 +290,7 @@ function submit() {
                type="string"
                size="medium"
                value={complete.Employee_ID}
+               defaultValue
                sx={{ width : 350 }}
                onChange={handleInputChange}
              ></TextField>
@@ -294,6 +309,7 @@ function submit() {
                 size="medium"
                 sx={{ width: 300 }}
                 value={complete.Name}
+                defaultValue
                 onChange={handleInputChange}
               />
            </FormControl>
@@ -304,7 +320,6 @@ function submit() {
           <FormControl fullWidth variant="outlined">
              <TextField
                id="Receive_ID"
-               disabled
                variant="outlined"
                type="string"
                size="medium"
@@ -353,35 +368,39 @@ function submit() {
 
          </Grid>
          </Grid>
-
+         </Paper>
+         <Grid container spacing={1} sx={{ padding: 5 }}>
          <Grid item xs={12}>
-
-           <Button component={RouterLink} to="/" variant="contained">
-
-             ย้อนกลับ
-
+           <Button 
+           component={RouterLink} to="/" 
+            variant="contained"
+            color="error"
+            endIcon={<CancelIcon />}
+            >
+           cancel
            </Button>
-
+           {/* <Button
+            variant="contained"
+            color="warning"
+            onClick={handleClick}
+            endIcon={<UpdateIcon />}
+            sx={{ marginRight: 2 }}
+            >
+            Update
+            </Button> */}
            <Button
-
              style={{ float: "right" }}
-
              onClick={submit}
-
              variant="contained"
-
              color="primary"
-
+             endIcon={<SaveIcon />}
            >
-
-             ยืนยันการดำเนินการเสร็จสิ้น
-
+           commit
            </Button>
 
          </Grid>
-
-     </Paper>
-
+         </Grid>
+     </Box>
    </Container>
 
  );
