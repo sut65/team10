@@ -15,10 +15,18 @@ func CreateReceive(c *gin.Context) {
 	var bill entity.Bill
 	var detergent entity.Detergent
 	var softener entity.Softener
+	var employee entity.Employee
 
 	if err := c.ShouldBindJSON(&receive); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
+	}
+	// ค้นหา Employee ด้วยไอดี
+	if tx := entity.DB().Where("id = ?", receive.Employee_ID).First(&employee); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
+
+		return
+
 	}
 
 	//8: ค้นหา bill ด้วยไอดี
@@ -47,6 +55,7 @@ func CreateReceive(c *gin.Context) {
 
 	//11: สร้าง
 	rec := entity.Receive{
+		Employee_ID:  receive.Employee_ID,
 		Bill_ID:      receive.Bill_ID,
 		Detergent_ID: receive.Detergent_ID,
 		Softener_ID:  receive.Softener_ID,

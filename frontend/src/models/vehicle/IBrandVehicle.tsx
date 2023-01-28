@@ -1,5 +1,5 @@
 export interface BrandVehicleInterface {
     ID:         number,
-    Type:       string,    
+    Brand_Vahicle:       string,    
 }
 

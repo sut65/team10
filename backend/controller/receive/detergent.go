@@ -10,8 +10,8 @@ import (
 
 // GET /detergents
 func ListDetergents(c *gin.Context) {
-	var detergent []entity.Weight
-	if err := entity.DB().Raw("SELECT * FROM detergents").Scan(&detergent).Error; err != nil {
+	var detergent []entity.Detergent
+	if err := entity.DB().Preload("Stock.Brand").Raw("SELECT * FROM detergents").Find(&detergent).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
