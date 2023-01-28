@@ -72,6 +72,7 @@ func main() {
 			p.GET("/promotion/:id", controllerpromotion.GetPromotion)
 			p.POST("/promotions", controllerpromotion.CreatePromotion)
 			p.PATCH("/promotions", controllerpromotion.UpdatePromotion)
+			p.DELETE("/promotions/:id", controllerpromotion.DeletePromotion)
 			//--codetype
 			p.GET("/codetype", controllerpromotion.ListCodetypes)
 			//--reason

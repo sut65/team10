@@ -61,7 +61,7 @@ func CreateReceive(c *gin.Context) {
 		Softener_ID:  receive.Softener_ID,
 		Det_Quantity: receive.Det_Quantity,
 		Sof_Quantity: receive.Sof_Quantity,
-		Time_Stamp:   bill.Time_Stamp.Local(),
+		Time_Stamp:   receive.Time_Stamp.Local(),
 	}
 
 	//12: บันทึก
@@ -90,7 +90,7 @@ func GetReceive(c *gin.Context) {
 
 func ListReceives(c *gin.Context) {
 	var receive []entity.Receive
-	if err := entity.DB().Raw("SELECT * FROM receives").Scan(&receive).Error; err != nil {
+	if err := entity.DB().Preload("Bill").Preload("Detergent.Stock.Brand").Preload("Softener.Stock.Brand").Preload("Employee").Raw("SELECT * FROM receives").Find(&receive).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

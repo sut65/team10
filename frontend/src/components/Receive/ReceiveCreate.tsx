@@ -30,7 +30,7 @@ import { ReceiveInterface } from "../../models/receive/IReceive";
 import { BillInterface } from "../../models/bill/IBill";
 import { DetergentInterface } from "../../models/receive/IDetergent";
 import { SoftenerInterface } from "../../models/receive/ISoftener";
-
+import ReceiveTableUI from "./ReceiveTableUI";
 
 function ReceiveCreate (){
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
@@ -60,9 +60,9 @@ function submit() {
   let receive_data = {
     Employee_ID: Number(localStorage.getItem("uid")),
     Bill_ID: receive.Bill_ID,
-    Detergent: receive.Detergent_ID,
+    Detergent_ID: receive.Detergent_ID,
     Det_Quantity: det_quantity,
-    Softener: receive.Softener_ID,
+    Softener_ID: receive.Softener_ID,
     Sof_Quantity: sof_quantity,
     Time_Stamp: date,
   };
@@ -86,6 +86,26 @@ fetch(`${apiUrl}/receives`, requestOptions)
     }
   });
 }
+
+const getBill = async () => {
+  const apiUrl = `http://localhost:8080/bill`;
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
+  };
+
+  fetch(apiUrl, requestOptions)
+    .then((response) => response.json()) 
+    .then((res) => {
+      console.log(res.data); 
+      if (res.data) {
+        setBill(res.data);
+      } 
+    });
+};
 
   const getDetergent = async () => {
     const apiUrl = `http://localhost:8080/detergents`;
@@ -132,6 +152,7 @@ fetch(`${apiUrl}/receives`, requestOptions)
   useEffect(() => {
     getDetergent();
     getSoftener();
+    getBill();
   }, []);
 
 return (
@@ -184,7 +205,7 @@ return (
                         setReceive({ ...receive, Bill_ID: value?.ID }); //Just Set ID to interface
                     }}
                     getOptionLabel={(option: any) =>
-                      `${option.Bill}`
+                      `${option.ID}`
                     } //filter value
                     renderInput={(params) => {
                       return (
@@ -201,7 +222,7 @@ return (
                           {...props}
                           value={`${option.ID}`}
                           key={`${option.ID}`}
-                        >{`${option.Bill}`}</li>
+                        >{`${option.ID}`}</li>
                       ); //display value
                     }}
                   />
@@ -340,22 +361,22 @@ return (
               </Grid>
 
               <Grid item xs={3}>
-                  <h3>Time Stamp</h3>
-                </Grid>
-                        <Grid item xs={5}>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DateTimePicker
-                                    label="DateTimePicker"
-                                    renderInput={(params) => <TextField {...params} />}
-                                    value={date}
-                                    onChange={(newValue) => {
-                                        setDate(newValue);
-                                    }}
-                                />
-                            </LocalizationProvider>
-                        </Grid>
-                    </Grid>
-                </Paper>
+                <h3>Time Stamp</h3>
+              </Grid>
+                      <Grid item xs={5}>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <DateTimePicker
+                                  label="DateTimePicker"
+                                  renderInput={(params) => <TextField {...params} />}
+                                  value={date}
+                                  onChange={(newValue) => {
+                                      setDate(newValue);
+                                  }}
+                              />
+                          </LocalizationProvider>
+                      </Grid>
+                  </Grid>
+              </Paper>
                 <Grid container spacing={4}
                     sx={{ paddingY: 1 }}>
                     <Grid item xs={6}
@@ -402,6 +423,7 @@ return (
                     </Grid>
                 </Grid>
             </Box>
+            <ReceiveTableUI/>
         </Container>
   );
 }

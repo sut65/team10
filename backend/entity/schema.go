@@ -42,6 +42,8 @@ type Customer struct {
 	Career    Career
 
 	Confirmation []Confirmation `gorm:"foreignKey:Customer_ID"`
+	Service              []Service `gorm:"foreignKey:Customer_ID"`
+	Form              []Form `gorm:"foreignKey:Customer_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
@@ -134,6 +136,7 @@ type Stock struct {
 type TypeWashing struct {
 	gorm.Model
 	Type_washing string
+	TypeWashing_Price uint
 	Description  string
 	Service      []Service `gorm:"foreignKey:TypeWashing_ID"`
 }
@@ -163,7 +166,11 @@ type Service struct {
 	Weight_ID *uint
 	Weight    Weight `gorm:"references:id"`
 
+	Customer_ID *uint
+	Customer    Customer `gorm:"references:id"`
+
 	Address string
+	Bill_Price	uint
 	Bill    []Bill `gorm:"foreignKey:Service_ID"`
 }
 
@@ -192,6 +199,9 @@ type Form struct {
 
 	FormTypeID *uint
 	FormType   FormType `gorm:"references:id"`
+
+	Customer_ID *uint
+	Customer    Customer `gorm:"references:id"`
 }
 
 /* -------------------------------------------------------------------------- */
@@ -287,8 +297,7 @@ type Receive struct {
 	Sof_Quantity uint
 	Time_Stamp   time.Time
 
-	Complete     []Complete `gorm:"foreignKey:Receive_ID"`
-
+	Complete []Complete `gorm:"foreignKey:Receive_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
@@ -316,7 +325,7 @@ type Vehicle struct {
 	Engine           Engine `gorm:"references:id"`
 	ListModel        string
 	Vehicle_Rigis    string
-	Time_Insulance   time.Time
+	Date_Insulance   time.Time
 	Delivery         []Delivery `gorm:"foreignKey:Vehicle_ID"`
 }
 
@@ -374,7 +383,6 @@ type RecvType struct {
 /* -------------------------------------------------------------------------- */
 type Delivery struct {
 	gorm.Model
-	Delivery_Name   string
 	Employee_ID     *uint
 	Employee        Employee `gorm:"references:id"`
 	Confirmation_ID *uint
