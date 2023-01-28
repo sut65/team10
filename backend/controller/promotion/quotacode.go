@@ -10,7 +10,7 @@ import (
 // POST /Quotacodes
 func ListQuotacode(c *gin.Context) {
 	var quotacode []entity.QuotaCode
-	if err := entity.DB().Preload("Promotion.Codetype").Raw("SELECT * FROM quota_codes WHERE bill_id is NULL GROUP BY promotion_id").Find(&quotacode).Error; err != nil {
+	if err := entity.DB().Preload("Promotion.Codetype").Raw("SELECT * FROM quota_codes WHERE bill_id = 0 GROUP BY promotion_id").Find(&quotacode).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -21,7 +21,7 @@ func ListQuotacode(c *gin.Context) {
 
 func ListQuotacodefull(c *gin.Context) {
 	var quotacode []entity.QuotaCode
-	if err := entity.DB().Preload("Promotion.Codetype").Raw("SELECT * FROM quota_codes").Find(&quotacode).Error; err != nil {
+	if err := entity.DB().Preload("Promotion").Preload("Bill").Raw("SELECT * FROM quota_codes").Find(&quotacode).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

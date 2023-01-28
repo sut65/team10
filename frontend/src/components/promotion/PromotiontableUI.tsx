@@ -67,6 +67,7 @@ function PromotionTable_UI() {
       .then((response) => response.json())
       .then((res) => {
         if (res.data) {
+          console.log(res.data)
             setQuotacode(res.data);
         }
       });
@@ -118,9 +119,10 @@ function PromotionTable_UI() {
       valueGetter: (params) => params.value.ID,
     },
     {
-      field: "Bill",
+      field: "Bill_ID",
       headerName: "เลขที่บิลที่ใช้งาน",
       width: 150,
+      // valueGetter: (params) => params.value.ID,
     },
   ];
 
@@ -182,7 +184,7 @@ function PromotionTable_UI() {
               getRowId={(row) => row.ID}
               columns={quotacolumns}
               pageSize={5}
-              rowsPerPageOptions={[2]}
+              rowsPerPageOptions={[3]}
             />
           </div>
         </Container>
