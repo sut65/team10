@@ -18,6 +18,8 @@ import UpdateCustomer from "./components/customer/UpdateCustomer";
 import NotFound from "./components/NotFound";
 import EmployeeTable from "./components/employee/EmployeeTable";
 import EmployeeUpdate_UI from "./components/employee/EmployeeUpdate_UI";
+import ServiceCreate from "./components/service/ServiceCreate";
+import ServiceUpdate from "./components/service/UpdateService";
 
 export default function App() {
   const [token, setToken] = React.useState<String>("");
@@ -67,7 +69,9 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/confirmation/create" element={<Confirmation />} />
               <Route path="/bill/create" element={<Bill />} />
+              <Route path="/service/create" element={<ServiceCreate />} />
               <Route path="/customer/update" element={<UpdateCustomer />} />
+              <Route path="/service/:id" element={<ServiceUpdate />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>

@@ -546,10 +546,6 @@ func SetupDatabase() {
 	}
 	db.Model(&Complete{}).Create(&complete3)
 
-<<<<<<< HEAD
-	//Delivery
-}
-=======
 		TypeWashing3 := TypeWashing{
 		Model:             gorm.Model{},
 		Type_washing: "ซักอบ",
@@ -600,4 +596,3 @@ func SetupDatabase() {
 	}
 	db.Model(&DeliveryType{}).Create(&DeliveryType3)
 }
->>>>>>> 728f666 (Modified Service - close #205)

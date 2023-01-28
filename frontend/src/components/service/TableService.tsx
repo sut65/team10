@@ -108,7 +108,7 @@ export default function ServiceTable() {
                     <TableCell align="right">{row.TypeWashing_ID}</TableCell>
                     <TableCell align="right">{row.Weight_ID}</TableCell>
                     <TableCell align="right">{row.Address}</TableCell>
-                    <TableCell align="right">{row.Delivery_ID}</TableCell>
+                    <TableCell align="right">{row.DeliveryType_ID}</TableCell>
                     <TableCell align="right">
                       <ButtonGroup
                         variant="outlined"
