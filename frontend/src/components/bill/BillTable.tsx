@@ -37,15 +37,20 @@ function BillTable_UI() {
     {
       field: "Service",
       headerName: "ชื่อลูกค้า",
-      width: 130,
-      valueGetter: (params) => params.value.ID,
+      width: 150,
+      valueGetter: (params) => params.value.Customer.Customer_Name,
     },
-    // {
-    //   field: "QuotaCode",
-    //   headerName: "โค๊ดเลขที่",
-    //   width: 150,
-    //   valueGetter: (params) => params.value.ID,
-    // },
+    {
+      field: "QuotaCode_ID",
+      headerName: "โค๊ดเลขที่",
+      width: 100,
+    },
+    {
+      field: "Paymenttype",
+      headerName: "ประเภทการชำระเงิน",
+      width: 150,
+      valueGetter: (params) => params.value.Type,
+    },
     {
       field: "Bill_Price",
       headerName: "ราคา",

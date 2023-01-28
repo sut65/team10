@@ -460,11 +460,13 @@ func SetupDatabase() {
 	//*********************---Bill---*******************//
 	//-- Service
 	Service1 := Service{
-		Address: "testbill",
+		Customer: Customer1,
+		Address:  "testbill",
 	}
 	db.Model(&Service{}).Create(&Service1)
 
 	Bill1 := Bill{
+		Service:    Service1,
 		Bill_Price: 30,
 	}
 	db.Model(&Bill{}).Create(&Bill1) //สร้างบิล
@@ -476,7 +478,6 @@ func SetupDatabase() {
 	db.Model(&QuotaCode{}).Create(&QuotaCode1) //สร้าง Quota
 
 	Bill11 := Bill{
-		Service:      Service1,
 		QuotaCode_ID: &QuotaCode1.ID,
 		Bill_Price:   250,
 	}
@@ -570,7 +571,7 @@ func SetupDatabase() {
 
 	//Delivery
 
-		TypeWashing3 := TypeWashing{
+	TypeWashing3 := TypeWashing{
 		Model:             gorm.Model{},
 		Type_washing:      "ซักอบ",
 		Description:       "ซักเสร็จ แล้วนำไปอบ",
