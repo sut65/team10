@@ -287,8 +287,7 @@ type Receive struct {
 	Sof_Quantity uint
 	Time_Stamp   time.Time
 
-	Complete     []Complete `gorm:"foreignKey:Receive_ID"`
-
+	Complete []Complete `gorm:"foreignKey:Receive_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
@@ -374,7 +373,6 @@ type RecvType struct {
 /* -------------------------------------------------------------------------- */
 type Delivery struct {
 	gorm.Model
-	Delivery_Name   string
 	Employee_ID     *uint
 	Employee        Employee `gorm:"references:id"`
 	Confirmation_ID *uint
