@@ -118,6 +118,33 @@ const getEmployee = async () => {
     });
 };
 
+const getReciev = async () => {
+  const apiUrl = `http://localhost:8080/receive`;
+
+  const requestOptions = {
+    method: "GET",
+
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
+  };
+  //การกระทำ //json
+  fetch(apiUrl, requestOptions)
+    .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
+
+    .then((res) => {
+      console.log(res.data); //show ข้อมูล
+
+      if (res.data) {
+        setReceive(res.data);
+      } else {
+        console.log("else");
+      }
+    });
+};
+
+
 
   /* ------------------------------- DatePicker ------------------------------- */
   const handleDateTime = (newValue: Dayjs | null) => {
@@ -158,7 +185,7 @@ function submit() {
   let data = {
 
     ID: complete.ID,
-    Employee_ID: complete.Employee_ID,
+    Employee_ID: Number(localStorage.getItem('uid')),
     Packaging_ID: complete.Packaging_ID,
     Employee_Name: complete.Name,
     Receive_ID: complete.Receive_ID,
@@ -195,6 +222,7 @@ function submit() {
      useEffect(() => {
       getPackaging();
       getEmployee();
+      getReciev();
 
             }, []);
  
@@ -210,7 +238,7 @@ function submit() {
        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
      >
        <Alert onClose={handleClose} severity="success">
-         บันทึกข้อมูลสำเร็จ
+         บันทึกข้อมูลไม่สำเร็จ
        </Alert>
      </Snackbar>
 
@@ -221,7 +249,7 @@ function submit() {
        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
      >
        <Alert onClose={handleClose} severity="success">
-         บันทึกข้อมูลไม่สำเร็จ
+         บันทึกข้อมูลสำเร็จ
        </Alert>
      </Snackbar>
      <Box sx={{ padding: 2
@@ -273,16 +301,38 @@ function submit() {
         <Grid item xs={6}>
           <p>เลขรายการรับผ้า</p>
           <FormControl fullWidth variant="outlined">
-             <TextField
-               id="Receive_ID"
-               variant="outlined"
-              disabled
-               type="string"
-               size="medium"
-               value={complete.Receive_ID}
-               sx={{ width : 350 }}
-               onChange={handleInputChange}
-             />
+          <Autocomplete
+                        id="recive-autocomplete"
+                        options={receive}
+                        fullWidth
+                        size="medium"
+                        onChange={(event: any, value) => {
+                          //Get ID from ...interface
+                          setComplete({
+                            ...complete,
+                            Receive_ID: value?.ID,
+                          }); //Just Set ID to interface
+                        }}
+                        getOptionLabel={(option: any) => `${option.ID}`} //filter value
+                        renderInput={(params) => {
+                          return (
+                            <TextField
+                              {...params}
+                              variant="outlined"
+                              placeholder="Search..."
+                            />
+                          );
+                        }}
+                        renderOption={(props: any, option: any) => {
+                          return (
+                            <li
+                              {...props}
+                              value={`${option.ID}`}
+                              key={`${option.ID}`}
+                            >{`${option.ID}`}</li>
+                          ); //display value
+                        }}
+                      />
 
            </FormControl>
         </Grid>
