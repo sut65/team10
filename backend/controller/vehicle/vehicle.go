@@ -85,7 +85,7 @@ func GetVehicle(c *gin.Context) {
 
 func ListVehicles(c *gin.Context) {
 	var vehicles []entity.Vehicle
-	if err := entity.DB().Raw("SELECT * FROM vehicles").Scan(&vehicles).Error; err != nil {
+	if err := entity.DB().Preload("Engine").Preload("Brand_Vehicle").Preload("Employee").Raw("SELECT * FROM vehicles").Find(&vehicles).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

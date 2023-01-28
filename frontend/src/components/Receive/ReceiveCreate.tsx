@@ -13,6 +13,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import UpdateIcon from '@mui/icons-material/Update';
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import { Link as RouterLink } from "react-router-dom";
 /* combobox */
 import { TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -57,12 +58,12 @@ function ReceiveCreate (){
 
 function submit() {
   let receive_data = {
-    Employee_ID: 1,
+    Employee_ID: Number(localStorage.getItem("uid")),
     Bill_ID: receive.Bill_ID,
     Detergent: receive.Detergent_ID,
-    Det_Quantity: receive.Det_Quantity,
+    Det_Quantity: det_quantity,
     Softener: receive.Softener_ID,
-    Sof_Quantity: receive.Sof_Quantity,
+    Sof_Quantity: sof_quantity,
     Time_Stamp: date,
   };
 
@@ -85,34 +86,13 @@ fetch(`${apiUrl}/receives`, requestOptions)
     }
   });
 }
-  // const getBill = async () => {
-  //   const apiUrl = `http://localhost:8080/bills`;
-  //   const requestOptions = {
-  //     method: "GET",
-  //     headers: {
-  //       Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //       "Content-Type": "application/json",
-  //     },
-  //   };
-
-  //   fetch(apiUrl, requestOptions)
-  //     .then((response) => response.json()) 
-  //     .then((res) => {
-  //       console.log(res.data);
-  //       if (res.data) {
-  //         setBill(res.data);
-  //       } else {
-  //         console.log("else");
-  //       }
-  //     });
-  // };
 
   const getDetergent = async () => {
     const apiUrl = `http://localhost:8080/detergents`;
     const requestOptions = {
       method: "GET",
       headers: {
-        //Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
     };
@@ -128,11 +108,11 @@ fetch(`${apiUrl}/receives`, requestOptions)
   };
 
   const getSoftener = async () => {
-    const apiUrl = `http://localhost:8080/softener`;
+    const apiUrl = `http://localhost:8080/softeners`;
     const requestOptions = {
       method: "GET",
       headers: {
-        //Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
     };
@@ -146,45 +126,6 @@ fetch(`${apiUrl}/receives`, requestOptions)
         } 
       });
   };
-
-  //================================================================================================================//
-
-  // const handleClose = (
-  //   event?: React.SyntheticEvent | Event,
-  //   reason?: string
-  // ) => {
-  //   if (reason === "clickaway") {
-  //     return;
-  //   }
-  //   setSuccess(false);
-  //   setError(false);
-  // };
-
-
-
-
-  // const handleInputChange = (
-  //   event: React.ChangeEvent<{ id?: string; value: any }>
-  // ) => {
-  //   const id = event.target.id as keyof typeof ReceiveCreate;
-  //   const { value } = event.target;
-  //   setReceive({ ...receive, [id]: value });
-  // };
-
-  // const handleChange = (event: SelectChangeEvent<number>) => {
-  //   const name = event.target.name as keyof typeof receive;
-  //   setReceive({
-  //     ...receive,
-  //     [name]: event.target.value,
-  //   });
-  // };
-
-  // const requestOptionsGet = {
-  //   method: "GET",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  // };
 
 //================================================================================================================//
 
@@ -287,7 +228,7 @@ return (
                         setReceive({ ...receive, Detergent_ID: value?.ID }); //Just Set ID to interface
                     }}
                     getOptionLabel={(option: any) =>
-                      `${option.Detergent}`
+                      `${option.Stock.Brand.Band_Name}`
                     } //filter value
                     renderInput={(params) => {
                       return (
@@ -304,7 +245,7 @@ return (
                           {...props}
                           value={`${option.ID}`}
                           key={`${option.ID}`}
-                        >{`${option.Detergent}`}</li>
+                        >{`${option.Stock.Brand.Band_Name}`}</li>
                       ); //display value
                     }}
                   />
@@ -352,7 +293,7 @@ return (
                         setReceive({ ...receive, Softener_ID: value?.ID }); //Just Set ID to interface
                     }}
                     getOptionLabel={(option: any) =>
-                      `${option.Softener}`
+                      `${option.Stock.Brand.Band_Name}`
                     } //filter value
                     renderInput={(params) => {
                       return (
@@ -369,7 +310,7 @@ return (
                           {...props}
                           value={`${option.ID}`}
                           key={`${option.ID}`}
-                        >{`${option.Softener}`}</li>
+                        >{`${option.Stock.Brand.Band_Name}`}</li>
                       ); //display value
                     }}
                   />
@@ -415,11 +356,13 @@ return (
                         </Grid>
                     </Grid>
                 </Paper>
-                <Grid container spacing={2}
-                    sx={{ paddingY: 2 }}>
-                    <Grid item xs={5}
+                <Grid container spacing={4}
+                    sx={{ paddingY: 1 }}>
+                    <Grid item xs={6}
                     >
                         <Button
+                        component={RouterLink}
+                        to="/"
                             variant="contained"
                             color="error"
                             endIcon={<CancelIcon />}
@@ -427,7 +370,27 @@ return (
                             cancel
                         </Button>
                     </Grid>
-                    <Grid container item xs={7} direction='row-reverse'>
+                    <Grid item xs={2}
+                    >
+                        <Button
+                            variant="contained"
+                            color="error"
+                            endIcon={<UpdateIcon />}
+                        >
+                            delete
+                        </Button>
+                    </Grid>
+                    <Grid item xs={2}
+                    >
+                        <Button
+                            variant="contained"
+                            color="warning"
+                            endIcon={<UpdateIcon />}
+                        >
+                            update
+                        </Button>
+                    </Grid>
+                    <Grid container item xs={2} direction='row-reverse'>
                         <Button
                             variant="contained"
                             color="success"

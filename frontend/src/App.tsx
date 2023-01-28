@@ -8,7 +8,7 @@ import Delivery from "./components/delivery/DeliveryUI";
 import Confirmation from "./components/confirmation/ConfirmationUI";
 import Promotion from "./components/promotion/PromotionUI";
 import Home from "./components/Home";
-import Vehicle from "./components/Vehicle/VehiclrUI";
+import Vehicle from "./components/Vehicle/VehicleUI";
 import ReceiveCreate from "./components/Receive/ReceiveCreate";
 import Bill from "./components/bill/BillUI";
 import CompleteCreate from "./components/complete/CompleteCreate";

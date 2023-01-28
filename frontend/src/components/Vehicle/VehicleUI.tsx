@@ -7,10 +7,13 @@ import { Alert, Box, Grid, Paper, SelectChangeEvent, Snackbar } from "@mui/mater
 import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from '@mui/icons-material/Cancel';
+import { Container } from "@mui/material";
 import UpdateIcon from '@mui/icons-material/Update';
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import MopedIcon from '@mui/icons-material/Moped';
-
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { Link as RouterLink } from "react-router-dom";
+import StorefrontIcon from '@mui/icons-material/Storefront';
 /* combobox */
 import { TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -20,14 +23,13 @@ import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { Container } from "@mui/material";
+
 
 /* Interface */
 import { BrandVehicleInterface } from "../../models/vehicle/IBrandVehicle";
 import { EngineInterface } from "../../models/vehicle/IEngine";
 import { VehicleInterface } from "../../models/vehicle/IVehicle";
-
-
+import VehicleTableUI from "./VehicleTableUI";
 function VehicleCreate  () {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
   const [vehicle, setVehicle] = React.useState<Partial<VehicleInterface>>({});
@@ -50,11 +52,11 @@ function VehicleCreate  () {
   };
   function submit() {
     let vehicle_data = {
-      Employee_ID: 1,
+      Employee_ID: Number(localStorage.getItem("uid")),
       Brand_Vehicle_ID: vehicle.Brand_Vehicle_ID,
       Engine_ID: vehicle.Engine_ID,
       ListModel: listmodel,
-      Vehicle_Regis: vehicle_regis,
+      Vehicle_Rigis: vehicle_regis,
       Time_Insulance:date,
     };
     console.log(vehicle_data)
@@ -307,30 +309,53 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
                       </Grid>
                   </Grid>
               </Paper>
-              <Grid container spacing={2}
-                  sx={{ paddingY: 2 }}>
-                  <Grid item xs={5}
-                  >
-                      <Button
-                          variant="contained"
-                          color="error"
-                          endIcon={<CancelIcon />}
-                      >
-                          cancel
-                      </Button>
-                  </Grid>
-                  <Grid container item xs={7} direction='row-reverse'>
-                      <Button
-                          variant="contained"
-                          color="success"
-                          onClick={submit}
-                          endIcon={<SaveIcon />}
-                      >
-                          commit
-                      </Button>
-                  </Grid>
-              </Grid>
+              <Grid container spacing={4}
+                    sx={{ paddingY: 1 }}>
+                    <Grid item xs={6}
+                    >
+                        <Button
+                        component={RouterLink}
+                        to="/"
+                            variant="contained"
+                            color="error"
+                            endIcon={<CancelIcon />}
+                        >
+                            cancel
+                        </Button>
+                    </Grid>
+                    <Grid item xs={2}
+                    >
+                        <Button
+                            variant="contained"
+                            color="error"
+                            endIcon={<UpdateIcon />}
+                        >
+                            delete
+                        </Button>
+                    </Grid>
+                    <Grid item xs={2}
+                    >
+                        <Button
+                            variant="contained"
+                            color="warning"
+                            endIcon={<UpdateIcon />}
+                        >
+                            update
+                        </Button>
+                    </Grid>
+                    <Grid container item xs={2} direction='row-reverse'>
+                        <Button
+                            variant="contained"
+                            color="success"
+                            onClick={submit}
+                            endIcon={<SaveIcon />}
+                        >
+                            commit
+                        </Button>
+                    </Grid>
+                </Grid>
           </Box>
+        <VehicleTableUI />
       </Container>
 );
 }
