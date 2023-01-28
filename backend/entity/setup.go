@@ -620,4 +620,5 @@ func SetupDatabase() {
 		DeliveryType_price:   50,
 	}
 	db.Model(&DeliveryType{}).Create(&DeliveryType3)
+
 }
