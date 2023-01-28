@@ -445,7 +445,7 @@ func SetupDatabase() {
 	db.Model(&RecvType{}).Create(&recvt1)
 	db.Model(&RecvType{}).Create(&recvt2)
 
-	//db.Model(&RecvType{}).Create(&recvt3)
+	///db.Model(&RecvType{}).Create(&recvt3)
 
 	//*********************---Bill---*******************//
 	//-- Service
@@ -544,4 +544,6 @@ func SetupDatabase() {
 		Packaging:         Packaging4,
 	}
 	db.Model(&Complete{}).Create(&complete3)
+
+	//Delivery
 }
