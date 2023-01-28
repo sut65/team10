@@ -6,8 +6,6 @@ import Box from "@mui/material/Box";
 import { Paper } from "@mui/material";
 import { Grid } from "@mui/material";
 import Button from "@mui/material/Button";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from '@mui/icons-material/Cancel';
 import UpdateIcon from '@mui/icons-material/Update';
 import { Snackbar, Alert } from "@mui/material";
 
