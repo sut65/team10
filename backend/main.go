@@ -109,7 +109,7 @@ func main() {
 			p.GET("/stocks", stock_controller.ListStock)
 			p.GET("/stocks/:id", stock_controller.GetStock)
 			p.PATCH("/stocks", stock_controller.UpdateStock)
-			p.GET("/stocks/:id", stock_controller.AddStock)
+			// p.GET("/stocks/:id", stock_controller.AddStock)
 
 			// Confirmation
 			p.GET("/confirmation", controllerconfirmation.ListConfirmations)

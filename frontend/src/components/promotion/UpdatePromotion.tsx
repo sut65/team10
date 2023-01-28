@@ -17,15 +17,11 @@ import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-
-import { CodetypeInterface } from "../../models/promotion/ICodetype";
-import { ReasonInterface } from "../../models/promotion/IReason";
 import { PromotionInterface } from "../../models/promotion/IPromotion";
 function UpdatePromotion() {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
   const [promotion, setPromotion] = React.useState<Partial<PromotionInterface>>({});
   const [price, setPrice] = React.useState<number | null>(null);
-  const [amount, setAmount] = React.useState<number | null>(null);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const [promotion_id, setPromotion_ID] = React.useState<PromotionInterface[]>([]);
 
@@ -46,10 +42,7 @@ function UpdatePromotion() {
   function update() {
     let promotion_u = {
       ID: promotion.ID,
-      Codetype_ID: promotion.Codetype_ID,
-      Reason_ID: promotion.Reason_ID,
       Price: price,
-      Amount: amount,
       Employee_ID: Number(localStorage.getItem("uid")),
       Time_Stamp: date,
     };
@@ -62,6 +55,7 @@ function UpdatePromotion() {
       },
       body: JSON.stringify(promotion_u),
     };
+    console.log(promotion_u);
     console.log(JSON.stringify(promotion_u));
 
     fetch(`http://localhost:8080/promotions`, requestOptions)
@@ -80,8 +74,6 @@ function UpdatePromotion() {
 
 
 
-  const open = Boolean(anchorEl);
-
   const getPromotion = async () => {
     const apiUrl = "http://localhost:8080/promotion";
     const requestOptions = {
@@ -97,6 +89,7 @@ function UpdatePromotion() {
       .then((res) => {
         console.log(res)
         if (res.data) {
+          setPromotion(res.data);
           setPromotion_ID(res.data);
         }
       });
