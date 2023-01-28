@@ -163,11 +163,17 @@ func UpdatePromotion(c *gin.Context) {
 
 // DELETE /promotions/:id
 func DeletePromotion(c *gin.Context) {
-	id := c.Param("id")
-	if tx := entity.DB().Exec("DELETE FROM promotions WHERE id = ?", id); tx.RowsAffected == 0 {
+	var promotion entity.Promotion
+
+	if err := c.ShouldBindJSON(&promotion); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if tx := entity.DB().Exec("DELETE FROM promotions WHERE id = ?", promotion.ID); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "promotion not found"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": id})
+	c.JSON(http.StatusOK, gin.H{"data": promotion})
 }
