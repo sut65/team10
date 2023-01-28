@@ -130,12 +130,6 @@ func SetupDatabase() {
 	db.Model(&Paymenttype{}).Create(&Paymenttype1)
 	db.Model(&Paymenttype{}).Create(&Paymenttype2)
 
-	//-- Service
-	Service1 := Service{
-		Address: "testbill",
-	}
-	db.Model(&Service{}).Create(&Service1)
-
 	//Promotion
 	//-- Codetype
 	Codetype1 := Codetype{
@@ -454,6 +448,12 @@ func SetupDatabase() {
 	//db.Model(&RecvType{}).Create(&recvt3)
 
 	//*********************---Bill---*******************//
+	//-- Service
+	Service1 := Service{
+		Address: "testbill",
+	}
+	db.Model(&Service{}).Create(&Service1)
+
 	Bill1 := Bill{
 		Service:    Service1,
 		Bill_Price: 250,
