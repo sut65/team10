@@ -54,59 +54,39 @@ function BillUpdate() {
         setError(false);
     };
 
-  function submit() {
-        let bill_p = {
-          Service_ID: 1,
-          //Service_ID: Number(localStorage.getItem("uid")),
-          QuotaCode_ID: bill.QuotaCode_ID,
-          Paymenttype_ID: bill.Paymenttype_ID,
-          Bill_Price: 20,
+    function update() {
+        let bill_u = {
+          ID: bill.ID,
+          Paymenttype: bill.Paymenttype_ID,
           Time_Stamp: date,
         };
-
-        const apiUrl = "http://localhost:8080";
+    
         const requestOptions = {
-          method: "POST",
+          method: "PATCH",
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(bill_p),
+          body: JSON.stringify(bill_u),
         };
-
-        fetch(`${apiUrl}/bills`, requestOptions)
+        console.log(bill_u);
+        console.log(JSON.stringify(bill_u));
+    
+        fetch(`http://localhost:8080/bills`, requestOptions)
           .then((response) => response.json())
           .then(async (res) => {
+            console.log(res);
             if (res.data) {
               setSuccess(true);
               await timeout(1000); //for 1 sec delay
-              window.location.reload(); 
+              window.location.reload();     
+              
             } else {
               setError(true);
+              console.log(res.data);
             }
           });
-        }
-        
-    
-        const getQuotacode = async () => {
-          const apiUrl = "http://localhost:8080/quotacode";
-          const requestOptions = {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "Content-Type": "application/json",
-            },
-          };
-      
-          fetch(apiUrl, requestOptions)
-            .then((response) => response.json())
-            .then((res) => {
-              console.log(res)
-              if (res.data) {
-                setQuotacode(res.data);
-              }
-            });
-        };
+      }
         
   const getPaymentType = async () => {
     const apiUrl = "http://localhost:8080/paymenttype";
@@ -124,6 +104,25 @@ function BillUpdate() {
         console.log(res)
         if (res.data) {
           setPaymenttype(res.data);
+        }
+      });
+  };
+  const getBill = async () => {
+    const apiUrl = "http://localhost:8080/bill";
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    fetch(apiUrl, requestOptions)
+      .then((response) => response.json())
+      .then((res) => {
+        console.log(res)
+        if (res.data) {
+          setBill(res.data);
         }
       });
   };
@@ -153,7 +152,7 @@ function BillUpdate() {
 
   useEffect(() => {
     getPaymentType();
-    getQuotacode();
+    getBill();
   }, []);
   return (
       <Container maxWidth="md">
@@ -301,7 +300,7 @@ function BillUpdate() {
                 <Button
                   variant="contained"
                   color="warning"
-                  onClick={submit}
+                  onClick={update}
                   endIcon={<UpdateIcon />}
                 >
                   update
