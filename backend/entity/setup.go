@@ -460,6 +460,7 @@ func SetupDatabase() {
 	}
 	db.Model(&Bill{}).Create(&Bill1)
 
+	//receive//
 	Detergent1 := Detergent{
 		Stock: stock1,
 	}
@@ -469,7 +470,7 @@ func SetupDatabase() {
 		Stock: stock2,
 	}
 	db.Model(&Softener{}).Create(&Softener1)
-	//receive//
+
 	Receive1 := Receive{
 		Employee:     E1,
 		Bill:         Bill1,

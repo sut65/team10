@@ -90,7 +90,7 @@ func GetReceive(c *gin.Context) {
 
 func ListReceives(c *gin.Context) {
 	var receive []entity.Receive
-	if err := entity.DB().Raw("SELECT * FROM receives").Scan(&receive).Error; err != nil {
+	if err := entity.DB().Preload("Bill").Preload("Detergent.Stock.Brand").Preload("Softener.Stock.Brand").Preload("Employee").Raw("SELECT * FROM receives").Find(&receive).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
