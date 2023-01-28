@@ -9,12 +9,12 @@ import (
 
 // POST /brandvehicles
 func ListBrand_Vehicles(c *gin.Context) {
-	var brandvehicles []entity.Brand_Vehicle
-	if err := entity.DB().Raw("SELECT * FROM brand_vehicles ").Scan(&brandvehicles).Error; err != nil {
+	var brand_vehicles []entity.Brand_Vehicle
+	if err := entity.DB().Raw("SELECT * FROM brand_vehicles ").Scan(&brand_vehicles).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": brandvehicles})
+	c.JSON(http.StatusOK, gin.H{"data": brand_vehicles})
 
 }

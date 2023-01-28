@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	controllerbill "github.com/sut65/team10/controller/bill"
+	Packging_controller "github.com/sut65/team10/controller/complete"
 	controllercomplete "github.com/sut65/team10/controller/complete"
 	controllerconfirmation "github.com/sut65/team10/controller/confirmation"
 	controllercustomer "github.com/sut65/team10/controller/customer"
@@ -26,10 +27,9 @@ import (
 	size_controller "github.com/sut65/team10/controller/stock"
 	stock_controller "github.com/sut65/team10/controller/stock"
 	type_controller "github.com/sut65/team10/controller/stock"
-	controllerbrandvehicle "github.com/sut65/team10/controller/vehicle"
-	controllerengine "github.com/sut65/team10/controller/vehicle"
-	controllervehicle"github.com/sut65/team10/controller/vehicle"
-	Packging_controller "github.com/sut65/team10/controller/complete"
+	controllerbrand_vehicles "github.com/sut65/team10/controller/vehicle"
+	controllerengines "github.com/sut65/team10/controller/vehicle"
+	controllervehicle "github.com/sut65/team10/controller/vehicle"
 
 	"github.com/sut65/team10/entity"
 	middlewares "github.com/sut65/team10/middlewares"
@@ -131,15 +131,15 @@ func main() {
 			p.GET("/softeners", controllersoftener.ListSofteners)
 
 			// Vehicle
-			p.GET("/vehicle", controllervehicle.ListVehicle)
+			p.GET("/vehicles", controllervehicle.ListVehicles)
 			p.GET("/vehicle/:id", controllervehicle.GetVehicle)
-			p.POST("/vehicles", controllervehicle.CreateVehicle)
+			p.POST("/vehicle", controllervehicle.CreateVehicle)
 			p.PATCH("/vehicle", controllervehicle.UpdateVehicle)
 			//brandvehicle
-			p.GET("/brandvehicles", controllerbrandvehicle.ListBrand_Vehicles)
+			p.GET("/brand_vehicles", controllerbrand_vehicles.ListBrand_Vehicles)
 
 			//engine
-			p.GET("/engines", controllerengine.ListEngines)
+			p.GET("/engines", controllerengines.ListEngines)
 
 			//service
 			p.GET("/services", Service_controller.ListServices)
@@ -163,18 +163,18 @@ func main() {
 			p.GET("/deliverytypes/:id", DeliveryType_controller.GetDelivery)
 			p.POST("/deliverytypes", DeliveryType_controller.CreateDeliverys)
 
-			 //complete
-            r.GET("/completes", controllercomplete.ListComplete)
-            r.GET("/complete/:id", controllercomplete.GetComplete)
-            r.POST("/completes", controllercomplete.CreateComplete)
-            r.PATCH("/completes", controllercomplete.UpdateComplete)
-            r.DELETE("/completes/:id", controllercomplete.DeleteComplete)
+			//complete
+			r.GET("/completes", controllercomplete.ListComplete)
+			r.GET("/complete/:id", controllercomplete.GetComplete)
+			r.POST("/completes", controllercomplete.CreateComplete)
+			r.PATCH("/completes", controllercomplete.UpdateComplete)
+			r.DELETE("/completes/:id", controllercomplete.DeleteComplete)
 
-            //packagink
-            r.GET("/packagings", Packging_controller.ListPackaging)
-            r.GET("/packaging/:id", Packging_controller.GetPackaging)
-            r.POST("/packagings", Packging_controller.CreatePackaging)
-            r.DELETE("/packagings/:id", Packging_controller.DeletePackaging)
+			//packagink
+			r.GET("/packagings", Packging_controller.ListPackaging)
+			r.GET("/packaging/:id", Packging_controller.GetPackaging)
+			r.POST("/packagings", Packging_controller.CreatePackaging)
+			r.DELETE("/packagings/:id", Packging_controller.DeletePackaging)
 
 			//Form
 			p.GET("/forms", Form_controller.ListForms)
