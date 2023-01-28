@@ -259,6 +259,7 @@ fetch(`${apiUrl}/services`, requestOptionsPost)
             window.location.reload();
             
         } else {
+          
             setError(true);
         }
     });
