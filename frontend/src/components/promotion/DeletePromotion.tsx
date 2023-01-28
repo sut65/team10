@@ -14,16 +14,11 @@ import SaveIcon from "@mui/icons-material/Save";
 import StorefrontIcon from '@mui/icons-material/Storefront';
 /* Datetimepicker */
 import dayjs, { Dayjs } from "dayjs";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { PromotionInterface } from "../../models/promotion/IPromotion";
-function UpdatePromotion() {
-  const [date, setDate] = React.useState<Dayjs | null>(dayjs());
+function PromotionDelete() {
   const [promotion, setPromotion] = React.useState<Partial<PromotionInterface>>({});
-  const [price, setPrice] = React.useState<number | null>(null);
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const [promotion_id, setPromotion_ID] = React.useState<PromotionInterface[]>([]);
+  const [deletePromotion_1, setDeletePromotion] = React.useState<number | undefined>();
 
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -43,41 +38,32 @@ function UpdatePromotion() {
     return new Promise( res => setTimeout(res, delay) );
 }
 
-  function update() {
-    let promotion_u = {
-      ID: promotion.ID,
-      Price: price,
-      Employee_ID: Number(localStorage.getItem("uid")),
-      Time_Stamp: date,
+  const deletePromotion = (id: number | undefined) => {
+    let data = {                                                            //ประกาศก้อนข้อมูล
+        ID: promotion.ID,      
     };
-
-    const requestOptions = {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(promotion_u),
+    const apiUrl = "http://localhost:8080/promotions/:id";                      //ส่งขอการลบ  
+    const requestOptions = {     
+        method: "DELETE",      
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+        },     
+        body: JSON.stringify(data),
     };
-    console.log(promotion_u);
-    console.log(JSON.stringify(promotion_u));
-
-    fetch(`http://localhost:8080/promotions`, requestOptions)
-      .then((response) => response.json())
-      .then(async (res) => {
-        console.log(res);
+    console.log(JSON.stringify(data),);
+    fetch(apiUrl, requestOptions)                                            //ขอการส่งกลับมาเช็คว่าบันทึกสำเร็จมั้ย
+    .then((response) => response.json())      
+    .then(async (res) => {      
         if (res.data) {
-          setSuccess(true);
-          await timeout(1000); //for 1 sec delay
-          window.location.reload();     
-          
+            setSuccess(true);
+            await timeout(1000); //for 1 sec delay
+            window.location.reload();     
         } else {
-          setError(true);
-          console.log(res.data);
+            setError(true);     
         }
-      });
-  }
-
+    });
+}
 
 
 
@@ -115,7 +101,7 @@ function UpdatePromotion() {
         onClose={handleClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
         <Alert onClose={handleClose} severity="success">
-          บันทึกข้อมูลสำเร็จ
+          ลบข้อมูลสำเร็จ
         </Alert>
       </Snackbar>
 
@@ -125,7 +111,7 @@ function UpdatePromotion() {
         onClose={handleClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
         <Alert onClose={handleClose} severity="error">
-          บันทึกข้อมูลไม่สำเร็จ
+          ลบข้อมูลไม่สำเร็จ
         </Alert>
       </Snackbar>
       <Box>
@@ -170,40 +156,6 @@ function UpdatePromotion() {
               />
             </Grid>
           </Grid>
-
-
-          <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 2 }}>
-            <Grid item xs={2}>
-              <h3>Price</h3>
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                id="outlined-basic"
-                label="Price"
-                variant="outlined"
-                defaultValue="0"
-                onChange={(event) => setPrice(Number(event.target.value))}
-              />
-            </Grid>
-          </Grid>
-
-          <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 2 }}>
-            <Grid item xs={2}>
-              <h3>Date Time</h3>
-            </Grid>
-            <Grid item xs={10}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateTimePicker
-                  label="DateTimePicker"
-                  renderInput={(params) => <TextField {...params} />}
-                  value={date}
-                  onChange={(newValue) => {
-                    setDate(newValue);
-                  }}
-                />
-              </LocalizationProvider>
-            </Grid>
-          </Grid>
         </Paper>
         <Grid container spacing={2}
           sx={{ paddingY: 2 }}>
@@ -214,10 +166,10 @@ function UpdatePromotion() {
             <Button
               variant="contained"
               color="warning"
-              onClick={update}
+              onClick={() => deletePromotion(deletePromotion_1)}
               endIcon={<SaveIcon />}
             >
-              update
+              delete
             </Button>
           </Grid>
         </Grid>
@@ -226,4 +178,4 @@ function UpdatePromotion() {
   );
 }
 
-export default UpdatePromotion;
+export default PromotionDelete;

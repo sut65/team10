@@ -18,6 +18,16 @@ import UpdateCustomer from "./components/customer/UpdateCustomer";
 import NotFound from "./components/NotFound";
 import EmployeeTable from "./components/employee/EmployeeTable";
 import EmployeeUpdate_UI from "./components/employee/EmployeeUpdate_UI";
+import Stock_UI from "./components/stock/Stock_UI";
+import StockTable from "./components/stock/StockTable";
+import StockUpdate_UI from "./components/stock/StockUpdat";
+import FormTable from "./components/form/TableForm";
+import ServiceTable from "./components/service/TableService";
+import ServiceCreate from "./components/service/ServiceCreate";
+import ServiceUpdate from "./components/service/UpdateService";
+import CompleteTable from "./components/complete/TabelComplete";
+import UpdateComplete from "./components/complete/UpdateCompplete";
+
 
 export default function App() {
   const [token, setToken] = React.useState<String>("");
@@ -67,7 +77,11 @@ export default function App() {
               <Route path="/" element={<Home />} />
               <Route path="/confirmation/create" element={<Confirmation />} />
               <Route path="/bill/create" element={<Bill />} />
+              <Route path="/service/create" element={<ServiceCreate />} />
               <Route path="/customer/update" element={<UpdateCustomer />} />
+              <Route path="/form" element={<FormTable />} />
+              <Route path="/service" element={<ServiceCreate />} />
+              <Route path="/service/:id" element={<ServiceUpdate />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
@@ -94,10 +108,15 @@ export default function App() {
               <Route path="/delivery/create" element={<Delivery />} />
               <Route path="/receive/create" element={<ReceiveCreate />} />
               <Route path="/vehicle/create" element={<Vehicle />} />
-              <Route path="/complete/create" element={<CompleteCreate />} />
+              <Route path="/create" element={<CompleteCreate />} />
+              <Route path="/complete/info" element={<CompleteTable/>} />
               <Route path="/employee" element={<EmployeeTable />} />
+              <Route path="/complete/info/complete/update/:id" element={<UpdateComplete />} />
               {/* <Route path="/employee/create" element={<EmployeeCreate_UI />} /> */}
               <Route path="/employee/update" element={<EmployeeUpdate_UI />} />
+              <Route path="/stock" element={<StockTable />} />
+              <Route path="/stock/create" element={<Stock_UI />} />
+              <Route path="/stock/update" element={<StockUpdate_UI />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>

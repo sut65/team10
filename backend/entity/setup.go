@@ -131,6 +131,7 @@ func SetupDatabase() {
 	db.Model(&Paymenttype{}).Create(&Paymenttype2)
 
 	//Promotion
+
 	//-- Codetype
 	Codetype1 := Codetype{
 		Type: "ส่วนลด",
@@ -140,6 +141,15 @@ func SetupDatabase() {
 	}
 	db.Model(&Codetype{}).Create(&Codetype1)
 	db.Model(&Codetype{}).Create(&Codetype2)
+
+	//-- Codetype
+
+	Promotion1 := Promotion{
+		Codetype: Codetype1,
+		Price:    50,
+	}
+
+	db.Model(&Promotion{}).Create(&Promotion1)
 
 	//-- Reason
 	Reason1 := Reason{
@@ -455,10 +465,22 @@ func SetupDatabase() {
 	db.Model(&Service{}).Create(&Service1)
 
 	Bill1 := Bill{
-		Service:    Service1,
-		Bill_Price: 250,
+		Bill_Price: 30,
 	}
-	db.Model(&Bill{}).Create(&Bill1)
+	db.Model(&Bill{}).Create(&Bill1) //สร้างบิล
+
+	QuotaCode1 := QuotaCode{
+		Promotion: Promotion1,
+		Bill_ID:   &Bill1.ID,
+	}
+	db.Model(&QuotaCode{}).Create(&QuotaCode1) //สร้าง Quota
+
+	Bill11 := Bill{
+		Service:      Service1,
+		QuotaCode_ID: &QuotaCode1.ID,
+		Bill_Price:   250,
+	}
+	db.Model(&Bill{}).Where("id = ?", 1).Updates(&Bill11)
 
 	//receive//
 	Detergent1 := Detergent{
@@ -547,4 +569,54 @@ func SetupDatabase() {
 	db.Model(&Complete{}).Create(&complete3)
 
 	//Delivery
+
+		TypeWashing3 := TypeWashing{
+		Model:             gorm.Model{},
+		Type_washing:      "ซักอบ",
+		Description:       "ซักเสร็จ แล้วนำไปอบ",
+		TypeWashing_Price: 100,
+	}
+	db.Model(&TypeWashing{}).Create(&TypeWashing3)
+
+	Weight1 := Weight{
+		Model:        gorm.Model{},
+		Weight_net:   "ไม่เกิน 3 กิโลกรัม",
+		Weight_price: 0,
+	}
+	db.Model(&Weight{}).Create(&Weight1)
+
+	Weight2 := Weight{
+		Model:        gorm.Model{},
+		Weight_net:   "ไม่เกิน 5 กิโลกรัม",
+		Weight_price: 10,
+	}
+	db.Model(&Weight{}).Create(&Weight2)
+
+	Weight3 := Weight{
+		Model:        gorm.Model{},
+		Weight_net:   "ไม่เกิน 7 กิโลกรัม",
+		Weight_price: 15,
+	}
+	db.Model(&Weight{}).Create(&Weight3)
+
+	DeliveryType1 := DeliveryType{
+		Model:                gorm.Model{},
+		DeriveryType_service: "ส่งด่วน",
+		DeliveryType_price:   10,
+	}
+	db.Model(&DeliveryType{}).Create(&DeliveryType1)
+
+	DeliveryType2 := DeliveryType{
+		Model:                gorm.Model{},
+		DeriveryType_service: "ส่งด่วนมาก",
+		DeliveryType_price:   20,
+	}
+	db.Model(&DeliveryType{}).Create(&DeliveryType2)
+
+	DeliveryType3 := DeliveryType{
+		Model:                gorm.Model{},
+		DeriveryType_service: "ส่งด่วนมากมากกกกกกกกกกก",
+		DeliveryType_price:   50,
+	}
+	db.Model(&DeliveryType{}).Create(&DeliveryType3)
 }

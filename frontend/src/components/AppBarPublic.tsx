@@ -95,13 +95,13 @@ function AppBarPublic() {
                 <ListItemText primary="หน้าแรก" sx={{ padding: 1 }} />
               </ListItem>
 
-              <ListItem component={RouterLink} to="/review/create">
+              <ListItem component={RouterLink} to="/form">
                 {" "}
                 <StarHalfIcon color="primary" />
                 <ListItemText primary="ประเมิน" sx={{ padding: 1 }} />
               </ListItem>
 
-              <ListItem component={RouterLink} to="/service/create">
+              <ListItem component={RouterLink} to="/service">
                 {" "}
                 <LocalLaundryServiceIcon color="primary" />
                 <ListItemText primary="เลือกบริการ" sx={{ padding: 1 }} />

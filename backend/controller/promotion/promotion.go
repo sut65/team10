@@ -25,7 +25,7 @@ func CreatePromotion(c *gin.Context) {
 
 	// ค้นหา Employee ด้วยไอดี
 	if tx := entity.DB().Where("id = ?", promotion.Employee_ID).First(&employee); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "employee not found"})
 
 		return
 
@@ -33,7 +33,7 @@ func CreatePromotion(c *gin.Context) {
 
 	//9: ค้นหา Codetype ด้วยไอดี
 	if tx := entity.DB().Where("id = ?", promotion.Codetype_ID).First(&codetype); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "codetype not found"})
 
 		return
 
@@ -41,7 +41,7 @@ func CreatePromotion(c *gin.Context) {
 
 	//10: ค้นหา Reason ด้วยไอดี
 	if tx := entity.DB().Where("id = ?", promotion.Reason_ID).First(&reason); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "reason not found"})
 
 		return
 
@@ -56,6 +56,9 @@ func CreatePromotion(c *gin.Context) {
 		Amount:      promotion.Amount,
 		Employee_ID: promotion.Employee_ID,
 		Time_Stamp:  promotion.Time_Stamp.Local(),
+	}
+	b := entity.Bill{
+		Model: gorm.Model{ID: 0},
 	}
 
 	if _, err := govalidator.ValidateStruct(p); err != nil {
@@ -72,6 +75,7 @@ func CreatePromotion(c *gin.Context) {
 	for i := 0; i < int(promotion.Amount); i++ {
 		q := entity.QuotaCode{
 			Promotion_ID: &p.ID,
+			Bill_ID:      &b.ID,
 		}
 		if err := entity.DB().Create(&q).Error; err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -120,38 +124,17 @@ func ListPromotions(c *gin.Context) {
 
 func UpdatePromotion(c *gin.Context) {
 	var promotion entity.Promotion
-	var reason entity.Reason
-	var codetype entity.Codetype
 	var employee entity.Employee
-	var Amount = promotion.Amount
 
-	print(Amount)
 	if err := c.ShouldBindJSON(&promotion); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	var updatePrice = promotion.Price
-	var updateAmount = promotion.Amount
 	// ค้นหา Employee ด้วยไอดี
 	if tx := entity.DB().Where("id = ?", promotion.Employee_ID).First(&employee); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
-
-		return
-
-	}
-
-	//9: ค้นหา Codetype ด้วยไอดี
-	if tx := entity.DB().Where("id = ?", promotion.Codetype_ID).First(&codetype); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
-
-		return
-
-	}
-
-	//ค้นหา Reason ด้วยไอดี
-	if tx := entity.DB().Where("id = ?", promotion.Reason_ID).First(&reason); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Employee not found"})
 
 		return
 
@@ -159,7 +142,7 @@ func UpdatePromotion(c *gin.Context) {
 
 	//ค้นหา id promotion
 	if tx := entity.DB().Where("id = ?", promotion.ID).First(&promotion); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "promotion not found"})
 
 		return
 
@@ -168,32 +151,14 @@ func UpdatePromotion(c *gin.Context) {
 	//12: สร้าง
 	u_p := entity.Promotion{
 		Model:       gorm.Model{ID: promotion.ID},
-		Codetype_ID: promotion.Codetype_ID,
-		Reason_ID:   promotion.Reason_ID,
 		Price:       updatePrice,
-		Amount:      updateAmount,
 		Employee_ID: promotion.Employee_ID,
 		Time_Stamp:  promotion.Time_Stamp.Local(),
 	}
 
-	if _, err := govalidator.ValidateStruct(u_p); err != nil {
+	if err := entity.DB().Where("id = ?", promotion.ID).Updates(&u_p).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
-	}
-
-	if err := entity.DB().Save(&u_p).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	for i := Amount; i < updateAmount; i++ {
-		q := entity.QuotaCode{
-			Promotion_ID: &u_p.ID,
-		}
-		if err := entity.DB().Create(&q).Error; err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
 	}
 
 	c.JSON(http.StatusOK, gin.H{"data": u_p})
@@ -202,11 +167,17 @@ func UpdatePromotion(c *gin.Context) {
 
 // DELETE /promotions/:id
 func DeletePromotion(c *gin.Context) {
-	id := c.Param("id")
-	if tx := entity.DB().Exec("DELETE FROM promotions WHERE id = ?", id); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "confirmation not found"})
+	var promotion entity.Promotion
+
+	if err := c.ShouldBindJSON(&promotion); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": id})
+	if tx := entity.DB().Exec("DELETE FROM promotions WHERE id = ?", promotion.ID); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "promotion not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": promotion})
 }

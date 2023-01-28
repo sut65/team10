@@ -1,3 +1,5 @@
+import { CustomerInterface } from "../customer/ICustomer";
+
 export interface ServiceInterface {
     ID: number,
     Address: string;
@@ -12,18 +14,22 @@ export interface ServiceInterface {
     Description: string;
     TypeWashing:TypeWashingInterface
    
-    Delivery_ID: number;
-    Delivery_price: number;
-    Devilery:DeliveryInterface
+    DeliveryType_ID: number;
+    DeliveryType_price: number;
+    DeliveryType_service: string;
+    DevileryType:DeliveryTypeInterface
+
+    Customer_ID: number;
+    Customer:CustomerInterface;
    
 }
 
-export interface DeliveryInterface {
+export interface DeliveryTypeInterface {
     ID: number,
    
-    Derivery_service: string;
+    DeliveryType_service: string;
    
-    Delivery_price: number;
+    DeliveryType_price: number;
    
 }
 

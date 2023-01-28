@@ -4,8 +4,9 @@ export interface BrandsInterface {
     ID: number,
 
     Brand_Name: string,
-    BrandID:       number,
+    
+    TypeID:       number,
 
-	  Brand:			BrandsInterface,
+	  Type:			TypesInterface,
   }
   

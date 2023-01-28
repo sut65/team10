@@ -23,7 +23,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import {DeliveryInterface,ServiceInterface,WeightInterface,} from "../../models/service/IService";
+import {DeliveryTypeInterface,ServiceInterface,WeightInterface,} from "../../models/service/IService";
 import Typography from "@mui/material/Typography";
 import { ThemeContext } from "@emotion/react";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
@@ -45,16 +45,16 @@ const ServiceCreate = () => {
   const navigate = useNavigate();
 
   const [service, setService] = React.useState<Partial<ServiceInterface>>({
-    TypeWashing_ID: 0,
-    Weight_ID: 0,
-    Delivery_ID: 0,
+    // TypeWashing_ID: 0,
+    // Weight_ID: 0,
+    // DeliveryType_ID: 0,
   });
   const [service1, setService1] = React.useState<ServiceInterface[]>([]);
   const [typewashing, setTypewashing] = React.useState<TypeWashingInterface[]>(
     []
   );
   // const [pricejoin, setPricejoin] = React.useState<PriceInterface[]>([]);
-  const [delivery, setDelivery] = React.useState<DeliveryInterface[]>([]);
+  const [deliverytype, setDelivery] = React.useState<DeliveryTypeInterface[]>([]);
   const [weight, setWeight] = React.useState<WeightInterface[]>([]);
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
@@ -65,7 +65,10 @@ const ServiceCreate = () => {
   const getServices = async () => {
     const requestOptions = {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
     };
     fetch(`${apiUrl}/services`, requestOptions)
       .then((response) => response.json())
@@ -73,7 +76,6 @@ const ServiceCreate = () => {
         if (res.data) {
           setService1(res.data);
           console.log(res.data);
-          // window.location.reload();
         }
       });
   };
@@ -131,7 +133,7 @@ const ServiceCreate = () => {
   };
 
   const getDelivery = async () => {
-    const apiUrl = `http://localhost:8080/deliveries`;
+    const apiUrl = `http://localhost:8080/deliverytypes`;
 
     const requestOptions = {
       method: "GET",
@@ -210,7 +212,10 @@ const ServiceCreate = () => {
   const ServiceDelete = async (ID: number) => {
     const requestOptions = {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
     };
     fetch(`${apiUrl}/services/${ID}`, requestOptions)
       .then((response) => response.json())
@@ -224,11 +229,12 @@ const ServiceCreate = () => {
   function submit() {
 
     let data = {
+      Customer_ID: Number(localStorage.getItem('uid')),
       ID: service.ID,
       TypeWashing_ID: service.TypeWashing_ID,
       Weight_ID: service.Weight_ID,
       Address: service.Address,
-      Delivery_ID: service.Delivery_ID,
+      DeliveryType_ID: service.DeliveryType_ID,
     };
 
     //================================================================================================================//
@@ -237,7 +243,10 @@ const apiUrl = "http://localhost:8080";
 
 const requestOptionsPost = {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+    "Content-Type": "application/json",
+  },
     body: JSON.stringify(data),
 };
 
@@ -248,7 +257,9 @@ fetch(`${apiUrl}/services`, requestOptionsPost)
         if (res.data) {
             setSuccess(true);
             window.location.reload();
+            
         } else {
+          
             setError(true);
         }
     });
@@ -404,15 +415,15 @@ fetch(`${apiUrl}/services`, requestOptionsPost)
                 <FormControl fullWidth variant="outlined">
                   <Select
                     sx={{ width: 300 }}
-                    value={service.Delivery_ID}
+                    value={service.DeliveryType_ID}
                     onChange={handleChange}
                     inputProps={{
-                      name: "Delivery_ID",
+                      name: "DeliveryType_ID",
                     }}
                   >
-                    {delivery.map((item: DeliveryInterface) => (
+                    {deliverytype.map((item: DeliveryTypeInterface) => (
                       <MenuItem value={item.ID}>
-                        {item.Derivery_service}
+                        {item.DeliveryType_service}
                       </MenuItem>
                     ))}
                   </Select>
@@ -430,7 +441,7 @@ fetch(`${apiUrl}/services`, requestOptionsPost)
                     size="medium"
                     inputProps={{
                       style: {
-                        width: 470,
+                        width: 490,
                       },
                     }}
                     sx={{ fontFamily: "Mitr-Regular" }}
@@ -503,7 +514,7 @@ fetch(`${apiUrl}/services`, requestOptionsPost)
                       <TableCell align="right">{row.TypeWashing_ID}</TableCell>
                       <TableCell align="right">{row.Weight_ID}</TableCell>
                       <TableCell align="right">{row.Address}</TableCell>
-                      <TableCell align="right">{row.Delivery_ID}</TableCell>
+                      <TableCell align="right">{row.DeliveryType_ID}</TableCell>
                       <TableCell align="right">{row.Price}</TableCell>
                       <TableCell align="right">
                         <ButtonGroup

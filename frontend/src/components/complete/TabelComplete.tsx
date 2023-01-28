@@ -24,7 +24,10 @@ export default function CompleteTable() {
   const getComplete = async () => {
     const requestOptions = {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
     };
     fetch(`${apiUrl}/completes`, requestOptions)
       .then((response) => response.json())
@@ -101,8 +104,8 @@ export default function CompleteTable() {
                     <TableCell align="right">{row.Packaging_ID}</TableCell>
                     <TableCell align="right">
                       <ButtonGroup variant="outlined" aria-lable="outlined button group">
-                        <Button onClick={() => navigate({ pathname: `/update/${row.ID}` })} variant="contained"
-                          >Edit</Button>
+                        <Button onClick={() => navigate({ pathname: `/complete/info/complete/update/${row.ID}` })} variant="contained" color="success"
+                          >แก้ไข</Button>
                         <Button onClick={() => CompleteDelete(row.ID)} color="error">Delete</Button>
                       </ButtonGroup>
                     </TableCell>

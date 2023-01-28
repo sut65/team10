@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
-  DeliveryInterface,
+  DeliveryTypeInterface,
   ServiceInterface,
   WeightInterface,
 } from "../../models/service/IService";
@@ -38,13 +38,13 @@ const ServiceUpdate = () => {
   const [service, setService] = React.useState<Partial<ServiceInterface>>({
     TypeWashing_ID: 0,
     Weight_ID: 0,
-    Delivery_ID: 0,
+    DeliveryType_ID: 0,
   });
 
   const [typewashing, setTypewashing] = React.useState<TypeWashingInterface[]>(
     []
   );
-  const [delivery, setDelivery] = React.useState<DeliveryInterface[]>([]);
+  const [delivery, setDelivery] = React.useState<DeliveryTypeInterface[]>([]);
   const [weight, setWeight] = React.useState<WeightInterface[]>([]);
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
@@ -104,7 +104,7 @@ const ServiceUpdate = () => {
   };
 
   const getDelivery = async () => {
-    const apiUrl = `http://localhost:8080/deliveries`;
+    const apiUrl = `http://localhost:8080/deliverytypes`;
 
     const requestOptions = {
       method: "GET",
@@ -191,7 +191,7 @@ const ServiceUpdate = () => {
       TypeWashing_ID: service.TypeWashing_ID,
       Weight_ID: service.Weight_ID,
       Address: service.Address,
-      Delivery_ID: service.Delivery_ID,
+      DeliveryType_ID: service.DeliveryType_ID,
     };
 
     //================================================================================================================//
@@ -200,7 +200,10 @@ const apiUrl = "http://localhost:8080";
 
 const requestOptionsPost = {
     method: "PATCH",
-    headers: { "Content-Type": "application/json" },
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+    "Content-Type": "application/json",
+  },
     body: JSON.stringify(data),
 };
 
@@ -331,15 +334,15 @@ fetch(`${apiUrl}/services`, requestOptionsPost)
                 <FormControl fullWidth variant="outlined">
                   <Select
                     sx={{ width: 300 }}
-                    value={service.Delivery_ID}
+                    value={service.DeliveryType_ID}
                     onChange={handleChange}
                     inputProps={{
                       name: "Delivery_ID",
                     }}
                   >
-                    {delivery.map((item: DeliveryInterface) => (
+                    {delivery.map((item: DeliveryTypeInterface) => (
                       <MenuItem value={item.ID}>
-                        {item.Derivery_service}
+                        {item.DeliveryType_service}
                       </MenuItem>
                     ))}
                   </Select>
@@ -361,7 +364,7 @@ fetch(`${apiUrl}/services`, requestOptionsPost)
               </Grid>
 
               <Grid item xs={12}>
-                <Button component={RouterLink} to="/" variant="contained">
+                <Button component={RouterLink} to="/service/create" variant="contained">
                   ย้อนกลับ
                 </Button>
 
