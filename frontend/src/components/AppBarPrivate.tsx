@@ -121,7 +121,7 @@ function AppBarPrivate() {
                 <ListItemText primary="รับรายการผ้า" sx={{ padding: 1 }} />
               </ListItem>
 
-              <ListItem component={RouterLink} to="/complete/create">
+              <ListItem component={RouterLink} to="/complete/info">
                 {" "}
                 <IronIcon color="primary" />
                 <ListItemText

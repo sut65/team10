@@ -7,6 +7,7 @@ import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Snackbar from "@mui/material/Snackbar";
@@ -21,6 +22,8 @@ import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
+import CancelIcon from '@mui/icons-material/Cancel';
+import SaveIcon from "@mui/icons-material/Save";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
  props,
@@ -48,9 +51,9 @@ function UpdateComplete() {
     setSuccess(false);
     setError(false);
 };
- //complete.Employee_ID = 55555555555848;
+ 
  const getPackaging = async () => {
-  const apiUrl = `http://localhost:8080/packaginks`;
+  const apiUrl = `http://localhost:8080/packagings`;
   const requestOptionsGet = {
     method: "GET",
 
@@ -163,7 +166,7 @@ function submitUpdate() {
   };
   console.log(JSON.stringify(data));
 
-  fetch(`${apiUrl}/complete`, requestOptionsPost)
+  fetch(`${apiUrl}/completes`, requestOptionsPost)
     .then((response) => response.json())
     .then((res) => {
       if (res.data) {
@@ -184,71 +187,34 @@ function submitUpdate() {
 
    <Container maxWidth="md">
 
-     <Snackbar
-
+<Snackbar
        open={success}
-
-       autoHideDuration={6000}
-
+       autoHideDuration={3000}
        onClose={handleClose}
-
        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-
      >
-
        <Alert onClose={handleClose} severity="success">
-
          บันทึกข้อมูลสำเร็จ
-
        </Alert>
-
      </Snackbar>
 
-     <Snackbar open={error} autoHideDuration={6000} onClose={handleClose}>
-
-       <Alert onClose={handleClose} severity="error">
-
+     <Snackbar
+       open={success}
+       autoHideDuration={3000}
+       onClose={handleClose}
+       anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+     >
+       <Alert onClose={handleClose} severity="success">
          บันทึกข้อมูลไม่สำเร็จ
-
        </Alert>
-
      </Snackbar>
-
+     <Box sx={{ padding: 2
+                     }}>
      <Paper>
-
-       <Box
-
-         display="flex"
-
-         sx={{
-
-           marginTop: 2,
-
-         }}
-
-       >
-
-         <Box sx={{ paddingX: 2, paddingY: 1 }}>
-
-           <Typography
-
-             component="h2"
-
-             variant="h6"
-
-             color="primary"
-
-             gutterBottom
-
-           >
-
-             Complete
-
-           </Typography>
-
-         </Box>
-
-       </Box>
+                    <Grid container spacing={0} sx={{ padding: 2
+                     }}>
+                    <h1>COMPLETE<TaskAltIcon color="success" sx={{ fontSize: 100 }}/></h1> 
+                    </Grid>
 
        <Divider />
        
@@ -336,34 +302,30 @@ function submitUpdate() {
 
          </Grid>
          </Grid>
-
+         </Paper>
+         <Grid container spacing={1} sx={{ padding: 5 }}>
          <Grid item xs={12}>
-
-           <Button component={RouterLink} to="/" variant="contained">
-
-            Back
-
+         <Button 
+           component={RouterLink} to="/complete/info" 
+            variant="contained"
+            color="error"
+            endIcon={<CancelIcon />}
+            >
+           cancel
            </Button>
-
            <Button
-
              style={{ float: "right" }}
-
              onClick={submitUpdate}
-
              variant="contained"
-
              color="primary"
-
+             endIcon={<SaveIcon />}
            >
-
-             SAVE
-
+           commit
            </Button>
 
          </Grid>
-
-     </Paper>
+         </Grid>
+     </Box>
 
    </Container>
 

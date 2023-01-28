@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sut65/team10/entity"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 /* --- ระบบบันทึข้อมูลบุคลากร --- */
@@ -71,6 +72,7 @@ func CreateEmployees(c *gin.Context) {
 
 	// 14: สร้าง  employee
 	emp := entity.Employee{
+		Model:         gorm.Model{ID: employee.ID},
 		Personal_ID:  employee.Personal_ID,
 		Username:     employee.Username,
 		Name:         employee.Name,

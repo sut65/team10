@@ -118,46 +118,6 @@ const getEmployee = async () => {
     });
 };
 
-// Fetch member from current user's student id.
-const getEmployeeByID = async () => {
-  const apiUrl = `http://localhost:8080`;
-  // get student id from local storage.
-  let uid = localStorage.getItem("customer_uid");
-  let uid2 = localStorage.getItem("employee_uid");
-
-  const requestOptions = {
-    method: "GET",
-
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-      "Content-Type": "application/json",
-    },
-  };
-
-  if (uid == null){
-    fetch(`${apiUrl}/employee/${uid2}`, requestOptions)
-    .then((response) => response.json())
-    .then((res) => {
-        if (res.data) {
-            complete.Employee_ID = res.data.Employee_ID;
-
-        }
-    });
-  }
-  else{
-    fetch(`${apiUrl}/employee/${uid}`, requestOptions)
-    .then((response) => response.json())
-    .then((res) => {
-        if (res.data) {
-          complete.Employee_ID = res.data.Employee_ID;
-
-        }
-    });
-  }
-  
-    
-  
-};
 
   /* ------------------------------- DatePicker ------------------------------- */
   const handleDateTime = (newValue: Dayjs | null) => {
@@ -175,10 +135,6 @@ const getEmployeeByID = async () => {
    setError(false);
 
  };
- const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-  setAnchorEl(event.currentTarget);
-};
-
 
  const handleInputChange = (
   event: React.ChangeEvent<{ id?: string; value: any }>
@@ -200,6 +156,7 @@ console.log(complete.Employee_ID)
 
 function submit() {
   let data = {
+
     ID: complete.ID,
     Employee_ID: complete.Employee_ID,
     Packaging_ID: complete.Packaging_ID,
@@ -216,7 +173,7 @@ function submit() {
   };
 
 
-  fetch(apiUrl, requestOptions)
+  fetch(`${apiUrl}/completes`, requestOptions)
 
     .then((response) => response.json())
 
@@ -238,7 +195,6 @@ function submit() {
      useEffect(() => {
       getPackaging();
       getEmployee();
-      getEmployeeByID();
 
             }, []);
  
@@ -290,11 +246,10 @@ function submit() {
                type="string"
                size="medium"
                value={complete.Employee_ID}
-               defaultValue
+               defaultValue={complete.Employee_ID}
                sx={{ width : 350 }}
                onChange={handleInputChange}
              ></TextField>
-
            </FormControl>
         </Grid>
 
@@ -309,7 +264,7 @@ function submit() {
                 size="medium"
                 sx={{ width: 300 }}
                 value={complete.Name}
-                defaultValue
+                defaultValue={complete.Employee_ID}
                 onChange={handleInputChange}
               />
            </FormControl>
@@ -321,6 +276,7 @@ function submit() {
              <TextField
                id="Receive_ID"
                variant="outlined"
+              disabled
                type="string"
                size="medium"
                value={complete.Receive_ID}
@@ -372,22 +328,13 @@ function submit() {
          <Grid container spacing={1} sx={{ padding: 5 }}>
          <Grid item xs={12}>
            <Button 
-           component={RouterLink} to="/" 
+           component={RouterLink} to="/complete/info" 
             variant="contained"
             color="error"
             endIcon={<CancelIcon />}
             >
            cancel
            </Button>
-           {/* <Button
-            variant="contained"
-            color="warning"
-            onClick={handleClick}
-            endIcon={<UpdateIcon />}
-            sx={{ marginRight: 2 }}
-            >
-            Update
-            </Button> */}
            <Button
              style={{ float: "right" }}
              onClick={submit}
