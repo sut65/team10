@@ -5,7 +5,7 @@ import Paper from "@mui/material/Paper";
 import { Alert, Grid, Snackbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
-import {TextFieldProps} from "@mui/material/TextField";
+import { TextFieldProps } from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Autocomplete from "@mui/material/Autocomplete";
 import dayjs, { Dayjs } from "dayjs";
@@ -13,7 +13,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import {EmployeesInterface} from "../../models/Employee/IEmployee";
+import { EmployeesInterface } from "../../models/Employee/IEmployee";
 import { TypesInterface } from "../../models/Stock/IType";
 import { BrandsInterface } from "../../models/Stock/IBrand";
 import { SizesInterface } from "../../models/Stock/ISize";
@@ -21,9 +21,7 @@ import { StocksInterface } from "../../models/Stock/IStock";
 import { Link as RouterLink } from "react-router-dom";
 
 function Stock_UI() {
-  const [stock, setStock] = React.useState<Partial<StocksInterface>>(
-    {}
-  );
+  const [stock, setStock] = React.useState<Partial<StocksInterface>>({});
   const [size, setSize] = React.useState<SizesInterface[]>([]);
   const [brand, setBrand] = React.useState<BrandsInterface[]>([]);
   const [type, setType] = React.useState<TypesInterface[]>([]);
@@ -152,9 +150,9 @@ function Stock_UI() {
 
       EmployeeID: stock.EmployeeID,
 
-      SizeID : stock.SizeID,
+      SizeID: stock.SizeID,
 
-      Add_number : stock.Add_number,
+      Add_number: stock.Add_number,
 
       Time: Date,
     };
@@ -219,10 +217,11 @@ function Stock_UI() {
       </Snackbar>
 
       <Snackbar // คุณไม่มีสิทธิการเข้าถึง
-        open={noAccess} 
-        autoHideDuration={3000} 
-        onClose={handleClose} 
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
+        open={noAccess}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
         <Alert onClose={handleClose} severity="error">
           คุณไม่มีสิทธิการเข้าถึง
         </Alert>
@@ -257,7 +256,9 @@ function Stock_UI() {
                   id="List_Number"
                   type="string"
                   variant="outlined"
-                  onChange={(event: { target: { value: React.SetStateAction<String>; }; }) => SetList_number(event.target.value)}
+                  onChange={(event: {
+                    target: { value: React.SetStateAction<String> };
+                  }) => SetList_number(event.target.value)}
                 />
               </Grid>
             </Grid>
@@ -276,11 +277,13 @@ function Stock_UI() {
                 <Autocomplete
                   id="brand-autocomplete"
                   options={brand}
-                  onChange={(event: any, value: { ID: any; }) => {
+                  onChange={(event: any, value: { ID: any }) => {
                     setStock({ ...stock, BrandID: value?.ID }); //Just Set ID to interface
                   }}
                   getOptionLabel={(option: any) => `${option.Brand_Name}`} //filter value
-                  renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => {
+                  renderInput={(
+                    params: JSX.IntrinsicAttributes & TextFieldProps
+                  ) => {
                     return (
                       <TextField
                         {...params}
@@ -316,11 +319,13 @@ function Stock_UI() {
                 <Autocomplete
                   id="type-autocomplete"
                   options={type}
-                  onChange={(event: any, value: { ID: any; }) => {
+                  onChange={(event: any, value: { ID: any }) => {
                     setStock({ ...stock, TypeID: value?.ID }); //Just Set ID to interface
                   }}
                   getOptionLabel={(option: any) => `${option.Type_Name}`} //filter value
-                  renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => {
+                  renderInput={(
+                    params: JSX.IntrinsicAttributes & TextFieldProps
+                  ) => {
                     return (
                       <TextField
                         {...params}
@@ -342,7 +347,6 @@ function Stock_UI() {
               </Grid>
             </Grid>
 
-
             <Grid
               container
               justifyContent={"center"}
@@ -357,13 +361,13 @@ function Stock_UI() {
                 <Autocomplete
                   id="employee-autocomplete"
                   options={employee}
-                  onChange={(event: any, value: { ID: any; }) => {
+                  onChange={(event: any, value: { ID: any }) => {
                     setStock({ ...stock, EmployeeID: value?.ID }); //Just Set ID to interface
                   }}
-                  getOptionLabel={(option: any) =>
-                    `${option.Name}`
-                  } //filter value
-                  renderInput={(params: JSX.IntrinsicAttributes & TextFieldProps) => {
+                  getOptionLabel={(option: any) => `${option.Name}`} //filter value
+                  renderInput={(
+                    params: JSX.IntrinsicAttributes & TextFieldProps
+                  ) => {
                     return (
                       <TextField
                         {...params}
@@ -401,12 +405,12 @@ function Stock_UI() {
                   id="add_number"
                   type="string"
                   variant="outlined"
-                  onChange={(event: { target: { value: React.SetStateAction<String>; }; }) => SetAdd_number(event.target.value)}
+                  onChange={(event: {
+                    target: { value: React.SetStateAction<String> };
+                  }) => SetAdd_number(event.target.value)}
                 />
               </Grid>
             </Grid>
-
-        
 
             <Grid
               container
@@ -418,19 +422,30 @@ function Stock_UI() {
             >
               <Grid container>
                 <Grid justifyContent={"flex-start"} item xs={6}>
-                <Button variant="contained" color="primary" component={RouterLink} to="/stocktable">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    component={RouterLink}
+                    to="/stocktable"
+                  >
                     Back
                   </Button>
                 </Grid>
                 <Grid alignItems={"flex-end"} item xs={6}>
-                  <Button variant="contained" color="success" onClick={submit} sx={{marginX:40}}>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    onClick={submit}
+                    sx={{ marginX: 40 }}
+                  >
                     Submit
-                    </Button>
-                  </Grid>
+                  </Button>
+                </Grid>
               </Grid>
-           </Grid>
-          </Paper>
-        </Container>
+            </Grid>
+          </Grid>
+        </Paper>
+      </Container>
     </Box>
   );
 }
