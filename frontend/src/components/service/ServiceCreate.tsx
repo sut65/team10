@@ -70,7 +70,7 @@ const ServiceCreate = () => {
         "Content-Type": "application/json",
       },
     };
-    fetch(`${apiUrl}/services`, requestOptions)
+    fetch(`${apiUrl}/services/${localStorage.getItem("uid")}`, requestOptions)
       .then((response) => response.json())
       .then((res) => {
         if (res.data) {

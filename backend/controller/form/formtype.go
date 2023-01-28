@@ -30,9 +30,9 @@ func GetFormType(c *gin.Context) {
 
 	var formtype entity.FormType
 
-	id := c.Param("form_type_id")
+	id := c.Param("id")
 
-	if err := entity.DB().Raw("SELECT * FROM formtypes WHERE form_type_id = ?", id).Scan(&formtype).Error; err != nil {
+	if err := entity.DB().Raw("SELECT * FROM form_types WHERE id = ?", id).Scan(&formtype).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -44,7 +44,7 @@ func ListFormTypes(c *gin.Context) {
 
 	var formtype []entity.FormType
 
-	if err := entity.DB().Raw("SELECT * FROM formtypes").Scan(&formtype).Error; err != nil {
+	if err := entity.DB().Raw("SELECT * FROM form_types").Scan(&formtype).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
