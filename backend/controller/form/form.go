@@ -85,7 +85,7 @@ type extendedForm struct {
 
 // POST /users
 func CreateForm(c *gin.Context) {
-
+	var customer entity.Customer
 	var formtype entity.FormType
 	var satisfaction entity.Satisfaction
 	var form entity.Form
@@ -102,6 +102,11 @@ func CreateForm(c *gin.Context) {
 	}
 	println(form.ID)
 
+		if tx := entity.DB().Where("id = ?", form.Customer_ID).First(&customer); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "type not found"})
+		return
+	}
+
 	if tx := entity.DB().Where("id = ?", form.SatisfactionID).First(&satisfaction); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Department not found"})
 		return
@@ -114,7 +119,9 @@ func CreateForm(c *gin.Context) {
 		Comment:      form.Comment,
 		Satisfaction: satisfaction,
 		FormType:     formtype,
-	}
+		Customer:     customer,
+    }
+
 
 	if err := entity.DB().Create(&fm).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
