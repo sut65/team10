@@ -4,18 +4,13 @@ import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import { Snackbar, Alert } from "@mui/material";
-import { ButtonGroup, Popover, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { Container } from "@mui/system";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from '@mui/icons-material/Cancel';
-import UpdateIcon from '@mui/icons-material/Update';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
-import { Link as RouterLink } from "react-router-dom";
 import StorefrontIcon from '@mui/icons-material/Storefront';
 /* Datetimepicker */
 import dayjs, { Dayjs } from "dayjs";
@@ -26,16 +21,13 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { CodetypeInterface } from "../../models/promotion/ICodetype";
 import { ReasonInterface } from "../../models/promotion/IReason";
 import { PromotionInterface } from "../../models/promotion/IPromotion";
-
-import PromotionTable_UI from "./PromotiontableUI";
 function UpdatePromotion() {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
   const [promotion, setPromotion] = React.useState<Partial<PromotionInterface>>({});
-  const [codetype, setCodetype] = React.useState<CodetypeInterface[]>([]);
-  const [reason, setReason] = React.useState<ReasonInterface[]>([]);
   const [price, setPrice] = React.useState<number | null>(null);
   const [amount, setAmount] = React.useState<number | null>(null);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const [promotion_id, setPromotion_ID] = React.useState<PromotionInterface[]>([]);
 
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -53,6 +45,7 @@ function UpdatePromotion() {
 
   function update() {
     let promotion_u = {
+      ID: promotion.ID,
       Codetype_ID: promotion.Codetype_ID,
       Reason_ID: promotion.Reason_ID,
       Price: price,
@@ -61,7 +54,6 @@ function UpdatePromotion() {
       Time_Stamp: date,
     };
 
-    const apiUrl = "http://localhost:8080/promotions"; //ส่งขอบันทึก
     const requestOptions = {
       method: "PATCH",
       headers: {
@@ -70,34 +62,28 @@ function UpdatePromotion() {
       },
       body: JSON.stringify(promotion_u),
     };
+    console.log(JSON.stringify(promotion_u));
 
-    fetch(`${apiUrl}/promotions`, requestOptions)
+    fetch(`http://localhost:8080/promotions`, requestOptions)
       .then((response) => response.json())
       .then((res) => {
+        console.log(res);
         if (res.data) {
           setSuccess(true);
-          console.log(res.data)
         } else {
           setError(true);
+          console.log(res.data);
         }
       });
   }
 
 
 
-  const handleClickPopover = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClosePopover = () => {
-    setAnchorEl(null);
-  };
 
   const open = Boolean(anchorEl);
-  const popover1 = open ? "simple-popover" : undefined;
 
-  const getCodetype = async () => {
-    const apiUrl = "http://localhost:8080/codetype";
+  const getPromotion = async () => {
+    const apiUrl = "http://localhost:8080/promotion";
     const requestOptions = {
       method: "GET",
       headers: {
@@ -111,34 +97,13 @@ function UpdatePromotion() {
       .then((res) => {
         console.log(res)
         if (res.data) {
-          setCodetype(res.data);
-        }
-      });
-  };
-
-  const getReason = async () => {
-    const apiUrl = "http://localhost:8080/reason";
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    };
-
-    fetch(apiUrl, requestOptions)
-      .then((response) => response.json())
-      .then((res) => {
-        console.log(res)
-        if (res.data) {
-          setReason(res.data);
+          setPromotion_ID(res.data);
         }
       });
   };
 
   useEffect(() => {
-    getCodetype();
-    getReason();
+    getPromotion();
   }, []);
   return (
 
@@ -166,22 +131,23 @@ function UpdatePromotion() {
       <Box>
         <Paper>
           <Grid sx={{ padding: 2 }}>
-            <h1>Promotion</h1></Grid>
-          <Grid container spacing={2} sx={{ paddingX: 2 }}>
+            <h1>Promotion</h1>
+            </Grid>
+            <Grid container spacing={2} sx={{ paddingX: 2 }}>
             <Grid item xs={2}>
-              <h3>Code Type</h3>
+              <h3>Promotion_ID</h3>
             </Grid>
             <Grid item xs={4} >
               <Autocomplete
-                id="codetype-auto"
-                options={codetype}
+                id="promption-auto"
+                options={promotion_id}
                 fullWidth
                 size="medium"
                 onChange={(event: any, value) => {
-                  setPromotion({ ...promotion, Codetype_ID: value?.ID }); //Just Set ID to interface
+                  setPromotion({ ...promotion, ID: value?.ID }); //Just Set ID to interface
                 }}
                 getOptionLabel={(option: any) =>
-                  `${option.Type}`
+                  `${option.ID}`
                 } //filter value
                 renderInput={(params) => {
                   return (
@@ -198,47 +164,13 @@ function UpdatePromotion() {
                       {...props}
                       value={`${option.ID}`}
                       key={`${option.ID}`}
-                    >{`${option.Type}`}</li>
-                  ); //display value
-                }}
-              />
-            </Grid>
-            <Grid item xs={2}>
-              <h3>Reason</h3>
-            </Grid>
-            <Grid item xs={4}>
-              <Autocomplete
-                id="reason-auto"
-                options={reason}
-                fullWidth
-                size="medium"
-                onChange={(event: any, value) => {
-                  setPromotion({ ...promotion, Reason_ID: value?.ID }); //Just Set ID to interface
-                }}
-                getOptionLabel={(option: any) =>
-                  `${option.Reason}`
-                } //filter value
-                renderInput={(params) => {
-                  return (
-                    <TextField
-                      {...params}
-                      variant="outlined"
-                      placeholder="Search..."
-                    />
-                  );
-                }}
-                renderOption={(props: any, option: any) => {
-                  return (
-                    <li
-                      {...props}
-                      value={`${option.ID}`}
-                      key={`${option.ID}`}
-                    >{`${option.Reason}`}</li>
+                    >{`${option.ID}`}</li>
                   ); //display value
                 }}
               />
             </Grid>
           </Grid>
+
 
           <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 2 }}>
             <Grid item xs={2}>
@@ -252,20 +184,6 @@ function UpdatePromotion() {
                 defaultValue="0"
                 onChange={(event) => setPrice(Number(event.target.value))}
               />
-            </Grid>
-          </Grid>
-
-          <Grid container spacing={2} sx={{ paddingX: 2 }}>
-            <Grid item xs={2}>
-              <h3>Amount</h3>
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                id="outlined-basic"
-                label="Amount"
-                variant="outlined"
-                onChange={(event) => setAmount(Number(event.target.value))}
-                inputProps={{ type: "number" }} />
             </Grid>
           </Grid>
 
