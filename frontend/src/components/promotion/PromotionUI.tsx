@@ -318,6 +318,7 @@ function Promotion() {
           </Grid>
           <Grid item xs={5}
           >
+            <div>
             <Button aria-describedby={popover} variant="contained" color="warning"
               endIcon={<UpdateIcon />}
               onClick={handleClickPopover}>
@@ -338,6 +339,7 @@ function Promotion() {
               <UpdatePromotion />
               <Typography sx={{ p: 2 }}>Update Promotion</Typography>
             </Popover>
+            </div>
           </Grid>
           <Grid container item xs={2} direction='row-reverse'>
             <Button
@@ -350,26 +352,6 @@ function Promotion() {
             </Button>
           </Grid>
           <Grid container item xs={6.8} direction='row-reverse'>
-
-          <Button aria-describedby={popover} variant="contained" color="error"
-              endIcon={<DeleteForeverIcon />}
-              onClick={handleClickPopover}>
-              delete
-            </Button>
-            <Popover
-              id={popover}
-              open={open}
-              anchorEl={anchorEl}
-              sx={{ paddingBottom: 20 }}
-              marginThreshold={80}
-              onClose={handleClosePopover}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-            >
-              <Typography sx={{ p: 2 }}>Delete Promotion</Typography>
-            </Popover>
           </Grid>
         </Grid>
         <PromotionTable_UI />

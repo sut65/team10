@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 
 /* Grid */
+import Box from "@mui/material/Box";
 import { Paper } from "@mui/material";
 import { Grid } from "@mui/material";
 import Button from "@mui/material/Button";
@@ -27,6 +28,7 @@ import { BillInterface } from "../../models/bill/IBill";
 import { PaymenttypeInterface } from "../../models/bill/IPaymenttype";
 import { QuotaCodeInterface } from "../../models/promotion/IQuotaCode";
 import { ServiceInterface } from "../../models/service/IService";
+import BillTable_UI from "./BillTable";
 //test
 import { PromotionInterface } from "../../models/promotion/IPromotion";
 function Bill() {
@@ -152,6 +154,7 @@ function Bill() {
   }, []);
   return (
       <Container maxWidth="md">
+        <Box>
         <Snackbar // บันทึกสำเร็จ
                 open={success}
                 autoHideDuration={3000}
@@ -391,7 +394,8 @@ function Bill() {
                 </Button> 
                 </Grid>
               </Grid>
-              
+              <BillTable_UI />
+              </Box>
       </Container>
   );
 }
