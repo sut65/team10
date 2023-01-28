@@ -20,9 +20,11 @@ import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
 
 import Divider from "@mui/material/Divider";
+import PersonAddAltSharpIcon from '@mui/icons-material/PersonAddAltSharp';
 
 import Snackbar from "@mui/material/Snackbar";
-
+import CancelIcon from '@mui/icons-material/Cancel';
+import SaveIcon from "@mui/icons-material/Save";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import { AdvertiseInterface } from "../../models/customer/IAdvertise";
 import { CustomerInterface } from "../../models/customer/ICustomer";
@@ -217,43 +219,36 @@ function UpdateCustomer() {
 
   return (
     <Container maxWidth="md">
-      <Snackbar
-        open={success}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert onClose={handleClose} severity="success">
-          บันทึกข้อมูลสำเร็จ
-        </Alert>
-      </Snackbar>
+    <Snackbar
+       open={success}
+       autoHideDuration={3000}
+       onClose={handleClose}
+       anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+     >
+       <Alert onClose={handleClose} severity="success">
+         บันทึกข้อมูลไม่สำเร็จ
+       </Alert>
+     </Snackbar>
 
-      <Snackbar open={error} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error">
-          บันทึกข้อมูลไม่สำเร็จ
-        </Alert>
-      </Snackbar>
+     <Snackbar
+       open={success}
+       autoHideDuration={3000}
+       onClose={handleClose}
+       anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+     >
+       <Alert onClose={handleClose} severity="success">
+         บันทึกข้อมูลสำเร็จ
+       </Alert>
+     </Snackbar>
+     <Box sx={{ padding: 2
+                     }}>
+     <Paper>
+                    <Grid container spacing={0} sx={{ padding: 2
+                     }}>
+                    <h1>CUSTOMER<PersonAddAltSharpIcon color="primary" sx={{ fontSize: 70 }}/></h1> 
+                    </Grid>
 
-      <Paper>
-        <Box
-          display="flex"
-          sx={{
-            marginTop: 2,
-          }}
-        >
-          <Box sx={{ paddingX: 2, paddingY: 1 }}>
-            <Typography
-              component="h2"
-              variant="h6"
-              color="primary"
-              gutterBottom
-            >
-              Customer
-            </Typography>
-          </Box>
-        </Box>
-
-        <Divider />
+       <Divider />
 
         <Grid container spacing={1} sx={{ padding: 5 }}>
           <Grid item xs={12}>
@@ -398,25 +393,30 @@ function UpdateCustomer() {
               </Select>
             </FormControl>
           </Grid>
-
+          </Grid>
+          </Paper>
           <Grid container spacing={3} sx={{ padding: 2 }}>
-            <Grid item xs={12}>
-              <Button component={RouterLink} to="/" variant="contained">
-                Back
-              </Button>
-
-              <Button
-                style={{ float: "right" }}
-                onClick={submitUpdate}
-                variant="contained"
-                color="primary"
-              >
-                SAVE
-              </Button>
+          <Grid item xs={12}>
+           <Button 
+            component={RouterLink} to="/" 
+            variant="contained"
+            color="error"
+            endIcon={<CancelIcon />}
+            >
+           cancel
+           </Button>
+           <Button
+             style={{ float: "right" }}
+             onClick={submitUpdate}
+             variant="contained"
+             color="primary"
+             endIcon={<SaveIcon />}
+           >
+           save
+           </Button>
             </Grid>
           </Grid>
-        </Grid>
-      </Paper>
+          </Box>
     </Container>
   );
 }
