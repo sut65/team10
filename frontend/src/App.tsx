@@ -8,7 +8,7 @@ import Delivery from "./components/delivery/DeliveryUI";
 import Confirmation from "./components/confirmation/ConfirmationUI";
 import Promotion from "./components/promotion/PromotionUI";
 import Home from "./components/Home";
-import Vehicle from "./components/Vehicle/VehicleUI";
+import Vehicle from "./components/Vehicle/VehiclrUI";
 import ReceiveCreate from "./components/Receive/ReceiveCreate";
 import Bill from "./components/bill/BillUI";
 import CompleteCreate from "./components/complete/CompleteCreate";
@@ -18,6 +18,10 @@ import UpdateCustomer from "./components/customer/UpdateCustomer";
 import NotFound from "./components/NotFound";
 import EmployeeTable from "./components/employee/EmployeeTable";
 import EmployeeUpdate_UI from "./components/employee/EmployeeUpdate_UI";
+import Stock_UI from "./components/stock/Stock_UI";
+import StockTable from "./components/stock/StockTable";
+import StockUpdate_UI from "./components/stock/StockUpdat";
+
 
 export default function App() {
   const [token, setToken] = React.useState<String>("");
@@ -98,6 +102,9 @@ export default function App() {
               <Route path="/employee" element={<EmployeeTable />} />
               {/* <Route path="/employee/create" element={<EmployeeCreate_UI />} /> */}
               <Route path="/employee/update" element={<EmployeeUpdate_UI />} />
+              <Route path="/stock" element={<StockTable />} />
+              <Route path="/stock/create" element={<Stock_UI />} />
+              <Route path="/stock/update" element={<StockUpdate_UI />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
