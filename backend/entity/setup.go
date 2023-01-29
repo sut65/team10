@@ -309,7 +309,7 @@ func SetupDatabase() {
 		Customer_Username:  "Cream_9",
 		Customer_Phone:     "0967436705",
 		Customer_Promptpay: "0912345265",
-		Customer_Password:  "cream9",
+		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234 //On test Purpose
 		Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
 		Gender:             female,
 		Advertise:          Advertise1,
@@ -322,7 +322,7 @@ func SetupDatabase() {
 		Customer_Username:  "MOD_MOD",
 		Customer_Phone:     "0612489105",
 		Customer_Promptpay: "0854251253",
-		Customer_Password:  "123123",
+		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234
 		Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ3 ห้อง3204",
 		Gender:             female,
 		Advertise:          Advertise1,
@@ -335,7 +335,7 @@ func SetupDatabase() {
 		Customer_Username:  "NutSmall",
 		Customer_Phone:     "0815426489",
 		Customer_Promptpay: "0652465258",
-		Customer_Password:  "Nuttttt",
+		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234
 		Customer_Address:   "หอพักปันสุข มทส. ประตู1 ต. สุรนารี เมืองนครราชสีมา",
 		Gender:             male,
 		Advertise:          Advertise4,
@@ -348,7 +348,7 @@ func SetupDatabase() {
 		Customer_Username:  "Jenny_K.",
 		Customer_Phone:     "0631489577",
 		Customer_Promptpay: "0685445358",
-		Customer_Password:  "J7845",
+		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234
 		Customer_Address:   "อพาร์ทเม้นท์โกลด์เดนคีย์ กังสดาล ม.ขอนแก่น",
 		Gender:             female,
 		Advertise:          Advertise3,
@@ -361,7 +361,7 @@ func SetupDatabase() {
 		Customer_Username:  "MJ-M",
 		Customer_Phone:     "0974851364",
 		Customer_Promptpay: "0815479546",
-		Customer_Password:  "78496",
+		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234
 		Customer_Address:   "โบ๊ทลากูล รีสอร์ท ถ.เทพกระษัตรี เกาะแก้ว เมืองภูเก็ต",
 		Gender:             male,
 		Advertise:          Advertise2,

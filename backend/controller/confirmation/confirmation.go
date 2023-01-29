@@ -61,9 +61,9 @@ func CreateConfirmation(c *gin.Context) {
 // GET /confirmation/:id
 func GetConfirmation(c *gin.Context) {
 	var confirmation entity.Confirmation
-	id := c.Param("id")
-	if tx := entity.DB().Where("id = ?", id).First(&confirmation); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "confirmation not found"})
+	customer_id := c.Param("id")
+	if err := entity.DB().Preload("Customer").Preload("RecvType").Raw("SELECT * FROM confirmations WHERE customer_id = ? ORDER BY id DESC LIMIT 1", customer_id).Find(&confirmation).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": confirmation})

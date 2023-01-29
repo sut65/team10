@@ -1,15 +1,7 @@
 /* -------------------------------------------------------------------------- */
 /*                                Header Import                               */
 /* -------------------------------------------------------------------------- */
-import {
-  Box,
-  colors,
-  Container,
-  FormControl,
-  Grid,
-  Paper,
-  Select,
-} from "@material-ui/core";
+import { Box, Container, FormControl, Grid, Paper } from "@material-ui/core";
 import Autocomplete from "@mui/material/Autocomplete";
 import { Popover, Snackbar, Stack, TextField } from "@mui/material";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
@@ -21,6 +13,8 @@ import { Link as RouterLink } from "react-router-dom";
 import SaveIcon from "@mui/icons-material/Save";
 import UpdateIcon from "@mui/icons-material/Update";
 import CancelIcon from "@mui/icons-material/Cancel";
+import PersonIcon from "@mui/icons-material/Person";
+import DryCleaningIcon from "@mui/icons-material/DryCleaning";
 
 import dayjs, { Dayjs } from "dayjs";
 
@@ -56,6 +50,9 @@ function Confirmation() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [customerName, setCustomerName] = useState<string | undefined>(
+    undefined
+  );
   const [noAccess, setNoAccess] = React.useState(false);
 
   /* ---------------------------------- Popup --------------------------------- */
@@ -137,7 +134,6 @@ function Confirmation() {
       .then((res) => {
         if (res.data) {
           setComplete(res.data);
-          console.log(res.data)
         } else {
           console.log("else");
         }
@@ -156,10 +152,23 @@ function Confirmation() {
       });
   };
 
+  const getCurrentCustomer = async () => {
+    fetch(`${apiUrl}/customer/${localStorage.getItem("uid")}`, requestOptions)
+      .then((response) => response.json())
+      .then((res) => {
+        if (res.data) {
+          setCustomerName(res.data.Customer_Name);
+        } else {
+          console.log("else");
+        }
+      });
+  };
+
   useEffect(() => {
     getComplete();
     getConfirmation();
     getRecvType();
+    getCurrentCustomer();
   }, []);
   /* -------------------------------------------------------------------------- */
   /*                                 PUSH Submit                                */
@@ -236,7 +245,8 @@ function Confirmation() {
         </Snackbar>
         <Paper style={{ background: "rgba(0, 0, 0, 0.2)" }}>
           <h2 style={{ textAlign: "center", paddingTop: 20, color: "white" }}>
-            Confirmation
+            <DryCleaningIcon style={{fontSize: 30}}/>
+            &nbsp;Confirmation
           </h2>
           <Grid container>
             <Grid xs={6}>
@@ -244,10 +254,11 @@ function Confirmation() {
                 <Paper style={{ background: "rgba(255,201,60,1)" }}>
                   <Box paddingLeft={2} paddingBottom={2}>
                     <div style={{ fontSize: "15px", fontWeight: "bold" }}>
-                      Customer Info
+                      <PersonIcon style={{ fontSize: 15 }} />
+                      &nbsp;Customer Info
                     </div>
-                    <Stack>[Customer ID]</Stack>
-                    <Stack>[Customer Name]</Stack>
+                    <Stack>UID: {localStorage.getItem("uid")}</Stack>
+                    <Stack>Name: {customerName}</Stack>
                   </Box>
                 </Paper>
               </Stack>
