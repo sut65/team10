@@ -72,10 +72,10 @@ func CreateStocks(c *gin.Context) {
 	}
 
 	// ขั้นตอนการ validate ที่นำมาจาก unit test
-	if _, err := govalidator.ValidateStruct(stc); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	// if _, err := govalidator.ValidateStruct(stc); err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	// 	return
+	// }
 
 	if err := entity.DB().Create(&stc).Error; err != nil {
 

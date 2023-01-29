@@ -5,7 +5,10 @@ import Paper from "@mui/material/Paper";
 import { Alert, Grid, Snackbar, Stack } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Autocomplete from "@mui/material/Autocomplete";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { StocksInterface } from "../../models/Stock/IStock";
 import { EmployeesInterface } from "../../models/Employee/IEmployee";
 import { TypesInterface } from "../../models/Stock/IType";
@@ -17,7 +20,7 @@ function StockUpdate_UI() {
   const [Stock, setStock] = React.useState<Partial<StocksInterface>>(
     {}
   );
-  const [type, setType] = React.useState<TypesInterface[]>([]);
+  const [types, setType] = React.useState<TypesInterface[]>([]);
   const [brand, setBrand] = React.useState<BrandsInterface[]>([]);
   const [employee, setEmployee] = React.useState<EmployeesInterface[]>([]);
   const [size, setSize] = React.useState<SizesInterface[]>([]);
@@ -25,8 +28,8 @@ function StockUpdate_UI() {
   const [List_number, SetList_number] = useState<String>("");
 
   const [Add_number, SetAdd_number] = useState<String>("");
-  const [Quantity, SetQuantity] = useState<String>("");
-  const [Time, SetTime] = React.useState<Dayjs | null>(dayjs());
+  const [Quantity, setQuantity] = useState<String>("");
+  const [Time, setTime] = React.useState<Dayjs | null>(dayjs());
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
   const [noAccess, setNoAccess] = React.useState(false);
@@ -34,7 +37,7 @@ function StockUpdate_UI() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const getEmployee = async () => {
-    //ดึงข้อมูลเพศ
+    //ดึงข้อมูลพนักงาน
     const apiUrl = "http://localhost:8080/employees";
     const requestOptions = {
       method: "GET",
@@ -134,7 +137,7 @@ function StockUpdate_UI() {
       Type_ID: Stock.Type_ID,
       Brand_ID: Stock.Brand_ID,
       Size_ID: Stock.Size_ID,
-      Time: Date,
+      Time: Stock.Time,
     };
 
     const apiUrl = "http://localhost:8080/stocks"; //ส่งขอบันทึก
@@ -152,10 +155,10 @@ function StockUpdate_UI() {
         if (res.data) {
           setSuccess(true);
           setErrorMessage("");
-          if (localStorage.getItem("uid") === localStorage.getItem("eid_edit")) {
+          if (localStorage.getItem("sid") === localStorage.getItem("sid_edit")) {
             localStorage.clear();
           } else {
-            localStorage.removeItem("eid_edit");
+            localStorage.removeItem("sid_edit");
           }
           window.location.href = "/stock";
         } else {
@@ -240,11 +243,11 @@ function StockUpdate_UI() {
                   Brand
                   <Autocomplete
                     id="brand-autocomplete"
-                    options={size}
+                    options={brand}
                     onChange={(event: any, value) => {
-                      setStock({ ...Stock, Brand_ID: value?.ID }); //Just Set ID to interface
+                      setStock({ ...Stock, BrandID: value?.ID }); //Just Set ID to interface
                     }}
-                    getOptionLabel={(option: any) => `${option.Brand_Name}`} //filter value
+                    getOptionLabel={(option: any) => `${option.Band_Name}`} //filter value
                     renderInput={(params) => {
                       return (
                         <TextField
@@ -260,7 +263,7 @@ function StockUpdate_UI() {
                           {...props}
                           value={`${option.ID}`}
                           key={`${option.ID}`}
-                        >{`${option.Brand_Name}`}</li>
+                        >{`${option.Band_Name}`}</li>
                       ); //display value
                     }}
                   />
@@ -269,9 +272,9 @@ function StockUpdate_UI() {
                   Type
                   <Autocomplete
                     id="type-autocomplete"
-                    options={type}
+                    options={types}
                     onChange={(event: any, value) => {
-                      setStock({ ...Stock, Type_ID: value?.ID }); //Just Set ID to interface
+                      setStock({ ...Stock, TypeID: value?.ID }); //Just Set ID to interface
                     }}
                     getOptionLabel={(option: any) => `${option.Type_Name}`} //filter value
                     renderInput={(params) => {
@@ -301,10 +304,10 @@ function StockUpdate_UI() {
                     id="size-autocomplete"
                     options={size}
                     onChange={(event: any, value) => {
-                      setStock({ ...Stock, Size_ID: value?.ID }); //Just Set ID to interface
+                      setStock({ ...Stock, SizeID: value?.ID }); //Just Set ID to interface
                     }}
                     getOptionLabel={(option: any) =>
-                      `${option.Stock_Name}`
+                      `${option.Size_Name}`
                     } //filter value
                     renderInput={(params) => {
                       return (
@@ -330,7 +333,7 @@ function StockUpdate_UI() {
                   Actor
                   <Autocomplete
                     id="employee-autocomplete"
-                    options={type}
+                    options={employee}
                     onChange={(event: any, value) => {
                       setStock({ ...Stock, Employee_ID: value?.ID }); //Just Set ID to interface
                     }}
@@ -356,11 +359,29 @@ function StockUpdate_UI() {
                   />
                 </Stack>
 
+                <Grid item xs={2}>
+                <p>Date:</p>
+              </Grid>
+                      <Grid item xs={6}>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <DateTimePicker
+                                  label="DateTimePicker"
+                                  renderInput={(params) => <TextField {...params} />}
+                                  value={Time}
+                                  onChange={(newValue) => {
+                                      setTime(newValue);
+                                  }}
+                              />
+                          </LocalizationProvider>
+                      </Grid>
+                  </Grid>
+
+
                 <Grid container justifyContent={"center"} paddingY={4}>
                   <Button
                     variant="contained"
                     color="error"
-                    href="/employee"
+                    href="/stock"
                     sx={{ marginX: 2 }}
                   >
                     Back
@@ -370,7 +391,6 @@ function StockUpdate_UI() {
                   </Button>
                 </Grid>
               </Grid>
-            </Grid>
           </Box>
         </Paper>
       </Container>

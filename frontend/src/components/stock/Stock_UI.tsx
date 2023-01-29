@@ -19,6 +19,7 @@ import { BrandsInterface } from "../../models/Stock/IBrand";
 import { SizesInterface } from "../../models/Stock/ISize";
 import { StocksInterface } from "../../models/Stock/IStock";
 import { Link as RouterLink } from "react-router-dom";
+import { id } from "date-fns/locale";
 
 function Stock_UI() {
   const [stock, setStock] = React.useState<Partial<StocksInterface>>({});
@@ -44,7 +45,7 @@ function Stock_UI() {
 
   const getType = async () => {
     //ดึงข้อมูลประเภท
-    const apiUrl = "http://localhost:8080/Types";
+    const apiUrl = "http://localhost:8080/types";
     const requestOptions = {
       method: "GET",
       headers: {
@@ -154,7 +155,7 @@ function Stock_UI() {
 
       Add_number: stock.Add_number,
 
-      Time: Date,
+      Time: stock.Time,
     };
 
     console.log(data);
@@ -277,10 +278,10 @@ function Stock_UI() {
                 <Autocomplete
                   id="brand-autocomplete"
                   options={brand}
-                  onChange={(event: any, value: { ID: any }) => {
+                  onChange={(event: any, value) => {
                     setStock({ ...stock, BrandID: value?.ID }); //Just Set ID to interface
                   }}
-                  getOptionLabel={(option: any) => `${option.Brand_Name}`} //filter value
+                  getOptionLabel={(option: any) => `${option.Band_Name}`} //filter value
                   renderInput={(
                     params: JSX.IntrinsicAttributes & TextFieldProps
                   ) => {
@@ -298,7 +299,7 @@ function Stock_UI() {
                         {...props}
                         value={`${option.ID}`}
                         key={`${option.ID}`}
-                      >{`${option.Brand_Name}`}</li>
+                      >{`${option.Band_Name}`}</li>
                     ); //display value
                   }}
                 />
@@ -319,10 +320,10 @@ function Stock_UI() {
                 <Autocomplete
                   id="type-autocomplete"
                   options={type}
-                  onChange={(event: any, value: { ID: any }) => {
-                    setStock({ ...stock, TypeID: value?.ID }); //Just Set ID to interface
+                  onChange={(event: any, value) => {
+                    setStock({ ...stock, TypeID : value?.ID }); //Just Set ID to interface
                   }}
-                  getOptionLabel={(option: any) => `${option.Type_Name}`} //filter value
+                  getOptionLabel={(option: any) => `${option.ID}`} //filter value
                   renderInput={(
                     params: JSX.IntrinsicAttributes & TextFieldProps
                   ) => {
@@ -340,7 +341,49 @@ function Stock_UI() {
                         {...props}
                         value={`${option.ID}`}
                         key={`${option.ID}`}
-                      >{`${option.TypeName}`}</li>
+                      >{`${option.ID}`}</li>
+                    ); //display value
+                  }}
+                />
+              </Grid>
+            </Grid>
+
+            <Grid
+              container
+              justifyContent={"center"}
+              sx={{
+                paddingY: 2,
+              }}
+            >
+              <Grid item xs={2}>
+                <p>Size</p>
+              </Grid>
+              <Grid item xs={6}>
+                <Autocomplete
+                  id="size-autocomplete"
+                  options={size}
+                  onChange={(event: any, value) => {
+                    setStock({ ...stock, SizeID: value?.ID }); //Just Set ID to interface
+                  }}
+                  getOptionLabel={(option: any) => `${option.Size_Name}`} //filter value
+                  renderInput={(
+                    params: JSX.IntrinsicAttributes & TextFieldProps
+                  ) => {
+                    return (
+                      <TextField
+                        {...params}
+                        variant="outlined"
+                        placeholder="Search..."
+                      />
+                    );
+                  }}
+                  renderOption={(props: any, option: any) => {
+                    return (
+                      <li
+                        {...props}
+                        value={`${option.ID}`}
+                        key={`${option.ID}`}
+                      >{`${option.Size_Name}`}</li>
                     ); //display value
                   }}
                 />
@@ -361,7 +404,7 @@ function Stock_UI() {
                 <Autocomplete
                   id="employee-autocomplete"
                   options={employee}
-                  onChange={(event: any, value: { ID: any }) => {
+                  onChange={(event: any, value) => {
                     setStock({ ...stock, EmployeeID: value?.ID }); //Just Set ID to interface
                   }}
                   getOptionLabel={(option: any) => `${option.Name}`} //filter value
@@ -412,6 +455,31 @@ function Stock_UI() {
               </Grid>
             </Grid>
 
+            
+            <Grid
+              container
+              justifyContent={"center"}
+              sx={{
+                paddingY: 2,
+              }}
+            >
+              <Grid item xs={2}>
+                <p>Date:</p>
+              </Grid>
+                      <Grid item xs={6}>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <DateTimePicker
+                                  label="DateTimePicker"
+                                  renderInput={(params) => <TextField {...params} />}
+                                  value={Time}
+                                  onChange={(newValue) => {
+                                      setTime(newValue);
+                                  }}
+                              />
+                          </LocalizationProvider>
+                      </Grid>
+                  </Grid>
+
             <Grid
               container
               justifyContent={"center"}
@@ -425,8 +493,7 @@ function Stock_UI() {
                   <Button
                     variant="contained"
                     color="primary"
-                    component={RouterLink}
-                    to="/stocktable"
+                    component={RouterLink}to="/stock"
                   >
                     Back
                   </Button>
@@ -443,7 +510,7 @@ function Stock_UI() {
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
+            </Grid>
         </Paper>
       </Container>
     </Box>

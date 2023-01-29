@@ -19,7 +19,7 @@ import NotFound from "./components/NotFound";
 import EmployeeTable from "./components/employee/EmployeeTable";
 import EmployeeUpdate_UI from "./components/employee/EmployeeUpdate_UI";
 import Stock_UI from "./components/stock/Stock_UI";
-import StockTable from "./components/stock/StockTable";
+import StockTable_UI from "./components/stock/StockTable";
 import StockUpdate_UI from "./components/stock/StockUpdat";
 import FormTable from "./components/form/TableForm";
 import ServiceTable from "./components/service/TableService";
@@ -115,7 +115,7 @@ export default function App() {
               <Route path="/complete/info/complete/update/:id" element={<UpdateComplete />} />
               {/* <Route path="/employee/create" element={<EmployeeCreate_UI />} /> */}
               <Route path="/employee/update" element={<EmployeeUpdate_UI />} />
-              <Route path="/stock" element={<StockTable />} />
+              <Route path="/stock" element={<StockTable_UI />} />
               <Route path="/stock/create" element={<Stock_UI />} />
               <Route path="/stock/update" element={<StockUpdate_UI />} />
               <Route path="*" element={<NotFound />} />
