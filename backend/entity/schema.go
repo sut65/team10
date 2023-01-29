@@ -95,13 +95,10 @@ type Type struct {
 	gorm.Model
 	Type_Name string
 	Stock     []Stock `gorm:"foreignKey:TypeID"`
-	Brand     []Brand `gorm:"foreignKey:TypeID"`
 }
 type Brand struct {
 	gorm.Model
 	Band_Name string
-	TypeID    *uint
-	Type      Type    `gorm:"references:id"`
 	Stock     []Stock `gorm:"foreignKey:BrandID"`
 }
 type Size struct {

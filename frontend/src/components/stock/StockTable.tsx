@@ -15,11 +15,11 @@ import { useNavigate } from "react-router-dom";
 import { Link as RouterLink, useParams } from "react-router-dom";
 import { StocksInterface } from "../../models/Stock/IStock";
 import Stock_UI from "./Stock_UI";
-import dayjs, { Dayjs } from "dayjs";
+// import dayjs, { Dayjs } from "dayjs";
 
 
-export default function StockTable() {
-  /* --------------------------------- Popover -------------------------------- */
+export default function StockTable_UI() {
+  /* -------------------------------------------------------------- */
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );
@@ -36,13 +36,13 @@ export default function StockTable() {
   const popover1 = open ? "simple-popover" : undefined;
 
   /* -------------------------------------------------------------------------- */
-  /*                           Sock Table Variable                          */
+  /*                                                    */
   /* -------------------------------------------------------------------------- */
   const params = useParams();
   const navigate = useNavigate();
   const [stock, setStock] = useState<StocksInterface[]>([]);
   /* -------------------------------------------------------------------------- */
-  /*                                   Driver                                   */
+  /*                                                                     */
   /* -------------------------------------------------------------------------- */
   const apiUrl = "http://localhost:8080";
 
@@ -111,7 +111,7 @@ export default function StockTable() {
             <Table sx={{ minWidth: 400, p: 2 }}>
               <TableHead>
                 <TableRow>
-                  <TableCell align="right">ID</TableCell>
+                  <TableCell align="right">SID</TableCell>
                   <TableCell align="right">List_number</TableCell>
                   <TableCell align="right">Add_number</TableCell>
                   <TableCell align="right">Brand</TableCell>
@@ -136,9 +136,10 @@ export default function StockTable() {
                     <TableCell align="right">{row.Add_number}</TableCell>
                     <TableCell align="right">{row.quantity}</TableCell>
                     <TableCell align="right">{row.Employee.Name}</TableCell>
+                    <TableCell align="right">{row.Size.Size_Name}</TableCell>
                     <TableCell align="right">{row.Brand.Brand_Name}</TableCell>
-                    <TableCell align="right">{row.Type.Type_Name}
-                    </TableCell>
+                    <TableCell align="right">{row.Type.Type_Name}</TableCell>
+                    <TableCell align="right">{row.Stock.Time}</TableCell>
 
                     <TableCell align="right">
                       <ButtonGroup
@@ -169,3 +170,4 @@ export default function StockTable() {
     </React.Fragment>
   );
 }
+
