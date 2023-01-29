@@ -116,10 +116,14 @@ func UpdateCustomer(c *gin.Context) {
 		return
 	}
 
-	hashPassword, err := bcrypt.GenerateFromPassword([]byte(customer.Customer_Password), 14)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "error hashing password"})
-		return
+	if customer.Customer_Password != "" {
+		hashPassword, err := bcrypt.GenerateFromPassword([]byte(customer.Customer_Password), 14)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "error hashing password"})
+			return
+
+		}
+		customer.Customer_Password = string(hashPassword)
 	}
 
 	cus := entity.Customer{
@@ -130,7 +134,7 @@ func UpdateCustomer(c *gin.Context) {
 		Customer_Username:  customer.Customer_Username,
 		Customer_Phone:     customer.Customer_Phone,
 		Customer_Promptpay: customer.Customer_Promptpay,
-		Customer_Password:  string(hashPassword),
+		Customer_Password:  customer.Customer_Password,
 		Customer_Address:   customer.Customer_Address,
 	}
 
