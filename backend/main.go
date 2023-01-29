@@ -59,6 +59,7 @@ func main() {
 		p := router.Use(middlewares.Authorizes())
 		{
 			// Customer
+			p.GET("/customer/:id", controllercustomer.GetCustomer)
 			p.PATCH("/customers", controllercustomer.UpdateCustomer)
 			// Bill
 			p.GET("/bill", controllerbill.ListBills)

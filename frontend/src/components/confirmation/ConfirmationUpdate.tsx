@@ -1,26 +1,15 @@
 /* -------------------------------------------------------------------------- */
 /*                                Header Import                               */
 /* -------------------------------------------------------------------------- */
-import {
-  Box,
-  colors,
-  Container,
-  FormControl,
-  Grid,
-  Paper,
-  Select,
-} from "@material-ui/core";
-import Autocomplete from "@mui/material/Autocomplete";
-import { Popover, Snackbar, Stack, TextField } from "@mui/material";
+import { Box, FormControl, Grid, Paper, Select } from "@material-ui/core";
+import { Snackbar, Stack, TextField } from "@mui/material";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
-import { Link as RouterLink } from "react-router-dom";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
-import SaveIcon from "@mui/icons-material/Save";
 import UpdateIcon from "@mui/icons-material/Update";
-import CancelIcon from "@mui/icons-material/Cancel";
+import PersonIcon from "@mui/icons-material/Person";
 
 import dayjs, { Dayjs } from "dayjs";
 
@@ -29,8 +18,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { RecvTypeInterface } from "../../models/confirmation/IRecvType";
 import { ConfirmationInterface } from "../../models/confirmation/IConfirmation";
 import { CompleteInterface } from "../../models/complete/IComplete";
-import ConfirmationUpdate from "./ConfirmationUpdate";
-import Receive from "../Receive/ReceiveCreate";
 /* -------------------------------------------------------------------------- */
 /*                                    Style                                   */
 /* -------------------------------------------------------------------------- */
@@ -60,14 +47,14 @@ function Confirmation() {
   const [confirmation_id, setConfirmation_ID] = useState<number | undefined>(
     undefined
   );
-  const [old_recv_address, setOldRecvAddress] = useState<string | undefined>(
-    undefined
-  );
-  const [old_note, setOldNote] = useState<string | undefined>(undefined);
+  const [old_recv_address, setOldRecvAddress] = useState<string>("");
+  const [old_note, setOldNote] = useState<string>("");
   const [old_recv_type, setOldRecvType] = useState<string | undefined>(
     undefined
   );
   const [old_recv_time, setOldRecvTime] = useState<any | undefined>(undefined);
+  const [cust_name, setCustomerName] = useState<string>("");
+  const [cust_id, setCustomerID] = useState<number | undefined>(undefined);
 
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -147,12 +134,22 @@ function Confirmation() {
       });
   };
 
-  const getConfirmation = async () => {
-    fetch(`${apiUrl}/confirmation`, requestOptions)
+  const getConfirmationByID = async () => {
+    fetch(
+      `${apiUrl}/confirmation/${localStorage.getItem("uid")}`,
+      requestOptions
+    )
       .then((response) => response.json())
       .then((res) => {
         if (res.data) {
-          setConfirmationTemp(res.data);
+          //setConfirmationTemp(res.data);
+          setCustomerID(res.data.Customer.ID);
+          setCustomerName(res.data.Customer.Customer_Name);
+          setOldNote(res.data.Note);
+          setOldRecvAddress(res.data.RecvAddress);
+          setOldRecvTime(res.data.RecvTime);
+          setOldRecvType(res.data.RecvType.Name);
+          setConfirmation_ID(res.data.ID);
         } else {
           console.log("else");
         }
@@ -160,7 +157,7 @@ function Confirmation() {
   };
 
   useEffect(() => {
-    getConfirmation();
+    getConfirmationByID();
     getRecvType();
   }, []);
   /* -------------------------------------------------------------------------- */
@@ -195,6 +192,7 @@ function Confirmation() {
       .then(async (res) => {
         if (res.data) {
           setSuccess(true);
+          window.location.reload();
         } else {
           setError(true);
         }
@@ -204,7 +202,7 @@ function Confirmation() {
   /*                                  HTML CSS                                  */
   /* -------------------------------------------------------------------------- */
   return (
-    <div style={{ background: "rgba(255,201,60,1)" }}>
+    <div style={{ background: "rgba(255,201,60,0.8)" }}>
       <div
         style={{
           textAlign: "center",
@@ -214,7 +212,8 @@ function Confirmation() {
           marginBottom: 10,
         }}
       >
-        Confirmation Updator
+        <UpdateIcon style={{ fontSize: 20 }} />
+        &nbsp;Confirmation Updator
       </div>
       <Grid container>
         <Snackbar
@@ -253,10 +252,13 @@ function Confirmation() {
             <Paper style={{ background: "rgba(255,201,60,1)" }}>
               <Box paddingLeft={2} paddingBottom={2}>
                 <div style={{ fontSize: "15px", fontWeight: "bold" }}>
-                  Customer Info
+                  <PersonIcon style={{ fontSize: 15 }} />
+                  &nbsp;Customer Info
                 </div>
-                <Stack>[Customer ID]</Stack>
-                <Stack>[Customer Name]</Stack>
+                <Stack>UID: {cust_id}</Stack>
+                <Stack>
+                  <div>Name: {cust_name}</div>
+                </Stack>
               </Box>
             </Paper>
           </Stack>
@@ -272,40 +274,15 @@ function Confirmation() {
                 >
                   Lastest Confirmation ID
                 </div>
-                <Autocomplete
-                  id="complete-autocomplete"
-                  options={confirmationTemp}
+                <TextField
+                  hiddenLabel
+                  id="LastConfID"
                   fullWidth
+                  defaultValue={"No Input"}
+                  value={confirmation_id}
+                  variant="filled"
                   size="small"
-                  style={{ background: "#feefd1" }}
-                  onChange={(event: any, value) => {
-                    //console.log(value); //Get ID from patientinterface
-                    setConfirmation_ID(value?.ID);
-                    setOldRecvAddress(value?.RecvAddress);
-                    setOldNote(value?.Note);
-                    setOldRecvType(value?.RecvType.Name);
-                    setOldRecvTime(value?.RecvTime);
-                  }}
-                  sx={{ bgcolor: "#feefd1" }}
-                  getOptionLabel={(option: any) => `${option.ID}`} //filter value
-                  renderInput={(params) => {
-                    return (
-                      <TextField
-                        {...params}
-                        variant="outlined"
-                        placeholder="Search..."
-                      />
-                    );
-                  }}
-                  renderOption={(props: any, option: any) => {
-                    return (
-                      <li
-                        {...props}
-                        value={`${option.ID}`}
-                        key={`${option.ID}`}
-                      >{`${option.ID}`}</li>
-                    ); //display value
-                  }}
+                  disabled
                 />
               </Box>
             </Paper>

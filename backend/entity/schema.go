@@ -42,8 +42,8 @@ type Customer struct {
 	Career    Career
 
 	Confirmation []Confirmation `gorm:"foreignKey:Customer_ID"`
-	Service              []Service `gorm:"foreignKey:Customer_ID"`
-	Form              []Form `gorm:"foreignKey:Customer_ID"`
+	Service      []Service      `gorm:"foreignKey:Customer_ID"`
+	Form         []Form         `gorm:"foreignKey:Customer_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
@@ -135,10 +135,10 @@ type Stock struct {
 
 type TypeWashing struct {
 	gorm.Model
-	Type_washing string
+	Type_washing      string
 	TypeWashing_Price uint
-	Description  string
-	Service      []Service `gorm:"foreignKey:TypeWashing_ID"`
+	Description       string
+	Service           []Service `gorm:"foreignKey:TypeWashing_ID"`
 }
 
 type DeliveryType struct {
@@ -169,9 +169,9 @@ type Service struct {
 	Customer_ID *uint
 	Customer    Customer `gorm:"references:id"`
 
-	Address string
-	Bill_Price	uint
-	Bill    []Bill `gorm:"foreignKey:Service_ID"`
+	Address    string
+	Bill_Price uint
+	Bill       []Bill `gorm:"foreignKey:Service_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
@@ -374,7 +374,7 @@ type Confirmation struct {
 
 type RecvType struct {
 	gorm.Model
-	Name         string
+	Name         string         `gorm:"uniqueIndex"`
 	Confirmation []Confirmation `gorm:"foreignKey:RecvType_ID"`
 }
 
