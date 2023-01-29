@@ -20,10 +20,10 @@ import Select from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
 
 import Divider from "@mui/material/Divider";
-import PersonAddAltSharpIcon from '@mui/icons-material/PersonAddAltSharp';
+import PersonAddAltSharpIcon from "@mui/icons-material/PersonAddAltSharp";
 
 import Snackbar from "@mui/material/Snackbar";
-import CancelIcon from '@mui/icons-material/Cancel';
+import CancelIcon from "@mui/icons-material/Cancel";
 import SaveIcon from "@mui/icons-material/Save";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import { AdvertiseInterface } from "../../models/customer/IAdvertise";
@@ -50,6 +50,8 @@ function UpdateCustomer() {
   const [gender, setGender] = React.useState<GendersInterface[]>([]);
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState("");
+
   const handleClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -182,9 +184,9 @@ function UpdateCustomer() {
       Customer_Promptpay: customer.Customer_Promptpay ?? "",
       Customer_Password: customer.Customer_Password ?? "",
       Customer_Address: customer.Customer_Address ?? "",
-      Career_ID: customer.Career_ID ?? "",
-      Gender_ID: customer.Gender_ID ?? "",
-      Advertise_ID: customer.Advertise_ID ?? "",
+      Career_ID: Number(customer.Career_ID ?? ""),
+      Gender_ID: Number(customer.Gender_ID ?? ""),
+      Advertise_ID: Number(customer.Advertise_ID ?? ""),
     };
 
     //================================================================================================================//
@@ -193,20 +195,25 @@ function UpdateCustomer() {
 
     const requestOptionsPost = {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(data),
     };
-    console.log(JSON.stringify(data));
 
     fetch(`http://localhost:8080/customers`, requestOptionsPost)
       .then((response) => response.json())
       .then((res) => {
-        console.log(res);
         if (res.data) {
           setSuccess(true);
+          setErrorMessage("");
+          localStorage.clear();
+          window.location.reload();
+          window.location.href = "/";
         } else {
           setError(true);
-          console.log(res.data);
+          setErrorMessage(res.error);
         }
       });
   }
@@ -219,204 +226,206 @@ function UpdateCustomer() {
 
   return (
     <Container maxWidth="md">
-    <Snackbar
-       open={success}
-       autoHideDuration={3000}
-       onClose={handleClose}
-       anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-     >
-       <Alert onClose={handleClose} severity="success">
-         บันทึกข้อมูลไม่สำเร็จ
-       </Alert>
-     </Snackbar>
+      <Snackbar
+        open={error}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="error">
+          อัพเดทข้อมูลไม่สำเร็จ {errorMessage}
+        </Alert>
+      </Snackbar>
 
-     <Snackbar
-       open={success}
-       autoHideDuration={3000}
-       onClose={handleClose}
-       anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-     >
-       <Alert onClose={handleClose} severity="success">
-         บันทึกข้อมูลสำเร็จ
-       </Alert>
-     </Snackbar>
-     <Box sx={{ padding: 2
-                     }}>
-     <Paper>
-                    <Grid container spacing={0} sx={{ padding: 2
-                     }}>
-                    <h1>CUSTOMER<PersonAddAltSharpIcon color="primary" sx={{ fontSize: 70 }}/></h1> 
-                    </Grid>
-
-       <Divider />
-
-        <Grid container spacing={1} sx={{ padding: 5 }}>
-          <Grid item xs={12}>
-            <p>ชื่อ - นามสกุล</p>
-            <FormControl fullWidth variant="outlined">
-              <TextField
-                id="Customer_Name"
-                variant="outlined"
-                type="string"
-                size="medium"
-                value={customer.Customer_Name}
-                sx={{ width: 350 }}
-                onChange={handleInputChange}
-              />
-            </FormControl>
+      <Snackbar
+        open={success}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="success">
+          บันทึกข้อมูลสำเร็จ
+        </Alert>
+      </Snackbar>
+      <Box sx={{ padding: 2 }}>
+        <Paper>
+          <Grid container spacing={0} sx={{ padding: 2 }}>
+            <h1>
+              CUSTOMER
+              <PersonAddAltSharpIcon color="primary" sx={{ fontSize: 70 }} />
+            </h1>
           </Grid>
 
-          <Grid item xs={6}>
-            <FormControl fullWidth variant="outlined">
-              <p>เพศ</p>
-              <Select
-                sx={{ width: 300 }}
-                value={customer.Gender_ID}
-                onChange={handleChange}
-                inputProps={{
-                  name: "Gender_ID",
-                }}
-              >
-                {gender.map((item: GendersInterface) => (
-                  <MenuItem value={item.ID}>{item.Gender_Name}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
+          <Divider />
 
-          <Grid item xs={6}>
-            <p>อาชีพ</p>
-            <FormControl fullWidth variant="outlined">
-              <Select
-                sx={{ width: 300 }}
-                value={customer.Career_ID}
-                onChange={handleChange}
-                inputProps={{
-                  name: "Career_ID",
-                }}
-              >
-                {career.map((item: CareerInterface) => (
-                  <MenuItem value={item.ID}>{item.Career_Name}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
+          <Grid container spacing={1} sx={{ padding: 5 }}>
+            <Grid item xs={12}>
+              <p>ชื่อ - นามสกุล</p>
+              <FormControl fullWidth variant="outlined">
+                <TextField
+                  id="Customer_Name"
+                  variant="outlined"
+                  type="string"
+                  size="medium"
+                  value={customer.Customer_Name}
+                  sx={{ width: 350 }}
+                  onChange={handleInputChange}
+                />
+              </FormControl>
+            </Grid>
 
-          <Grid item xs={12}>
-            <p>Username</p>
-            <FormControl fullWidth variant="outlined">
-              <TextField
-                id="Customer_Username"
-                variant="outlined"
-                type="string"
-                size="medium"
-                sx={{ width: 300 }}
-                value={customer.Customer_Username}
-                onChange={handleInputChange}
-              />
-            </FormControl>
-          </Grid>
+            <Grid item xs={6}>
+              <FormControl fullWidth variant="outlined">
+                <p>เพศ</p>
+                <Select
+                  sx={{ width: 300 }}
+                  value={customer.Gender_ID}
+                  onChange={handleChange}
+                  inputProps={{
+                    name: "Gender_ID",
+                  }}
+                >
+                  {gender.map((item: GendersInterface) => (
+                    <MenuItem value={item.ID}>{item.Gender_Name}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
 
-          <Grid item xs={12}>
-            <p>Password</p>
-            <FormControl fullWidth variant="outlined">
-              <TextField
-                id="Customer_Password"
-                variant="outlined"
-                type="string"
-                size="medium"
-                sx={{ width: 300 }}
-                value={customer.Customer_Password}
-                onChange={handleInputChange}
-              />
-            </FormControl>
-          </Grid>
+            <Grid item xs={6}>
+              <p>อาชีพ</p>
+              <FormControl fullWidth variant="outlined">
+                <Select
+                  sx={{ width: 300 }}
+                  value={customer.Career_ID}
+                  onChange={handleChange}
+                  inputProps={{
+                    name: "Career_ID",
+                  }}
+                >
+                  {career.map((item: CareerInterface) => (
+                    <MenuItem value={item.ID}>{item.Career_Name}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
 
-          <Grid item xs={12}>
-            <p>เบอร์โทรศัพท์</p>
-            <FormControl fullWidth variant="outlined">
-              <TextField
-                id="Customer_Phone"
-                variant="outlined"
-                type="string"
-                size="medium"
-                sx={{ width: 300 }}
-                value={customer.Customer_Phone}
-                onChange={handleInputChange}
-              />
-            </FormControl>
-          </Grid>
+            <Grid item xs={12}>
+              <p>Username</p>
+              <FormControl fullWidth variant="outlined">
+                <TextField
+                  id="Customer_Username"
+                  variant="outlined"
+                  type="string"
+                  size="medium"
+                  sx={{ width: 300 }}
+                  value={customer.Customer_Username}
+                  onChange={handleInputChange}
+                />
+              </FormControl>
+            </Grid>
 
-          <Grid item xs={6}>
-            <p>PromPay</p>
-            <FormControl fullWidth variant="outlined">
-              <TextField
-                id="Customer_Promptpay"
-                variant="outlined"
-                type="string"
-                size="medium"
-                sx={{ width: 300 }}
-                value={customer.Customer_Promptpay}
-                onChange={handleInputChange}
-              />
-            </FormControl>
-          </Grid>
+            <Grid item xs={12}>
+              <p>Password</p>
+              <FormControl fullWidth variant="outlined">
+                <TextField
+                  id="Customer_Password"
+                  variant="outlined"
+                  type="string"
+                  size="medium"
+                  sx={{ width: 300 }}
+                  value={customer.Customer_Password}
+                  onChange={handleInputChange}
+                />
+              </FormControl>
+            </Grid>
 
-          <Grid item xs={6}>
-            <p>ที่อยู่</p>
-            <FormControl fullWidth variant="outlined">
-              <TextField
-                id="Customer_Address"
-                variant="outlined"
-                type="string"
-                size="medium"
-                sx={{ width: 300 }}
-                value={customer.Customer_Address}
-                onChange={handleInputChange}
-              />
-            </FormControl>
-          </Grid>
-          <Grid item xs={12}>
-            <p>คุณรู้จักเราได้จากที่ไหน</p>
-            <FormControl fullWidth variant="outlined">
-              <Select
-                sx={{ width: 300 }}
-                value={customer.Advertise_ID}
-                onChange={handleChange}
-                inputProps={{
-                  name: "Advertise_ID",
-                }}
-              >
-                {advertise.map((item: AdvertiseInterface) => (
-                  <MenuItem value={item.ID}>{item.Advertise_Type}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          </Grid>
-          </Paper>
-          <Grid container spacing={3} sx={{ padding: 2 }}>
-          <Grid item xs={12}>
-           <Button 
-            component={RouterLink} to="/" 
-            variant="contained"
-            color="error"
-            endIcon={<CancelIcon />}
-            >
-           cancel
-           </Button>
-           <Button
-             style={{ float: "right" }}
-             onClick={submitUpdate}
-             variant="contained"
-             color="primary"
-             endIcon={<SaveIcon />}
-           >
-           save
-           </Button>
+            <Grid item xs={12}>
+              <p>เบอร์โทรศัพท์</p>
+              <FormControl fullWidth variant="outlined">
+                <TextField
+                  id="Customer_Phone"
+                  variant="outlined"
+                  type="string"
+                  size="medium"
+                  sx={{ width: 300 }}
+                  value={customer.Customer_Phone}
+                  onChange={handleInputChange}
+                />
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={6}>
+              <p>PromPay</p>
+              <FormControl fullWidth variant="outlined">
+                <TextField
+                  id="Customer_Promptpay"
+                  variant="outlined"
+                  type="string"
+                  size="medium"
+                  sx={{ width: 300 }}
+                  value={customer.Customer_Promptpay}
+                  onChange={handleInputChange}
+                />
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={6}>
+              <p>ที่อยู่</p>
+              <FormControl fullWidth variant="outlined">
+                <TextField
+                  id="Customer_Address"
+                  variant="outlined"
+                  type="string"
+                  size="medium"
+                  sx={{ width: 300 }}
+                  value={customer.Customer_Address}
+                  onChange={handleInputChange}
+                />
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <p>คุณรู้จักเราได้จากที่ไหน</p>
+              <FormControl fullWidth variant="outlined">
+                <Select
+                  sx={{ width: 300 }}
+                  value={customer.Advertise_ID}
+                  onChange={handleChange}
+                  inputProps={{
+                    name: "Advertise_ID",
+                  }}
+                >
+                  {advertise.map((item: AdvertiseInterface) => (
+                    <MenuItem value={item.ID}>{item.Advertise_Type}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Grid>
           </Grid>
-          </Box>
+        </Paper>
+        <Grid container spacing={3} sx={{ padding: 2 }}>
+          <Grid item xs={12}>
+            <Button
+              component={RouterLink}
+              to="/"
+              variant="contained"
+              color="error"
+              endIcon={<CancelIcon />}
+            >
+              cancel
+            </Button>
+            <Button
+              style={{ float: "right" }}
+              onClick={submitUpdate}
+              variant="contained"
+              color="primary"
+              endIcon={<SaveIcon />}
+            >
+              save
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
     </Container>
   );
 }
