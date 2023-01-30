@@ -10,20 +10,13 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import { ReceiveInterface } from "../../models/receive/IReceive";
 
-import StorefrontIcon from '@mui/icons-material/Storefront';
-/* Datetimepicker */
-import dayjs, { Dayjs } from "dayjs";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { PromotionInterface } from "../../models/promotion/IPromotion";
-
-function UpdatePromotion() {
-  const [date_u, setDate_U] = React.useState<Dayjs | null>(dayjs());
-  const [promotion, setPromotion] = React.useState<Partial<PromotionInterface>>({});
-  const [price, setPrice] = React.useState<number | null>(null);
-  const [promotion_id, setPromotion_ID] = React.useState<PromotionInterface[]>([]);
+function ReceiveDelete() {
+  const [receive, setReceive] = React.useState<Partial<ReceiveInterface>>({});
+  const [receive_id, setReceive_ID] = React.useState<ReceiveInterface[]>([]);
+  const [deleteReceive_1, setDeleteReceive] = React.useState<number | undefined>();
 
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -43,46 +36,37 @@ function UpdatePromotion() {
     return new Promise( res => setTimeout(res, delay) );
 }
 
-  function update() {
-    let promotion_u = {
-      ID: promotion.ID,
-      Price: price,
-      Employee_ID: Number(localStorage.getItem("uid")),
-      Time_Stamp: date_u,
+  const deleteReceive = (id: number | undefined) => {
+    let data = {                                                            //ประกาศก้อนข้อมูล
+        ID: receive.ID,      
     };
-
-    const requestOptions = {
-      method: "PATCH",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(promotion_u),
+    const apiUrl = "http://localhost:8080/receive/:id";                      //ส่งขอการลบ  
+    const requestOptions = {     
+        method: "DELETE",      
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+        },     
+        body: JSON.stringify(data),
     };
-    console.log(promotion_u);
-    // console.log(JSON.stringify(promotion_u));
-
-    fetch(`http://localhost:8080/promotions`, requestOptions)
-      .then((response) => response.json())
-      .then(async (res) => {
-        console.log(res);
+    console.log(JSON.stringify(data),);
+    fetch(apiUrl, requestOptions)                                            //ขอการส่งกลับมาเช็คว่าบันทึกสำเร็จมั้ย
+    .then((response) => response.json())      
+    .then(async (res) => {      
         if (res.data) {
-          setSuccess(true);
-          await timeout(1000); //for 1 sec delay
-          window.location.reload();     
-          
+            setSuccess(true);
+            await timeout(1000); //for 1 sec delay
+            window.location.reload();     
         } else {
-          setError(true);
-          console.log(res.data);
+            setError(true);     
         }
-      });
-  }
+    });
+}
 
 
 
-
-  const getPromotion = async () => {
-    const apiUrl = "http://localhost:8080/promotion";
+  const getReceive = async () => {
+    const apiUrl = "http://localhost:8080/receive";
     const requestOptions = {
       method: "GET",
       headers: {
@@ -96,26 +80,25 @@ function UpdatePromotion() {
       .then((res) => {
         console.log(res)
         if (res.data) {
-          setPromotion(res.data);
-          setPromotion_ID(res.data);
+          setReceive(res.data);
+          setReceive_ID(res.data);
         }
       });
   };
 
   useEffect(() => {
-    getPromotion();
+    getReceive();
   }, []);
   return (
 
     <Container maxWidth="xl">
-      <StorefrontIcon color="primary" sx={{ fontSize: 80 }} />
       <Snackbar // บันทึกสำเร็จ
         open={success}
         autoHideDuration={3000}
         onClose={handleClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
         <Alert onClose={handleClose} severity="success">
-          บันทึกข้อมูลสำเร็จ
+          ลบข้อมูลสำเร็จ
         </Alert>
       </Snackbar>
 
@@ -125,26 +108,26 @@ function UpdatePromotion() {
         onClose={handleClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
         <Alert onClose={handleClose} severity="error">
-          บันทึกข้อมูลไม่สำเร็จ
+          ลบข้อมูลไม่สำเร็จ
         </Alert>
       </Snackbar>
       <Box>
         <Paper>
-          <Grid sx={{ padding: 2 }}>
-            <h1>Promotion</h1>
+        <Grid container spacing={0} sx={{ padding: 2}}>
+            <h1>RECEIVE<AddShoppingCartIcon color="success" sx={{ fontSize: 200 }}/></h1>
             </Grid>
             <Grid container spacing={2} sx={{ paddingX: 2 }}>
             <Grid item xs={2}>
-              <h3>ID</h3>
+              <h3>Bill ID</h3>
             </Grid>
             <Grid item xs={10} >
               <Autocomplete
-                id="promption-auto"
-                options={promotion_id}
+                id="receive-auto"
+                options={receive_id}
                 fullWidth
                 size="medium"
                 onChange={(event: any, value) => {
-                  setPromotion({ ...promotion, ID: value?.ID }); //Just Set ID to interface
+                  setReceive({ ...receive, ID: value?.ID }); //Just Set ID to interface
                 }}
                 getOptionLabel={(option: any) =>
                   `${option.ID}`
@@ -170,41 +153,6 @@ function UpdatePromotion() {
               />
             </Grid>
           </Grid>
-
-
-          <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 2 }}>
-            <Grid item xs={2}>
-              <h3>Price</h3>
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                id="outlined-basic"
-                label="Price"
-                variant="outlined"
-                defaultValue="0"
-                onChange={(event) => setPrice(Number(event.target.value))}
-              />
-            </Grid>
-          </Grid>
-
-          <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 2 }}>
-            <Grid item xs={2}>
-              <h3>Date Time</h3>
-            </Grid>
-            <Grid item xs={10}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateTimePicker
-                  label="DateTimePicker"
-                  renderInput={(params) => <TextField {...params} />}
-                  value={date_u}
-                  onChange={(newValue: Dayjs | null) => {
-                    setDate_U(newValue);
-                    console.log(newValue)
-                  }}
-                />
-              </LocalizationProvider>
-            </Grid>
-          </Grid>
         </Paper>
         <Grid container spacing={2}
           sx={{ paddingY: 2 }}>
@@ -215,10 +163,10 @@ function UpdatePromotion() {
             <Button
               variant="contained"
               color="warning"
-              onClick={update}
+              onClick={() => deleteReceive(deleteReceive_1)}
               endIcon={<SaveIcon />}
             >
-              update
+              delete
             </Button>
           </Grid>
         </Grid>
@@ -227,4 +175,4 @@ function UpdatePromotion() {
   );
 }
 
-export default UpdatePromotion;
+export default ReceiveDelete;

@@ -2,6 +2,8 @@ package controller
 
 import (
 	"github.com/sut65/team10/entity"
+	//"gopkg.in/yaml.v2"
+	"gorm.io/gorm"
 
 	"github.com/gin-gonic/gin"
 
@@ -103,21 +105,46 @@ func ListReceives(c *gin.Context) {
 
 func UpdateReceive(c *gin.Context) {
 	var receive entity.Receive
+
 	if err := c.ShouldBindJSON(&receive); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	if tx := entity.DB().Where("id = ?", receive.ID).First(&receive); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
-		return
+	var updateDet_Quantity = receive.Det_Quantity
+	var updateSof_Quantity = receive.Sof_Quantity
+
+	//12: สร้าง
+	u_r := entity.Receive{
+		Model:        gorm.Model{ID: receive.ID},
+		Det_Quantity: updateDet_Quantity,
+		Sof_Quantity: updateSof_Quantity,
+		Employee_ID:  receive.Employee_ID,
+		Time_Stamp:   receive.Time_Stamp.Local(),
 	}
 
-	if err := entity.DB().Save(&receive).Error; err != nil {
+	if err := entity.DB().Where("id = ?", receive.ID).Updates(&u_r).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": receive})
+	c.JSON(http.StatusOK, gin.H{"data": u_r})
 
+}
+
+// DELETE /receives/:id
+func DeleteReceive(c *gin.Context) {
+	var receive entity.Receive
+
+	if err := c.ShouldBindJSON(&receive); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if tx := entity.DB().Exec("DELETE FROM receives WHERE id = ?", receive.ID); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "receive not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": receive})
 }

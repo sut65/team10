@@ -31,7 +31,6 @@ function BillUpdate() {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
   const [bill, setBill] = React.useState<Partial<BillInterface>>({});
   const [paymenttype, setPaymenttype] = React.useState<PaymenttypeInterface[]>([]);
-  const [quotacode, setQuotacode] = React.useState<QuotaCodeInterface[]>([]);
   const [service, setService] = React.useState<ServiceInterface[]>([]);
 
   const [success, setSuccess] = useState(false);
@@ -56,8 +55,11 @@ function BillUpdate() {
 
     function update() {
         let bill_u = {
-          ID: bill.ID,
-          Paymenttype: bill.Paymenttype_ID,
+          // ID: bill.ID,
+          ID: 2,
+          Paymenttype_ID: bill.Paymenttype_ID,
+          Service_ID: 2,
+          //Service_ID: Number(localStorage.getItem("uid")),
           Time_Stamp: date,
         };
     
@@ -70,7 +72,6 @@ function BillUpdate() {
           body: JSON.stringify(bill_u),
         };
         console.log(bill_u);
-        console.log(JSON.stringify(bill_u));
     
         fetch(`http://localhost:8080/bills`, requestOptions)
           .then((response) => response.json())
@@ -285,7 +286,7 @@ function BillUpdate() {
                       label="DateTimePicker"
                       renderInput={(params) => <TextField {...params} />}
                       value={date}
-                      onChange={(newValue) => {
+                      onChange={(newValue: Dayjs | null) => {
                         setDate(newValue);
                       }}
                     />

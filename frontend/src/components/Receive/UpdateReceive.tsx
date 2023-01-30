@@ -10,20 +10,21 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
-import StorefrontIcon from '@mui/icons-material/Storefront';
 /* Datetimepicker */
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { PromotionInterface } from "../../models/promotion/IPromotion";
-
-function UpdatePromotion() {
-  const [date_u, setDate_U] = React.useState<Dayjs | null>(dayjs());
-  const [promotion, setPromotion] = React.useState<Partial<PromotionInterface>>({});
-  const [price, setPrice] = React.useState<number | null>(null);
-  const [promotion_id, setPromotion_ID] = React.useState<PromotionInterface[]>([]);
+import { ReceiveInterface } from "../../models/receive/IReceive";
+function UpdateReceive() {
+  const [date, setDate] = React.useState<Dayjs | null>(dayjs());
+  const [receive, setReceive] = React.useState<Partial<ReceiveInterface>>({});
+  const [Det_Quantity, setDet_Quantity] = React.useState<number | null>(null);
+  const [Sof_Quantity, setSof_Quantity] = React.useState<number | null>(null);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const [receive_id, serReceive_ID] = React.useState<ReceiveInterface[]>([]);
 
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -44,11 +45,12 @@ function UpdatePromotion() {
 }
 
   function update() {
-    let promotion_u = {
-      ID: promotion.ID,
-      Price: price,
+    let receive_update = {
+      ID: receive.ID,
+      Det_Quantity: Det_Quantity,
+      Sof_Quantity:Sof_Quantity,
       Employee_ID: Number(localStorage.getItem("uid")),
-      Time_Stamp: date_u,
+      Time_Stamp: date,
     };
 
     const requestOptions = {
@@ -57,12 +59,12 @@ function UpdatePromotion() {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(promotion_u),
+      body: JSON.stringify(receive_update),
     };
-    console.log(promotion_u);
-    // console.log(JSON.stringify(promotion_u));
+    console.log(receive_update);
+    console.log(JSON.stringify(receive_update));
 
-    fetch(`http://localhost:8080/promotions`, requestOptions)
+    fetch(`http://localhost:8080/receives`, requestOptions)
       .then((response) => response.json())
       .then(async (res) => {
         console.log(res);
@@ -81,8 +83,8 @@ function UpdatePromotion() {
 
 
 
-  const getPromotion = async () => {
-    const apiUrl = "http://localhost:8080/promotion";
+  const getReceive = async () => {
+    const apiUrl = "http://localhost:8080/receive";
     const requestOptions = {
       method: "GET",
       headers: {
@@ -96,19 +98,18 @@ function UpdatePromotion() {
       .then((res) => {
         console.log(res)
         if (res.data) {
-          setPromotion(res.data);
-          setPromotion_ID(res.data);
+          setReceive(res.data);
+          serReceive_ID(res.data);
         }
       });
   };
 
   useEffect(() => {
-    getPromotion();
+    getReceive();
   }, []);
   return (
 
     <Container maxWidth="xl">
-      <StorefrontIcon color="primary" sx={{ fontSize: 80 }} />
       <Snackbar // บันทึกสำเร็จ
         open={success}
         autoHideDuration={3000}
@@ -128,23 +129,23 @@ function UpdatePromotion() {
           บันทึกข้อมูลไม่สำเร็จ
         </Alert>
       </Snackbar>
-      <Box>
+      <Box sx={{ padding: 2}}>
         <Paper>
-          <Grid sx={{ padding: 2 }}>
-            <h1>Promotion</h1>
+        <Grid container spacing={0} sx={{ padding: 2}}>
+            <h1>RECEIVE<AddShoppingCartIcon color="success" sx={{ fontSize: 200 }}/></h1>
             </Grid>
             <Grid container spacing={2} sx={{ paddingX: 2 }}>
-            <Grid item xs={2}>
-              <h3>ID</h3>
+            <Grid item xs={4}>
+              <h3>Bill ID</h3>
             </Grid>
-            <Grid item xs={10} >
+            <Grid item xs={8} >
               <Autocomplete
-                id="promption-auto"
-                options={promotion_id}
+                id="receive-auto"
+                options={receive_id}
                 fullWidth
                 size="medium"
                 onChange={(event: any, value) => {
-                  setPromotion({ ...promotion, ID: value?.ID }); //Just Set ID to interface
+                  setReceive({ ...receive, ID: value?.ID }); //Just Set ID to interface
                 }}
                 getOptionLabel={(option: any) =>
                   `${option.ID}`
@@ -154,7 +155,7 @@ function UpdatePromotion() {
                     <TextField
                       {...params}
                       variant="outlined"
-                      placeholder="Search..."
+                      placeholder="ID..."
                     />
                   );
                 }}
@@ -173,33 +174,48 @@ function UpdatePromotion() {
 
 
           <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 2 }}>
-            <Grid item xs={2}>
-              <h3>Price</h3>
-            </Grid>
             <Grid item xs={4}>
+              <h3>Detergent</h3>
+            </Grid>
+            <Grid item xs={7}>
               <TextField
                 id="outlined-basic"
-                label="Price"
+                label="Quantity"
                 variant="outlined"
-                defaultValue="0"
-                onChange={(event) => setPrice(Number(event.target.value))}
+                defaultValue=""
+                onChange={(event) => setDet_Quantity(Number(event.target.value))}
+                inputProps={{ type: "number" }}
+              />
+            </Grid>
+          </Grid>
+          <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 2 }}>
+            <Grid item xs={4}>
+              <h3>Softener</h3>
+            </Grid>
+            <Grid item xs={7}>
+              <TextField
+                id="outlined-basic"
+                label="Quantity"
+                variant="outlined"
+                defaultValue=""
+                onChange={(event) => setSof_Quantity(Number(event.target.value))}
+                inputProps={{ type: "number" }}
               />
             </Grid>
           </Grid>
 
           <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 2 }}>
-            <Grid item xs={2}>
-              <h3>Date Time</h3>
+            <Grid item xs={4}>
+              <h3>Time Stamp</h3>
             </Grid>
-            <Grid item xs={10}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Grid item xs={8}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateTimePicker
                   label="DateTimePicker"
                   renderInput={(params) => <TextField {...params} />}
-                  value={date_u}
+                  value={date}
                   onChange={(newValue: Dayjs | null) => {
-                    setDate_U(newValue);
-                    console.log(newValue)
+                    setDate(newValue);
                   }}
                 />
               </LocalizationProvider>
@@ -227,4 +243,4 @@ function UpdatePromotion() {
   );
 }
 
-export default UpdatePromotion;
+export default UpdateReceive;
