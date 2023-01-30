@@ -62,7 +62,7 @@ function VehicleTableUI() {
       width: 150,
       valueGetter: (params) => params.value.Name,
     },
-    { field: "Time_Insulance", headerName: "วันที่ต่อ พรบ.", width: 250 },
+    { field: "Date_Insulance", headerName: "วันที่ต่อ พรบ.", width: 250 },
   ];
 
   return (
