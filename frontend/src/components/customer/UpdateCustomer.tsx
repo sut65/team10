@@ -226,34 +226,51 @@ function UpdateCustomer() {
 
   return (
     <Container maxWidth="md">
-      <Snackbar
-        open={error}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert onClose={handleClose} severity="error">
-          อัพเดทข้อมูลไม่สำเร็จ {errorMessage}
-        </Alert>
-      </Snackbar>
+    <Snackbar
+       open={success}
+       autoHideDuration={3000}
+       onClose={handleClose}
+       anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+     >
+       <Alert onClose={handleClose} severity="success">
+         บันทึกข้อมูลสำเร็จ
+       </Alert>
+     </Snackbar>
 
-      <Snackbar
-        open={success}
-        autoHideDuration={3000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert onClose={handleClose} severity="success">
-          บันทึกข้อมูลสำเร็จ
-        </Alert>
-      </Snackbar>
-      <Box sx={{ padding: 2 }}>
-        <Paper>
-          <Grid container spacing={0} sx={{ padding: 2 }}>
-            <h1>
-              CUSTOMER
-              <PersonAddAltSharpIcon color="primary" sx={{ fontSize: 70 }} />
-            </h1>
+     <Snackbar
+       open={error}
+       autoHideDuration={3000}
+       onClose={handleClose}
+       anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+     >
+       <Alert onClose={handleClose} severity="error">
+         บันทึกข้อมูลไม่สำเร็จ
+       </Alert>
+     </Snackbar>
+     <Box sx={{ padding: 2
+                     }}>
+     <Paper>
+                    <Grid container spacing={0} sx={{ padding: 2
+                     }}>
+                    <h1>CUSTOMER<PersonAddAltSharpIcon color="primary" sx={{ fontSize: 70 }}/></h1> 
+                    </Grid>
+
+       <Divider />
+
+        <Grid container spacing={1} sx={{ padding: 5 }}>
+          <Grid item xs={12}>
+            <p>ชื่อ - นามสกุล</p>
+            <FormControl fullWidth variant="outlined">
+              <TextField
+                id="Customer_Name"
+                variant="outlined"
+                type="string"
+                size="medium"
+                value={customer.Customer_Name}
+                sx={{ width: 350 }}
+                onChange={handleInputChange}
+              />
+            </FormControl>
           </Grid>
 
           <Divider />
