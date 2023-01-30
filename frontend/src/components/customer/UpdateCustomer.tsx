@@ -226,51 +226,35 @@ function UpdateCustomer() {
 
   return (
     <Container maxWidth="md">
-    <Snackbar
-       open={success}
-       autoHideDuration={3000}
-       onClose={handleClose}
-       anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-     >
-       <Alert onClose={handleClose} severity="success">
-         บันทึกข้อมูลสำเร็จ
-       </Alert>
-     </Snackbar>
+      <Snackbar
+        open={success}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="success">
+          บันทึกข้อมูลสำเร็จ
+        </Alert>
+      </Snackbar>
 
-     <Snackbar
-       open={error}
-       autoHideDuration={3000}
-       onClose={handleClose}
-       anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-     >
-       <Alert onClose={handleClose} severity="error">
-         บันทึกข้อมูลไม่สำเร็จ
-       </Alert>
-     </Snackbar>
-     <Box sx={{ padding: 2
-                     }}>
-     <Paper>
-                    <Grid container spacing={0} sx={{ padding: 2
-                     }}>
-                    <h1>CUSTOMER<PersonAddAltSharpIcon color="primary" sx={{ fontSize: 70 }}/></h1> 
-                    </Grid>
-
-       <Divider />
-
-        <Grid container spacing={1} sx={{ padding: 5 }}>
-          <Grid item xs={12}>
-            <p>ชื่อ - นามสกุล</p>
-            <FormControl fullWidth variant="outlined">
-              <TextField
-                id="Customer_Name"
-                variant="outlined"
-                type="string"
-                size="medium"
-                value={customer.Customer_Name}
-                sx={{ width: 350 }}
-                onChange={handleInputChange}
-              />
-            </FormControl>
+      <Snackbar
+        open={error}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert onClose={handleClose} severity="error">
+          บันทึกข้อมูลไม่สำเร็จ
+        </Alert>
+      </Snackbar>
+      <Box sx={{
+        padding: 2
+      }}>
+        <Paper>
+          <Grid container spacing={0} sx={{
+            padding: 2
+          }}>
+            <h1>CUSTOMER<PersonAddAltSharpIcon color="primary" sx={{ fontSize: 70 }} /></h1>
           </Grid>
 
           <Divider />
@@ -291,132 +275,151 @@ function UpdateCustomer() {
               </FormControl>
             </Grid>
 
-            <Grid item xs={6}>
-              <FormControl fullWidth variant="outlined">
-                <p>เพศ</p>
-                <Select
-                  sx={{ width: 300 }}
-                  value={customer.Gender_ID}
-                  onChange={handleChange}
-                  inputProps={{
-                    name: "Gender_ID",
-                  }}
-                >
-                  {gender.map((item: GendersInterface) => (
-                    <MenuItem value={item.ID}>{item.Gender_Name}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
+            <Divider />
 
-            <Grid item xs={6}>
-              <p>อาชีพ</p>
-              <FormControl fullWidth variant="outlined">
-                <Select
-                  sx={{ width: 300 }}
-                  value={customer.Career_ID}
-                  onChange={handleChange}
-                  inputProps={{
-                    name: "Career_ID",
-                  }}
-                >
-                  {career.map((item: CareerInterface) => (
-                    <MenuItem value={item.ID}>{item.Career_Name}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
+            <Grid container spacing={1} sx={{ padding: 5 }}>
+              <Grid item xs={12}>
+                <p>ชื่อ - นามสกุล</p>
+                <FormControl fullWidth variant="outlined">
+                  <TextField
+                    id="Customer_Name"
+                    variant="outlined"
+                    type="string"
+                    size="medium"
+                    value={customer.Customer_Name}
+                    sx={{ width: 350 }}
+                    onChange={handleInputChange}
+                  />
+                </FormControl>
+              </Grid>
 
-            <Grid item xs={12}>
-              <p>Username</p>
-              <FormControl fullWidth variant="outlined">
-                <TextField
-                  id="Customer_Username"
-                  variant="outlined"
-                  type="string"
-                  size="medium"
-                  sx={{ width: 300 }}
-                  value={customer.Customer_Username}
-                  onChange={handleInputChange}
-                />
-              </FormControl>
-            </Grid>
+              <Grid item xs={6}>
+                <FormControl fullWidth variant="outlined">
+                  <p>เพศ</p>
+                  <Select
+                    sx={{ width: 300 }}
+                    value={customer.Gender_ID}
+                    onChange={handleChange}
+                    inputProps={{
+                      name: "Gender_ID",
+                    }}
+                  >
+                    {gender.map((item: GendersInterface) => (
+                      <MenuItem value={item.ID}>{item.Gender_Name}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
 
-            <Grid item xs={12}>
-              <p>Password</p>
-              <FormControl fullWidth variant="outlined">
-                <TextField
-                  id="Customer_Password"
-                  variant="outlined"
-                  type="string"
-                  size="medium"
-                  sx={{ width: 300 }}
-                  value={customer.Customer_Password}
-                  onChange={handleInputChange}
-                />
-              </FormControl>
-            </Grid>
+              <Grid item xs={6}>
+                <p>อาชีพ</p>
+                <FormControl fullWidth variant="outlined">
+                  <Select
+                    sx={{ width: 300 }}
+                    value={customer.Career_ID}
+                    onChange={handleChange}
+                    inputProps={{
+                      name: "Career_ID",
+                    }}
+                  >
+                    {career.map((item: CareerInterface) => (
+                      <MenuItem value={item.ID}>{item.Career_Name}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
 
-            <Grid item xs={12}>
-              <p>เบอร์โทรศัพท์</p>
-              <FormControl fullWidth variant="outlined">
-                <TextField
-                  id="Customer_Phone"
-                  variant="outlined"
-                  type="string"
-                  size="medium"
-                  sx={{ width: 300 }}
-                  value={customer.Customer_Phone}
-                  onChange={handleInputChange}
-                />
-              </FormControl>
-            </Grid>
+              <Grid item xs={12}>
+                <p>Username</p>
+                <FormControl fullWidth variant="outlined">
+                  <TextField
+                    id="Customer_Username"
+                    variant="outlined"
+                    type="string"
+                    size="medium"
+                    sx={{ width: 300 }}
+                    value={customer.Customer_Username}
+                    onChange={handleInputChange}
+                  />
+                </FormControl>
+              </Grid>
 
-            <Grid item xs={6}>
-              <p>PromPay</p>
-              <FormControl fullWidth variant="outlined">
-                <TextField
-                  id="Customer_Promptpay"
-                  variant="outlined"
-                  type="string"
-                  size="medium"
-                  sx={{ width: 300 }}
-                  value={customer.Customer_Promptpay}
-                  onChange={handleInputChange}
-                />
-              </FormControl>
-            </Grid>
+              <Grid item xs={12}>
+                <p>Password</p>
+                <FormControl fullWidth variant="outlined">
+                  <TextField
+                    id="Customer_Password"
+                    variant="outlined"
+                    type="string"
+                    size="medium"
+                    sx={{ width: 300 }}
+                    value={customer.Customer_Password}
+                    onChange={handleInputChange}
+                  />
+                </FormControl>
+              </Grid>
 
-            <Grid item xs={6}>
-              <p>ที่อยู่</p>
-              <FormControl fullWidth variant="outlined">
-                <TextField
-                  id="Customer_Address"
-                  variant="outlined"
-                  type="string"
-                  size="medium"
-                  sx={{ width: 300 }}
-                  value={customer.Customer_Address}
-                  onChange={handleInputChange}
-                />
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <p>คุณรู้จักเราได้จากที่ไหน</p>
-              <FormControl fullWidth variant="outlined">
-                <Select
-                  sx={{ width: 300 }}
-                  value={customer.Advertise_ID}
-                  onChange={handleChange}
-                  inputProps={{
-                    name: "Advertise_ID",
-                  }}
-                >
-                  {advertise.map((item: AdvertiseInterface) => (
-                    <MenuItem value={item.ID}>{item.Advertise_Type}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <Grid item xs={12}>
+                <p>เบอร์โทรศัพท์</p>
+                <FormControl fullWidth variant="outlined">
+                  <TextField
+                    id="Customer_Phone"
+                    variant="outlined"
+                    type="string"
+                    size="medium"
+                    sx={{ width: 300 }}
+                    value={customer.Customer_Phone}
+                    onChange={handleInputChange}
+                  />
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={6}>
+                <p>PromPay</p>
+                <FormControl fullWidth variant="outlined">
+                  <TextField
+                    id="Customer_Promptpay"
+                    variant="outlined"
+                    type="string"
+                    size="medium"
+                    sx={{ width: 300 }}
+                    value={customer.Customer_Promptpay}
+                    onChange={handleInputChange}
+                  />
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={6}>
+                <p>ที่อยู่</p>
+                <FormControl fullWidth variant="outlined">
+                  <TextField
+                    id="Customer_Address"
+                    variant="outlined"
+                    type="string"
+                    size="medium"
+                    sx={{ width: 300 }}
+                    value={customer.Customer_Address}
+                    onChange={handleInputChange}
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <p>คุณรู้จักเราได้จากที่ไหน</p>
+                <FormControl fullWidth variant="outlined">
+                  <Select
+                    sx={{ width: 300 }}
+                    value={customer.Advertise_ID}
+                    onChange={handleChange}
+                    inputProps={{
+                      name: "Advertise_ID",
+                    }}
+                  >
+                    {advertise.map((item: AdvertiseInterface) => (
+                      <MenuItem value={item.ID}>{item.Advertise_Type}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
             </Grid>
           </Grid>
         </Paper>
