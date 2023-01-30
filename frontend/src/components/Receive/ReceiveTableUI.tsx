@@ -1,11 +1,28 @@
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useEffect } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Container from "@mui/material/Container";
-import { Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { ReceiveInterface } from "../../models/receive/IReceive";
-
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import ReceiveDelete from "./DeleteReceive";
+import {  Popover, Typography } from "@mui/material";
 function ReceiveTableUI() {
   const [receive, setReceive] = useState<ReceiveInterface[]>([]);
+
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const popup = open ? 'simple-popover' : undefined;
+
 
   useEffect(() => {
     getReceive();
@@ -63,6 +80,34 @@ function ReceiveTableUI() {
   return (
     <div>
       <Grid>
+      <Grid item xs={6} sx={{
+                  paddingX: 2, paddingY: 0
+                }}
+          >
+            <div>
+            <Button aria-describedby={popup} variant="contained" color="error"
+              endIcon={<DeleteForeverIcon />}
+              onClick={handleClick}>
+              Delete
+            </Button>
+            <Popover
+              id={popup}
+              open={open}
+              anchorEl={anchorEl}
+              sx={{ paddingBottom: 20 }}
+              marginThreshold={80}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+            >
+              <ReceiveDelete />
+              <Typography sx={{ p: 2 }}>Delete Receive</Typography>
+            </Popover>
+            </div>
+            </Grid>
+      <Grid>
         <Grid
                 container
                 justifyContent={"center"}
@@ -82,6 +127,7 @@ function ReceiveTableUI() {
           </div>
         </Container>
         </Grid>
+      </Grid>
       </Grid>
     </div>
   );
