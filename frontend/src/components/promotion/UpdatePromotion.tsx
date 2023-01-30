@@ -18,11 +18,11 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { PromotionInterface } from "../../models/promotion/IPromotion";
+
 function UpdatePromotion() {
-  const [date, setDate] = React.useState<Dayjs | null>(dayjs());
+  const [date_u, setDate_U] = React.useState<Dayjs | null>(dayjs());
   const [promotion, setPromotion] = React.useState<Partial<PromotionInterface>>({});
   const [price, setPrice] = React.useState<number | null>(null);
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const [promotion_id, setPromotion_ID] = React.useState<PromotionInterface[]>([]);
 
   const [success, setSuccess] = useState(false);
@@ -48,7 +48,7 @@ function UpdatePromotion() {
       ID: promotion.ID,
       Price: price,
       Employee_ID: Number(localStorage.getItem("uid")),
-      Time_Stamp: date,
+      Time_Stamp: date_u,
     };
 
     const requestOptions = {
@@ -60,7 +60,7 @@ function UpdatePromotion() {
       body: JSON.stringify(promotion_u),
     };
     console.log(promotion_u);
-    console.log(JSON.stringify(promotion_u));
+    // console.log(JSON.stringify(promotion_u));
 
     fetch(`http://localhost:8080/promotions`, requestOptions)
       .then((response) => response.json())
@@ -192,13 +192,14 @@ function UpdatePromotion() {
               <h3>Date Time</h3>
             </Grid>
             <Grid item xs={10}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateTimePicker
                   label="DateTimePicker"
                   renderInput={(params) => <TextField {...params} />}
-                  value={date}
-                  onChange={(newValue) => {
-                    setDate(newValue);
+                  value={date_u}
+                  onChange={(newValue: Dayjs | null) => {
+                    setDate_U(newValue);
+                    console.log(newValue)
                   }}
                 />
               </LocalizationProvider>

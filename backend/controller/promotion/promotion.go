@@ -124,34 +124,15 @@ func ListPromotions(c *gin.Context) {
 
 func UpdatePromotion(c *gin.Context) {
 	var promotion entity.Promotion
-	var employee entity.Employee
 
 	if err := c.ShouldBindJSON(&promotion); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	var updatePrice = promotion.Price
-	// ค้นหา Employee ด้วยไอดี
-	if tx := entity.DB().Where("id = ?", promotion.Employee_ID).First(&employee); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Employee not found"})
-
-		return
-
-	}
-
-	//ค้นหา id promotion
-	if tx := entity.DB().Where("id = ?", promotion.ID).First(&promotion); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "promotion not found"})
-
-		return
-
-	}
-
-	//12: สร้าง
+	// สร้าง
 	u_p := entity.Promotion{
-		Model:       gorm.Model{ID: promotion.ID},
-		Price:       updatePrice,
+		Price:       promotion.Price,
 		Employee_ID: promotion.Employee_ID,
 		Time_Stamp:  promotion.Time_Stamp.Local(),
 	}
