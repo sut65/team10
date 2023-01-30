@@ -80,7 +80,7 @@ func main() {
 			//--reason
 			p.GET("/reason", controllerpromotion.ListReasons)
 			//--quotacode
-			p.GET("/quotacode", controllerpromotion.ListQuotacode)
+			p.GET("/quotacode", controllerpromotion.ListQuotacode)      //Unuse Quotacode
 			p.GET("/quotacodes", controllerpromotion.ListQuotacodefull) //Full
 			p.PATCH("/quotacodes", controllerpromotion.UpdatePromotion)
 
