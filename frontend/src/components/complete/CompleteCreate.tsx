@@ -28,7 +28,6 @@ import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import { CompleteInterface } from "../../models/complete/IComplete";
 
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -42,6 +41,7 @@ import { DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import UpdateIcon from "@mui/icons-material/Update";
 import dayjs, { Dayjs } from "dayjs";
+import CompleteTable from "./TabelComplete";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
@@ -63,6 +63,9 @@ function CompleteCreate() {
  const [employee, setEmployee] = React.useState<EmployeesInterface[]>([]);
  const [receive, setReceive] = React.useState<ReceiveInterface[]>([]);
  const [packaging, setPackaging] = React.useState<PackagingInterface[]>([]);
+
+ const [e_name, setE_name] = React.useState<String | undefined>(undefined);
+ const [eid, setEid] = React.useState<Number | undefined>(undefined);
  const [success, setSuccess] = React.useState(false);
  const [error, setError] = React.useState(false);
  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
@@ -81,7 +84,6 @@ function CompleteCreate() {
     .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
 
     .then((res) => {
-      console.log(res.data); //show ข้อมูล
 
       if (res.data) {
         setPackaging(res.data);
@@ -93,7 +95,7 @@ function CompleteCreate() {
 
 
 const getEmployee = async () => {
-  const apiUrl = `http://localhost:8080/employees`;
+  const apiUrl = `http://localhost:8080/employees/${localStorage.getItem("uid")}`;
 
   const requestOptions = {
     method: "GET",
@@ -108,10 +110,11 @@ const getEmployee = async () => {
     .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
 
     .then((res) => {
-      console.log(res.data); //show ข้อมูล
 
       if (res.data) {
         setEmployee(res.data);
+        setE_name(res.data.Name);
+        setEid(res.data.ID);
       } else {
         console.log("else");
       }
@@ -134,7 +137,7 @@ const getReciev = async () => {
     .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
 
     .then((res) => {
-      console.log(res.data); //show ข้อมูล
+       //show ข้อมูล
 
       if (res.data) {
         setReceive(res.data);
@@ -178,8 +181,6 @@ const handleChange = (event: SelectChangeEvent<number>) => {
     [name]: event.target.value,
   });
 };
-
-console.log(complete.Employee_ID)
 
 function submit() {
   let data = {
@@ -238,18 +239,18 @@ function submit() {
        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
      >
        <Alert onClose={handleClose} severity="success">
-         บันทึกข้อมูลไม่สำเร็จ
+         บันทึกข้อมูลสำเร็จ
        </Alert>
      </Snackbar>
 
      <Snackbar
-       open={success}
+       open={error}
        autoHideDuration={3000}
        onClose={handleClose}
        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
      >
-       <Alert onClose={handleClose} severity="success">
-         บันทึกข้อมูลสำเร็จ
+       <Alert onClose={handleClose} severity="error">
+         บันทึกข้อมูลไม่สำเร็จ
        </Alert>
      </Snackbar>
      <Box sx={{ padding: 2
@@ -273,8 +274,8 @@ function submit() {
                disabled
                type="string"
                size="medium"
-               value={complete.Employee_ID}
-               defaultValue={complete.Employee_ID}
+               value={eid}
+               defaultValue={"Employee ID"}
                sx={{ width : 350 }}
                onChange={handleInputChange}
              ></TextField>
@@ -291,8 +292,8 @@ function submit() {
                 type="string"
                 size="medium"
                 sx={{ width: 300 }}
-                value={complete.Name}
-                defaultValue={complete.Employee_ID}
+                value={e_name}
+                defaultValue={"Name"}
                 onChange={handleInputChange}
               />
            </FormControl>

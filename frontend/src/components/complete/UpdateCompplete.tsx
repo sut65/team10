@@ -39,6 +39,8 @@ function UpdateComplete() {
  const [employee, setEmployee] = React.useState<EmployeesInterface[]>([]);
  const [receive, setReceive] = React.useState<ReceiveInterface[]>([]);
  const [packaging, setPackaging] = React.useState<PackagingInterface[]>([]);
+ const [e_name, setE_name] = React.useState<String | undefined>(undefined);
+ const [eid, setEid] = React.useState<Number | undefined>(undefined);
  const [success, setSuccess] = React.useState(false);
  const [error, setError] = React.useState(false);
  const handleClose = (
@@ -79,7 +81,7 @@ function UpdateComplete() {
 
 
 const getEmployee = async () => {
-  const apiUrl = `http://localhost:8080/employees`;
+  const apiUrl = `http://localhost:8080/employees/${localStorage.getItem("uid")}`;
 
   const requestOptionsGet = {
     method: "GET",
@@ -98,6 +100,8 @@ const getEmployee = async () => {
 
       if (res.data) {
         setEmployee(res.data);
+        setE_name(res.data.Name);
+        setEid(res.data.ID);
       } else {
         console.log("else");
       }
@@ -199,12 +203,12 @@ function submitUpdate() {
      </Snackbar>
 
      <Snackbar
-       open={success}
+       open={error}
        autoHideDuration={3000}
        onClose={handleClose}
        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
      >
-       <Alert onClose={handleClose} severity="success">
+       <Alert onClose={handleClose} severity="error">
          บันทึกข้อมูลไม่สำเร็จ
        </Alert>
      </Snackbar>
@@ -228,7 +232,8 @@ function submitUpdate() {
                disabled
                type="string"
                size="medium"
-               value={complete.Employee_ID}
+               value={eid}
+               defaultValue={"Employee ID"}
                sx={{ width : 350 }}
                onChange={handleInputChange}
              ></TextField>
@@ -245,7 +250,8 @@ function submitUpdate() {
                 type="string"
                 size="medium"
                 sx={{ width: 300 }}
-                value={complete.Name}
+                value={e_name}
+                defaultValue={"Name"}
                 onChange={handleInputChange}
               />
            </FormControl>
