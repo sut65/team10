@@ -136,10 +136,11 @@ func main() {
 			p.GET("/softeners", controllersoftener.ListSofteners)
 
 			// Vehicle
-			p.GET("/vehicles", controllervehicle.ListVehicles)
+			p.GET("/vehicle", controllervehicle.ListVehicles)
 			p.GET("/vehicle/:id", controllervehicle.GetVehicle)
 			p.POST("/vehicle", controllervehicle.CreateVehicle)
 			p.PATCH("/vehicle", controllervehicle.UpdateVehicle)
+			p.DELETE("/vehicle/:id", controllervehicle.DeleteVehicle)
 			//brandvehicle
 			p.GET("/brand_vehicles", controllerbrand_vehicles.ListBrand_Vehicles)
 

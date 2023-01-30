@@ -58,6 +58,10 @@ function ReceiveCreate (){
   setError(false);
 };
 
+function timeout(delay: number) {
+  return new Promise( res => setTimeout(res, delay) );
+}
+
 function submit() {
   let receive_data = {
     Employee_ID: Number(localStorage.getItem("uid")),
@@ -79,10 +83,12 @@ const requestOptions = {
 
 fetch(`${apiUrl}/receives`, requestOptions)
   .then((response) => response.json())
-  .then((res) => {
+  .then(async (res) => {
     if (res.data) {
       setSuccess(true);
       console.log(res.data)
+      await timeout(1000); //for 1 sec delay
+          window.location.reload(); 
     } else {
       setError(true);
     }
@@ -380,7 +386,7 @@ return (
                       <Grid item xs={5}>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                               <DateTimePicker
-                                  label="DateTimePicker"
+                                  label="Time Stamp"
                                   renderInput={(params) => <TextField {...params} />}
                                   value={date}
                                   onChange={(newValue: Dayjs | null) => {

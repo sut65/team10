@@ -11,20 +11,18 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-
+import MopedIcon from '@mui/icons-material/Moped';
 /* Datetimepicker */
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { ReceiveInterface } from "../../models/receive/IReceive";
-function UpdateReceive() {
+import { VehicleInterface } from "../../models/vehicle/IVehicle";
+function UpdateVehicle() {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
-  const [receive, setReceive] = React.useState<Partial<ReceiveInterface>>({});
-  const [Det_Quantity, setDet_Quantity] = React.useState<number | null>(null);
-  const [Sof_Quantity, setSof_Quantity] = React.useState<number | null>(null);
+  const [vehicle, setVehicle] = React.useState<Partial<VehicleInterface>>({});
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-  const [receive_id, setReceive_ID] = React.useState<ReceiveInterface[]>([]);
+  const [vehicle_id, setVehicle_ID] = React.useState<VehicleInterface[]>([]);
 
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -45,12 +43,10 @@ function UpdateReceive() {
 }
 
   function update() {
-    let receive_update = {
-      ID: receive.ID,
-      Det_Quantity: Det_Quantity,
-      Sof_Quantity:Sof_Quantity,
+    let vehicle_update = {
+      ID: vehicle.ID,
       Employee_ID: Number(localStorage.getItem("uid")),
-      Time_Stamp: date,
+      Date_Insulance: date,
     };
 
     const requestOptions = {
@@ -59,12 +55,12 @@ function UpdateReceive() {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(receive_update),
+      body: JSON.stringify(vehicle_update),
     };
-    console.log(receive_update);
-    console.log(JSON.stringify(receive_update));
+    console.log(vehicle_update);
+    console.log(JSON.stringify(vehicle_update));
 
-    fetch(`http://localhost:8080/receives`, requestOptions)
+    fetch(`http://localhost:8080/vehicle`, requestOptions)
       .then((response) => response.json())
       .then(async (res) => {
         console.log(res);
@@ -83,8 +79,8 @@ function UpdateReceive() {
 
 
 
-  const getReceive = async () => {
-    const apiUrl = "http://localhost:8080/receive";
+  const getVegicle = async () => {
+    const apiUrl = "http://localhost:8080/vehicle";
     const requestOptions = {
       method: "GET",
       headers: {
@@ -98,14 +94,14 @@ function UpdateReceive() {
       .then((res) => {
         console.log(res)
         if (res.data) {
-          setReceive(res.data);
-          setReceive_ID(res.data);
+          setVehicle(res.data);
+          setVehicle_ID(res.data);
         }
       });
   };
 
   useEffect(() => {
-    getReceive();
+    getVegicle();
   }, []);
   return (
 
@@ -132,20 +128,20 @@ function UpdateReceive() {
       <Box sx={{ padding: 2}}>
         <Paper>
         <Grid container spacing={0} sx={{ padding: 2}}>
-            <h1>RECEIVE<AddShoppingCartIcon color="success" sx={{ fontSize: 200 }}/></h1>
+            <h1>VEHICLE<MopedIcon color="action" sx={{ fontSize: 200 }}/></h1>
             </Grid>
             <Grid container spacing={2} sx={{ paddingX: 2 }}>
             <Grid item xs={4}>
-              <h3>Bill ID</h3>
+              <h3>ID</h3>
             </Grid>
             <Grid item xs={8} >
               <Autocomplete
-                id="receive-auto"
-                options={receive_id}
+                id="vehicle-auto"
+                options={vehicle_id}
                 fullWidth
                 size="medium"
                 onChange={(event: any, value) => {
-                  setReceive({ ...receive, ID: value?.ID }); //Just Set ID to interface
+                  setVehicle({ ...vehicle, ID: value?.ID }); //Just Set ID to interface
                 }}
                 getOptionLabel={(option: any) =>
                   `${option.ID}`
@@ -171,47 +167,14 @@ function UpdateReceive() {
               />
             </Grid>
           </Grid>
-
-
           <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 2 }}>
             <Grid item xs={4}>
-              <h3>Detergent</h3>
-            </Grid>
-            <Grid item xs={7}>
-              <TextField
-                id="outlined-basic"
-                label="Quantity"
-                variant="outlined"
-                defaultValue=""
-                onChange={(event) => setDet_Quantity(Number(event.target.value))}
-                inputProps={{ type: "number" }}
-              />
-            </Grid>
-          </Grid>
-          <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 2 }}>
-            <Grid item xs={4}>
-              <h3>Softener</h3>
-            </Grid>
-            <Grid item xs={7}>
-              <TextField
-                id="outlined-basic"
-                label="Quantity"
-                variant="outlined"
-                defaultValue=""
-                onChange={(event) => setSof_Quantity(Number(event.target.value))}
-                inputProps={{ type: "number" }}
-              />
-            </Grid>
-          </Grid>
-
-          <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 2 }}>
-            <Grid item xs={4}>
-              <h3>Time Stamp</h3>
+              <h3>Date Insulance</h3>
             </Grid>
             <Grid item xs={8}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateTimePicker
-                  label="Time Stamp"
+                  label="Date Insulance"
                   renderInput={(params) => <TextField {...params} />}
                   value={date}
                   onChange={(newValue: Dayjs | null) => {
@@ -243,4 +206,4 @@ function UpdateReceive() {
   );
 }
 
-export default UpdateReceive;
+export default UpdateVehicle;

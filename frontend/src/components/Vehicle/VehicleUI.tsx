@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 /* Grid */
 
-import { Alert, Box, Grid, Paper, SelectChangeEvent, Snackbar } from "@mui/material";
+import { Alert, Box, Grid, Paper, Popover, SelectChangeEvent, Snackbar, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -11,9 +11,8 @@ import { Container } from "@mui/material";
 import UpdateIcon from '@mui/icons-material/Update';
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import MopedIcon from '@mui/icons-material/Moped';
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Link as RouterLink } from "react-router-dom";
-import StorefrontIcon from '@mui/icons-material/Storefront';
+import UpdateVehicle from "./UpdateVehicle";
 /* combobox */
 import { TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -30,6 +29,7 @@ import { BrandVehicleInterface } from "../../models/vehicle/IBrandVehicle";
 import { EngineInterface } from "../../models/vehicle/IEngine";
 import { VehicleInterface } from "../../models/vehicle/IVehicle";
 import VehicleTableUI from "./VehicleTableUI";
+
 function VehicleCreate  () {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
   const [vehicle, setVehicle] = React.useState<Partial<VehicleInterface>>({});
@@ -37,9 +37,23 @@ function VehicleCreate  () {
   const [engine, setEngine] = React.useState<EngineInterface[]>([]);
   const [listmodel, setListModel] = React.useState<string | null>(null);
   const [vehicle_regis, setVehicle_Regis] = React.useState<string | null>(null);
+  const [model, setModel] = React.useState<string | null>(null);
+  const [regis, setRigis] = React.useState<string | null>(null);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
 
+  const handleClickPopover = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  
+  
+  const handleClosePopover = () => {
+    setAnchorEl(null);
+  };
+  
+  const open = Boolean(anchorEl);
+  const popover = open ? "simple-popover" : undefined;
   const handleClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -50,6 +64,12 @@ function VehicleCreate  () {
     setSuccess(false);
     setError(false);
   };
+
+  function timeout(delay: number) {
+    return new Promise( res => setTimeout(res, delay) );
+  }
+
+  
   function submit() {
     let vehicle_data = {
       Employee_ID: Number(localStorage.getItem("uid")),
@@ -73,10 +93,11 @@ const requestOptions = {
 
 fetch(`${apiUrl}/vehicle`, requestOptions)
   .then((response) => response.json())
-  .then((res) => {
+  .then(async (res) => {
     if (res.data) {
       setSuccess(true);
-      console.log(res.data)
+      await timeout(1000); //for 1 sec delay
+          window.location.reload(); 
     } else {
       setError(true);
     }
@@ -298,10 +319,10 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
                       <Grid item xs={5}>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                               <DateTimePicker
-                                  label="DateTimePicker"
+                                  label="Date Insulance"
                                   renderInput={(params) => <TextField {...params} />}
                                   value={date}
-                                  onChange={(newValue) => {
+                                  onChange={(newValue: Dayjs | null) => {
                                       setDate(newValue);
                                   }}
                               />
@@ -309,9 +330,9 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
                       </Grid>
                   </Grid>
               </Paper>
-              <Grid container spacing={4}
+              <Grid container spacing={2}
                     sx={{ paddingY: 1 }}>
-                    <Grid item xs={6}
+                    <Grid item xs={8}
                     >
                         <Button
                         component={RouterLink}
@@ -323,25 +344,31 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
                             cancel
                         </Button>
                     </Grid>
+                    
                     <Grid item xs={2}
                     >
-                        <Button
-                            variant="contained"
-                            color="error"
-                            endIcon={<UpdateIcon />}
-                        >
-                            delete
-                        </Button>
-                    </Grid>
-                    <Grid item xs={2}
-                    >
-                        <Button
-                            variant="contained"
-                            color="warning"
-                            endIcon={<UpdateIcon />}
-                        >
-                            update
-                        </Button>
+                         <div>
+            <Button aria-describedby={popover} variant="contained" color="warning"
+              endIcon={<UpdateIcon />}
+              onClick={handleClickPopover}>
+              update
+            </Button>
+            <Popover
+              id={popover}
+              open={open}
+              anchorEl={anchorEl}
+              sx={{ paddingBottom: 20 }}
+              marginThreshold={80}
+              onClose={handleClosePopover}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+            >
+              <UpdateVehicle />
+              <Typography sx={{ p: 2 }}>Update Receive</Typography>
+            </Popover>
+            </div>
                     </Grid>
                     <Grid container item xs={2} direction='row-reverse'>
                         <Button
