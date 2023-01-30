@@ -6,6 +6,7 @@ import (
 	govalidator "github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"github.com/sut65/team10/entity"
+	"gorm.io/gorm"
 )
 
 // POST /vehicles
@@ -84,13 +85,13 @@ func GetVehicle(c *gin.Context) {
 // GET /receives
 
 func ListVehicles(c *gin.Context) {
-	var vehicles []entity.Vehicle
-	if err := entity.DB().Preload("Engine").Preload("Brand_Vehicle").Preload("Employee").Raw("SELECT * FROM vehicles").Find(&vehicles).Error; err != nil {
+	var vehicle []entity.Vehicle
+	if err := entity.DB().Preload("Engine").Preload("Brand_Vehicle").Preload("Employee").Raw("SELECT * FROM vehicles").Find(&vehicle).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": vehicles})
+	c.JSON(http.StatusOK, gin.H{"data": vehicle})
 
 }
 
@@ -103,16 +104,35 @@ func UpdateVehicle(c *gin.Context) {
 		return
 	}
 
-	if tx := entity.DB().Where("id = ?", vehicle.ID).First(&vehicle); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
-		return
+	//12: สร้าง
+	u_v := entity.Vehicle{
+		Model:          gorm.Model{ID: vehicle.ID},
+		Employee_ID:    vehicle.Employee_ID,
+		Date_Insulance: vehicle.Date_Insulance.Local(),
 	}
 
-	if err := entity.DB().Save(&vehicle).Error; err != nil {
+	if err := entity.DB().Where("id = ?", vehicle.ID).Updates(&u_v).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": vehicle})
+	c.JSON(http.StatusOK, gin.H{"data": u_v})
 
+}
+
+// DELETE /vehicle/:id
+func DeleteVehicle(c *gin.Context) {
+	var vehicle entity.Vehicle
+
+	if err := c.ShouldBindJSON(&vehicle); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if tx := entity.DB().Exec("DELETE FROM vehicles WHERE id = ?", vehicle.ID); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "vehicle not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": vehicle})
 }

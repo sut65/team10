@@ -1,17 +1,34 @@
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useEffect } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Container from "@mui/material/Container";
-import { Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { VehicleInterface } from "../../models/vehicle/IVehicle";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import VehicleDelete from "./DeleteVehicle";
+import {  Popover, Typography } from "@mui/material";
 
 function VehicleTableUI() {
   const [vehicle, setVehicle] = useState<VehicleInterface[]>([]);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const popup = open ? 'simple-popover' : undefined;
+
 
   useEffect(() => {
     getVehicle();
   }, []);
   const getVehicle = async () => {
-    const apiUrl = "http://localhost:8080/vehicles";
+    const apiUrl = "http://localhost:8080/vehicle";
     const requestOptions = {
       method: "GET",
       headers: {
@@ -67,28 +84,57 @@ function VehicleTableUI() {
 
   return (
     <div>
-      <Grid>
-        <Grid
-                container
-                justifyContent={"center"}
-                sx={{
-                  paddingY: 2,
-                }}
-              >
-        <Container maxWidth="xl">
-          <div style={{ height: 400, width: "100%", marginTop: "30px" }}>
-            <DataGrid
-              rows={vehicle}
-              getRowId={(row) => row.ID}
-              columns={vehiclecolumbs}
-              pageSize={5}
-              rowsPerPageOptions={[7]}
-            />
+    <Grid>
+    <Grid item xs={6} sx={{
+                paddingX: 2, paddingY: 0
+              }}
+        >
+          <div>
+          <Button aria-describedby={popup} variant="contained" color="error"
+            endIcon={<DeleteForeverIcon />}
+            onClick={handleClick}>
+            Delete
+          </Button>
+          <Popover
+            id={popup}
+            open={open}
+            anchorEl={anchorEl}
+            sx={{ paddingBottom: 20 }}
+            marginThreshold={80}
+            onClose={handleClose}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+          >
+            <VehicleDelete />
+            <Typography sx={{ p: 2 }}>Delete Vehicle</Typography>
+          </Popover>
           </div>
-        </Container>
-        </Grid>
+          </Grid>
+    <Grid>
+      <Grid
+              container
+              justifyContent={"center"}
+              sx={{
+                paddingY: 2,
+              }}
+            >
+      <Container maxWidth="xl">
+        <div style={{ height: 400, width: "100%", marginTop: "30px" }}>
+          <DataGrid
+            rows={vehicle}
+            getRowId={(row) => row.ID}
+            columns={vehiclecolumbs}
+            pageSize={5}
+            rowsPerPageOptions={[7]}
+          />
+        </div>
+      </Container>
       </Grid>
-    </div>
-  );
+    </Grid>
+    </Grid>
+  </div>
+);
 }
 export default VehicleTableUI;
