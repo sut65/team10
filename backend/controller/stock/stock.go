@@ -3,7 +3,7 @@ package controller
 import (
 	"net/http"
 
-	"github.com/asaskevich/govalidator"
+	//"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"github.com/sut65/team10/entity"
 )
@@ -133,7 +133,7 @@ func UpdateStock(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": stocks})
 
 }
-func AddStock (c *gin.Context) {
+func AddStock(c *gin.Context) {
 	var stocks entity.Stock
 	id := c.Param("id")
 
