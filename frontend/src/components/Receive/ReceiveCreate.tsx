@@ -4,7 +4,7 @@ import { useEffect } from "react";
 /* Grid */
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
-import { Snackbar, Alert } from "@mui/material";
+import { Snackbar, Alert, Popover, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { Container } from "@mui/system/";
 import Button from "@mui/material/Button";
@@ -31,6 +31,7 @@ import { BillInterface } from "../../models/bill/IBill";
 import { DetergentInterface } from "../../models/receive/IDetergent";
 import { SoftenerInterface } from "../../models/receive/ISoftener";
 import ReceiveTableUI from "./ReceiveTableUI";
+import UpdateReceive from "./UpdateReceive";
 
 function ReceiveCreate (){
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
@@ -40,6 +41,7 @@ function ReceiveCreate (){
   const [softener, setSoftener] = React.useState<SoftenerInterface[]>([]);
   const [det_quantity, setDet_Quantity] = React.useState<number | null>(null);
   const [sof_quantity, setSof_Quantity] = React.useState<number | null>(null);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
 
@@ -86,6 +88,18 @@ fetch(`${apiUrl}/receives`, requestOptions)
     }
   });
 }
+
+const handleClickPopover = (event: React.MouseEvent<HTMLButtonElement>) => {
+  setAnchorEl(event.currentTarget);
+};
+
+
+const handleClosePopover = () => {
+  setAnchorEl(null);
+};
+
+const open = Boolean(anchorEl);
+const popover = open ? "simple-popover" : undefined;
 
 const getBill = async () => {
   const apiUrl = `http://localhost:8080/bill`;
@@ -369,7 +383,7 @@ return (
                                   label="DateTimePicker"
                                   renderInput={(params) => <TextField {...params} />}
                                   value={date}
-                                  onChange={(newValue) => {
+                                  onChange={(newValue: Dayjs | null) => {
                                       setDate(newValue);
                                   }}
                               />
@@ -377,9 +391,9 @@ return (
                       </Grid>
                   </Grid>
               </Paper>
-                <Grid container spacing={4}
+                <Grid container spacing={2}
                     sx={{ paddingY: 1 }}>
-                    <Grid item xs={6}
+                    <Grid item xs={8}
                     >
                         <Button
                         component={RouterLink}
@@ -392,25 +406,30 @@ return (
                         </Button>
                     </Grid>
                     <Grid item xs={2}
-                    >
-                        <Button
-                            variant="contained"
-                            color="error"
-                            endIcon={<UpdateIcon />}
-                        >
-                            delete
-                        </Button>
-                    </Grid>
-                    <Grid item xs={2}
-                    >
-                        <Button
-                            variant="contained"
-                            color="warning"
-                            endIcon={<UpdateIcon />}
-                        >
-                            update
-                        </Button>
-                    </Grid>
+          >
+            <div>
+            <Button aria-describedby={popover} variant="contained" color="warning"
+              endIcon={<UpdateIcon />}
+              onClick={handleClickPopover}>
+              update
+            </Button>
+            <Popover
+              id={popover}
+              open={open}
+              anchorEl={anchorEl}
+              sx={{ paddingBottom: 20 }}
+              marginThreshold={80}
+              onClose={handleClosePopover}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left",
+              }}
+            >
+              <UpdateReceive />
+              <Typography sx={{ p: 2 }}>Update Receive</Typography>
+            </Popover>
+            </div>
+          </Grid>
                     <Grid container item xs={2} direction='row-reverse'>
                         <Button
                             variant="contained"

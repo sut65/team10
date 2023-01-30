@@ -128,6 +128,7 @@ func main() {
 			p.GET("/receive/:id", controllerreceive.GetReceive)
 			p.POST("/receives", controllerreceive.CreateReceive)
 			p.PATCH("/receives", controllerreceive.UpdateReceive)
+			p.DELETE("/receive/:id", controllerreceive.DeleteReceive)
 			//detergent
 			p.GET("/detergents", controllerdetergent.ListDetergents)
 
