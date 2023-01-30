@@ -6,7 +6,6 @@ import (
 	govalidator "github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"github.com/sut65/team10/entity"
-	"gorm.io/gorm"
 )
 
 // POST /bills
@@ -98,32 +97,16 @@ func ListBills(c *gin.Context) {
 
 func UpdateBill(c *gin.Context) {
 	var bill entity.Bill
-	var paymenttype entity.Paymenttype
 
 	if err := c.ShouldBindJSON(&bill); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	//ค้นหา id paymenttype
-	if tx := entity.DB().Where("id = ?", bill.Paymenttype_ID).First(&paymenttype); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "paymenttype not found"})
-
-		return
-
-	}
-
-	if tx := entity.DB().Where("id = ?", bill.ID).First(&bill); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "bill not found"})
-
-		return
-
-	}
-
-	//12: สร้าง
+	// สร้าง
 	u_b := entity.Bill{
-		Model:          gorm.Model{ID: bill.ID},
 		Paymenttype_ID: bill.Paymenttype_ID,
+		Service_ID:     bill.Service_ID,
 		Time_Stamp:     bill.Time_Stamp.Local(),
 	}
 
