@@ -9,6 +9,9 @@ import (
 	"net/http"
 )
 
+type Sumprice struct {
+	SumPirce uint
+}
 //POST /users
 func CreateService(c *gin.Context) {
 	var customer entity.Customer
@@ -86,6 +89,29 @@ func ListServices(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": service})
+}
+
+// func ListServiceByUID(c *gin.Context) {
+
+// 	var service []entity.Service
+// 	id := c.Param("id")
+
+// 	if err := entity.DB().Preload("TypeWashing").Preload("DeliveryType").Preload("Weight").Raw("SELECT * FROM services WHERE customer_id = ?",id).Find(&service).Error; err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+// 		return
+// 	}
+// 	c.JSON(http.StatusOK, gin.H{"data": service})
+// }
+
+func ListSumPircie(c *gin.Context) {
+
+	var sumprice []Sumprice
+
+	if err := entity.DB().Raw("SELECT * ,(s.bill_price+d.delivery_type_price+w.weight_price+t.type_washing_price) as Sumprice FROM services s JOIN delivery_types d JOIN type_washings t JOIN weights w on  s.id = d.id AND s.id = w.id AND s.id = t.id").Scan(&sumprice).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": sumprice})
 }
 
 // DELETE /users/:id

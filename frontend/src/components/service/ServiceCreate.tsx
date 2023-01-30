@@ -23,14 +23,13 @@ import {
   TextField,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import {DeliveryTypeInterface,ServiceInterface,WeightInterface,} from "../../models/service/IService";
+import { DeliveryTypeInterface, ServiceInterface, SumpriceInterface, WeightInterface, } from "../../models/service/IService";
 import Typography from "@mui/material/Typography";
 import { ThemeContext } from "@emotion/react";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import { TypeWashingInterface } from "../../models/service/IService";
 import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
 import DeleteIcon from '@mui/icons-material/Delete';
-
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -43,6 +42,8 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 const ServiceCreate = () => {
   const params = useParams();
   const navigate = useNavigate();
+
+  const [price1, setPrice1] = React.useState<number>(0);
 
   const [service, setService] = React.useState<Partial<ServiceInterface>>({
     // TypeWashing_ID: 0,
@@ -58,6 +59,8 @@ const ServiceCreate = () => {
   const [weight, setWeight] = React.useState<WeightInterface[]>([]);
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
+  const [sumprice, setSumprice] = React.useState<SumpriceInterface[]>([]);
+  // const id_customer = localStorage.getItem("id");
 
   //================================================================================================================//
   const apiUrl = "http://localhost:8080";
@@ -70,7 +73,7 @@ const ServiceCreate = () => {
         "Content-Type": "application/json",
       },
     };
-    fetch(`${apiUrl}/services/${localStorage.getItem("uid")}`, requestOptions)
+    fetch(`${apiUrl}/services`, requestOptions)
       .then((response) => response.json())
       .then((res) => {
         if (res.data) {
@@ -166,17 +169,32 @@ const ServiceCreate = () => {
       "Content-Type": "application/json",
     },
   };
-// let sum
-// let cal: ( value_cal: number) => number =
-//   function ( value_cal: number) {
-//     sum = 0;
-//     for(let i=0;i<price.length;i++){
-//       if(price[i] == Number(value_cal)){
-//         sum += washsing[i]+weightprice[i]+deliveryprice[i]
-//       }
-//     }
-//     return sum;
-//   };
+
+  const getsumPrice = async () => {
+    const apiUrl = `http://localhost:8080/typewashings`;
+
+    const requestOptions = {
+      method: "GET",
+
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    };
+    //การกระทำ //json
+    fetch(apiUrl, requestOptions)
+      .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
+
+      .then((res) => {
+        console.log(res.data); //show ข้อมูล
+
+        if (res.data) {
+          setSumprice(res.data);
+        } else {
+          console.log("else");
+        }
+      });
+  };
 
   //================================================================================================================//
 
@@ -201,8 +219,9 @@ const ServiceCreate = () => {
     setService({ ...service, [id]: value });
   };
 
-  const handleChange = (event: SelectChangeEvent<number>) => {
+  const handleChange = (event: SelectChangeEvent<number>,) => {
     const name = event.target.name as keyof typeof service;
+    console.log(price1);
     setService({
       ...service,
       [name]: event.target.value,
@@ -239,31 +258,31 @@ const ServiceCreate = () => {
 
     //================================================================================================================//
 
-const apiUrl = "http://localhost:8080";
+    const apiUrl = "http://localhost:8080";
 
-const requestOptionsPost = {
-    method: "POST",
-  headers: {
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
-    "Content-Type": "application/json",
-  },
-    body: JSON.stringify(data),
-};
+    const requestOptionsPost = {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
 
-fetch(`${apiUrl}/services`, requestOptionsPost)
-    .then((response) => response.json())
-    .then((res) => {
+    fetch(`${apiUrl}/services`, requestOptionsPost)
+      .then((response) => response.json())
+      .then((res) => {
         console.log(res)
         if (res.data) {
-            setSuccess(true);
-            window.location.reload();
-            
+          setSuccess(true);
+          window.location.reload();
+
         } else {
-          
-            setError(true);
+
+          setError(true);
         }
-    });
-}
+      });
+  }
 
   //================================================================================================================//
 
@@ -272,6 +291,7 @@ fetch(`${apiUrl}/services`, requestOptionsPost)
     getWeight();
     getDelivery();
     getServices();
+    getsumPrice();
   }, []);
 
 
@@ -515,7 +535,7 @@ fetch(`${apiUrl}/services`, requestOptionsPost)
                       <TableCell align="right">{row.Weight_ID}</TableCell>
                       <TableCell align="right">{row.Address}</TableCell>
                       <TableCell align="right">{row.DeliveryType_ID}</TableCell>
-                      <TableCell align="right">{row.Price}</TableCell>
+                      {/* <TableCell align="right">{row.Price}</TableCell> */}
                       <TableCell align="right">
                         <ButtonGroup
                           variant="outlined"

@@ -187,6 +187,7 @@ const ServiceUpdate = () => {
   function submit() {
 
     let data = {
+      Customer_ID: Number(localStorage.getItem('uid')),
       ID: service.ID,
       TypeWashing_ID: service.TypeWashing_ID,
       Weight_ID: service.Weight_ID,

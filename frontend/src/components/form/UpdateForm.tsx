@@ -149,6 +149,7 @@ function FormUpdate() {
 
     function submitUpdate() {
         let data = {
+            Customer_ID: Number(localStorage.getItem('uid')),
             ID: form.ID,
             FormTypeID: form.FormTypeID,
             SatisfactionID: form.SatisfactionID,
@@ -320,7 +321,7 @@ function FormUpdate() {
 
                     <Grid item xs={12}>
 
-                        <Button component={RouterLink} to="/" variant="contained">
+                        <Button component={RouterLink} to="/form" variant="contained">
 
                             Back
 

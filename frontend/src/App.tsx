@@ -28,6 +28,7 @@ import ServiceUpdate from "./components/service/UpdateService";
 import FormCreate from "./components/form/FormCreate";
 import CompleteTable from "./components/complete/TabelComplete";
 import UpdateComplete from "./components/complete/UpdateCompplete";
+import FormUpdate from "./components/form/UpdateForm";
 
 export default function App() {
   const [token, setToken] = React.useState<String>("");
@@ -82,6 +83,7 @@ export default function App() {
               {/* <Route path="/form" element={<FormTable />} /> */}
               <Route path="/service" element={<ServiceCreate />} />
               <Route path="/form" element={<FormCreate/>} />
+              <Route path="/form/:id" element={<FormUpdate />} />
               <Route path="/service/:id" element={<ServiceUpdate />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

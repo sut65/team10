@@ -151,6 +151,7 @@ func main() {
 			p.POST("/services", Service_controller.CreateService)
 			p.DELETE("/services/:id", Service_controller.DeleteService)
 			p.PATCH("/services", Service_controller.UpdateService)
+			// p.GET("services/customer/:id", Service_controller.ListServiceByUID)
 
 			//washingType
 			p.GET("/typewashings", WashingType_controller.ListTypeWashings)

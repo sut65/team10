@@ -11,6 +11,7 @@ export interface ServiceInterface {
    
     TypeWashing_ID: number;
     Type_washing: string;
+    TypeWashing_price: number;
     Description: string;
     TypeWashing:TypeWashingInterface
    
@@ -21,6 +22,8 @@ export interface ServiceInterface {
 
     Customer_ID: number;
     Customer:CustomerInterface;
+
+    sumprice: number;
    
 }
 
@@ -39,7 +42,7 @@ export interface TypeWashingInterface {
     Type_washing: string;
    
     Description: string;
-   
+    TypeWashing_price: number;
    }
 
 
@@ -51,3 +54,7 @@ export interface WeightInterface {
     Weight_price: number;
    
    }
+
+export interface SumpriceInterface {
+    sumprice: number;
+}

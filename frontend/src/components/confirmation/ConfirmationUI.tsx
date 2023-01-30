@@ -245,7 +245,7 @@ function Confirmation() {
         </Snackbar>
         <Paper style={{ background: "rgba(0, 0, 0, 0.2)" }}>
           <h2 style={{ textAlign: "center", paddingTop: 20, color: "white" }}>
-            <DryCleaningIcon style={{fontSize: 30}}/>
+            <DryCleaningIcon style={{ fontSize: 30 }} />
             &nbsp;Confirmation
           </h2>
           <Grid container>

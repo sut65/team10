@@ -61,6 +61,32 @@ function FormCreate() {
         setError(false);
     };
 
+    const getForm = async () => {
+        const apiUrl = `http://localhost:8080/forms`;
+
+        const requestOptionsGet = {
+            method: "GET",
+
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                "Content-Type": "application/json",
+            },
+        };
+        //การกระทำ //json
+        fetch(apiUrl, requestOptionsGet)
+            .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
+
+            .then((res) => {
+                console.log(res.data); //show ข้อมูล
+
+                if (res.data) {
+                    setForm1(res.data);
+                } else {
+                    console.log("else");
+                }
+            });
+    };
+
     const getFormType = async () => {
         const apiUrl = `http://localhost:8080/formtypes`;
 
@@ -88,10 +114,13 @@ function FormCreate() {
     };
 
     const FormDelete = async (ID: number) => {
-        const apiUrl = `http://localhost:8080/formtypes`;
+        const apiUrl = `http://localhost:8080`;
         const requestOptions = {
             method: "DELETE",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                "Content-Type": "application/json",
+            },
         };
         fetch(`${apiUrl}/forms/${ID}`, requestOptions)
             .then((response) => response.json())
@@ -181,6 +210,7 @@ function FormCreate() {
     useEffect(() => {
         getFormType();
         getSatisfaction();
+        getForm();
     }, []);
     return (
 
@@ -388,7 +418,7 @@ function FormCreate() {
                                     <TableCell align="right">{row.Comment}</TableCell>
                                     <TableCell align="right">
                                         <ButtonGroup variant="outlined" aria-lable="outlined button group">
-                                            <Button onClick={() => navigate({ pathname: `/forms/${row.ID}` })} variant="contained"
+                                            <Button onClick={() => navigate({ pathname: `/form/${row.ID}` })} variant="contained"
                                             >Edit</Button>
                                             <Button onClick={() => FormDelete(row.ID)} color="error">Delete</Button>
                                         </ButtonGroup>

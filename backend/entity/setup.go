@@ -620,4 +620,16 @@ func SetupDatabase() {
 		DeliveryType_price:   50,
 	}
 	db.Model(&DeliveryType{}).Create(&DeliveryType3)
+
+		FormType1 := FormType{
+		Model:        gorm.Model{},
+		FormType_name: "การบริการ",
+	}
+	db.Model(&FormType{}).Create(&FormType1)
+
+		Satisfaction1 := Satisfaction{
+		Model:        gorm.Model{},
+		Satisfaction_name: "พอใจมาก",
+	}
+	db.Model(&Satisfaction{}).Create(&Satisfaction1)
 }
