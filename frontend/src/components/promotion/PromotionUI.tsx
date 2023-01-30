@@ -287,8 +287,9 @@ function Promotion() {
                   label="DateTimePicker"
                   renderInput={(params) => <TextField {...params} />}
                   value={date}
-                  onChange={(newValue) => {
+                  onChange={(newValue: Dayjs | null) => {
                     setDate(newValue);
+                    console.log(newValue)
                   }}
                 />
               </LocalizationProvider>
