@@ -374,7 +374,7 @@ function Bill() {
                       label="DateTimePicker"
                       renderInput={(params) => <TextField {...params} />}
                       value={date}
-                      onChange={(newValue) => {
+                      onChange={(newValue: Dayjs | null) => {
                         setDate(newValue);
                       }}
                     />
