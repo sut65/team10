@@ -542,32 +542,32 @@ func SetupDatabase() {
 	}
 	db.Model(&TypeWashing{}).Create(&TypeWashing2)
 
-	complete1 := Complete{
-		Model:             gorm.Model{},
-		Complete_datetime: time.Time{},
-		Employee:          E1,
-		Receive:           Receive2,
-		Packaging:         Packaging1,
-	}
-	db.Model(&Complete{}).Create(&complete1)
+	// complete1 := Complete{
+	// 	Model:             gorm.Model{},
+	// 	Complete_datetime: time.Time{},
+	// 	Employee:          E1,
+	// 	Receive:           Receive2,
+	// 	Packaging:         Packaging1,
+	// }
+	// db.Model(&Complete{}).Create(&complete1)
 
-	complete2 := Complete{
-		Model:             gorm.Model{},
-		Complete_datetime: time.Time{},
-		Employee:          E1,
-		Receive:           Receive1,
-		Packaging:         Packaging3,
-	}
-	db.Model(&Complete{}).Create(&complete2)
+	// complete2 := Complete{
+	// 	Model:             gorm.Model{},
+	// 	Complete_datetime: time.Time{},
+	// 	Employee:          E1,
+	// 	Receive:           Receive1,
+	// 	Packaging:         Packaging3,
+	// }
+	// db.Model(&Complete{}).Create(&complete2)
 
-	complete3 := Complete{
-		Model:             gorm.Model{},
-		Complete_datetime: time.Time{},
-		Employee:          E2,
-		Receive:           Receive3,
-		Packaging:         Packaging4,
-	}
-	db.Model(&Complete{}).Create(&complete3)
+	// complete3 := Complete{
+	// 	Model:             gorm.Model{},
+	// 	Complete_datetime: time.Time{},
+	// 	Employee:          E2,
+	// 	Receive:           Receive3,
+	// 	Packaging:         Packaging4,
+	// }
+	// db.Model(&Complete{}).Create(&complete3)
 
 	//Delivery
 
@@ -621,14 +621,14 @@ func SetupDatabase() {
 	}
 	db.Model(&DeliveryType{}).Create(&DeliveryType3)
 
-		FormType1 := FormType{
-		Model:        gorm.Model{},
+	FormType1 := FormType{
+		Model:         gorm.Model{},
 		FormType_name: "การบริการ",
 	}
 	db.Model(&FormType{}).Create(&FormType1)
 
-		Satisfaction1 := Satisfaction{
-		Model:        gorm.Model{},
+	Satisfaction1 := Satisfaction{
+		Model:             gorm.Model{},
 		Satisfaction_name: "พอใจมาก",
 	}
 	db.Model(&Satisfaction{}).Create(&Satisfaction1)
