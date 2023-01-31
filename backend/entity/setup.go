@@ -542,32 +542,32 @@ func SetupDatabase() {
 	}
 	db.Model(&TypeWashing{}).Create(&TypeWashing2)
 
-	// complete1 := Complete{
-	// 	Model:             gorm.Model{},
-	// 	Complete_datetime: time.Time{},
-	// 	Employee:          E1,
-	// 	Receive:           Receive2,
-	// 	Packaging:         Packaging1,
-	// }
-	// db.Model(&Complete{}).Create(&complete1)
+	complete1 := Complete{
+		Model:             gorm.Model{},
+		Complete_datetime: time.Time{},
+		Employee:          E1,
+		Receive:           Receive2,
+		Packaging:         Packaging1,
+	}
+	db.Model(&Complete{}).Create(&complete1)
 
-	// complete2 := Complete{
-	// 	Model:             gorm.Model{},
-	// 	Complete_datetime: time.Time{},
-	// 	Employee:          E1,
-	// 	Receive:           Receive1,
-	// 	Packaging:         Packaging3,
-	// }
-	// db.Model(&Complete{}).Create(&complete2)
+	complete2 := Complete{
+		Model:             gorm.Model{},
+		Complete_datetime: time.Time{},
+		Employee:          E1,
+		Receive:           Receive1,
+		Packaging:         Packaging3,
+	}
+	db.Model(&Complete{}).Create(&complete2)
 
-	// complete3 := Complete{
-	// 	Model:             gorm.Model{},
-	// 	Complete_datetime: time.Time{},
-	// 	Employee:          E2,
-	// 	Receive:           Receive3,
-	// 	Packaging:         Packaging4,
-	// }
-	// db.Model(&Complete{}).Create(&complete3)
+	complete3 := Complete{
+		Model:             gorm.Model{},
+		Complete_datetime: time.Time{},
+		Employee:          E2,
+		Receive:           Receive3,
+		Packaging:         Packaging4,
+	}
+	db.Model(&Complete{}).Create(&complete3)
 
 	//Delivery
 
