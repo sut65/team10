@@ -42,7 +42,8 @@ function Confirmation() {
   /* -------------------------------------------------------------------------- */
   const [recvtime, setRecvTime] = useState<Dayjs | null>(dayjs);
   const [recvtype, setRecvType] = useState<RecvTypeInterface[]>([]);
-  const [complete, setComplete] = useState<CompleteInterface[]>([]);
+  // const [complete, setComplete] = useState<CompleteInterface[]>([]);
+  const [last_complete, setLastComplete] = useState<CompleteInterface[]>([]);
   const [confirmation, setConfirmation] = useState<
     Partial<ConfirmationInterface>
   >({});
@@ -51,6 +52,9 @@ function Confirmation() {
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [customerName, setCustomerName] = useState<string | undefined>(
+    undefined
+  );
+  const [last_complete_id, setLastCompleteID] = useState<number | undefined>(
     undefined
   );
   const [noAccess, setNoAccess] = React.useState(false);
@@ -129,11 +133,16 @@ function Confirmation() {
   };
 
   const getComplete = async () => {
-    fetch(`${apiUrl}/c_complete`, requestOptions)
+    fetch(`${apiUrl}/c_complete/${localStorage.getItem("uid")}`, requestOptions)
       .then((response) => response.json())
       .then((res) => {
         if (res.data) {
-          setComplete(res.data);
+          // Check length of res array
+          let length = res.data.length;
+          // setComplete(res.data);
+          // Select Lastest array and set value
+          setLastComplete(res.data[length - 1]);
+          setLastCompleteID(res.data[length - 1].ID);
         } else {
           console.log("else");
         }
@@ -180,7 +189,7 @@ function Confirmation() {
 
   async function submit() {
     let data = {
-      Complete_ID: convertType(confirmation.Complete_ID),
+      Complete_ID: convertType(last_complete_id),
       RecvType_ID: convertType(confirmation.RecvType_ID),
       RecvAddress: confirmation.RecvAddress,
       RecvTime: recvtime,
@@ -201,6 +210,7 @@ function Confirmation() {
         if (res.data) {
           setSuccess(true);
           setErrorMessage("");
+          window.location.reload();
         } else {
           setError(true);
           setErrorMessage(res.error);
@@ -274,39 +284,15 @@ function Confirmation() {
                     >
                       Service Complete Info
                     </div>
-                    <Autocomplete
-                      id="complete-autocomplete"
-                      options={complete}
+                    <TextField
+                      hiddenLabel
+                      id="LastCompID"
                       fullWidth
+                      defaultValue={"No Input"}
+                      value={last_complete_id}
+                      variant="filled"
                       size="small"
-                      style={{ background: "#feefd1" }}
-                      onChange={(event: any, value) => {
-                        //Get ID from ...interface
-                        setConfirmation({
-                          ...confirmation,
-                          Complete_ID: value?.ID,
-                        }); //Just Set ID to interface
-                      }}
-                      sx={{ bgcolor: "#feefd1" }}
-                      getOptionLabel={(option: any) => `${option.ID}`} //filter value
-                      renderInput={(params) => {
-                        return (
-                          <TextField
-                            {...params}
-                            variant="outlined"
-                            placeholder="Search..."
-                          />
-                        );
-                      }}
-                      renderOption={(props: any, option: any) => {
-                        return (
-                          <li
-                            {...props}
-                            value={`${option.ID}`}
-                            key={`${option.ID}`}
-                          >{`${option.ID}`}</li>
-                        ); //display value
-                      }}
+                      disabled
                     />
                   </Box>
                 </Paper>
