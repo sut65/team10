@@ -532,6 +532,7 @@ func SetupDatabase() {
 		Model:        gorm.Model{},
 		Type_washing: "ซักรีดปกติ",
 		Description:  "ก็แค่ซักรีดโว้ยย",
+		TypeWashing_Price: 80,
 	}
 	db.Model(&TypeWashing{}).Create(&TypeWashing1)
 
@@ -539,6 +540,7 @@ func SetupDatabase() {
 		Model:        gorm.Model{},
 		Type_washing: "ซักรีดน้ำหอม",
 		Description:  "รีดเสร็จฉีดน้ำหอม",
+		TypeWashing_Price: 90,
 	}
 	db.Model(&TypeWashing{}).Create(&TypeWashing2)
 

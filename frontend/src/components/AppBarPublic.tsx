@@ -101,7 +101,7 @@ function AppBarPublic() {
                 <ListItemText primary="ประเมิน" sx={{ padding: 1 }} />
               </ListItem>
 
-              <ListItem component={RouterLink} to="/service">
+              <ListItem component={RouterLink} to="/serviceinfo">
                 {" "}
                 <LocalLaundryServiceIcon color="primary" />
                 <ListItemText primary="เลือกบริการ" sx={{ padding: 1 }} />

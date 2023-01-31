@@ -76,7 +76,7 @@ export default function ServiceTable() {
               <Button
                 variant="contained"
                 component={RouterLink}
-                to="/create"
+                to="/service"
                 sx={{ p: 1 }}
               >
                 Create Service

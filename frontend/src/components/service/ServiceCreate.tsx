@@ -39,11 +39,13 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
+var sum = 0;
+
 const ServiceCreate = () => {
   const params = useParams();
   const navigate = useNavigate();
 
-  const [price1, setPrice1] = React.useState<number>(0);
+  // const [price1, setPrice1] = React.useState<number>(0);
 
   const [service, setService] = React.useState<Partial<ServiceInterface>>({
     // TypeWashing_ID: 0,
@@ -54,13 +56,15 @@ const ServiceCreate = () => {
   const [typewashing, setTypewashing] = React.useState<TypeWashingInterface[]>(
     []
   );
-  // const [pricejoin, setPricejoin] = React.useState<PriceInterface[]>([]);
   const [deliverytype, setDelivery] = React.useState<DeliveryTypeInterface[]>([]);
   const [weight, setWeight] = React.useState<WeightInterface[]>([]);
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
-  const [sumprice, setSumprice] = React.useState<SumpriceInterface[]>([]);
-  // const id_customer = localStorage.getItem("id");
+  // const id_customer = localStorage.getItem("id");'
+  const [typewashingprice,setTypewashingprice] = React.useState<TypeWashingInterface>()
+  const [weightprice,setWeightprice] = React.useState<WeightInterface>()
+  const [deliprice,setDeliprice] = React.useState<DeliveryTypeInterface>()
+  const [sumprice,setSumprice] = React.useState<number>();
 
   //================================================================================================================//
   const apiUrl = "http://localhost:8080";
@@ -170,32 +174,6 @@ const ServiceCreate = () => {
     },
   };
 
-  const getsumPrice = async () => {
-    const apiUrl = `http://localhost:8080/typewashings`;
-
-    const requestOptions = {
-      method: "GET",
-
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    };
-    //การกระทำ //json
-    fetch(apiUrl, requestOptions)
-      .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
-
-      .then((res) => {
-        console.log(res.data); //show ข้อมูล
-
-        if (res.data) {
-          setSumprice(res.data);
-        } else {
-          console.log("else");
-        }
-      });
-  };
-
   //================================================================================================================//
 
   const handleClose = (
@@ -221,12 +199,38 @@ const ServiceCreate = () => {
 
   const handleChange = (event: SelectChangeEvent<number>,) => {
     const name = event.target.name as keyof typeof service;
-    console.log(price1);
     setService({
       ...service,
       [name]: event.target.value,
     });
+    if (event.target.name === "TypeWashing_ID") {
+      setTypewashingprice(typewashing.find((r) => r.ID === event.target.value));
+    }
+    if (event.target.name === "Weight_ID") {
+      setWeightprice(weight.find((r) => r.ID === event.target.value));
+    }
+    if (event.target.name === "DeliveryType_ID") {
+      setDeliprice(deliverytype.find((r) => r.ID === event.target.value));
+    }
+
+
   };
+  console.log(typewashingprice);
+  console.log(weightprice);
+
+  // const handleChangeWeight = (event: SelectChangeEvent<number>,) => {
+  //   const name = event.target.name as keyof typeof service;
+  //   setService({
+  //     ...service,
+  //     [name]: event.target.value,
+  //   });
+  //   if (event.target.name === "TypeWashing_ID") {
+  //     setTypewashingprice(typewashing.find((r) => r.ID === event.target.value));
+  //   }
+
+  // };
+  // console.log(typewashingprice);
+  
 
   const ServiceDelete = async (ID: number) => {
     const requestOptions = {
@@ -244,7 +248,17 @@ const ServiceCreate = () => {
         }
       });
   };
+  var total = 0;
+  function add(num1: any, num2: any, num3: any) {
+    if ((num1 === undefined) && (num2 === undefined) && (num3 === undefined)){
+      return 0;
+    }else {
+      total= num1 + num2 + num3;
+      return num1 + num2 + num3;
+    }
+  }
 
+  console.log(total)
   function submit() {
 
     let data = {
@@ -254,6 +268,7 @@ const ServiceCreate = () => {
       Weight_ID: service.Weight_ID,
       Address: service.Address,
       DeliveryType_ID: service.DeliveryType_ID,
+      Bill_Price: sumprice
     };
 
     //================================================================================================================//
@@ -291,7 +306,6 @@ const ServiceCreate = () => {
     getWeight();
     getDelivery();
     getServices();
-    getsumPrice();
   }, []);
 
 
@@ -442,9 +456,7 @@ const ServiceCreate = () => {
                     }}
                   >
                     {deliverytype.map((item: DeliveryTypeInterface) => (
-                      <MenuItem value={item.ID}>
-                        {item.DeliveryType_service}
-                      </MenuItem>
+                      <MenuItem value={item.ID}>{item.DeliveryType_service}</MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -455,7 +467,7 @@ const ServiceCreate = () => {
                   <p>ราคา</p>
                   <TextField
                     disabled
-                    id="Price"
+                    // id="Price"
                     variant="outlined"
                     type="string"
                     size="medium"
@@ -464,16 +476,17 @@ const ServiceCreate = () => {
                         width: 490,
                       },
                     }}
+                    value={add(typewashingprice?.TypeWashing_Price, weightprice?.Weight_price, deliprice?.DeliveryType_price)}
+
+                    onChange={() => setSumprice(add(typewashingprice?.TypeWashing_Price, weightprice?.Weight_price, deliprice?.DeliveryType_price))}
                     sx={{ fontFamily: "Mitr-Regular" }}
                     multiline
-                    value={[]}
-                    onChange={handleInputChange}
                   />
                 </FormControl>
               </Grid>
 
               <Grid item xs={12}>
-                <Button component={RouterLink} to="/" variant="contained">
+                <Button component={RouterLink} to="/serviceinfo" variant="contained">
                   Back
                 </Button>
 
