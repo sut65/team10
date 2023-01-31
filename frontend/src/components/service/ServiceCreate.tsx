@@ -22,7 +22,7 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { DeliveryTypeInterface, ServiceInterface, SumpriceInterface, WeightInterface, } from "../../models/service/IService";
 import Typography from "@mui/material/Typography";
 import { ThemeContext } from "@emotion/react";
@@ -64,7 +64,7 @@ const ServiceCreate = () => {
   const [typewashingprice,setTypewashingprice] = React.useState<TypeWashingInterface>()
   const [weightprice,setWeightprice] = React.useState<WeightInterface>()
   const [deliprice,setDeliprice] = React.useState<DeliveryTypeInterface>()
-  const [sumprice,setSumprice] = React.useState<number>();
+  const [sumprice,setSumprice] = React.useState<number>(0);
 
   //================================================================================================================//
   const apiUrl = "http://localhost:8080";
@@ -218,18 +218,18 @@ const ServiceCreate = () => {
   console.log(typewashingprice);
   console.log(weightprice);
 
-  // const handleChangeWeight = (event: SelectChangeEvent<number>,) => {
-  //   const name = event.target.name as keyof typeof service;
-  //   setService({
-  //     ...service,
-  //     [name]: event.target.value,
-  //   });
-  //   if (event.target.name === "TypeWashing_ID") {
-  //     setTypewashingprice(typewashing.find((r) => r.ID === event.target.value));
-  //   }
+  const handleChangeWeight = (event: SelectChangeEvent<number>,) => {
+    const name = event.target.name as keyof typeof service;
+    setService({
+      ...service,
+      [name]: event.target.value,
+    });
+    if (event.target.name === "TypeWashing_ID") {
+      setTypewashingprice(typewashing.find((r) => r.ID === event.target.value));
+    }
 
-  // };
-  // console.log(typewashingprice);
+  };
+  console.log(typewashingprice);
   
 
   const ServiceDelete = async (ID: number) => {
@@ -249,14 +249,16 @@ const ServiceCreate = () => {
       });
   };
   var total = 0;
-  function add(num1: any, num2: any, num3: any) {
-    if ((num1 === undefined) && (num2 === undefined) && (num3 === undefined)){
+  let add = function (num1: any, num2: any, num3: any) {
+    if ((num1 === undefined) || (num2 === undefined) || (num3 === undefined)){
       return 0;
     }else {
-      total= num1 + num2 + num3;
-      return num1 + num2 + num3;
+      total = num1 + num2 + num3;
+      return total;
     }
+
   }
+
 
   console.log(total)
   function submit() {
@@ -268,7 +270,7 @@ const ServiceCreate = () => {
       Weight_ID: service.Weight_ID,
       Address: service.Address,
       DeliveryType_ID: service.DeliveryType_ID,
-      Bill_Price: sumprice
+      Bill_Price: total
     };
 
     //================================================================================================================//
@@ -477,8 +479,7 @@ const ServiceCreate = () => {
                       },
                     }}
                     value={add(typewashingprice?.TypeWashing_Price, weightprice?.Weight_price, deliprice?.DeliveryType_price)}
-
-                    onChange={() => setSumprice(add(typewashingprice?.TypeWashing_Price, weightprice?.Weight_price, deliprice?.DeliveryType_price))}
+                    // onChange={()=> setSumprice(total)}
                     sx={{ fontFamily: "Mitr-Regular" }}
                     multiline
                   />
