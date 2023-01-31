@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sut65/team10/entity"
+	"gorm.io/gorm/clause"
 )
 
 // POST /confirmation
@@ -116,10 +117,13 @@ func UpdateConfirmation(c *gin.Context) {
 
 }
 
-// GET /c_completes
+// GET /c_completes/:id
 func ListComplete(c *gin.Context) {
 	var complete []entity.Complete
-	if err := entity.DB().Raw("SELECT * FROM completes").Find(&complete).Error; err != nil {
+	customer_id := c.Param("id")
+	// Preload ตัวแรก กำหนด ความลึกมากที่สุดที่ต้องการจะ Preload
+	// Preload ตัวที่ 2 สั่งให้ Preload สิ่งที่เกี่ยวข้องทั้งหมดกับความลึกที่ได้กำหนดไว้จากตัวแรก
+	if err := entity.DB().Preload("Receive.Bill.Service").Preload(clause.Associations).Raw("SELECT * FROM completes").Where("customer_id = ?", customer_id).Find(&complete).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
