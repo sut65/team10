@@ -3,7 +3,7 @@ import { CustomerInterface } from "../customer/ICustomer";
 export interface ServiceInterface {
     ID: number,
     Address: string;
-    Price:  number;
+    Bill_Price:  number;
    
     Weight_ID: number;
     Weight_price: number;
@@ -22,8 +22,6 @@ export interface ServiceInterface {
 
     Customer_ID: number;
     Customer:CustomerInterface;
-
-    sumprice: number;
    
 }
 
@@ -42,7 +40,7 @@ export interface TypeWashingInterface {
     Type_washing: string;
    
     Description: string;
-    TypeWashing_price: number;
+    TypeWashing_Price: number;
    }
 
 

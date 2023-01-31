@@ -167,7 +167,7 @@ type Service struct {
 	Customer    Customer `gorm:"references:id"`
 
 	Address    string
-	Bill_Price uint
+	Bill_Price float64
 	Bill       []Bill `gorm:"foreignKey:Service_ID"`
 }
 

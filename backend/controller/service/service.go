@@ -26,9 +26,9 @@ func CreateService(c *gin.Context) {
 		return
 	}
 
-		if tx := entity.DB().Where("id = ?", service.Customer_ID).First(&customer); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "typewashing not found"})
-		return
+	if tx := entity.DB().Where("id = ?", service.Customer_ID).First(&customer); tx.RowsAffected == 0 {
+	c.JSON(http.StatusBadRequest, gin.H{"error": "Customer not found"})
+	return
 	}
 
 	if tx := entity.DB().Where("id = ?", service.TypeWashing_ID).First(&typewashing); tx.RowsAffected == 0 {
@@ -54,7 +54,8 @@ func CreateService(c *gin.Context) {
 		Model: gorm.Model{ID: service.ID},
 		TypeWashing:      typewashing,               
 		DeliveryType:   deliverytype,            
-		Weight:     weight,             
+		Weight:     weight,  
+		Bill_Price: service.Bill_Price,           
 		Address:     service.Address,
 		Customer:	customer,          
 		                       // ตั้งค่าฟิลด์ Address
