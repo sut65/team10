@@ -260,24 +260,6 @@ function UpdateCustomer() {
           <Divider />
 
           <Grid container spacing={1} sx={{ padding: 5 }}>
-            <Grid item xs={12}>
-              <p>ชื่อ - นามสกุล</p>
-              <FormControl fullWidth variant="outlined">
-                <TextField
-                  id="Customer_Name"
-                  variant="outlined"
-                  type="string"
-                  size="medium"
-                  value={customer.Customer_Name}
-                  sx={{ width: 350 }}
-                  onChange={handleInputChange}
-                />
-              </FormControl>
-            </Grid>
-
-            <Divider />
-
-            <Grid container spacing={1} sx={{ padding: 5 }}>
               <Grid item xs={12}>
                 <p>ชื่อ - นามสกุล</p>
                 <FormControl fullWidth variant="outlined">
@@ -292,6 +274,8 @@ function UpdateCustomer() {
                   />
                 </FormControl>
               </Grid>
+
+            <Divider />
 
               <Grid item xs={6}>
                 <FormControl fullWidth variant="outlined">
@@ -350,7 +334,7 @@ function UpdateCustomer() {
                   <TextField
                     id="Customer_Password"
                     variant="outlined"
-                    type="string"
+                    type="password"
                     size="medium"
                     sx={{ width: 300 }}
                     value={customer.Customer_Password}
@@ -421,7 +405,6 @@ function UpdateCustomer() {
                 </FormControl>
               </Grid>
             </Grid>
-          </Grid>
         </Paper>
         <Grid container spacing={3} sx={{ padding: 2 }}>
           <Grid item xs={12}>
