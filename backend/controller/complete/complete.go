@@ -97,7 +97,7 @@ func ListComplete(c *gin.Context) {
 
 	var completes []extendedComplete
 
-	if err := entity.DB().Preload("Employees").Preload("Packagings").Preload("Receives").Preload("Completes").Raw("SELECT c.* , e.name FROM completes c JOIN employees e ON e.id = c.id").Scan(&completes).Error; err != nil {
+	if err := entity.DB().Preload("Employees").Preload("Packagings").Preload("Receives").Preload("Completes").Raw("SELECT c.* , e.name FROM completes c JOIN employees e GROUP BY c.id").Scan(&completes).Error; err != nil {
 
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 

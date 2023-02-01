@@ -18,10 +18,13 @@ export default function CompleteTable() {
   const params = useParams();
   const navigate = useNavigate();
   const [complete, setComplete] = React.useState<CompleteInterface[]>([]);
-
+  useEffect(() => {
+    getComplete();
+  }, []);
   const apiUrl = "http://localhost:8080";
 
   const getComplete = async () => {
+    const apiUrl = "http://localhost:8080/completes";
     const requestOptions = {
       method: "GET",
       headers: {
@@ -29,13 +32,11 @@ export default function CompleteTable() {
         "Content-Type": "application/json",
       },
     };
-    fetch(`${apiUrl}/completes`, requestOptions)
+    fetch(apiUrl, requestOptions)
       .then((response) => response.json())
       .then((res) => {
         if (res.data) {
-          setComplete(res.data);
-          console.log(res.data);
-
+            setComplete(res.data);
         }
       });
   };
@@ -54,9 +55,7 @@ export default function CompleteTable() {
       });
   };
 
-  useEffect(() => {
-    getComplete();
-  }, []);
+  
 
   return (
     <React.Fragment>
