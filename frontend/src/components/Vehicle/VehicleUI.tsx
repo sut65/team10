@@ -40,6 +40,7 @@ function VehicleCreate  () {
   const [model, setModel] = React.useState<string | null>(null);
   const [regis, setRigis] = React.useState<string | null>(null);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const [alertmessage,setAlertMessage] = useState("");
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
 
@@ -96,10 +97,12 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
   .then(async (res) => {
     if (res.data) {
       setSuccess(true);
+      setAlertMessage("บันทึกข้อมูลสำเร็จ")
       await timeout(1000); //for 1 sec delay
           window.location.reload(); 
     } else {
       setError(true);
+      setAlertMessage(res.error)
     }
   });
 }
@@ -160,7 +163,7 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
               onClose={handleClose}
               anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
               <Alert onClose={handleClose} severity="success">              
-                  บันทึกข้อมูลสำเร็จ
+                  {alertmessage}
               </Alert>
           </Snackbar>
 
@@ -170,7 +173,7 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
               onClose={handleClose} 
               anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
               <Alert onClose={handleClose} severity="error">
-                  บันทึกข้อมูลไม่สำเร็จ
+                  {alertmessage}
               </Alert>
           </Snackbar>
           <Box sx={{ padding: 2
