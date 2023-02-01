@@ -290,8 +290,8 @@ type Receive struct {
 	Detergent    Detergent `gorm:"references:id"`
 	Softener_ID  *uint
 	Softener     Softener `gorm:"references:id"`
-	Det_Quantity uint
-	Sof_Quantity uint
+	Det_Quantity int      `valid:"range(0|100)~จำนวนผงซักฟอกห้ามเป็นลบ"`
+	Sof_Quantity int      `valid:"range(0|100)~จำนวนน้ำยาปรับผ้านุ่มห้ามเป็นลบ"`
 	Time_Stamp   time.Time
 
 	Complete []Complete `gorm:"foreignKey:Receive_ID"`
@@ -320,8 +320,8 @@ type Vehicle struct {
 	Brand_Vehicle    Brand_Vehicle `gorm:"references:id"`
 	Engine_ID        *uint
 	Engine           Engine `gorm:"references:id"`
-	ListModel        string
-	Vehicle_Rigis    string
+	ListModel        string `valid:"required~จำเป็นต้องกรอกรุ่นของรถ"`
+	Vehicle_Rigis    string `valid:"required~จำเป็นต้องกรอกทะเบียนรถ"`
 	Date_Insulance   time.Time
 	Delivery         []Delivery `gorm:"foreignKey:Vehicle_ID"`
 }

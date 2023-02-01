@@ -42,6 +42,7 @@ function ReceiveCreate (){
   const [det_quantity, setDet_Quantity] = React.useState<number | null>(null);
   const [sof_quantity, setSof_Quantity] = React.useState<number | null>(null);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const [alertmessage,setAlertMessage] = useState("");
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
 
@@ -86,11 +87,13 @@ fetch(`${apiUrl}/receives`, requestOptions)
   .then(async (res) => {
     if (res.data) {
       setSuccess(true);
+      setAlertMessage("บันทึกข้อมูลสำเร็จ")
       console.log(res.data)
       await timeout(1000); //for 1 sec delay
           window.location.reload(); 
     } else {
       setError(true);
+      setAlertMessage(res.error)
     }
   });
 }
@@ -184,7 +187,7 @@ return (
                 onClose={handleClose}
                 anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
                 <Alert onClose={handleClose} severity="success">              
-                    บันทึกข้อมูลสำเร็จ
+                    {alertmessage}
                 </Alert>
             </Snackbar>
 
@@ -194,7 +197,7 @@ return (
                 onClose={handleClose} 
                 anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
                 <Alert onClose={handleClose} severity="error">
-                    บันทึกข้อมูลไม่สำเร็จ
+                    {alertmessage}
                 </Alert>
             </Snackbar>
             <Box sx={{ padding: 2
