@@ -74,7 +74,6 @@ function UpdatePromotion() {
           
         } else {
           setError(true);
-          console.log(res.data);
         }
       });
   }
@@ -91,14 +90,12 @@ function UpdatePromotion() {
       },
     };
 
-    fetch(`http://localhost:8080/complete/${params.id}`, requestOptions )
+    fetch(`http://localhost:8080/promotion/${params.id}`, requestOptions )
       .then((response) => response.json())
       .then((res) => {
-        console.log(res)
         if (res.data) {
           setPromotion(res.data);
           setPromotion_ID(res.data.ID);
-          console.log(promotion_id)
         }
       });
   };
