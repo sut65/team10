@@ -109,7 +109,7 @@ function AppBarPrivate() {
                 />
               </ListItem>
 
-              <ListItem component={RouterLink} to="/promotion/create">
+              <ListItem component={RouterLink} to="/promotion/">
                 {" "}
                 <LocalOfferIcon color="primary" />
                 <ListItemText primary="โปรโมชั่น" sx={{ padding: 1 }} />
