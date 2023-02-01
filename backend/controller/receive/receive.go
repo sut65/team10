@@ -3,11 +3,11 @@ package controller
 import (
 	"github.com/sut65/team10/entity"
 	//"gopkg.in/yaml.v2"
-	"gorm.io/gorm"
-
-	"github.com/gin-gonic/gin"
-
 	"net/http"
+
+	govalidator "github.com/asaskevich/govalidator"
+	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 // POST /receives
@@ -66,6 +66,11 @@ func CreateReceive(c *gin.Context) {
 		Time_Stamp:   receive.Time_Stamp.Local(),
 	}
 
+	if _, err := govalidator.ValidateStruct(rec); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	//12: บันทึก
 	if err := entity.DB().Create(&rec).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -115,7 +120,7 @@ func UpdateReceive(c *gin.Context) {
 	var updateSof_Quantity = receive.Sof_Quantity
 
 	//12: สร้าง
-	u_r := entity.Receive{
+	u_rec := entity.Receive{
 		Model:        gorm.Model{ID: receive.ID},
 		Det_Quantity: updateDet_Quantity,
 		Sof_Quantity: updateSof_Quantity,
@@ -123,12 +128,12 @@ func UpdateReceive(c *gin.Context) {
 		Time_Stamp:   receive.Time_Stamp.Local(),
 	}
 
-	if err := entity.DB().Where("id = ?", receive.ID).Updates(&u_r).Error; err != nil {
+	if err := entity.DB().Where("id = ?", receive.ID).Updates(&u_rec).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": u_r})
+	c.JSON(http.StatusOK, gin.H{"data": u_rec})
 
 }
 
