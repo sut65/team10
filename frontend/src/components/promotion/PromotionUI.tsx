@@ -82,7 +82,7 @@ function Promotion() {
           setSuccess(true);
           console.log(res.data)
           await timeout(1000); //for 1 sec delay
-          window.location.reload(); 
+          window.location.href = "/promotion"; 
         } else {
           setError(true);
         }
@@ -149,7 +149,7 @@ function Promotion() {
   }, []);
   return (
 
-    <Container maxWidth="md">
+    <Container maxWidth="xl">
       <StorefrontIcon color="primary" sx={{ fontSize: 80 }} />
       <Snackbar // บันทึกสำเร็จ
         open={success}
@@ -302,7 +302,7 @@ function Promotion() {
           >
             <Button
               component={RouterLink}
-              to="/"
+              to="/promotion"
               variant="contained"
               color="error"
               endIcon={<CancelIcon />}
@@ -310,32 +310,9 @@ function Promotion() {
               cancel
             </Button>
           </Grid>
-          <Grid item xs={5}
+          <Grid container item xs={7} direction='row-reverse'>
+          <Grid item xs={3}
           >
-            <div>
-            <Button aria-describedby={popover} variant="contained" color="warning"
-              endIcon={<UpdateIcon />}
-              onClick={handleClickPopover}>
-              update
-            </Button>
-            <Popover
-              id={popover}
-              open={open}
-              anchorEl={anchorEl}
-              sx={{ paddingBottom: 20 }}
-              marginThreshold={80}
-              onClose={handleClosePopover}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-            >
-              <UpdatePromotion />
-              <Typography sx={{ p: 2 }}>Update Promotion</Typography>
-            </Popover>
-            </div>
-          </Grid>
-          <Grid container item xs={2} direction='row-reverse'>
             <Button
               variant="contained"
               color="success"
@@ -345,10 +322,8 @@ function Promotion() {
               commit
             </Button>
           </Grid>
-          <Grid container item xs={6.8} direction='row-reverse'>
           </Grid>
         </Grid>
-        <PromotionTable_UI />
       </Box>
     </Container>
   );

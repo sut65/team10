@@ -7,9 +7,9 @@ import { Snackbar, Alert } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { Container } from "@mui/system";
 import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
 import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from '@mui/icons-material/Cancel';
 
 import StorefrontIcon from '@mui/icons-material/Storefront';
 /* Datetimepicker */
@@ -18,12 +18,14 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { PromotionInterface } from "../../models/promotion/IPromotion";
-
+import { useParams } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 function UpdatePromotion() {
+  const params = useParams()
   const [date_u, setDate_U] = React.useState<Dayjs | null>(dayjs());
   const [promotion, setPromotion] = React.useState<Partial<PromotionInterface>>({});
   const [price, setPrice] = React.useState<number | null>(null);
-  const [promotion_id, setPromotion_ID] = React.useState<PromotionInterface[]>([]);
+  const [promotion_id, setPromotion_ID] = React.useState<Number | undefined>(undefined);
 
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -60,7 +62,6 @@ function UpdatePromotion() {
       body: JSON.stringify(promotion_u),
     };
     console.log(promotion_u);
-    // console.log(JSON.stringify(promotion_u));
 
     fetch(`http://localhost:8080/promotions`, requestOptions)
       .then((response) => response.json())
@@ -82,7 +83,6 @@ function UpdatePromotion() {
 
 
   const getPromotion = async () => {
-    const apiUrl = "http://localhost:8080/promotion";
     const requestOptions = {
       method: "GET",
       headers: {
@@ -91,13 +91,14 @@ function UpdatePromotion() {
       },
     };
 
-    fetch(apiUrl, requestOptions)
+    fetch(`http://localhost:8080/complete/${params.id}`, requestOptions )
       .then((response) => response.json())
       .then((res) => {
         console.log(res)
         if (res.data) {
           setPromotion(res.data);
-          setPromotion_ID(res.data);
+          setPromotion_ID(res.data.ID);
+          console.log(promotion_id)
         }
       });
   };
@@ -107,7 +108,7 @@ function UpdatePromotion() {
   }, []);
   return (
 
-    <Container maxWidth="xl">
+    <Container maxWidth="md">
       <StorefrontIcon color="primary" sx={{ fontSize: 80 }} />
       <Snackbar // บันทึกสำเร็จ
         open={success}
@@ -138,36 +139,15 @@ function UpdatePromotion() {
               <h3>ID</h3>
             </Grid>
             <Grid item xs={10} >
-              <Autocomplete
-                id="promption-auto"
-                options={promotion_id}
-                fullWidth
-                size="medium"
-                onChange={(event: any, value) => {
-                  setPromotion({ ...promotion, ID: value?.ID }); //Just Set ID to interface
-                }}
-                getOptionLabel={(option: any) =>
-                  `${option.ID}`
-                } //filter value
-                renderInput={(params) => {
-                  return (
-                    <TextField
-                      {...params}
-                      variant="outlined"
-                      placeholder="Search..."
-                    />
-                  );
-                }}
-                renderOption={(props: any, option: any) => {
-                  return (
-                    <li
-                      {...props}
-                      value={`${option.ID}`}
-                      key={`${option.ID}`}
-                    >{`${option.ID}`}</li>
-                  ); //display value
-                }}
-              />
+            <TextField
+               id="Employee_ID"
+               variant="outlined"
+               disabled
+               type="string"
+               size="medium"
+               value={promotion_id}
+               sx={{ width : 350 }}
+             ></TextField>
             </Grid>
           </Grid>
 
@@ -210,6 +190,15 @@ function UpdatePromotion() {
           sx={{ paddingY: 2 }}>
           <Grid item xs={5}
           >
+            <Button
+              component={RouterLink}
+              to="/promotion"
+              variant="contained"
+              color="error"
+              endIcon={<CancelIcon />}
+            >
+              cancel
+            </Button>
           </Grid>
           <Grid container item xs={7} direction='row-reverse'>
             <Button

@@ -29,6 +29,8 @@ import FormCreate from "./components/form/FormCreate";
 import CompleteTable from "./components/complete/TabelComplete";
 import UpdateComplete from "./components/complete/UpdateCompplete";
 import FormUpdate from "./components/form/UpdateForm";
+import PromotionTable_UI from "./components/promotion/PromotiontableUI";
+import UpdatePromotion from "./components/promotion/UpdatePromotion";
 
 export default function App() {
   const [token, setToken] = React.useState<String>("");
@@ -108,7 +110,9 @@ export default function App() {
             <AppBarPrivate />
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/promotion/" element={<PromotionTable_UI />} />
               <Route path="/promotion/create" element={<Promotion />} />
+              <Route path="/promotion/update/:id" element={<UpdatePromotion />} />
               <Route path="/delivery/create" element={<Delivery />} />
               <Route path="/receive/create" element={<ReceiveCreate />} />
               <Route path="/vehicle/create" element={<Vehicle />} />
