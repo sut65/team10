@@ -321,7 +321,7 @@ type Vehicle struct {
 	Engine_ID        *uint
 	Engine           Engine `gorm:"references:id"`
 	ListModel        string `valid:"required~จำเป็นต้องกรอกรุ่นของรถ"`
-	Vehicle_Rigis    string //`valid:"required~จำเป็นต้องกรอกทะเบียนรถ"`
+	Vehicle_Rigis    string `valid:"required~จำเป็นต้องกรอกทะเบียนรถ"`
 	Date_Insulance   time.Time
 	Delivery         []Delivery `gorm:"foreignKey:Vehicle_ID"`
 }
