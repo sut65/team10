@@ -46,7 +46,7 @@ func CreateVehicle(c *gin.Context) {
 	}
 
 	//10: สร้าง
-	rec := entity.Vehicle{
+	veh := entity.Vehicle{
 		Employee_ID:      vehicle.Employee_ID,
 		Brand_Vehicle_ID: vehicle.Brand_Vehicle_ID,
 		Engine_ID:        vehicle.Engine_ID,
@@ -55,17 +55,17 @@ func CreateVehicle(c *gin.Context) {
 		Date_Insulance:   vehicle.Date_Insulance.Local(),
 	}
 
-	if _, err := govalidator.ValidateStruct(rec); err != nil {
+	if _, err := govalidator.ValidateStruct(veh); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	//11: บันทึก
-	if err := entity.DB().Create(&rec).Error; err != nil {
+	if err := entity.DB().Create(&veh).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"data": rec})
+	c.JSON(http.StatusOK, gin.H{"data": veh})
 
 }
 

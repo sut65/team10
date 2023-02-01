@@ -32,7 +32,7 @@ func TestDetQuantityNotNegative(t *testing.T) {
 	g.Expect(err.Error()).To(Equal("จำนวนผงซักฟอกห้ามเป็นลบ"))
 }
 
-// ตรวจสอบจำนวนของน้ำยาแล้วต้องเจอ Error
+// ตรวจสอบจำนวนของน้ำยาปรับผ้านุ่มแล้วต้องเจอ Error
 func TestSofQuantityNotNegative(t *testing.T) {
 	g := NewGomegaWithT(t)
 
