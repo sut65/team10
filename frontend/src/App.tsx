@@ -31,7 +31,8 @@ import UpdateComplete from "./components/complete/UpdateCompplete";
 import FormUpdate from "./components/form/UpdateForm";
 import PromotionTable_UI from "./components/promotion/PromotiontableUI";
 import UpdatePromotion from "./components/promotion/UpdatePromotion";
-
+import BillTable_UI from "./components/bill/BillTable";
+import BillUpdate from "./components/bill/UpdateBill";
 export default function App() {
   const [token, setToken] = React.useState<String>("");
 
@@ -79,7 +80,9 @@ export default function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/confirmation/create" element={<Confirmation />} />
+              <Route path="/bill" element={<BillTable_UI />} />
               <Route path="/bill/create" element={<Bill />} />
+              <Route path="/bills/update/:id" element={<BillUpdate />} />
               <Route path="/service/create" element={<ServiceCreate />} />
               <Route path="/customer/update" element={<UpdateCustomer />} />
               {/* <Route path="/form" element={<FormTable />} /> */}

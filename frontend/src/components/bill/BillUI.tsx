@@ -32,13 +32,13 @@ import { QuotaCodeInterface } from "../../models/promotion/IQuotaCode";
 import { ServiceInterface } from "../../models/service/IService";
 import BillTable_UI from "./BillTable";
 import BillUpdate from "./UpdateBill";
-
+import { Link as RouterLink } from "react-router-dom";
 //สร้างตัวแปรสำหรับคำนวณค่าใช้จ่าย
- let sum = 0;
+let sum = 0;
 
 function Bill() {
   //////////////////////////////////////////////////////////////////////////////////
-                            /* ตัวแปรต่างๆ สำหรับรับค่า*/
+  /* ตัวแปรต่างๆ สำหรับรับค่า*/
   //////////////////////////////////////////////////////////////////////////////////
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
   const [bill, setBill] = React.useState<Partial<BillInterface>>({});
@@ -58,7 +58,7 @@ function Bill() {
   }
 
   //////////////////////////////////////////////////////////////////////////////////
-                            /* ฟังก์ชั่นสำหรับ popup*/
+  /* ฟังก์ชั่นสำหรับ popup*/
   //////////////////////////////////////////////////////////////////////////////////
   const handleClickpop = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -84,17 +84,17 @@ function Bill() {
   };
 
   //ฟังชั่นสำหรับคำนวณค่าใช้จ่ายทั้งหมดในบิล
-  let cal: ( value_cal: number) => number =
-    function ( value_cal: number) {
+  let cal: (value_cal: number) => number =
+    function (value_cal: number) {
       sum = 0;
-      sum = price_service[0] - discount_promotion[value_cal-1]
-      console.log(discount_promotion[value_cal-1])
+      sum = price_service[0] - discount_promotion[value_cal - 1]
+      console.log(discount_promotion[value_cal - 1])
       console.log(sum)
       return sum;
     };
 
   //////////////////////////////////////////////////////////////////////////////////
-                        /* ฟังก์ชั่นสำหรับ submit สำหรับส่งข้อมูลไป backend*/
+  /* ฟังก์ชั่นสำหรับ submit สำหรับส่งข้อมูลไป backend*/
   //////////////////////////////////////////////////////////////////////////////////
   function submit() {
     let bill_p = {
@@ -120,7 +120,7 @@ function Bill() {
         if (res.data) {
           setSuccess(true);
           await timeout(1000); //for 1 sec delay
-          window.location.reload();
+          window.location.href = "/bill"; 
         } else {
           setError(true);
         }
@@ -198,18 +198,18 @@ function Bill() {
       },
     };
     fetch(`${apiUrl}/b_services/${localStorage.getItem("uid")}`, requestOptions)
-    .then((response) => response.json())
-    .then((res) => {
-      console.log(res.data);
-      if (res.data) {
-        setService(res.data);
-        setBill({ ...bill, Service_ID: res.data[0].ID , Bill_Price: sum }) //ทำการเซ็ท service_id ให้กับ bill โดยเอา ID ของ array[0]
-        //ทำการเซ็ทค่า bill price โดยมีค่าเริ่มต้นมาจาก service_price ไม่สามารถเซ็ตเป็น setBill แยกเป็น 2 อันได้เนื่องจากข้อมูลที่เซ็ตตอนแรกจะหายไป
-        console.log(bill)
-      } else {
-        console.log("else");
-      }
-    });
+      .then((response) => response.json())
+      .then((res) => {
+        console.log(res.data);
+        if (res.data) {
+          setService(res.data);
+          setBill({ ...bill, Service_ID: res.data[0].ID, Bill_Price: sum }) //ทำการเซ็ท service_id ให้กับ bill โดยเอา ID ของ array[0]
+          //ทำการเซ็ทค่า bill price โดยมีค่าเริ่มต้นมาจาก service_price ไม่สามารถเซ็ตเป็น setBill แยกเป็น 2 อันได้เนื่องจากข้อมูลที่เซ็ตตอนแรกจะหายไป
+          console.log(bill)
+        } else {
+          console.log("else");
+        }
+      });
   };
 
 
@@ -220,7 +220,7 @@ function Bill() {
     getQuotacodeAll();
   }, []);
 
-  
+
   var discount_promotion = quotacodeall.map((item: QuotaCodeInterface) => (item.Promotion.Price)); //เก็บค่าจำนวนเงินที่ได้จากส่วนลดของโปรโมชั่น
   var price_service = service.map((item: ServiceInterface) => (item.Bill_Price)); //เก็บค่าจำนวนเงินที่ได้จาก service ของลูกค้า
   sum = price_service[0]; //กำหนดค่าในตัวแปรให้เป็นค่าใช้จ่ายที่ได้จาก service_price เพื่อนำไปเซ็ทในตัวแปร bill.Bill_Price เนื่องจากถ้าใช้ตัวแปรธรรมดา ค่าจะไม่ถูกเปลี่ยน
@@ -265,7 +265,7 @@ function Bill() {
               </Grid>
               <Grid item xs={5}>
                 <TextField
-                fullWidth
+                  fullWidth
                   id="service-read-only-input"
                   label="Read Only"
                   defaultValue={0}
@@ -296,7 +296,7 @@ function Bill() {
                   size="medium"
                   onChange={(event: any, value) => {
                     sum = cal(Number(value?.ID));
-                    setBill({ ...bill, QuotaCode_ID: value?.ID , Bill_Price: sum}); //Just Set ID to interface
+                    setBill({ ...bill, QuotaCode_ID: value?.ID, Bill_Price: sum }); //Just Set ID to interface
                   }}
                   getOptionLabel={(option: any) =>
                     `${option.Promotion.Codetype.Type}`
@@ -419,6 +419,8 @@ function Bill() {
           <Grid item xs={5}
           >
             <Button
+              component={RouterLink}
+              to="/bill"
               variant="contained"
               color="error"
               endIcon={<CancelIcon />}
@@ -427,27 +429,6 @@ function Bill() {
             </Button>
           </Grid>
           <Grid item xs={2}>
-            <div>
-              <Button aria-describedby={pop1} variant="contained" color="warning" onClick={handleClickpop}
-                endIcon={<UpdateIcon />}
-              >
-                Update
-              </Button>
-              <Popover
-                id={pop1}
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleClosepop}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left',
-                }
-                }
-              >
-                < BillUpdate />
-                <Typography sx={{ p: 2 }}>Update Bill</Typography>
-              </Popover>
-            </div>
           </Grid>
           <Grid container item xs={5} direction='row-reverse'>
             <Button
@@ -460,7 +441,6 @@ function Bill() {
             </Button>
           </Grid>
         </Grid>
-        <BillTable_UI />
       </Box>
     </Container>
   );
