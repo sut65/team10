@@ -32,10 +32,14 @@ import { QuotaCodeInterface } from "../../models/promotion/IQuotaCode";
 import { ServiceInterface } from "../../models/service/IService";
 import BillTable_UI from "./BillTable";
 import BillUpdate from "./UpdateBill";
+
 //สร้างตัวแปรสำหรับคำนวณค่าใช้จ่าย
  let sum = 0;
 
 function Bill() {
+  //////////////////////////////////////////////////////////////////////////////////
+                            /* ตัวแปรต่างๆ สำหรับรับค่า*/
+  //////////////////////////////////////////////////////////////////////////////////
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
   const [bill, setBill] = React.useState<Partial<BillInterface>>({});
   const [paymenttype, setPaymenttype] = React.useState<PaymenttypeInterface[]>([]);
@@ -46,12 +50,16 @@ function Bill() {
 
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+  //////////////////////////////////////////////////////////////////////////////////
 
   //หน่วงเวลา
   function timeout(delay: number) {
     return new Promise(res => setTimeout(res, delay));
   }
 
+  //////////////////////////////////////////////////////////////////////////////////
+                            /* ฟังก์ชั่นสำหรับ popup*/
+  //////////////////////////////////////////////////////////////////////////////////
   const handleClickpop = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -62,7 +70,7 @@ function Bill() {
 
   const open = Boolean(anchorEl);
   const pop1 = open ? 'simple-popover' : undefined;
-
+  //////////////////////////////////////////////////////////////////////////////////
   //แสดงการ Alert
   const handleClose = ( // AlertBar
     event?: React.SyntheticEvent | Event,
@@ -85,6 +93,9 @@ function Bill() {
       return sum;
     };
 
+  //////////////////////////////////////////////////////////////////////////////////
+                        /* ฟังก์ชั่นสำหรับ submit สำหรับส่งข้อมูลไป backend*/
+  //////////////////////////////////////////////////////////////////////////////////
   function submit() {
     let bill_p = {
       Service_ID: bill.Service_ID,
@@ -103,22 +114,20 @@ function Bill() {
       },
       body: JSON.stringify(bill_p),
     };
-
-    console.log(bill_p)
     fetch(`${apiUrl}/bills`, requestOptions)
       .then((response) => response.json())
       .then(async (res) => {
         if (res.data) {
           setSuccess(true);
           await timeout(1000); //for 1 sec delay
-          //window.location.reload();
+          window.location.reload();
         } else {
           setError(true);
         }
       });
   }
 
-
+  //ดึงข้อมูล Quotacode ที่สามารถใช้งานได้ (bill_id = 0)
   const getQuotacode = async () => {
     const apiUrl = "http://localhost:8080/quotacode";
     const requestOptions = {
@@ -159,7 +168,7 @@ function Bill() {
       });
   };
 
-  const getPaymentType = async () => {
+  const getPaymentType = async () => { //ใช้ดึง paymenttype ทั้งหมด
     const apiUrl = "http://localhost:8080/paymenttype";
     const requestOptions = {
       method: "GET",
@@ -179,7 +188,7 @@ function Bill() {
       });
   };
 
-  const getServiceBill = async () => {
+  const getServiceBill = async () => { //ใช้สำหรับดึงข้อมูล service ของเฉพาะของลูกค้า
     const apiUrl = "http://localhost:8080";
     const requestOptions = {
       method: "GET",
