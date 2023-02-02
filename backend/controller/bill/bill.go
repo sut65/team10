@@ -150,7 +150,6 @@ func UpdateBill(c *gin.Context) {
 	// สร้าง
 	u_b := entity.Bill{
 		Paymenttype_ID: bill.Paymenttype_ID,
-		Service_ID:     bill.Service_ID,
 		Time_Stamp:     bill.Time_Stamp.Local(),
 	}
 

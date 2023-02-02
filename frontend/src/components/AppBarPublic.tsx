@@ -107,11 +107,11 @@ function AppBarPublic() {
                 <ListItemText primary="เลือกบริการ" sx={{ padding: 1 }} />
               </ListItem>
 
-              <ListItem component={RouterLink} to="/bill/create">
+              <ListItem component={RouterLink} to="/bill">
                 {/* {เป็นระบบที่ต่อเนื่องจาก เลือกบริการ} */}{" "}
                 <PersonSearchIcon color="primary" />
                 <ListItemText
-                  primary="ชำระค่าบริการ (Debug)"
+                  primary="ชำระค่าบริการ"
                   sx={{ padding: 1 }}
                 />
               </ListItem>

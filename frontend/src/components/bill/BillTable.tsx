@@ -1,16 +1,27 @@
 import { useEffect, useState } from "react";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Container from "@mui/material/Container";
 import { BillInterface } from "../../models/bill/IBill";
-import { Grid } from "@mui/material";
+import { Box, Button, ButtonGroup, CssBaseline, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Paper, TableCell, Typography } from "@mui/material";
+
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Dialog } from "@material-ui/core";
+import React from "react";
 
 function BillTable_UI() {
   const [bill, setBill] = useState<BillInterface[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getListBill_Customer();
   }, []);
-    //ดึงข้อมูลจาก Promotion
+
+  
+    //ดึงข้อมูลบิลเฉพาะของลูกค้า
   const getListBill_Customer = async () => {
     const apiUrl = "http://localhost:8080/bills/";
     const requestOptions = {
@@ -32,59 +43,95 @@ function BillTable_UI() {
   };
 
 
-  const billcolumns: GridColDef[] = [
-    { field: "ID", headerName: "ลำดับ", width: 50 },
-    {
-      field: "Service",
-      headerName: "ชื่อลูกค้า",
-      width: 150,
-      valueGetter: (params) => params.value.Customer.Customer_Name,
-    },
-    {
-      field: "QuotaCode_ID",
-      headerName: "โค๊ดเลขที่",
-      width: 100,
-    },
-    {
-      field: "Paymenttype",
-      headerName: "ประเภทการชำระเงิน",
-      width: 150,
-      valueGetter: (params) => params.value.Type,
-    },
-    {
-      field: "Bill_Price",
-      headerName: "ราคา",
-      width: 100,
-    },
-    { field: "Time_Stamp", headerName: "เวลาออกบิล", width: 250 },
-  ];
+
+
+  // const billcolumns: GridColDef[] = [
+  //   { field: "ID", headerName: "ลำดับ", width: 50 },
+  //   {
+  //     field: "Service",
+  //     headerName: "ชื่อลูกค้า",
+  //     width: 150,
+  //     valueGetter: (params) => params.value.Customer.Customer_Name,
+  //   },
+  //   {
+  //     field: "QuotaCode_ID",
+  //     headerName: "โค๊ดเลขที่",
+  //     width: 100,
+  //   },
+  //   {
+  //     field: "Paymenttype",
+  //     headerName: "ประเภทการชำระเงิน",
+  //     width: 150,
+  //     valueGetter: (params) => params.value.Type,
+  //   },
+  //   {
+  //     field: "Bill_Price",
+  //     headerName: "ราคา",
+  //     width: 100,
+  //   },
+  //   { field: "Time_Stamp", headerName: "เวลาออกบิล", width: 250 },
+  // ];
 
   return (
-    <div>
-      <Grid>
-        <Grid
-                container
-                justifyContent={"center"}
-                sx={{
-                  paddingY: 2,
-                }}
-              >
-        <Grid item xs = {12}>
-        <Container maxWidth="xl">
-          <div style={{ height: 400, width: "100%", marginTop: "30px" }}>
-            <DataGrid
-              rows={bill}
-              getRowId={(row) => row.ID}
-              columns={billcolumns}
-              pageSize={5}
-              rowsPerPageOptions={[7]}
-            />
-          </div>
-        </Container>
-        </Grid>
-        </Grid>
-      </Grid>
-    </div>
+    <React.Fragment>
+      <CssBaseline />
+      <Container maxWidth="lg" sx={{ p: 2 }}>
+        <Paper sx={{ p: 2 }}>
+          <Box display="flex">
+            <Box sx={{ flexGrow: 1 }}>
+              <Typography variant="h6" gutterBottom component="div">
+                Bill
+              </Typography>
+            </Box>
+            <Box>
+              <Button
+                variant="contained"
+                component={RouterLink}
+                to="/bill/create"
+                sx={{ p: 1 }}>Create Bill</Button>
+            </Box>
+          </Box>
+
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 400, p: 2 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>ID</TableCell>
+                  <TableCell align="right">Codetype</TableCell>
+                  <TableCell align="right">QuotaCode_ID</TableCell>
+                  <TableCell align="right">Paymenttype</TableCell>
+                  <TableCell align="right">Bill_Price</TableCell>
+                  <TableCell align="right">Time_Stamp</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {bill.map((row) => (
+                  <TableRow
+                    key={row.ID}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.ID}
+                    </TableCell>
+                    <TableCell align="right">{row.Service.Customer.Customer_Name}</TableCell>
+                    <TableCell align="right">{row.QuotaCode_ID}</TableCell>
+                    <TableCell align="right">{row.Paymenttype_ID}</TableCell>
+                    <TableCell align="right">{row.Bill_Price}</TableCell>
+                    <TableCell align="right">{row.Time_Stamp.toString()}</TableCell>
+                    <TableCell align="right">
+                      <ButtonGroup variant="outlined" aria-lable="outlined button group">
+                        <Button onClick={() => navigate({ pathname: `/bills/update/${row.ID}` })} variant="contained" color="success"
+                        >edit</Button>
+                      </ButtonGroup>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
+      </Container>
+    </React.Fragment>
   );
 }
 export default BillTable_UI;
