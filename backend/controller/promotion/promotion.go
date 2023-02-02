@@ -160,5 +160,12 @@ func DeletePromotion(c *gin.Context) {
 		return
 	}
 
+	//ใช้สำหรับลบ quotacode โดยกำหนดไว้ว่าต้องการให้ลบเฉพาะ code ที่ยังไม่ถูกใช้งานเท่านั้น เพื่อไม่ให้ข้อมูลเก่าของลูกค้าที่เคยใช้หายไป
+	//และไม่ให้โค๊ดที่ยังไม่ถูกใช้งาน สามารถค้นหาและนำไปใช้งานได้
+	if tx := entity.DB().Exec("DELETE FROM quota_codes WHERE bill_id = 0 AND promotion_id = ?", promotion.ID); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "quotacode not found"})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{"data": promotion})
 }
