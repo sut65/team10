@@ -66,6 +66,8 @@ func main() {
 			p.GET("/bill/:id", controllerbill.GetBill)
 			p.POST("/bills", controllerbill.CreateBill)
 			p.PATCH("/bills", controllerbill.UpdateBill)
+
+			p.GET("/b_services/:id", controllerbill.ListServiceBill)
 			// --Paymenttype
 			p.GET("/paymenttype", controllerbill.ListPaymenttypes)
 
@@ -153,6 +155,7 @@ func main() {
 			p.POST("/services", Service_controller.CreateService)
 			p.DELETE("/services/:id", Service_controller.DeleteService)
 			p.PATCH("/services", Service_controller.UpdateService)
+
 			// p.GET("services/customer/:id", Service_controller.ListServiceByUID)
 
 			//washingType

@@ -46,8 +46,8 @@ function Bill() {
 
   //หน่วงเวลา
   function timeout(delay: number) {
-    return new Promise( res => setTimeout(res, delay) );
-}
+    return new Promise(res => setTimeout(res, delay));
+  }
 
   const handleClickpop = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -62,70 +62,70 @@ function Bill() {
 
   //แสดงการ Alert
   const handleClose = ( // AlertBar
-        event?: React.SyntheticEvent | Event,
-        reason?: string
-    ) => {
-        if (reason === "clickaway") {
-            return;
-        }
-        setSuccess(false);
-        setError(false);
-    };
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSuccess(false);
+    setError(false);
+  };
 
   function submit() {
-        let bill_p = {
-          Service_ID: 1,
-          //Service_ID: Number(localStorage.getItem("uid")),
-          QuotaCode_ID: bill.QuotaCode_ID,
-          Paymenttype_ID: bill.Paymenttype_ID,
-          Bill_Price: 20,
-          Time_Stamp: date,
-        };
+    let bill_p = {
+      Service_ID: bill.Service_ID,
+      QuotaCode_ID: bill.QuotaCode_ID,
+      Paymenttype_ID: bill.Paymenttype_ID,
+      Bill_Price: 20,
+      Time_Stamp: date,
+    };
 
-        const apiUrl = "http://localhost:8080";
-        const requestOptions = {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(bill_p),
-        };
+    const apiUrl = "http://localhost:8080";
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(bill_p),
+    };
 
-        fetch(`${apiUrl}/bills`, requestOptions)
-          .then((response) => response.json())
-          .then(async (res) => {
-            if (res.data) {
-              setSuccess(true);
-              await timeout(1000); //for 1 sec delay
-              window.location.reload(); 
-            } else {
-              setError(true);
-            }
-          });
+    console.log(bill_p)
+    fetch(`${apiUrl}/bills`, requestOptions)
+      .then((response) => response.json())
+      .then(async (res) => {
+        if (res.data) {
+          setSuccess(true);
+          await timeout(1000); //for 1 sec delay
+          window.location.reload();
+        } else {
+          setError(true);
         }
-        
-    
-        const getQuotacode = async () => {
-          const apiUrl = "http://localhost:8080/quotacode";
-          const requestOptions = {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "Content-Type": "application/json",
-            },
-          };
-      
-          fetch(apiUrl, requestOptions)
-            .then((response) => response.json())
-            .then((res) => {
-              console.log(res)
-              if (res.data) {
-                setQuotacode(res.data);
-              }
-            });
-        };
-        
+      });
+  }
+
+
+  const getQuotacode = async () => {
+    const apiUrl = "http://localhost:8080/quotacode";
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    fetch(apiUrl, requestOptions)
+      .then((response) => response.json())
+      .then((res) => {
+        console.log(res)
+        if (res.data) {
+          setQuotacode(res.data);
+        }
+      });
+  };
+
   const getPaymentType = async () => {
     const apiUrl = "http://localhost:8080/paymenttype";
     const requestOptions = {
@@ -146,292 +146,274 @@ function Bill() {
       });
   };
 
-    // const getService = async () => {
-    //   const requestOptions = {
-    //     method: "GET",
-    //     headers: {
-    //       //Authorization: `Bearer ${localStorage.getItem("token")}`,
-    //       "Content-Type": "application/json",
-    //     },
-    //   };
-    //   let uid = localStorage.getItem("uid");
-    //   fetch(`http://localhost:8080/service/${uid}`, requestOptions)
-    //     .then((response) => response.json())
-    //     .then((res) => {
-    //        = res.data.ID
-    //       if (res.data) {
-    //         setService(res.data);
-    //       } else {
-    //         console.log("else");
-    //       }
-    //     });
-    // };
+  const getServiceBill = async () => {
+    const apiUrl = "http://localhost:8080";
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    };
+    fetch(`${apiUrl}/b_services/${localStorage.getItem("uid")}`, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+      console.log(res.data);
+      if (res.data) {
+        setService(res.data);
+        setBill({ ...bill, Service_ID: res.data[0].ID }) //ทำการเซ็ท service_id ให้กับ bill โดยเอา ID ของ array[0]
+      } else {
+        console.log("else");
+      }
+    });
+  };
 
-  
 
   useEffect(() => {
     getPaymentType();
     getQuotacode();
+    getServiceBill();
   }, []);
   return (
-      <Container maxWidth="md">
-        <Box>
+    <Container maxWidth="md">
+      <Box>
         <Snackbar // บันทึกสำเร็จ
-                open={success}
-                autoHideDuration={3000}
-                onClose={handleClose}
-                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
-                <Alert onClose={handleClose} severity="success">              
-                    บันทึกข้อมูลสำเร็จ
-                </Alert>
-            </Snackbar>
+          open={success}
+          autoHideDuration={3000}
+          onClose={handleClose}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
+          <Alert onClose={handleClose} severity="success">
+            บันทึกข้อมูลสำเร็จ
+          </Alert>
+        </Snackbar>
 
-            <Snackbar // บันทึกไม่สำเร็จ
-                open={error} 
-                autoHideDuration={3000} 
-                onClose={handleClose} 
-                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
-                <Alert onClose={handleClose} severity="error">
-                    บันทึกข้อมูลไม่สำเร็จ
-                </Alert>
-            </Snackbar>
+        <Snackbar // บันทึกไม่สำเร็จ
+          open={error}
+          autoHideDuration={3000}
+          onClose={handleClose}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
+          <Alert onClose={handleClose} severity="error">
+            บันทึกข้อมูลไม่สำเร็จ
+          </Alert>
+        </Snackbar>
 
-        <LocalAtmIcon color="success" sx={{ fontSize: 80 }}/>
+        <LocalAtmIcon color="success" sx={{ fontSize: 80 }} />
         <Paper>
-          <Grid sx={{padding:2}}>
-          <h1>Receipt</h1></Grid>
-            <Grid container spacing={5}>
-              <Grid
-                container
-                justifyContent={"center"}
-                sx={{
-                  paddingY: 2,
-                }}
-              >
-                <Grid item xs={3}>
-                  <h3>Service ID</h3>
-                </Grid>
-                <Grid item xs={5}>
-                <Autocomplete
-                    id="service-auto"
-                    options={service}
-                    fullWidth
-                    size="medium"
-                    onChange={(event: any, value) => {
-                      setBill({ ...bill, Service_ID: value?.ID }); //Just Set ID to interface
-                    }}
-                    getOptionLabel={(option: any) =>
-                      `${option.ID}`
-                    } //filter value
-                    renderInput={(params) => {
-                      return (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          placeholder="Search..."
-                        />
-                      );
-                    }}
-                    renderOption={(props: any, option: any) => {
-                      return (
-                        <li
-                          {...props}
-                          value={`${option.ID}`}
-                          key={`${option.ID}`}
-                        >{`${option.ID}`}</li>
-                      ); //display value
-                    }}
-                  />
-                </Grid>
+          <Grid sx={{ padding: 2 }}>
+            <h1>Receipt</h1></Grid>
+          <Grid container spacing={5}>
+            <Grid
+              container
+              justifyContent={"center"}
+              sx={{
+                paddingY: 2,
+              }}
+            >
+              <Grid item xs={3}>
+                <h3>Service ID</h3>
               </Grid>
-
-              <Grid
-                container
-                justifyContent={"center"}
-                sx={{
-                  paddingY: 2,
-                }}
-              >
-                <Grid item xs={3}>
-                  <h3>Promotion</h3>
-                </Grid>
-                <Grid item xs={5}>
-                <Autocomplete
-                    id="quotacode-auto"
-                    options={quotacode}
-                    fullWidth
-                    size="medium"
-                    onChange={(event: any, value) => {
-                      setBill({ ...bill, QuotaCode_ID: value?.ID }); //Just Set ID to interface
-                    }}
-                    getOptionLabel={(option: any) =>
-                      `${option.Promotion.Codetype.Type}`
-                    } //filter value
-                    renderInput={(params) => {
-                      return (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          placeholder="Search..."
-                        />
-                      );
-                    }}
-                    renderOption={(props: any, option: any) => {
-                      return (
-                        <li
-                          {...props}
-                          value={`${option.ID}`}
-                          key={`${option.ID}`}
-                        >{`${option.Promotion.Codetype.Type}`}</li>
-                      ); //display value
-                    }}
-                  />
-                </Grid>
-              </Grid>
-
-              <Grid
-                container
-                justifyContent={"center"}
-                sx={{
-                  paddingY: 2,
-                }}
-              >
-                <Grid item xs={3}>
-                  <h3>Payment Type</h3>
-                </Grid>
-                <Grid item xs={5}>
-                <Autocomplete
-                    id="paymenttype-auto"
-                    options={paymenttype}
-                    fullWidth
-                    size="medium"
-                    onChange={(event: any, value) => {
-                      setBill({ ...bill, Paymenttype_ID: value?.ID }); //Just Set ID to interface
-                    }}
-                    getOptionLabel={(option: any) =>
-                      `${option.Type}`
-                    } //filter value
-                    renderInput={(params) => {
-                      return (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          placeholder="Search..."
-                        />
-                      );
-                    }}
-                    renderOption={(props: any, option: any) => {
-                      return (
-                        <li
-                          {...props}
-                          value={`${option.ID}`}
-                          key={`${option.ID}`}
-                        >{`${option.Type}`}</li>
-                      ); //display value
-                    }}
-                  />
-                </Grid>
-              </Grid>
-
-              <Grid
-                container
-                justifyContent={"center"}
-                sx={{
-                  paddingY: 2,
-                }}
-              >
-                <Grid item xs={3}>
-                  <h3>Price</h3>
-                </Grid>
-                <Grid item xs={5}>
-                  <TextField
-                    fullWidth
-                    id="Bill_Price"
-                    label="Bill_Price"
-                    variant="outlined"
-                    defaultValue="0"
-                    value={5}
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                  />
-                </Grid>
-              </Grid>
-
-              <Grid
-                container
-                justifyContent={"center"}
-                sx={{
-                  paddingY: 2,
-                }}
-              >
-                <Grid item xs={3}>
-                  <h3>Date Time</h3>
-                </Grid>
-                <Grid item xs={5}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DateTimePicker
-                      label="DateTimePicker"
-                      renderInput={(params) => <TextField {...params} />}
-                      value={date}
-                      onChange={(newValue: Dayjs | null) => {
-                        setDate(newValue);
-                      }}
-                    />
-                  </LocalizationProvider>
-                </Grid>
+              <Grid item xs={5}>
+                <TextField
+                fullWidth
+                  id="service-read-only-input"
+                  label="Read Only"
+                  defaultValue={0}
+                  value={bill.Service_ID}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  variant="filled"
+                />
               </Grid>
             </Grid>
+
+            <Grid
+              container
+              justifyContent={"center"}
+              sx={{
+                paddingY: 2,
+              }}
+            >
+              <Grid item xs={3}>
+                <h3>Promotion</h3>
+              </Grid>
+              <Grid item xs={5}>
+                <Autocomplete
+                  id="quotacode-auto"
+                  options={quotacode}
+                  fullWidth
+                  size="medium"
+                  onChange={(event: any, value) => {
+                    setBill({ ...bill, QuotaCode_ID: value?.ID }); //Just Set ID to interface
+                  }}
+                  getOptionLabel={(option: any) =>
+                    `${option.Promotion.Codetype.Type}`
+                  } //filter value
+                  renderInput={(params) => {
+                    return (
+                      <TextField
+                        {...params}
+                        variant="outlined"
+                        placeholder="Search..."
+                      />
+                    );
+                  }}
+                  renderOption={(props: any, option: any) => {
+                    return (
+                      <li
+                        {...props}
+                        value={`${option.ID}`}
+                        key={`${option.ID}`}
+                      >{`${option.Promotion.Codetype.Type}`}</li>
+                    ); //display value
+                  }}
+                />
+              </Grid>
+            </Grid>
+
+            <Grid
+              container
+              justifyContent={"center"}
+              sx={{
+                paddingY: 2,
+              }}
+            >
+              <Grid item xs={3}>
+                <h3>Payment Type</h3>
+              </Grid>
+              <Grid item xs={5}>
+                <Autocomplete
+                  id="paymenttype-auto"
+                  options={paymenttype}
+                  fullWidth
+                  size="medium"
+                  onChange={(event: any, value) => {
+                    setBill({ ...bill, Paymenttype_ID: value?.ID }); //Just Set ID to interface
+                  }}
+                  getOptionLabel={(option: any) =>
+                    `${option.Type}`
+                  } //filter value
+                  renderInput={(params) => {
+                    return (
+                      <TextField
+                        {...params}
+                        variant="outlined"
+                        placeholder="Search..."
+                      />
+                    );
+                  }}
+                  renderOption={(props: any, option: any) => {
+                    return (
+                      <li
+                        {...props}
+                        value={`${option.ID}`}
+                        key={`${option.ID}`}
+                      >{`${option.Type}`}</li>
+                    ); //display value
+                  }}
+                />
+              </Grid>
+            </Grid>
+
+            <Grid
+              container
+              justifyContent={"center"}
+              sx={{
+                paddingY: 2,
+              }}
+            >
+              <Grid item xs={3}>
+                <h3>Price</h3>
+              </Grid>
+              <Grid item xs={5}>
+                <TextField
+                  fullWidth
+                  id="Bill_Price"
+                  label="Bill_Price"
+                  variant="outlined"
+                  defaultValue="0"
+                  value={5}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                />
+              </Grid>
+            </Grid>
+
+            <Grid
+              container
+              justifyContent={"center"}
+              sx={{
+                paddingY: 2,
+              }}
+            >
+              <Grid item xs={3}>
+                <h3>Date Time</h3>
+              </Grid>
+              <Grid item xs={5}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateTimePicker
+                    label="DateTimePicker"
+                    renderInput={(params) => <TextField {...params} />}
+                    value={date}
+                    onChange={(newValue: Dayjs | null) => {
+                      setDate(newValue);
+                    }}
+                  />
+                </LocalizationProvider>
+              </Grid>
+            </Grid>
+          </Grid>
         </Paper>
         <Grid container spacing={2}
-        sx={{paddingY:2}}>
-                <Grid item xs={5} 
-                >
-                <Button
-                  variant="contained"
-                  color="error"
-                  endIcon={<CancelIcon />}
-                >
-                  cancel
-                </Button> 
-                </Grid>
-                <Grid item xs={2}>
-                <div>
-                <Button aria-describedby={pop1} variant="contained" color="warning" onClick={handleClickpop}
+          sx={{ paddingY: 2 }}>
+          <Grid item xs={5}
+          >
+            <Button
+              variant="contained"
+              color="error"
+              endIcon={<CancelIcon />}
+            >
+              cancel
+            </Button>
+          </Grid>
+          <Grid item xs={2}>
+            <div>
+              <Button aria-describedby={pop1} variant="contained" color="warning" onClick={handleClickpop}
                 endIcon={<UpdateIcon />}
-                >
-                  Update
-                </Button>
-                <Popover
-                  id={pop1}
-                  open={open}
-                  anchorEl={anchorEl}
-                  onClose={handleClosepop}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                  }
+              >
+                Update
+              </Button>
+              <Popover
+                id={pop1}
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClosepop}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
                 }
-                >
-                  < BillUpdate/>
-                  <Typography sx={{ p: 2 }}>Update Bill</Typography>
-                </Popover>
-              </div>
-                </Grid>
-                <Grid container item xs={5}  direction='row-reverse'>
-                <Button
-                  variant="contained"
-                  color="success"
-                  onClick={submit}
-                  endIcon={<SaveIcon />}
-                >
-                  commit
-                </Button> 
-                </Grid>
-              </Grid>
-              <BillTable_UI />
-              </Box>
-      </Container>
+                }
+              >
+                < BillUpdate />
+                <Typography sx={{ p: 2 }}>Update Bill</Typography>
+              </Popover>
+            </div>
+          </Grid>
+          <Grid container item xs={5} direction='row-reverse'>
+            <Button
+              variant="contained"
+              color="success"
+              onClick={submit}
+              endIcon={<SaveIcon />}
+            >
+              commit
+            </Button>
+          </Grid>
+        </Grid>
+        <BillTable_UI />
+      </Box>
+    </Container>
   );
 }
 export default Bill;
