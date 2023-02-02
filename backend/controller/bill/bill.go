@@ -63,6 +63,16 @@ func CreateBill(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	q := entity.QuotaCode{
+		Bill_ID: &b.ID,
+	}
+
+	if err := entity.DB().Where("id = ?", bill.QuotaCode_ID).Updates(&q).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{"data": b})
 
 }
