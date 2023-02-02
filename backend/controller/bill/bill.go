@@ -83,6 +83,17 @@ func CreateBill(c *gin.Context) {
 		return
 	}
 
+	//สร้าง ข้อมูลสำหรับใช้ในการอัปเดต Bill_Status ใน Service
+	s_u := entity.Service{
+		Bill_status: 1,
+	}
+
+	//function สำหรับอัปเดต Bill_Status Service
+	if err := entity.DB().Where("id = ?", bill.Service_ID).Updates(&s_u).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{"data": b})
 
 }
@@ -105,6 +116,19 @@ func GetBill(c *gin.Context) {
 func ListBills(c *gin.Context) {
 	var bill []entity.Bill
 	if err := entity.DB().Preload("Service.Customer").Preload("QuotaCode").Preload("Paymenttype").Raw("SELECT * FROM bills").Find(&bill).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": bill})
+
+}
+
+// ใช้สำหรับค้นหา list ของ bill ที่ลูกค้าคนนั้นเคยเข้ามาใช้งาน
+func ListBills_Customer(c *gin.Context) {
+	var bill []entity.Bill
+	customer_id := c.Param("id")
+	if err := entity.DB().Preload("Service.Customer").Preload("QuotaCode").Preload("Paymenttype").Raw("SELECT bills.id,service_id,quota_code_id,paymenttype_id,bills.bill_price,type_washing_id,delivery_type_id,weight_id,customer_id,bill_status,address,time_stamp FROM bills join services WHERE services.id = bills.id AND customer_id = ?", customer_id).Find(&bill).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -144,7 +168,7 @@ func UpdateBill(c *gin.Context) {
 func ListServiceBill(c *gin.Context) {
 	var service []entity.Service
 	customer_id := c.Param("id")
-	if err := entity.DB().Preload("Customer").Raw("SELECT * FROM services WHERE customer_id = ? ORDER BY  services.id DESC LIMIT 1;", customer_id).Find(&service).Error; err != nil {
+	if err := entity.DB().Preload("Customer").Raw("SELECT * FROM services WHERE customer_id = ? AND bill_status = 0 ORDER BY  services.id DESC LIMIT 1;", customer_id).Find(&service).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

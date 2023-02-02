@@ -8,11 +8,11 @@ function BillTable_UI() {
   const [bill, setBill] = useState<BillInterface[]>([]);
 
   useEffect(() => {
-    getBill();
+    getListBill_Customer();
   }, []);
     //ดึงข้อมูลจาก Promotion
-  const getBill = async () => {
-    const apiUrl = "http://localhost:8080/bill";
+  const getListBill_Customer = async () => {
+    const apiUrl = "http://localhost:8080/bills/";
     const requestOptions = {
       method: "GET",
       headers: {
@@ -20,7 +20,7 @@ function BillTable_UI() {
         "Content-Type": "application/json",
       },
     };
-    fetch(apiUrl, requestOptions)
+    fetch(`${apiUrl}${localStorage.getItem("uid")}`, requestOptions)
       .then((response) => response.json())
       .then((res) => {
         console.log(res.data)

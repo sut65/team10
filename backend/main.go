@@ -67,6 +67,7 @@ func main() {
 			p.POST("/bills", controllerbill.CreateBill)
 			p.PATCH("/bills", controllerbill.UpdateBill)
 
+			p.GET("/bills/:id", controllerbill.ListBills_Customer)
 			p.GET("/b_services/:id", controllerbill.ListServiceBill)
 			// --Paymenttype
 			p.GET("/paymenttype", controllerbill.ListPaymenttypes)

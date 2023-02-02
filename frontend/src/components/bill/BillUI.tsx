@@ -31,13 +31,16 @@ import { PaymenttypeInterface } from "../../models/bill/IPaymenttype";
 import { QuotaCodeInterface } from "../../models/promotion/IQuotaCode";
 import { ServiceInterface } from "../../models/service/IService";
 import BillTable_UI from "./BillTable";
-//test
 import BillUpdate from "./UpdateBill";
+//สร้างตัวแปรสำหรับคำนวณค่าใช้จ่าย
+ let sum = 0;
+
 function Bill() {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
   const [bill, setBill] = React.useState<Partial<BillInterface>>({});
   const [paymenttype, setPaymenttype] = React.useState<PaymenttypeInterface[]>([]);
   const [quotacode, setQuotacode] = React.useState<QuotaCodeInterface[]>([]);
+  const [quotacodeall, setQuotacodeall] = React.useState<QuotaCodeInterface[]>([]);
   const [service, setService] = React.useState<ServiceInterface[]>([]);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
@@ -72,12 +75,22 @@ function Bill() {
     setError(false);
   };
 
+  //ฟังชั่นสำหรับคำนวณค่าใช้จ่ายทั้งหมดในบิล
+  let cal: ( value_cal: number) => number =
+    function ( value_cal: number) {
+      sum = 0;
+      sum = price_service[0] - discount_promotion[value_cal-1]
+      console.log(discount_promotion[value_cal-1])
+      console.log(sum)
+      return sum;
+    };
+
   function submit() {
     let bill_p = {
       Service_ID: bill.Service_ID,
       QuotaCode_ID: bill.QuotaCode_ID,
       Paymenttype_ID: bill.Paymenttype_ID,
-      Bill_Price: 20,
+      Bill_Price: bill.Bill_Price,
       Time_Stamp: date,
     };
 
@@ -98,7 +111,7 @@ function Bill() {
         if (res.data) {
           setSuccess(true);
           await timeout(1000); //for 1 sec delay
-          window.location.reload();
+          //window.location.reload();
         } else {
           setError(true);
         }
@@ -122,6 +135,26 @@ function Bill() {
         console.log(res)
         if (res.data) {
           setQuotacode(res.data);
+        }
+      });
+  };
+
+  const getQuotacodeAll = async () => { //ใช้สำหรับดึง Quotacode ทั้งหมด เพื่อที่จะใช้ในการ map หาส่วนลด
+    const apiUrl = "http://localhost:8080/quotacodes";
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    fetch(apiUrl, requestOptions)
+      .then((response) => response.json())
+      .then((res) => {
+        console.log(res)
+        if (res.data) {
+          setQuotacodeall(res.data);
         }
       });
   };
@@ -161,7 +194,9 @@ function Bill() {
       console.log(res.data);
       if (res.data) {
         setService(res.data);
-        setBill({ ...bill, Service_ID: res.data[0].ID }) //ทำการเซ็ท service_id ให้กับ bill โดยเอา ID ของ array[0]
+        setBill({ ...bill, Service_ID: res.data[0].ID , Bill_Price: sum }) //ทำการเซ็ท service_id ให้กับ bill โดยเอา ID ของ array[0]
+        //ทำการเซ็ทค่า bill price โดยมีค่าเริ่มต้นมาจาก service_price ไม่สามารถเซ็ตเป็น setBill แยกเป็น 2 อันได้เนื่องจากข้อมูลที่เซ็ตตอนแรกจะหายไป
+        console.log(bill)
       } else {
         console.log("else");
       }
@@ -173,7 +208,14 @@ function Bill() {
     getPaymentType();
     getQuotacode();
     getServiceBill();
+    getQuotacodeAll();
   }, []);
+
+  
+  var discount_promotion = quotacodeall.map((item: QuotaCodeInterface) => (item.Promotion.Price)); //เก็บค่าจำนวนเงินที่ได้จากส่วนลดของโปรโมชั่น
+  var price_service = service.map((item: ServiceInterface) => (item.Bill_Price)); //เก็บค่าจำนวนเงินที่ได้จาก service ของลูกค้า
+  sum = price_service[0]; //กำหนดค่าในตัวแปรให้เป็นค่าใช้จ่ายที่ได้จาก service_price เพื่อนำไปเซ็ทในตัวแปร bill.Bill_Price เนื่องจากถ้าใช้ตัวแปรธรรมดา ค่าจะไม่ถูกเปลี่ยน
+  console.log(discount_promotion)
   return (
     <Container maxWidth="md">
       <Box>
@@ -244,7 +286,8 @@ function Bill() {
                   fullWidth
                   size="medium"
                   onChange={(event: any, value) => {
-                    setBill({ ...bill, QuotaCode_ID: value?.ID }); //Just Set ID to interface
+                    sum = cal(Number(value?.ID));
+                    setBill({ ...bill, QuotaCode_ID: value?.ID , Bill_Price: sum}); //Just Set ID to interface
                   }}
                   getOptionLabel={(option: any) =>
                     `${option.Promotion.Codetype.Type}`
@@ -328,11 +371,8 @@ function Bill() {
               <Grid item xs={5}>
                 <TextField
                   fullWidth
-                  id="Bill_Price"
-                  label="Bill_Price"
                   variant="outlined"
-                  defaultValue="0"
-                  value={5}
+                  value={bill.Bill_Price}
                   InputProps={{
                     readOnly: true,
                   }}

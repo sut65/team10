@@ -20,6 +20,7 @@ export interface ServiceInterface {
     DeliveryType_service: string;
     DevileryType:DeliveryTypeInterface
 
+    Bill_status: number;
     Customer_ID: number;
     Customer:CustomerInterface;
    
