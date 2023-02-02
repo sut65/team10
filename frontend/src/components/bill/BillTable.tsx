@@ -42,36 +42,6 @@ function BillTable_UI() {
       
   };
 
-
-
-
-  // const billcolumns: GridColDef[] = [
-  //   { field: "ID", headerName: "ลำดับ", width: 50 },
-  //   {
-  //     field: "Service",
-  //     headerName: "ชื่อลูกค้า",
-  //     width: 150,
-  //     valueGetter: (params) => params.value.Customer.Customer_Name,
-  //   },
-  //   {
-  //     field: "QuotaCode_ID",
-  //     headerName: "โค๊ดเลขที่",
-  //     width: 100,
-  //   },
-  //   {
-  //     field: "Paymenttype",
-  //     headerName: "ประเภทการชำระเงิน",
-  //     width: 150,
-  //     valueGetter: (params) => params.value.Type,
-  //   },
-  //   {
-  //     field: "Bill_Price",
-  //     headerName: "ราคา",
-  //     width: 100,
-  //   },
-  //   { field: "Time_Stamp", headerName: "เวลาออกบิล", width: 250 },
-  // ];
-
   return (
     <React.Fragment>
       <CssBaseline />
@@ -97,7 +67,7 @@ function BillTable_UI() {
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
-                  <TableCell align="right">Codetype</TableCell>
+                  <TableCell align="right">Service_name</TableCell>
                   <TableCell align="right">QuotaCode_ID</TableCell>
                   <TableCell align="right">Paymenttype</TableCell>
                   <TableCell align="right">Bill_Price</TableCell>
@@ -115,7 +85,7 @@ function BillTable_UI() {
                     </TableCell>
                     <TableCell align="right">{row.Service.Customer.Customer_Name}</TableCell>
                     <TableCell align="right">{row.QuotaCode_ID}</TableCell>
-                    <TableCell align="right">{row.Paymenttype_ID}</TableCell>
+                    <TableCell align="right">{row.Paymenttype.Type}</TableCell>
                     <TableCell align="right">{row.Bill_Price}</TableCell>
                     <TableCell align="right">{row.Time_Stamp.toString()}</TableCell>
                     <TableCell align="right">
