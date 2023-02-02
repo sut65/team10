@@ -166,9 +166,10 @@ type Service struct {
 	Customer_ID *uint
 	Customer    Customer `gorm:"references:id"`
 
-	Address    string
-	Bill_Price float64
-	Bill       []Bill `gorm:"foreignKey:Service_ID"`
+	Bill_status uint
+	Address     string
+	Bill_Price  float64
+	Bill        []Bill `gorm:"foreignKey:Service_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
