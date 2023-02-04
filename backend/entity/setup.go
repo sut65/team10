@@ -604,21 +604,21 @@ func SetupDatabase() {
 
 	DeliveryType1 := DeliveryType{
 		Model:                gorm.Model{},
-		DeriveryType_service: "ส่งด่วน",
+		DeliveryType_service: "ส่งด่วน",
 		DeliveryType_price:   10,
 	}
 	db.Model(&DeliveryType{}).Create(&DeliveryType1)
 
 	DeliveryType2 := DeliveryType{
 		Model:                gorm.Model{},
-		DeriveryType_service: "ส่งด่วนมาก",
+		DeliveryType_service: "ส่งด่วนมาก",
 		DeliveryType_price:   20,
 	}
 	db.Model(&DeliveryType{}).Create(&DeliveryType2)
 
 	DeliveryType3 := DeliveryType{
 		Model:                gorm.Model{},
-		DeriveryType_service: "ส่งด่วนมากมากกกกกกกกกกก",
+		DeliveryType_service: "ส่งด่วนมากมากกกกกกกกกกก",
 		DeliveryType_price:   50,
 	}
 	db.Model(&DeliveryType{}).Create(&DeliveryType3)

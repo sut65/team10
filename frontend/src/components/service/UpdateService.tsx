@@ -1,7 +1,10 @@
 import * as React from "react";
 import {
+  Autocomplete,
   Box,
   Button,
+  Card,
+  CardContent,
   Container,
   Divider,
   FormControl,
@@ -13,17 +16,14 @@ import {
   Snackbar,
   TextField,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import {
-  DeliveryTypeInterface,
-  ServiceInterface,
-  WeightInterface,
-} from "../../models/service/IService";
+import { ChangeEvent, useEffect, useState } from "react";
+import { DeliveryTypeInterface, ServiceInterface, WeightInterface, } from "../../models/service/IService";
 import Typography from "@mui/material/Typography";
 import { ThemeContext } from "@emotion/react";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import { TypeWashingInterface } from "../../models/service/IService";
-import { Link as RouterLink, useParams } from "react-router-dom";
+import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -33,23 +33,33 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const ServiceUpdate = () => {
-  const params = useParams()
-  const [service, setService] = React.useState<Partial<ServiceInterface>>({
-    TypeWashing_ID: 0,
-    Weight_ID: 0,
-    DeliveryType_ID: 0,
-  });
+var sum = 0;
 
+const ServiceUpdate = () => {
+  const params = useParams();
+  const navigate = useNavigate();
+  const [service, setService] = React.useState<Partial<ServiceInterface>>({
+    // TypeWashing_ID: 0,
+    // Weight_ID: 0,
+    // DeliveryType_ID: 0,
+  });
   const [typewashing, setTypewashing] = React.useState<TypeWashingInterface[]>(
     []
   );
-  const [delivery, setDelivery] = React.useState<DeliveryTypeInterface[]>([]);
+  const [typewashing1, setTypeWashing1] = React.useState<TypeWashingInterface>();
+  const [deliverytype, setDelivery] = React.useState<DeliveryTypeInterface[]>([]);
   const [weight, setWeight] = React.useState<WeightInterface[]>([]);
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
+  // const id_customer = localStorage.getItem("id");'
+  const [typewashingprice, setTypewashingprice] = React.useState<TypeWashingInterface>()
+  const [weightprice, setWeightprice] = React.useState<WeightInterface>()
+  const [deliprice, setDeliprice] = React.useState<DeliveryTypeInterface>()
+  // const [sumprice,setSumprice] = React.useState<number>(0);
+  const [message, setAlertMessage] = React.useState("");
 
   //================================================================================================================//
+  const apiUrl = "http://localhost:8080";
 
   const getTypeWashing = async () => {
     const apiUrl = `http://localhost:8080/typewashings`;
@@ -117,12 +127,36 @@ const ServiceUpdate = () => {
     //การกระทำ //json
     fetch(apiUrl, requestOptions)
       .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
-
       .then((res) => {
         console.log(res.data); //show ข้อมูล
 
         if (res.data) {
           setDelivery(res.data);
+        } else {
+          console.log("else");
+        }
+      });
+  };
+
+  const getTypewashing1 = async () => {
+    const apiUrl = `http://localhost:8080/typewashing`;
+
+    const requestOptions = {
+      method: "GET",
+
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    };
+    //การกระทำ //json
+    fetch(`${apiUrl}/1`, requestOptions)
+      .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
+      .then((res) => {
+        console.log(res.data); //show ข้อมูล
+
+        if (res.data) {
+          setTypeWashing1(res.data);
         } else {
           console.log("else");
         }
@@ -153,6 +187,7 @@ const ServiceUpdate = () => {
       });
   };
 
+
   //================================================================================================================//
 
   const handleClose = (
@@ -176,15 +211,39 @@ const ServiceUpdate = () => {
     setService({ ...service, [id]: value });
   };
 
-  const handleChange = (event: SelectChangeEvent<number>) => {
+  const handleChange = (event: SelectChangeEvent<number>,) => {
     const name = event.target.name as keyof typeof service;
     setService({
       ...service,
       [name]: event.target.value,
     });
+    if (event.target.name === "TypeWashing_ID") {
+      setTypewashingprice(typewashing.find((r) => r.ID === event.target.value));
+    }
+    if (event.target.name === "Weight_ID") {
+      setWeightprice(weight.find((r) => r.ID === event.target.value));
+    }
+    if (event.target.name === "DeliveryType_ID") {
+      setDeliprice(deliverytype.find((r) => r.ID === event.target.value));
+    }
+
+
   };
 
-  function submit() {
+
+  var total = 0;
+  let add = function (num1: any, num2: any, num3: any) {
+    if ((num1 === undefined) || (num2 === undefined) || (num3 === undefined)) {
+      return 0;
+    } else {
+      total = num1 + num2 + num3;
+      return total;
+    }
+
+  }
+
+
+  function update() {
 
     let data = {
       Customer_ID: Number(localStorage.getItem('uid')),
@@ -193,32 +252,31 @@ const ServiceUpdate = () => {
       Weight_ID: service.Weight_ID,
       Address: service.Address,
       DeliveryType_ID: service.DeliveryType_ID,
+      Bill_Price: total
     };
 
-    //================================================================================================================//
+    const apiUrl = "http://localhost:8080";
 
-const apiUrl = "http://localhost:8080";
+    const requestOptionsPost = {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    };
 
-const requestOptionsPost = {
-    method: "PATCH",
-  headers: {
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
-    "Content-Type": "application/json",
-  },
-    body: JSON.stringify(data),
-};
-
-fetch(`${apiUrl}/services`, requestOptionsPost)
-    .then((response) => response.json())
-    .then((res) => {
+    fetch(`${apiUrl}/services`, requestOptionsPost)
+      .then((response) => response.json())
+      .then((res) => {
         console.log(res)
         if (res.data) {
-            setSuccess(true);
+          setSuccess(true);
         } else {
-            setError(true);
+          setError(true);
         }
-    });
-}
+      });
+  }
 
   //================================================================================================================//
 
@@ -226,12 +284,14 @@ fetch(`${apiUrl}/services`, requestOptionsPost)
     getTypeWashing();
     getWeight();
     getDelivery();
+    getTypewashing1();
     getCurrentService();
   }, []);
 
+
   return (
     <div>
-      <Container maxWidth="md">
+      <Container maxWidth="md" sx={{ p: 3 }}>
         <div>
           <Snackbar
             open={success}
@@ -246,10 +306,46 @@ fetch(`${apiUrl}/services`, requestOptionsPost)
 
           <Snackbar open={error} autoHideDuration={6000} onClose={handleClose}>
             <Alert onClose={handleClose} severity="error">
-              บันทึกข้อมูลไม่สำเร็จ
+              {message}
             </Alert>
           </Snackbar>
-          <Paper>
+
+          {/* <Paper variant="elevation"> */}
+          <Grid container spacing={2} sx={{ padding: 2 }}>
+            <Grid item xs={4}>
+              <Card sx={{ minWidth: 275 }}>
+                <CardContent>
+                  <FormControl fullWidth variant="outlined">
+                    <TextField
+                      id="TypWashing_ID"
+                      variant="outlined"
+                      disabled
+                      type="string"
+                      size="medium"
+                      value={service.Description}
+                      defaultValue={"รายละเอียด"}
+                      sx={{ width: 240 }}
+                    ></TextField>
+                  </FormControl>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            <Grid item xs={4}>
+              <Card sx={{ minWidth: 275 }}>
+                <CardContent></CardContent>
+              </Card>
+            </Grid>
+
+            <Grid item xs={4}>
+              <Card sx={{ minWidth: 275 }}>
+                <CardContent></CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+          {/* </Paper> */}
+
+          <Paper variant="elevation">
             <Box
               display="flex"
               maxWidth="lg"
@@ -322,7 +418,7 @@ fetch(`${apiUrl}/services`, requestOptionsPost)
                         width: 450,
                       },
                     }}
-                    sx={{fontFamily:'Mitr-Regular'}}  
+                    sx={{ fontFamily: "Mitr-Regular" }}
                     multiline
                     value={service.Address}
                     onChange={handleInputChange}
@@ -338,44 +434,50 @@ fetch(`${apiUrl}/services`, requestOptionsPost)
                     value={service.DeliveryType_ID}
                     onChange={handleChange}
                     inputProps={{
-                      name: "Delivery_ID",
+                      name: "DeliveryType_ID",
                     }}
                   >
-                    {delivery.map((item: DeliveryTypeInterface) => (
-                      <MenuItem value={item.ID}>
-                        {item.DeliveryType_service}
-                      </MenuItem>
+                    {deliverytype.map((item: DeliveryTypeInterface) => (
+                      <MenuItem value={item.ID}>{item.DeliveryType_service}</MenuItem>
                     ))}
                   </Select>
                 </FormControl>
               </Grid>
 
               <Grid item xs={4}>
-                <p>ราคา</p>
-                <TextField
-                  disabled
-                  inputProps={{
-                    style: {
-                      width: 280,
-                    },
-                  }}
-                >
-                  ราคา
-                </TextField>
+                <FormControl fullWidth variant="outlined">
+                  <p>ราคา</p>
+                  <TextField
+                    disabled
+                    // id="Price"
+                    variant="outlined"
+                    type="string"
+                    size="medium"
+                    inputProps={{
+                      style: {
+                        width: 490,
+                      },
+                    }}
+                    value={add(typewashingprice?.TypeWashing_Price, weightprice?.Weight_price, deliprice?.DeliveryType_price)}
+                    // onChange={()=> setSumprice(total)}
+                    sx={{ fontFamily: "Mitr-Regular" }}
+                    multiline
+                  />
+                </FormControl>
               </Grid>
 
               <Grid item xs={12}>
-                <Button component={RouterLink} to="/service/create" variant="contained">
-                  ย้อนกลับ
+                <Button component={RouterLink} to="/serviceinfo" variant="contained">
+                  Back
                 </Button>
 
                 <Button
                   style={{ float: "right" }}
-                  onClick={submit}
+                  onClick={update}
                   variant="contained"
                   color="primary"
                 >
-                  บันทึก
+                  Submit
                 </Button>
               </Grid>
             </Grid>

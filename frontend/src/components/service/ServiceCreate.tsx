@@ -1,8 +1,8 @@
 import * as React from "react";
 import {
+  Autocomplete,
   Box,
   Button,
-  ButtonGroup,
   Card,
   CardContent,
   Container,
@@ -14,16 +14,10 @@ import {
   Select,
   SelectChangeEvent,
   Snackbar,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   TextField,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
-import { DeliveryTypeInterface, ServiceInterface, SumpriceInterface, WeightInterface, } from "../../models/service/IService";
+import { DeliveryTypeInterface, ServiceInterface, WeightInterface, } from "../../models/service/IService";
 import Typography from "@mui/material/Typography";
 import { ThemeContext } from "@emotion/react";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
@@ -44,48 +38,28 @@ var sum = 0;
 const ServiceCreate = () => {
   const params = useParams();
   const navigate = useNavigate();
-
-  // const [price1, setPrice1] = React.useState<number>(0);
-
   const [service, setService] = React.useState<Partial<ServiceInterface>>({
     // TypeWashing_ID: 0,
     // Weight_ID: 0,
     // DeliveryType_ID: 0,
   });
-  const [service1, setService1] = React.useState<ServiceInterface[]>([]);
   const [typewashing, setTypewashing] = React.useState<TypeWashingInterface[]>(
     []
   );
+  const [typewashing1, setTypeWashing1] = React.useState<TypeWashingInterface>();
   const [deliverytype, setDelivery] = React.useState<DeliveryTypeInterface[]>([]);
   const [weight, setWeight] = React.useState<WeightInterface[]>([]);
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
   // const id_customer = localStorage.getItem("id");'
-  const [typewashingprice,setTypewashingprice] = React.useState<TypeWashingInterface>()
-  const [weightprice,setWeightprice] = React.useState<WeightInterface>()
-  const [deliprice,setDeliprice] = React.useState<DeliveryTypeInterface>()
-  const [sumprice,setSumprice] = React.useState<number>(0);
+  const [typewashingprice, setTypewashingprice] = React.useState<TypeWashingInterface>()
+  const [weightprice, setWeightprice] = React.useState<WeightInterface>()
+  const [deliprice, setDeliprice] = React.useState<DeliveryTypeInterface>()
+  // const [sumprice,setSumprice] = React.useState<number>(0);
+  const [message, setAlertMessage] = React.useState("");
 
   //================================================================================================================//
   const apiUrl = "http://localhost:8080";
-
-  const getServices = async () => {
-    const requestOptions = {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    };
-    fetch(`${apiUrl}/services`, requestOptions)
-      .then((response) => response.json())
-      .then((res) => {
-        if (res.data) {
-          setService1(res.data);
-          console.log(res.data);
-        }
-      });
-  };
 
   const getTypeWashing = async () => {
     const apiUrl = `http://localhost:8080/typewashings`;
@@ -153,7 +127,6 @@ const ServiceCreate = () => {
     //การกระทำ //json
     fetch(apiUrl, requestOptions)
       .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
-
       .then((res) => {
         console.log(res.data); //show ข้อมูล
 
@@ -165,14 +138,31 @@ const ServiceCreate = () => {
       });
   };
 
-  const requestOptions = {
-    method: "GET",
+  const getTypewashing1 = async () => {
+    const apiUrl = `http://localhost:8080/typewashing`;
 
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-      "Content-Type": "application/json",
-    },
+    const requestOptions = {
+      method: "GET",
+
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    };
+    //การกระทำ //json
+    fetch(`${apiUrl}/1`, requestOptions)
+      .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
+      .then((res) => {
+        console.log(res.data); //show ข้อมูล
+
+        if (res.data) {
+          setTypeWashing1(res.data);
+        } else {
+          console.log("else");
+        }
+      });
   };
+
 
   //================================================================================================================//
 
@@ -218,41 +208,12 @@ const ServiceCreate = () => {
   console.log(typewashingprice);
   console.log(weightprice);
 
-  const handleChangeWeight = (event: SelectChangeEvent<number>,) => {
-    const name = event.target.name as keyof typeof service;
-    setService({
-      ...service,
-      [name]: event.target.value,
-    });
-    if (event.target.name === "TypeWashing_ID") {
-      setTypewashingprice(typewashing.find((r) => r.ID === event.target.value));
-    }
 
-  };
-  console.log(typewashingprice);
-  
-
-  const ServiceDelete = async (ID: number) => {
-    const requestOptions = {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    };
-    fetch(`${apiUrl}/services/${ID}`, requestOptions)
-      .then((response) => response.json())
-      .then((res) => {
-        if (res.data) {
-          window.location.reload();
-        }
-      });
-  };
   var total = 0;
   let add = function (num1: any, num2: any, num3: any) {
-    if ((num1 === undefined) || (num2 === undefined) || (num3 === undefined)){
+    if ((num1 === undefined) || (num2 === undefined) || (num3 === undefined)) {
       return 0;
-    }else {
+    } else {
       total = num1 + num2 + num3;
       return total;
     }
@@ -270,7 +231,8 @@ const ServiceCreate = () => {
       Weight_ID: service.Weight_ID,
       Address: service.Address,
       DeliveryType_ID: service.DeliveryType_ID,
-      Bill_Price: total
+      Bill_Price: total,
+      Description: 1
     };
 
     //================================================================================================================//
@@ -290,12 +252,18 @@ const ServiceCreate = () => {
       .then((response) => response.json())
       .then((res) => {
         console.log(res)
+        // if (res.data) {
+        //   setSuccess(true);
+        //   window.location.reload();
+
+        // } else {
+
+        //   setError(true);
+        // }
         if (res.data) {
           setSuccess(true);
-          window.location.reload();
-
         } else {
-
+          setAlertMessage(res.error);
           setError(true);
         }
       });
@@ -307,7 +275,8 @@ const ServiceCreate = () => {
     getTypeWashing();
     getWeight();
     getDelivery();
-    getServices();
+    getTypewashing1();
+    // getServices();
   }, []);
 
 
@@ -328,42 +297,44 @@ const ServiceCreate = () => {
 
           <Snackbar open={error} autoHideDuration={6000} onClose={handleClose}>
             <Alert onClose={handleClose} severity="error">
-              บันทึกข้อมูลไม่สำเร็จ
+              {message}
             </Alert>
           </Snackbar>
 
-          <Paper variant="elevation">
-            <Grid container spacing={2} sx={{ padding: 2 }}>
-              <Grid item xs={4}>
-                <Card sx={{ minWidth: 275 }}>
-                  <CardContent>
-                    {/* <TextField
-                    disabled
-                      id="Description"
+          {/* <Paper variant="elevation"> */}
+          <Grid container spacing={2} sx={{ padding: 2 }}>
+            <Grid item xs={4}>
+              <Card sx={{ minWidth: 275 }}>
+                <CardContent>
+                  <FormControl fullWidth variant="outlined">
+                    <TextField
+                      id="TypWashing_ID"
                       variant="outlined"
+                      disabled
                       type="string"
                       size="medium"
-                      sx={{fontFamily:'Mitr-Regular'}}
-                      defaultValue={service?.Description}  
-                      value={service?.TypeWashing_ID}
-                    ></TextField> */}
-                  </CardContent>
-                </Card>
-              </Grid>
-
-              <Grid item xs={4}>
-                <Card sx={{ minWidth: 275 }}>
-                  <CardContent></CardContent>
-                </Card>
-              </Grid>
-
-              <Grid item xs={4}>
-                <Card sx={{ minWidth: 275 }}>
-                  <CardContent></CardContent>
-                </Card>
-              </Grid>
+                      value={service.Description}
+                      defaultValue={"รายละเอียด"}
+                      sx={{ width: 240 }}
+                    ></TextField>
+                  </FormControl>
+                </CardContent>
+              </Card>
             </Grid>
-          </Paper>
+
+            <Grid item xs={4}>
+              <Card sx={{ minWidth: 275 }}>
+                <CardContent></CardContent>
+              </Card>
+            </Grid>
+
+            <Grid item xs={4}>
+              <Card sx={{ minWidth: 275 }}>
+                <CardContent></CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+          {/* </Paper> */}
 
           <Paper variant="elevation">
             <Box
@@ -501,85 +472,6 @@ const ServiceCreate = () => {
                 </Button>
               </Grid>
             </Grid>
-          </Paper>
-          <Paper variant="elevation" square={true}>
-            <Box
-              display="flex"
-              maxWidth="lg"
-              sx={{
-                marginTop: 2,
-              }}
-            >
-              <Box sx={{ paddingX: 2, paddingY: 1 }}>
-                <Typography
-                  component="h2"
-                  variant="h6"
-                  color="primary"
-                  gutterBottom
-                  mt={2}
-                  align="center"
-                >
-                  {/* <h2>ระบบเลือกบริการ</h2> */}
-                </Typography>
-              </Box>
-            </Box>
-            <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 400, p: 2 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>ID</TableCell>
-                    <TableCell align="right">TypeWashingID</TableCell>
-                    <TableCell align="right">WeightID</TableCell>
-                    <TableCell align="right">Address</TableCell>
-                    <TableCell align="right">Delivery</TableCell>
-                    <TableCell align="right">Price</TableCell>
-                    {/* <TableCell align="right">Action</TableCell> */}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {service1.map((row) => (
-                    <TableRow
-                      key={row.ID}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {row.ID}
-                      </TableCell>
-                      <TableCell align="right">{row.TypeWashing_ID}</TableCell>
-                      <TableCell align="right">{row.Weight_ID}</TableCell>
-                      <TableCell align="right">{row.Address}</TableCell>
-                      <TableCell align="right">{row.DeliveryType_ID}</TableCell>
-                      {/* <TableCell align="right">{row.Price}</TableCell> */}
-                      <TableCell align="right">
-                        <ButtonGroup
-                          variant="outlined"
-                          aria-lable="outlined button group"
-                        >
-                          <Button
-                            variant="outlined"
-                            startIcon={<DeleteIcon />}
-                            onClick={() => ServiceDelete(row.ID)}
-                            color="error"
-                            size="small"
-                          >
-                            Delete
-                          </Button>
-                          <Button
-                            variant="contained"
-                            color="success"
-                            onClick={() =>
-                              navigate({ pathname: `/service/${row.ID}` })
-                            }
-                          >
-                            แก้ไข
-                          </Button>
-                        </ButtonGroup>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
           </Paper>
         </div>
       </Container>

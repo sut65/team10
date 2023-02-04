@@ -139,6 +139,7 @@ func UpdateService(c *gin.Context) {
 		return
 	}
 	var upAddress = service.Address
+	var upBill_Price = service.Bill_Price
 
 	if tx := entity.DB().Where("id = ?", service.TypeWashing_ID).First(&typewashing); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "typewashing not found"})
@@ -170,6 +171,7 @@ func UpdateService(c *gin.Context) {
 		DeliveryType: deliverytype,
 		Weight:       weight,
 		Address:      upAddress,
+		Bill_Price: upBill_Price,
 		Customer:     customer,
 		// ตั้งค่าฟิลด์ Address
 	}
