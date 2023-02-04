@@ -25,7 +25,7 @@ func CreateReceive(c *gin.Context) {
 	}
 	// ค้นหา Employee ด้วยไอดี
 	if tx := entity.DB().Where("id = ?", receive.Employee_ID).First(&employee); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Employee not found"})
 
 		return
 
@@ -33,7 +33,7 @@ func CreateReceive(c *gin.Context) {
 
 	//8: ค้นหา bill ด้วยไอดี
 	if tx := entity.DB().Where("id = ?", receive.Bill_ID).First(&bill); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Bill not found"})
 
 		return
 
@@ -41,7 +41,7 @@ func CreateReceive(c *gin.Context) {
 
 	//9: ค้นหา Det ด้วยไอดี
 	if tx := entity.DB().Where("id = ?", receive.Detergent_ID).First(&detergent); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Detergent not found"})
 
 		return
 
@@ -49,7 +49,7 @@ func CreateReceive(c *gin.Context) {
 
 	//10: ค้นหา Sof ด้วยไอดี
 	if tx := entity.DB().Where("id = ?", receive.Softener_ID).First(&softener); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Softener not found"})
 
 		return
 

@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import { Snackbar, Alert, Popover, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import { Container } from "@mui/system/";
+import { Container } from "@material-ui/core";
 import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -30,7 +30,6 @@ import { ReceiveInterface } from "../../models/receive/IReceive";
 import { BillInterface } from "../../models/bill/IBill";
 import { DetergentInterface } from "../../models/receive/IDetergent";
 import { SoftenerInterface } from "../../models/receive/ISoftener";
-import ReceiveTableUI from "./ReceiveTableUI";
 import UpdateReceive from "./UpdateReceive";
 
 function ReceiveCreate (){
@@ -90,7 +89,7 @@ fetch(`${apiUrl}/receives`, requestOptions)
       setAlertMessage("บันทึกข้อมูลสำเร็จ")
       console.log(res.data)
       await timeout(1000); //for 1 sec delay
-          window.location.reload(); 
+          window.location.href = "/receive"; 
     } else {
       setError(true);
       setAlertMessage(res.error)
@@ -406,38 +405,15 @@ return (
                     >
                         <Button
                         component={RouterLink}
-                        to="/"
+                        to="/receive"
                             variant="contained"
                             color="error"
                             endIcon={<CancelIcon />}
                         >
-                            cancel
+                            Cancel
                         </Button>
                     </Grid>
-                    <Grid item xs={2}
-          >
-            <div>
-            <Button aria-describedby={popover} variant="contained" color="warning"
-              endIcon={<UpdateIcon />}
-              onClick={handleClickPopover}>
-              update
-            </Button>
-            <Popover
-              id={popover}
-              open={open}
-              anchorEl={anchorEl}
-              sx={{ paddingBottom: 20 }}
-              marginThreshold={80}
-              onClose={handleClosePopover}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-            >
-              <UpdateReceive />
-              <Typography sx={{ p: 2 }}>Update Receive</Typography>
-            </Popover>
-            </div>
+                    <Grid item xs={2}>
           </Grid>
                     <Grid container item xs={2} direction='row-reverse'>
                         <Button
@@ -446,12 +422,11 @@ return (
                             onClick={submit}
                             endIcon={<SaveIcon />}
                         >
-                            commit
+                            Commit
                         </Button>
                     </Grid>
                 </Grid>
             </Box>
-            <ReceiveTableUI/>
         </Container>
   );
 }
