@@ -31,7 +31,10 @@ export default function ServiceTable() {
   const getServices = async () => {
     const requestOptions = {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
     };
     fetch(`${apiUrl}/services`, requestOptions)
       .then((response) => response.json())
@@ -46,7 +49,10 @@ export default function ServiceTable() {
   const ServiceDelete = async (ID: number) => {
     const requestOptions = {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
     };
     fetch(`${apiUrl}/services/${ID}`, requestOptions)
       .then((response) => response.json())
@@ -93,6 +99,7 @@ export default function ServiceTable() {
                   <TableCell align="right">WeightID</TableCell>
                   <TableCell align="right">Address</TableCell>
                   <TableCell align="right">Delivery</TableCell>
+                  <TableCell align="right">Price/THB</TableCell>
                   <TableCell align="right">Action</TableCell>
                 </TableRow>
               </TableHead>
@@ -109,6 +116,7 @@ export default function ServiceTable() {
                     <TableCell align="right">{row.Weight_ID}</TableCell>
                     <TableCell align="right">{row.Address}</TableCell>
                     <TableCell align="right">{row.DeliveryType_ID}</TableCell>
+                    <TableCell align="right">{row.Bill_Price}</TableCell>
                     <TableCell align="right">
                       <ButtonGroup
                         variant="outlined"

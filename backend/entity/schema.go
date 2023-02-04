@@ -140,7 +140,7 @@ type TypeWashing struct {
 
 type DeliveryType struct {
 	gorm.Model
-	DeriveryType_service string
+	DeliveryType_service string
 	DeliveryType_price   uint8
 	Service              []Service `gorm:"foreignKey:DeliveryType_ID"`
 }
