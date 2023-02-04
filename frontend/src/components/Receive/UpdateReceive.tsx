@@ -5,12 +5,14 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import { Snackbar, Alert } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import { Container } from "@mui/system";
+import { Container } from "@material-ui/core";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import { Link as RouterLink } from "react-router-dom";
+import CancelIcon from '@mui/icons-material/Cancel';
 
 /* Datetimepicker */
 import dayjs, { Dayjs } from "dayjs";
@@ -18,7 +20,9 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { ReceiveInterface } from "../../models/receive/IReceive";
+import { useParams } from "react-router-dom";
 function UpdateReceive() {
+  const params = useParams()
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
   const [receive, setReceive] = React.useState<Partial<ReceiveInterface>>({});
   const [Det_Quantity, setDet_Quantity] = React.useState<number | null>(null);
@@ -71,7 +75,7 @@ function UpdateReceive() {
         if (res.data) {
           setSuccess(true);
           await timeout(1000); //for 1 sec delay
-          window.location.reload();     
+          window.location.href = "/receive";      
           
         } else {
           setError(true);
@@ -84,7 +88,6 @@ function UpdateReceive() {
 
 
   const getReceive = async () => {
-    const apiUrl = "http://localhost:8080/receive";
     const requestOptions = {
       method: "GET",
       headers: {
@@ -93,23 +96,23 @@ function UpdateReceive() {
       },
     };
 
-    fetch(apiUrl, requestOptions)
+    fetch(`http://localhost:8080/receive/${params.id}`, requestOptions )
       .then((response) => response.json())
       .then((res) => {
-        console.log(res)
         if (res.data) {
           setReceive(res.data);
-          setReceive_ID(res.data);
+          setReceive_ID(res.data.ID);
         }
       });
   };
+
 
   useEffect(() => {
     getReceive();
   }, []);
   return (
 
-    <Container maxWidth="xl">
+    <Container maxWidth="md">
       <Snackbar // บันทึกสำเร็จ
         open={success}
         autoHideDuration={3000}
@@ -131,51 +134,28 @@ function UpdateReceive() {
       </Snackbar>
       <Box sx={{ padding: 2}}>
         <Paper>
-        <Grid container spacing={0} sx={{ padding: 2}}>
-            <h1>RECEIVE<AddShoppingCartIcon color="success" sx={{ fontSize: 200 }}/></h1>
+        <Grid sx={{ padding: 2 }}>
+            <h1>RECEIVE</h1>
             </Grid>
-            <Grid container spacing={2} sx={{ paddingX: 2 }}>
+            <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 1 }}>
             <Grid item xs={4}>
               <h3>Bill ID</h3>
             </Grid>
             <Grid item xs={8} >
-              <Autocomplete
-                id="receive-auto"
-                options={receive_id}
-                fullWidth
-                size="medium"
-                onChange={(event: any, value) => {
-                  setReceive({ ...receive, ID: value?.ID }); //Just Set ID to interface
-                }}
-                getOptionLabel={(option: any) =>
-                  `${option.ID}`
-                } //filter value
-                renderInput={(params) => {
-                  return (
-                    <TextField
-                      {...params}
-                      variant="outlined"
-                      placeholder="ID..."
-                    />
-                  );
-                }}
-                renderOption={(props: any, option: any) => {
-                  return (
-                    <li
-                      {...props}
-                      value={`${option.ID}`}
-                      key={`${option.ID}`}
-                    >{`${option.ID}`}</li>
-                  ); //display value
-                }}
-              />
+            <TextField
+               id="Employee_ID"
+               variant="outlined"
+               disabled
+               type="string"
+               size="medium"
+               value={receive_id}             
+               sx={{ width : 350 }}
+             ></TextField>
             </Grid>
           </Grid>
-
-
-          <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 2 }}>
+          <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 1 }}>
             <Grid item xs={4}>
-              <h3>Detergent</h3>
+              <h3>Detergent Quantity</h3>
             </Grid>
             <Grid item xs={7}>
               <TextField
@@ -188,9 +168,9 @@ function UpdateReceive() {
               />
             </Grid>
           </Grid>
-          <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 2 }}>
+          <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 1 }}>
             <Grid item xs={4}>
-              <h3>Softener</h3>
+              <h3>Softener Quantity</h3>
             </Grid>
             <Grid item xs={7}>
               <TextField
@@ -204,7 +184,7 @@ function UpdateReceive() {
             </Grid>
           </Grid>
 
-          <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 2 }}>
+          <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 1 }}>
             <Grid item xs={4}>
               <h3>Time Stamp</h3>
             </Grid>
@@ -223,21 +203,32 @@ function UpdateReceive() {
           </Grid>
         </Paper>
         <Grid container spacing={2}
-          sx={{ paddingY: 2 }}>
-          <Grid item xs={5}
-          >
+                    sx={{ paddingY: 1 }}>
+                    <Grid item xs={8}
+                    >
+                        <Button
+                        component={RouterLink}
+                        to="/receive"
+                            variant="contained"
+                            color="error"
+                            endIcon={<CancelIcon />}
+                        >
+                            Cancel
+                        </Button>
+                    </Grid>
+                    <Grid item xs={2}>
           </Grid>
-          <Grid container item xs={7} direction='row-reverse'>
-            <Button
-              variant="contained"
-              color="warning"
-              onClick={update}
-              endIcon={<SaveIcon />}
-            >
-              update
-            </Button>
-          </Grid>
-        </Grid>
+                    <Grid container item xs={2} direction='row-reverse'>
+                        <Button
+                            variant="contained"
+                            color="success"
+                            onClick={update}
+                            endIcon={<SaveIcon />}
+                        >
+                            Update
+                        </Button>
+                    </Grid>
+                </Grid>
       </Box>
     </Container>
   );

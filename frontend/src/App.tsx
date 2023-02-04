@@ -1,9 +1,7 @@
 import * as React from "react";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-
+import { BrowserRouter, Route, Link } from "react-router-dom";
 import AppBarPrivate from "./components/AppBarPrivate";
 import AppBarPublic from "./components/AppBarPublic";
-
 import Delivery from "./components/delivery/DeliveryUI";
 import Confirmation from "./components/confirmation/ConfirmationUI";
 import Promotion from "./components/promotion/PromotionUI";
@@ -33,6 +31,9 @@ import PromotionTable_UI from "./components/promotion/PromotiontableUI";
 import UpdatePromotion from "./components/promotion/UpdatePromotion";
 import BillTable_UI from "./components/bill/BillTable";
 import BillUpdate from "./components/bill/UpdateBill";
+import UpdateReceive from "./components/Receive/UpdateReceive";
+import ReceiveTableUI from "./components/Receive/ReceiveTableUI";
+import { Routes } from "react-router-dom/";
 export default function App() {
   const [token, setToken] = React.useState<String>("");
 
@@ -119,6 +120,8 @@ export default function App() {
               <Route path="/promotion/update/:id" element={<UpdatePromotion />} />
               <Route path="/delivery/create" element={<Delivery />} />
               <Route path="/receive/create" element={<ReceiveCreate />} />
+              <Route path="/receive/" element={<ReceiveTableUI />} />
+              <Route path="/receive/update/:id" element={<UpdateReceive />} />
               <Route path="/vehicle/create" element={<Vehicle />} />
               <Route path="/create" element={<CompleteCreate />} />
               <Route path="/complete/info" element={<CompleteTable/>} />
