@@ -160,9 +160,10 @@ func GetForm(c *gin.Context) {
 
 func ListForms(c *gin.Context) {
 
-	var forms []extendedForm
+	var forms []entity.Form
 	//.Preload("FormType").Preload("Satisfaction").Preload("Form")
-	if err := entity.DB().Raw("SELECT f.* , q.form_type_name FROM form_types q JOIN forms f ON q.id = f.id;").Scan(&forms).Error; err != nil {
+	//SELECT f.* , q.form_type_name FROM form_types q JOIN forms f ON q.id = f.id;
+	if err := entity.DB().Raw("SELECT * FROM forms").Scan(&forms).Error; err != nil {
 
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 

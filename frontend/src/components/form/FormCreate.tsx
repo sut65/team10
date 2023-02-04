@@ -347,7 +347,7 @@ function FormCreate() {
 
                     <Grid item xs={12}>
 
-                        <Button component={RouterLink} to="/" variant="contained">
+                        <Button component={RouterLink} to="/forminfo" variant="contained">
 
                             Back
 
@@ -373,61 +373,6 @@ function FormCreate() {
 
                 </Grid>
 
-            </Paper>
-
-            <Paper sx={{ p: 2 }}>
-                <Box display="flex">
-                    <Box sx={{ flexGrow: 1 }}>
-                        <Typography variant="h6" gutterBottom component="div">
-                            Form
-                        </Typography>
-                    </Box>
-                    {/* <Box>
-                        <Button
-                            variant="contained"
-                            component={RouterLink}
-                            to="/create"
-                            sx={{ p: 1 }}>Create Form</Button>
-                    </Box> */}
-                </Box>
-
-                <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 400, p: 2 }} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>ID</TableCell>
-                                <TableCell align="right">FormTypeID</TableCell>
-                                <TableCell align="right">หัวข้อประเมิน</TableCell>
-                                <TableCell align="right">SatisfactionID</TableCell>
-                                <TableCell align="right">Comment</TableCell>
-                                <TableCell align="right">Action</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {form1.map((row) => (
-                                <TableRow
-                                    key={row.ID}
-                                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                                >
-                                    <TableCell component="th" scope="row">
-                                        {row.ID}
-                                    </TableCell>
-                                    <TableCell align="right">{row.FormTypeID}</TableCell>
-                                    <TableCell align="right">{row.FormType_name}</TableCell>
-                                    <TableCell align="right">{row.SatisfactionID}</TableCell>
-                                    <TableCell align="right">{row.Comment}</TableCell>
-                                    <TableCell align="right">
-                                        <ButtonGroup variant="outlined" aria-lable="outlined button group">
-                                            <Button onClick={() => navigate({ pathname: `/form/${row.ID}` })} variant="contained"
-                                            >Edit</Button>
-                                            <Button onClick={() => FormDelete(row.ID)} color="error">Delete</Button>
-                                        </ButtonGroup>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
             </Paper>
 
         </Container>

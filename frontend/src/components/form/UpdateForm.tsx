@@ -162,7 +162,10 @@ function FormUpdate() {
 
         const requestOptionsPost = {
             method: "PATCH",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                "Content-Type": "application/json",
+            },
             body: JSON.stringify(data),
         };
         console.log(JSON.stringify(data));
