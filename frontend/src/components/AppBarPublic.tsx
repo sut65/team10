@@ -95,7 +95,7 @@ function AppBarPublic() {
                 <ListItemText primary="หน้าแรก" sx={{ padding: 1 }} />
               </ListItem>
 
-              <ListItem component={RouterLink} to="/form">
+              <ListItem component={RouterLink} to="/forminfo">
                 {" "}
                 <StarHalfIcon color="primary" />
                 <ListItemText primary="ประเมิน" sx={{ padding: 1 }} />

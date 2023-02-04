@@ -18,14 +18,17 @@ import { useNavigate } from "react-router-dom";
 export default function FormTable() {
     const params = useParams();
     const navigate = useNavigate();
-    let [form, setForm] = React.useState<FormInterface[]>([]);
+    const [form, setForm] = React.useState<FormInterface[]>([]);
 
     const apiUrl = "http://localhost:8080";
 
     const getForm = async () => {
         const requestOptions = {
             method: "GET",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                "Content-Type": "application/json",
+            },
         };
         fetch(`${apiUrl}/forms`, requestOptions)
             .then((response) => response.json())
@@ -40,7 +43,10 @@ export default function FormTable() {
     const FormDelete = async (ID: number) => {
         const requestOptions = {
             method: "DELETE",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                "Content-Type": "application/json",
+            },
         };
         fetch(`${apiUrl}/forms/${ID}`, requestOptions)
             .then((response) => response.json())
@@ -53,7 +59,6 @@ export default function FormTable() {
 
     useEffect(() => {
         getForm();
-        // window.location.reload();
     }, []);
 
     return (
@@ -71,7 +76,7 @@ export default function FormTable() {
                             <Button
                                 variant="contained"
                                 component={RouterLink}
-                                to="/create"
+                                to="/form"
                                 sx={{ p: 1 }}>Create Form</Button>
                         </Box>
                     </Box>
@@ -82,7 +87,7 @@ export default function FormTable() {
                                 <TableRow>
                                     <TableCell>ID</TableCell>
                                     <TableCell align="right">FormTypeID</TableCell>
-                                    <TableCell align="right">หัวข้อประเมิน</TableCell>
+                                    {/* <TableCell align="right">หัวข้อประเมิน</TableCell> */}
                                     <TableCell align="right">SatisfactionID</TableCell>
                                     <TableCell align="right">Comment</TableCell>
                                     <TableCell align="right">Action</TableCell>
@@ -98,12 +103,12 @@ export default function FormTable() {
                                             {row.ID}
                                         </TableCell>
                                         <TableCell align="right">{row.FormTypeID}</TableCell>
-                                        <TableCell align="right">{row.FormType_name}</TableCell>
+                                        {/* <TableCell align="right">{row.FormType_name}</TableCell> */}
                                         <TableCell align="right">{row.SatisfactionID}</TableCell>
                                         <TableCell align="right">{row.Comment}</TableCell>
                                         <TableCell align="right">
                                             <ButtonGroup variant="outlined" aria-lable="outlined button group">
-                                                <Button onClick={() => navigate({ pathname: `/forms/${row.ID}` })} variant="contained"
+                                                <Button onClick={() => navigate({ pathname: `/formsupdate/${row.ID}` })} variant="contained"
                                                 >Edit</Button>
                                                 <Button onClick={() => FormDelete(row.ID)} color="error">Delete</Button>
                                             </ButtonGroup>
