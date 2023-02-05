@@ -109,7 +109,7 @@ type Size struct {
 
 type Stock struct {
 	gorm.Model
-	List_Number string `gorm:"uniqueIndex"`
+	List_Number uint `gorm:"uniqueIndex"`
 	TypeID      *uint
 	Type        Type `gorm:"references:id"`
 	BrandID     *uint
@@ -118,8 +118,8 @@ type Stock struct {
 	Size        Size `gorm:"references:id"`
 	Employee_ID *uint
 	Employee    Employee `gorm:"references:id"`
-	Add_number  string
-	Quantity    string
+	Add_number  uint
+	Quantity    uint
 	Time        time.Time
 	Detergent   []Detergent `gorm:"foreignKey:Stock_ID"`
 	Softener    []Softener  `gorm:"foreignKey:Stock_ID"`
@@ -140,7 +140,7 @@ type TypeWashing struct {
 
 type DeliveryType struct {
 	gorm.Model
-	DeliveryType_service string
+	DeriveryType_service string
 	DeliveryType_price   uint8
 	Service              []Service `gorm:"foreignKey:DeliveryType_ID"`
 }
@@ -166,10 +166,9 @@ type Service struct {
 	Customer_ID *uint
 	Customer    Customer `gorm:"references:id"`
 
-	Bill_status uint
-	Address     string
-	Bill_Price  float64
-	Bill        []Bill `gorm:"foreignKey:Service_ID"`
+	Address    string
+	Bill_Price float64
+	Bill       []Bill `gorm:"foreignKey:Service_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
@@ -291,8 +290,8 @@ type Receive struct {
 	Detergent    Detergent `gorm:"references:id"`
 	Softener_ID  *uint
 	Softener     Softener `gorm:"references:id"`
-	Det_Quantity int      `valid:"range(0|100)~จำนวนผงซักฟอกห้ามเป็นลบ"`
-	Sof_Quantity int      `valid:"range(0|100)~จำนวนน้ำยาปรับผ้านุ่มห้ามเป็นลบ"`
+	Det_Quantity uint
+	Sof_Quantity uint
 	Time_Stamp   time.Time
 
 	Complete []Complete `gorm:"foreignKey:Receive_ID"`
@@ -321,8 +320,8 @@ type Vehicle struct {
 	Brand_Vehicle    Brand_Vehicle `gorm:"references:id"`
 	Engine_ID        *uint
 	Engine           Engine `gorm:"references:id"`
-	ListModel        string `valid:"required~จำเป็นต้องกรอกรุ่นของรถ"`
-	Vehicle_Rigis    string `valid:"required~จำเป็นต้องกรอกทะเบียนรถ"`
+	ListModel        string
+	Vehicle_Rigis    string
 	Date_Insulance   time.Time
 	Delivery         []Delivery `gorm:"foreignKey:Vehicle_ID"`
 }
@@ -363,7 +362,7 @@ type Confirmation struct {
 	Customer_ID *uint
 	Customer    Customer `gorm:"references:id"`
 	RecvTime    time.Time
-	RecvAddress string `valid:"required~กรุณากรอกที่อยู่จัดส่ง"`
+	RecvAddress string
 	RecvType_ID *uint
 	RecvType    RecvType `gorm:"references:id"`
 	Note        string
