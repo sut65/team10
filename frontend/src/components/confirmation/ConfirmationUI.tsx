@@ -290,6 +290,8 @@ function Confirmation() {
                       fullWidth
                       defaultValue={"No Input"}
                       value={last_complete_id}
+                      // Can directly use with array if
+                      // value={last_complete[0].ID}
                       variant="filled"
                       size="small"
                       disabled

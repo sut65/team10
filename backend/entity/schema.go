@@ -363,7 +363,7 @@ type Confirmation struct {
 	Customer_ID *uint
 	Customer    Customer `gorm:"references:id"`
 	RecvTime    time.Time
-	RecvAddress string
+	RecvAddress string `valid:"required~กรุณากรอกที่อยู่จัดส่ง"`
 	RecvType_ID *uint
 	RecvType    RecvType `gorm:"references:id"`
 	Note        string
