@@ -140,7 +140,6 @@ export default function StockTable_UI() {
                     <TableCell align="right">{row.Brand.Brand_Name}</TableCell>
                     <TableCell align="right">{row.Type.Type_Name}</TableCell>
                     {/* //<TableCell align="right">{row.Time}</TableCell> */}
-
                     <TableCell align="right">
                       <ButtonGroup
                         variant="outlined"
