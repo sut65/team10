@@ -3,6 +3,7 @@ package controller
 import (
 	"net/http"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"github.com/sut65/team10/entity"
 	"gorm.io/gorm/clause"
@@ -50,6 +51,10 @@ func CreateConfirmation(c *gin.Context) {
 		Note:        confirmation.Note,             // ตั้งค่าฟิลด์ Symptom
 	}
 
+	if _, err := govalidator.ValidateStruct(con); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	// 13: บันทึก
 	if err := entity.DB().Create(&con).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
