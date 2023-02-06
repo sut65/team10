@@ -4,7 +4,7 @@ import (
 	"github.com/sut65/team10/entity"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
-
+	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 
 	"net/http"
@@ -39,7 +39,7 @@ func CreateCustomer(c *gin.Context) {
 	}
 
 	// Encrypt Password Before save to database
-	hashPassword, err := bcrypt.GenerateFromPassword([]byte(customers.Customer_Password), 14)
+	hashPassword, err := bcrypt.GenerateFromPassword([]byte(customers.Customer_Password), 14) 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "error hashing password"})
 		return
@@ -57,6 +57,10 @@ func CreateCustomer(c *gin.Context) {
 		Customer_Promptpay: customers.Customer_Promptpay,
 		Customer_Password:  string(hashPassword),
 		Customer_Address:   customers.Customer_Address,
+	}
+	if _, err := govalidator.ValidateStruct(cus); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 	//save customer
 	if err := entity.DB().Create(&cus).Error; err != nil {

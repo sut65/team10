@@ -54,6 +54,7 @@ function CustomerCreate() {
   const [gender, setGender] = React.useState<GendersInterface[]>([]);
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
+  const [message, setAlertMessage] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
 
   const apiUrl = "http://localhost:8080";
@@ -151,7 +152,10 @@ function CustomerCreate() {
     };
     const requestOptionsPost = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(data),
     };
 
@@ -161,10 +165,10 @@ function CustomerCreate() {
         console.log(res);
         if (res.data) {
           setSuccess(true);
-          setErrorMessage("");
+          // setErrorMessage("");
         } else {
+          setAlertMessage(res.error);
           setError(true);
-          setErrorMessage(res.error);
         }
       });
   }
@@ -189,7 +193,7 @@ function CustomerCreate() {
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
         <Alert onClose={handleClose} severity="error">
-          บันทึกข้อมูลไม่สำเร็จ
+        {message}
         </Alert>
       </Snackbar>
       <Box sx={{

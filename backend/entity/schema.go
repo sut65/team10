@@ -28,21 +28,21 @@ type Career struct {
 
 type Customer struct {
 	gorm.Model
-	Customer_Name      string `gorm:"uniqueIndex"`
-	Customer_Username  string `gorm:"uniqueIndex"`
-	Customer_Phone     string
-	Customer_Promptpay string
-	Customer_Password  string
-	Customer_Address   string
+	Customer_Name      string `valid:"required~Name not blank"`
+	Customer_Username  string `valid:"matches(^[A-Z])~Username must be is Begin with A-Z ,required~Username not blank"`
+	Customer_Phone     string `valid:"matches(^(0)([0-9]{9}))~Phonenumber is not valid,required~Phone not blank"`
+	Customer_Promptpay string `valid:"matches((^[0][0-9]{9}$)|([0-9]{13}))~Promptpay is not valid,required~Promptpay not blank"`
+	Customer_Password  string `valid:"minstringlength(6)~Password must be more than or equal to 6 characters,required~Password not blank"`
+	Customer_Address   string `valid:"required~Address not blank"`
 
-	Gender_ID *uint
-	Gender    Gender
+	Gender_ID *uint   `valid:"-"`
+	Gender    Gender `gorm:"references:id" valid:"-"`
 
-	Advertise_ID *uint
-	Advertise    Advertise
+	Advertise_ID *uint `valid:"-"`
+	Advertise    Advertise `gorm:"references:id" valid:"-"`
 
-	Career_ID *uint
-	Career    Career
+	Career_ID *uint `valid:"-"`
+	Career    Career `gorm:"references:id" valid:"-"`
 
 	Confirmation []Confirmation `gorm:"foreignKey:Customer_ID"`
 	Service      []Service      `gorm:"foreignKey:Customer_ID"`
@@ -143,7 +143,7 @@ type TypeWashing struct {
 
 type DeliveryType struct {
 	gorm.Model
-	DeriveryType_service string
+	DeliveryType_service string
 	DeliveryType_price   uint8
 	Service              []Service `gorm:"foreignKey:DeliveryType_ID"`
 }
