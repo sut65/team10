@@ -3,7 +3,7 @@ package controller
 import (
 	"github.com/sut65/team10/entity"
 	"gorm.io/gorm"
-
+	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 
 	"net/http"
@@ -61,6 +61,10 @@ func CreateService(c *gin.Context) {
 		Bill_status:  0,
 		Customer:     customer,
 		// ตั้งค่าฟิลด์ Address
+	}
+	if _, err := govalidator.ValidateStruct(sv); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 
 	if err := entity.DB().Create(&sv).Error; err != nil {

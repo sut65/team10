@@ -3,6 +3,9 @@ package entity
 import (
 	"time"
 
+	"regexp"
+
+	validator "github.com/asaskevich/govalidator"
 	"gorm.io/gorm"
 )
 
@@ -166,9 +169,18 @@ type Service struct {
 	Customer_ID *uint
 	Customer    Customer `gorm:"references:id"`
 
-	Address    string
-	Bill_Price float64
-	Bill       []Bill `gorm:"foreignKey:Service_ID"`
+	Bill_status uint
+	Address     string `valid:"address~ที่อยู่เป็นตัวอักษรพิเศษหรือภาษาอังกฤษ,required~จำเป็นต้องกรอกที่อยู่"`
+	Bill_Price  float64
+	Bill        []Bill `gorm:"foreignKey:Service_ID"`
+}
+
+func SetServiceValidation() {
+	validator.CustomTypeTagMap.Set("address", validator.CustomTypeValidator(func(address interface{}, context interface{}) bool {
+		str := address.(string)
+		match, _ := regexp.MatchString(`^$`, str)
+		return match
+	}))
 }
 
 /* -------------------------------------------------------------------------- */

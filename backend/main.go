@@ -39,6 +39,7 @@ import (
 func main() {
 
 	entity.SetupDatabase()
+	entity.SetServiceValidation()
 	r := gin.Default()
 	r.Use(CORSMiddleware())
 
