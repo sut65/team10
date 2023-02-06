@@ -9,14 +9,14 @@ export interface VehicleInterface {
     Employee:         EmployeesInterface,
 
     Brand_Vehicle_ID : number,
-    BrandVehicle: BrandVehicleInterface,
+    Brand_Vehicle: BrandVehicleInterface,
 
     Engine_ID : number,
     Engine : EngineInterface,
 
     ListModel : string,
-    Vehicle_Regis:  number,
+    Registration:  string,
     
-    Date_Insurance:   Date,
+    Date_Insulance:   Date,
   
   }

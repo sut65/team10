@@ -206,16 +206,16 @@ func SetupDatabase() {
 	//Vehicle
 	//Brand_Vehicle
 	Brand_Vehicle1 := Brand_Vehicle{
-		Brand_Vehicle: "Yamaha",
+		Brand_Name: "Yamaha",
 	}
 	Brand_Vehicle2 := Brand_Vehicle{
-		Brand_Vehicle: "Honda",
+		Brand_Name: "Honda",
 	}
 	Brand_Vehicle3 := Brand_Vehicle{
-		Brand_Vehicle: "Vespa",
+		Brand_Name: "Vespa",
 	}
 	Brand_Vehicle4 := Brand_Vehicle{
-		Brand_Vehicle: "Suzuki",
+		Brand_Name: "Suzuki",
 	}
 	db.Model(&Brand_Vehicle{}).Create(&Brand_Vehicle1)
 	db.Model(&Brand_Vehicle{}).Create(&Brand_Vehicle2)
@@ -529,17 +529,17 @@ func SetupDatabase() {
 
 	//======================================Service====================================//
 	TypeWashing1 := TypeWashing{
-		Model:        gorm.Model{},
-		Type_washing: "ซักรีดปกติ",
-		Description:  "ก็แค่ซักรีดโว้ยย",
+		Model:             gorm.Model{},
+		Type_washing:      "ซักรีดปกติ",
+		Description:       "ก็แค่ซักรีดโว้ยย",
 		TypeWashing_Price: 80,
 	}
 	db.Model(&TypeWashing{}).Create(&TypeWashing1)
 
 	TypeWashing2 := TypeWashing{
-		Model:        gorm.Model{},
-		Type_washing: "ซักรีดน้ำหอม",
-		Description:  "รีดเสร็จฉีดน้ำหอม",
+		Model:             gorm.Model{},
+		Type_washing:      "ซักรีดน้ำหอม",
+		Description:       "รีดเสร็จฉีดน้ำหอม",
 		TypeWashing_Price: 90,
 	}
 	db.Model(&TypeWashing{}).Create(&TypeWashing2)

@@ -130,7 +130,7 @@ function AppBarPrivate() {
                 />
               </ListItem>
 
-              <ListItem component={RouterLink} to="/vehicle/create">
+              <ListItem component={RouterLink} to="/vehicle">
                 {" "}
                 <DirectionsCarIcon color="primary" />
                 <ListItemText primary="จัดการรถขนส่ง" sx={{ padding: 1 }} />

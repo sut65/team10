@@ -315,8 +315,8 @@ type Receive struct {
 //ระบบจัดการรถขนส่ง
 type Brand_Vehicle struct {
 	gorm.Model
-	Brand_Vehicle string
-	Vehicle       []Vehicle `gorm:"foreignKey:Brand_Vehicle_ID"`
+	Brand_Name string
+	Vehicle    []Vehicle `gorm:"foreignKey:Brand_Vehicle_ID"`
 }
 
 type Engine struct {
@@ -332,8 +332,8 @@ type Vehicle struct {
 	Brand_Vehicle    Brand_Vehicle `gorm:"references:id"`
 	Engine_ID        *uint
 	Engine           Engine `gorm:"references:id"`
-	ListModel        string
-	Vehicle_Rigis    string
+	ListModel        string `valid:"required~จำเป็นต้องกรอกรุ่นของรถ"`
+	Registration     string `valid:"required~จำเป็นต้องกรอกทะเบียนรถ"`
 	Date_Insulance   time.Time
 	Delivery         []Delivery `gorm:"foreignKey:Vehicle_ID"`
 }

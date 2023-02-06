@@ -28,7 +28,6 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { BrandVehicleInterface } from "../../models/vehicle/IBrandVehicle";
 import { EngineInterface } from "../../models/vehicle/IEngine";
 import { VehicleInterface } from "../../models/vehicle/IVehicle";
-import VehicleTableUI from "./VehicleTableUI";
 
 function VehicleCreate  () {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
@@ -77,7 +76,7 @@ function VehicleCreate  () {
       Brand_Vehicle_ID: vehicle.Brand_Vehicle_ID,
       Engine_ID: vehicle.Engine_ID,
       ListModel: listmodel,
-      Vehicle_Rigis: vehicle_regis,
+      Registration: vehicle_regis,
       Date_Insulance:date,
     };
     console.log(vehicle_data)
@@ -99,7 +98,7 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
       setSuccess(true);
       setAlertMessage("บันทึกข้อมูลสำเร็จ")
       await timeout(1000); //for 1 sec delay
-          window.location.reload(); 
+          window.location.href = "/vehicle"; 
     } else {
       setError(true);
       setAlertMessage(res.error)
@@ -108,7 +107,7 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
 }
 //===============================================================================================================//
 
-  const getBran_Vehicle = async () => {
+  const getBrand_Vehicle = async () => {
     const apiUrl = `http://localhost:8080/brand_vehicles`;
     const requestOptions = {
       method: "GET",
@@ -150,7 +149,7 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
 
   
   useEffect(() => {
-    getBran_Vehicle();
+    getBrand_Vehicle();
     getEngine();
   }, []);
 
@@ -204,7 +203,7 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
                       setVehicle({ ...vehicle, Brand_Vehicle_ID: value?.ID }); //Just Set ID to interface
                   }}
                   getOptionLabel={(option: any) =>
-                    `${option.Brand_Vehicle}`
+                    `${option.Brand_Name}`
                   } //filter value
                   renderInput={(params) => {
                     return (
@@ -221,7 +220,7 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
                         {...props}
                         value={`${option.ID}`}
                         key={`${option.ID}`}
-                      >{`${option.Brand_Vehicle}`}</li>
+                      >{`${option.Brand_Name}`}</li>
                     ); //display value
                   }}
                 />
@@ -339,39 +338,17 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
                     >
                         <Button
                         component={RouterLink}
-                        to="/"
+                        to="/vehicle"
                             variant="contained"
                             color="error"
                             endIcon={<CancelIcon />}
                         >
-                            cancel
+                            Cancel
                         </Button>
                     </Grid>
                     
                     <Grid item xs={2}
                     >
-                         <div>
-            <Button aria-describedby={popover} variant="contained" color="warning"
-              endIcon={<UpdateIcon />}
-              onClick={handleClickPopover}>
-              update
-            </Button>
-            <Popover
-              id={popover}
-              open={open}
-              anchorEl={anchorEl}
-              sx={{ paddingBottom: 20 }}
-              marginThreshold={80}
-              onClose={handleClosePopover}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-            >
-              <UpdateVehicle />
-              <Typography sx={{ p: 2 }}>Update Receive</Typography>
-            </Popover>
-            </div>
                     </Grid>
                     <Grid container item xs={2} direction='row-reverse'>
                         <Button
@@ -380,12 +357,11 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
                             onClick={submit}
                             endIcon={<SaveIcon />}
                         >
-                            commit
+                            Commit
                         </Button>
                     </Grid>
                 </Grid>
           </Box>
-        <VehicleTableUI />
       </Container>
 );
 }
