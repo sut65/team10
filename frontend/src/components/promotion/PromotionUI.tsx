@@ -36,7 +36,8 @@ function Promotion() {
   const [price, setPrice] = React.useState<number | null>(null);
   const [amount, setAmount] = React.useState<number | null>(null);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-
+  
+  const [alertmsg, setAlertmsg] = useState("");
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
 
@@ -80,11 +81,13 @@ function Promotion() {
       .then(async (res) => {
         if (res.data) {
           setSuccess(true);
+          setAlertmsg("บันทึกสำเร็จ")
           console.log(res.data)
           await timeout(1000); //for 1 sec delay
           window.location.href = "/promotion"; 
         } else {
           setError(true);
+          setAlertmsg(res.error)
         }
       });
   }
@@ -157,7 +160,7 @@ function Promotion() {
         onClose={handleClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
         <Alert onClose={handleClose} severity="success">
-          บันทึกข้อมูลสำเร็จ
+          {alertmsg}
         </Alert>
       </Snackbar>
 
@@ -167,7 +170,7 @@ function Promotion() {
         onClose={handleClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
         <Alert onClose={handleClose} severity="error">
-          บันทึกข้อมูลไม่สำเร็จ
+          {alertmsg}
         </Alert>
       </Snackbar>
       <Box>
