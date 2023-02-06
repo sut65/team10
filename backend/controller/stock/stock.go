@@ -25,12 +25,14 @@ func CreateStocks(c *gin.Context) {
 		return
 	}
 
-	if stock.Add_number == "" {
+	//temp fixing bug
+	if stock.Add_number == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "UserName invalid"})
 		return
 	}
 
-	if stock.Quantity == "" {
+	//temp fixing bug
+	if stock.Quantity == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Name invalid"})
 		return
 	}
