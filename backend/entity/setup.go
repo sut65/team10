@@ -206,16 +206,16 @@ func SetupDatabase() {
 	//Vehicle
 	//Brand_Vehicle
 	Brand_Vehicle1 := Brand_Vehicle{
-		Brand_Vehicle: "Yamaha",
+		Brand_Name: "Yamaha",
 	}
 	Brand_Vehicle2 := Brand_Vehicle{
-		Brand_Vehicle: "Honda",
+		Brand_Name: "Honda",
 	}
 	Brand_Vehicle3 := Brand_Vehicle{
-		Brand_Vehicle: "Vespa",
+		Brand_Name: "Vespa",
 	}
 	Brand_Vehicle4 := Brand_Vehicle{
-		Brand_Vehicle: "Suzuki",
+		Brand_Name: "Suzuki",
 	}
 	db.Model(&Brand_Vehicle{}).Create(&Brand_Vehicle1)
 	db.Model(&Brand_Vehicle{}).Create(&Brand_Vehicle2)
@@ -423,25 +423,26 @@ func SetupDatabase() {
 	}
 
 	db.Model(&Brand{}).Create(&B2)
+
 	stock1 := Stock{
-		List_Number: "1",
+		List_Number: 1,
 		Type:        t1,
 		Brand:       B2,
 		Size:        s1,
 		Employee:    E1,
-		Add_number:  "11",
-		Quantity:    "12",
+		Add_number:  11,
+		Quantity:    12,
 		Time:        time.Date(2022, 10, 23, 12, 30, 00, 00, time.Now().Local().Location())}
 	db.Model(&Stock{}).Create(&stock1)
 
 	stock2 := Stock{
-		List_Number: "2",
+		List_Number: 2,
 		Type:        t2,
 		Brand:       B1,
 		Size:        s2,
 		Employee:    E1,
-		Add_number:  "11",
-		Quantity:    "15",
+		Add_number:  11,
+		Quantity:    15,
 		Time:        time.Date(2022, 10, 25, 12, 40, 00, 00, time.Now().Local().Location())}
 	db.Model(&Stock{}).Create(&stock2)
 
@@ -529,17 +530,17 @@ func SetupDatabase() {
 
 	//======================================Service====================================//
 	TypeWashing1 := TypeWashing{
-		Model:        gorm.Model{},
-		Type_washing: "ซักรีดปกติ",
-		Description:  "ก็แค่ซักรีดโว้ยย",
+		Model:             gorm.Model{},
+		Type_washing:      "ซักรีดปกติ",
+		Description:       "ก็แค่ซักรีดโว้ยย",
 		TypeWashing_Price: 80,
 	}
 	db.Model(&TypeWashing{}).Create(&TypeWashing1)
 
 	TypeWashing2 := TypeWashing{
-		Model:        gorm.Model{},
-		Type_washing: "ซักรีดน้ำหอม",
-		Description:  "รีดเสร็จฉีดน้ำหอม",
+		Model:             gorm.Model{},
+		Type_washing:      "ซักรีดน้ำหอม",
+		Description:       "รีดเสร็จฉีดน้ำหอม",
 		TypeWashing_Price: 90,
 	}
 	db.Model(&TypeWashing{}).Create(&TypeWashing2)

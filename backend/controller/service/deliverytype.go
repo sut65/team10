@@ -37,7 +37,7 @@ func GetDelivery(c *gin.Context) {
 // GET /users
 func ListDeliverys(c *gin.Context) {
 	var deliverytype []entity.DeliveryType
-	if err := entity.DB().Raw("SELECT * FROM delivery_Types").Scan(&deliverytype).Error; err != nil {
+	if err := entity.DB().Raw("SELECT * FROM delivery_types").Scan(&deliverytype).Error; err != nil {
 		   c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		   return
 	}

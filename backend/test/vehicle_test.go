@@ -15,7 +15,7 @@ func TestModelNotBlank(t *testing.T) {
 
 	vehicle := entity.Vehicle{
 		ListModel:      "", // ผิด
-		Vehicle_Rigis:  "กษ5336",
+		Registration:   "กษ5336",
 		Date_Insulance: time.Now(),
 	}
 
@@ -38,7 +38,7 @@ func TestRegistrationNotBlank(t *testing.T) {
 
 	vehicle := entity.Vehicle{
 		ListModel:      "Scoopyi",
-		Vehicle_Rigis:  "", // ผิด
+		Registration:   "", // ผิด
 		Date_Insulance: time.Now(),
 	}
 

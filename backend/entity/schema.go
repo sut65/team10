@@ -157,31 +157,24 @@ type Weight struct {
 
 type Service struct {
 	gorm.Model
-	TypeWashing_ID *uint
-	TypeWashing    TypeWashing `gorm:"references:id"`
+	TypeWashing_ID *uint `valid:"-"`
+	TypeWashing    TypeWashing `gorm:"references:id" valid:"-" `
 
 	DeliveryType_ID *uint
 	DeliveryType    DeliveryType `gorm:"references:id"`
 
-	Weight_ID *uint
-	Weight    Weight `gorm:"references:id"`
+	Weight_ID *uint	`valid:"-"`
+	Weight    Weight `gorm:"references:id" valid:"-" `
 
-	Customer_ID *uint
-	Customer    Customer `gorm:"references:id"`
+	Customer_ID *uint	`valid:"-"`
+	Customer    Customer `gorm:"references:id" valid:"-"`
 
 	Bill_status uint
-	Address     string `valid:"address~ที่อยู่เป็นตัวอักษรพิเศษหรือภาษาอังกฤษ,required~จำเป็นต้องกรอกที่อยู่"`
+	Address     string `valid:"minstringlength(15)~โปรดระบุให้ละเอียด,alphabet~ที่อยู่เป็นตัวอักษรพิเศษหรือภาษาอังกฤษ,required~โปรดกรอกที่อยู่"`
 	Bill_Price  float64
 	Bill        []Bill `gorm:"foreignKey:Service_ID"`
 }
 
-func SetServiceValidation() {
-	validator.CustomTypeTagMap.Set("address", validator.CustomTypeValidator(func(address interface{}, context interface{}) bool {
-		str := address.(string)
-		match, _ := regexp.MatchString(`^$`, str)
-		return match
-	}))
-}
 
 /* -------------------------------------------------------------------------- */
 /*                                  Form                                      */
@@ -315,8 +308,8 @@ type Receive struct {
 //ระบบจัดการรถขนส่ง
 type Brand_Vehicle struct {
 	gorm.Model
-	Brand_Vehicle string
-	Vehicle       []Vehicle `gorm:"foreignKey:Brand_Vehicle_ID"`
+	Brand_Name string
+	Vehicle    []Vehicle `gorm:"foreignKey:Brand_Vehicle_ID"`
 }
 
 type Engine struct {
@@ -332,8 +325,8 @@ type Vehicle struct {
 	Brand_Vehicle    Brand_Vehicle `gorm:"references:id"`
 	Engine_ID        *uint
 	Engine           Engine `gorm:"references:id"`
-	ListModel        string
-	Vehicle_Rigis    string
+	ListModel        string `valid:"required~จำเป็นต้องกรอกรุ่นของรถ"`
+	Registration     string `valid:"required~จำเป็นต้องกรอกทะเบียนรถ"`
 	Date_Insulance   time.Time
 	Delivery         []Delivery `gorm:"foreignKey:Vehicle_ID"`
 }
@@ -369,12 +362,12 @@ type Complete struct {
 /* -------------------------------------------------------------------------- */
 type Confirmation struct {
 	gorm.Model
-	Complete_ID *uint
-	Complete    Complete `gorm:"references:id"`
-	Customer_ID *uint
-	Customer    Customer `gorm:"references:id"`
+	Complete_ID *uint    `valid:"-"` //prevent valid from this or upper entity
+	Complete    Complete `gorm:"references:id" valid:"-"`
+	Customer_ID *uint    `valid:"-"` //prevent valid from this or upper entity
+	Customer    Customer `gorm:"references:id" valid:"-"`
 	RecvTime    time.Time
-	RecvAddress string
+	RecvAddress string `valid:"required~กรุณากรอกที่อยู่จัดส่ง"`
 	RecvType_ID *uint
 	RecvType    RecvType `gorm:"references:id"`
 	Note        string
@@ -396,13 +389,27 @@ type Delivery struct {
 	Employee        Employee `gorm:"references:id"`
 	Confirmation_ID *uint
 	Confirmation    Confirmation `gorm:"references:id"`
-	Vehicle_ID      *uint
-	Vehicle         Vehicle `gorm:"references:id"`
-	Score           uint
-	Problem         string
+	Vehicle_ID      *uint        `valid:"-"` //prevent valid from this or upper entity
+	Vehicle         Vehicle      `gorm:"references:id" valid:"-"`
+	Score           uint         `valid:"required~กรุณาให้คะแนนสภาพการขนส่ง, range(0|5)~ใส่คะแนนตั้งแต่ 0 ถึง 5"`
+	Problem         string       `valid:"required~กรุณากรอกปัญหา หรือหากไม่มีให้ใส่ '-', maxstringlength(100)~กรอกได้สูงสุด 100 ตัวอักษร"`
 }
 
 // type Test struct {
 // 	gorm.Model
 // 	Name string
 // }
+
+func SetServiceValidation() {
+	validator.CustomTypeTagMap.Set("alphabet", validator.CustomTypeValidator(func(address interface{}, context interface{}) bool {
+		str := address.(string)
+		match, _ := regexp.MatchString(`[0-9ก-๏]`, str)
+		return match
+	}))
+
+	// validator.CustomTypeTagMap.Set("alphabetPro", validator.CustomTypeValidator(func(address interface{}, context interface{}) bool {
+	// 	str := address.(string)
+	// 	match, _ := regexp.MatchString(`[ควย]+[0-9ก-๏]`, str)
+	// 	return match
+	// }))
+}
