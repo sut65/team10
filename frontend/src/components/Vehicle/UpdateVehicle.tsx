@@ -12,6 +12,9 @@ import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import MopedIcon from '@mui/icons-material/Moped';
+import { Link as RouterLink } from "react-router-dom";
+import CancelIcon from '@mui/icons-material/Cancel';
+import { useParams } from "react-router-dom";
 /* Datetimepicker */
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -19,11 +22,13 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { VehicleInterface } from "../../models/vehicle/IVehicle";
 function UpdateVehicle() {
+  const params = useParams()
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
   const [vehicle, setVehicle] = React.useState<Partial<VehicleInterface>>({});
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const [vehicle_id, setVehicle_ID] = React.useState<VehicleInterface[]>([]);
-
+  const [branname, setBrand_Name]  = React.useState<String | undefined>(undefined);
+  const [engine, setEngine]  = React.useState<String | undefined>(undefined);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
 
@@ -67,7 +72,7 @@ function UpdateVehicle() {
         if (res.data) {
           setSuccess(true);
           await timeout(1000); //for 1 sec delay
-          window.location.reload();     
+          window.location.href = "/receive";        
           
         } else {
           setError(true);
@@ -76,10 +81,7 @@ function UpdateVehicle() {
       });
   }
 
-
-
-
-  const getVegicle = async () => {
+  const getVehicle = async () => {
     const apiUrl = "http://localhost:8080/vehicle";
     const requestOptions = {
       method: "GET",
@@ -89,19 +91,73 @@ function UpdateVehicle() {
       },
     };
 
-    fetch(apiUrl, requestOptions)
+    fetch(`http://localhost:8080/vehicle/${params.id}`, requestOptions )
       .then((response) => response.json())
       .then((res) => {
         console.log(res)
         if (res.data) {
           setVehicle(res.data);
-          setVehicle_ID(res.data);
+          setVehicle_ID(res.data.ID);
+        }
+      });
+  };
+
+  const getBran_Vehicle = async () => {
+    const apiUrl = `http://localhost:8080/brand_vehicle/${localStorage.getItem("uid")}`;
+  
+    const requestOptionsGet = {
+      method: "GET",
+  
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    };
+    //การกระทำ //json
+    fetch(apiUrl, requestOptionsGet)
+      .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
+  
+      .then((res) => {
+        console.log(res.data); //show ข้อมูล
+  
+        if (res.data) {
+          setBrand_Name(res.data.Brand_Name);
+        } else {
+          console.log("else");
+        }
+      });
+  };
+
+  const getEngine = async () => {
+    const apiUrl = `http://localhost:8080/engine/${localStorage.getItem("uid")}`;
+  
+    const requestOptionsGet = {
+      method: "GET",
+  
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    };
+    //การกระทำ //json
+    fetch(apiUrl, requestOptionsGet)
+      .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
+  
+      .then((res) => {
+        console.log(res.data); //show ข้อมูล
+  
+        if (res.data) {
+          setEngine(res.data.Engine);
+        } else {
+          console.log("else");
         }
       });
   };
 
   useEffect(() => {
-    getVegicle();
+    getVehicle();
+    getBran_Vehicle();
+    getEngine();
   }, []);
   return (
 
@@ -132,41 +188,55 @@ function UpdateVehicle() {
             </Grid>
             <Grid container spacing={2} sx={{ paddingX: 2 }}>
             <Grid item xs={4}>
-              <h3>ID</h3>
+              <h3>Receive ID</h3>
             </Grid>
             <Grid item xs={8} >
-              <Autocomplete
-                id="vehicle-auto"
-                options={vehicle_id}
-                fullWidth
-                size="medium"
-                onChange={(event: any, value) => {
-                  setVehicle({ ...vehicle, ID: value?.ID }); //Just Set ID to interface
-                }}
-                getOptionLabel={(option: any) =>
-                  `${option.ID}`
-                } //filter value
-                renderInput={(params) => {
-                  return (
-                    <TextField
-                      {...params}
-                      variant="outlined"
-                      placeholder="ID..."
-                    />
-                  );
-                }}
-                renderOption={(props: any, option: any) => {
-                  return (
-                    <li
-                      {...props}
-                      value={`${option.ID}`}
-                      key={`${option.ID}`}
-                    >{`${option.ID}`}</li>
-                  ); //display value
-                }}
-              />
+            <TextField
+               id="Employee_ID"
+               variant="outlined"
+               disabled
+               type="string"
+               size="medium"
+               value={vehicle_id}             
+               sx={{ width : 350 }}
+             ></TextField>
             </Grid>
           </Grid>
+
+          <Grid container spacing={2} sx={{ paddingX: 2 }}>
+            <Grid item xs={4}>
+              <h3>Brand</h3>
+            </Grid>
+            <Grid item xs={8} >
+            <TextField
+               id="Brand"
+               variant="outlined"
+               disabled
+               type="string"
+               size="medium"
+               value={branname}             
+               sx={{ width : 350 }}
+             ></TextField>
+            </Grid>
+          </Grid>
+
+          <Grid container spacing={2} sx={{ paddingX: 2 }}>
+            <Grid item xs={4}>
+              <h3>Engine</h3>
+            </Grid>
+            <Grid item xs={8} >
+            <TextField
+               id="Engine"
+               variant="outlined"
+               disabled
+               type="string"
+               size="medium"
+               value={engine}             
+               sx={{ width : 350 }}
+             ></TextField>
+            </Grid>
+          </Grid>
+          
           <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 2 }}>
             <Grid item xs={4}>
               <h3>Date Insulance</h3>

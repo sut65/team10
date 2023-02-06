@@ -147,9 +147,11 @@ func main() {
 			p.DELETE("/vehicle/:id", controllervehicle.DeleteVehicle)
 			//brandvehicle
 			p.GET("/brand_vehicles", controllerbrand_vehicles.ListBrand_Vehicles)
+			p.GET("/brand_vehicle/:id", controllerbrand_vehicles.GetBrand_Vehicle)
 
 			//engine
 			p.GET("/engines", controllerengines.ListEngines)
+			p.GET("/engine/:id", controllerengines.GetEngine)
 
 			//service
 			p.GET("/services", Service_controller.ListServices)
