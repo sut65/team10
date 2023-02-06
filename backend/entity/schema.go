@@ -369,10 +369,10 @@ type Complete struct {
 /* -------------------------------------------------------------------------- */
 type Confirmation struct {
 	gorm.Model
-	Complete_ID *uint
-	Complete    Complete `gorm:"references:id"`
-	Customer_ID *uint
-	Customer    Customer `gorm:"references:id"`
+	Complete_ID *uint    `valid:"-"` //prevent valid from upper table
+	Complete    Complete `gorm:"references:id" valid:"-"`
+	Customer_ID *uint    `valid:"-"` //prevent valid from upper table
+	Customer    Customer `gorm:"references:id" valid:"-"`
 	RecvTime    time.Time
 	RecvAddress string `valid:"required~กรุณากรอกที่อยู่จัดส่ง"`
 	RecvType_ID *uint
