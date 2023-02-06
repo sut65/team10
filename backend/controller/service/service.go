@@ -9,8 +9,11 @@ import (
 	"net/http"
 )
 
-type Sumprice struct {
-	SumPirce uint
+type extendedService struct {
+	entity.Service
+	Type_washing string
+	DeliveryType_service string
+	Weight_net string
 }
 
 // POST /users
@@ -86,11 +89,22 @@ func GetService(c *gin.Context) {
 }
 
 // GET /users
+// func ListServices(c *gin.Context) {
+
+// 	var service []entity.Service
+
+// 	if err := entity.DB().Preload("TypeWashing").Preload("DeliveryType").Preload("Weight").Raw("SELECT * FROM services").Find(&service).Error; err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+// 		return
+// 	}
+// 	c.JSON(http.StatusOK, gin.H{"data": service})
+// }
+
 func ListServices(c *gin.Context) {
 
-	var service []entity.Service
+	var service []extendedService
 
-	if err := entity.DB().Preload("TypeWashing").Preload("DeliveryType").Preload("Weight").Raw("SELECT * FROM services").Find(&service).Error; err != nil {
+	if err := entity.DB().Preload("TypeWashing").Preload("DeliveryType").Preload("Weight").Raw("SELECT s.*,t.*,d.*,w.* FROM services s JOIN type_washings t JOIN delivery_types d JOIN weights w ON s.id = t.id AND s.id = d.id AND s.id = w.id;").Find(&service).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -109,16 +123,16 @@ func ListServices(c *gin.Context) {
 // 	c.JSON(http.StatusOK, gin.H{"data": service})
 // }
 
-func ListSumPircie(c *gin.Context) {
+// func ListSumPircie(c *gin.Context) {
 
-	var sumprice []Sumprice
+// 	var sumprice []Sumprice
 
-	if err := entity.DB().Raw("SELECT * ,(s.bill_price+d.delivery_type_price+w.weight_price+t.type_washing_price) as Sumprice FROM services s JOIN delivery_types d JOIN type_washings t JOIN weights w on  s.id = d.id AND s.id = w.id AND s.id = t.id").Scan(&sumprice).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{"data": sumprice})
-}
+// 	if err := entity.DB().Raw("SELECT * ,(s.bill_price+d.delivery_type_price+w.weight_price+t.type_washing_price) as Sumprice FROM services s JOIN delivery_types d JOIN type_washings t JOIN weights w on  s.id = d.id AND s.id = w.id AND s.id = t.id").Scan(&sumprice).Error; err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+// 		return
+// 	}
+// 	c.JSON(http.StatusOK, gin.H{"data": sumprice})
+// }
 
 // DELETE /users/:id
 func DeleteService(c *gin.Context) {
@@ -129,6 +143,8 @@ func DeleteService(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"data": id})
 }
+
+
 
 // PATCH /users
 func UpdateService(c *gin.Context) {
@@ -178,6 +194,10 @@ func UpdateService(c *gin.Context) {
 		Bill_Price: upBill_Price,
 		Customer:     customer,
 		// ตั้งค่าฟิลด์ Address
+	}
+	if _, err := govalidator.ValidateStruct(up_sv); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 
 	if err := entity.DB().Save(&up_sv).Error; err != nil {

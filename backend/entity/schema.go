@@ -398,7 +398,8 @@ type Delivery struct {
 func SetServiceValidation() {
 	validator.CustomTypeTagMap.Set("alphabet", validator.CustomTypeValidator(func(address interface{}, context interface{}) bool {
 		str := address.(string)
-		match, _ := regexp.MatchString(`[0-9ก-๏]`, str)
+		match, _ := regexp.MatchString(`[0-9ก-ฮ]`, str)
+		//[0-9ก-๏]
 		return match
 	}))
 

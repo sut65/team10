@@ -273,6 +273,7 @@ const ServiceUpdate = () => {
         if (res.data) {
           setSuccess(true);
         } else {
+          setAlertMessage(res.error);
           setError(true);
         }
       });

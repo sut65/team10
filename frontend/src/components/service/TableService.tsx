@@ -95,10 +95,14 @@ export default function ServiceTable() {
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
-                  <TableCell align="right">TypeWashingID</TableCell>
+                  {/* <TableCell align="right">TypeWashingID</TableCell>
                   <TableCell align="right">WeightID</TableCell>
                   <TableCell align="right">Address</TableCell>
-                  <TableCell align="right">Delivery</TableCell>
+                  <TableCell align="right">Delivery</TableCell> */}
+                  <TableCell align="right">ประเภทการซัก</TableCell>
+                  <TableCell align="right">น้ำหนัก</TableCell>
+                  <TableCell align="center">ที่อยู่</TableCell>
+                  <TableCell align="right">ประเภทการจัดส่ง</TableCell>
                   <TableCell align="right">Price/THB</TableCell>
                   <TableCell align="right">Action</TableCell>
                 </TableRow>
@@ -112,10 +116,10 @@ export default function ServiceTable() {
                     <TableCell component="th" scope="row">
                       {row.ID}
                     </TableCell>
-                    <TableCell align="right">{row.TypeWashing_ID}</TableCell>
-                    <TableCell align="right">{row.Weight_ID}</TableCell>
-                    <TableCell align="right">{row.Address}</TableCell>
-                    <TableCell align="right">{row.DeliveryType_ID}</TableCell>
+                    <TableCell align="right">{row.Type_washing}</TableCell>
+                    <TableCell align="right">{row.Weight_net}</TableCell>
+                    <TableCell align="center">{row.Address}</TableCell>
+                    <TableCell align="right">{row.DeliveryType_service}</TableCell>
                     <TableCell align="right">{row.Bill_Price}</TableCell>
                     <TableCell align="right">
                       <ButtonGroup

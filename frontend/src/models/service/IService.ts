@@ -6,6 +6,7 @@ export interface ServiceInterface {
     Bill_Price: number;
 
     Weight_ID: number;
+    Weight_net: string;
     Weight_price: number;
     Weight: WeightInterface
 
@@ -18,7 +19,7 @@ export interface ServiceInterface {
     DeliveryType_ID: number;
     DeliveryType_price: number;
     DeliveryType_service: string;
-    DeสiveryType: DeliveryTypeInterface
+    DeliveryType: DeliveryTypeInterface
 
     Bill_status: number;
     Customer_ID: number;
