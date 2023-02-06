@@ -157,31 +157,24 @@ type Weight struct {
 
 type Service struct {
 	gorm.Model
-	TypeWashing_ID *uint
-	TypeWashing    TypeWashing `gorm:"references:id"`
+	TypeWashing_ID *uint `valid:"-"`
+	TypeWashing    TypeWashing `gorm:"references:id" valid:"-" `
 
 	DeliveryType_ID *uint
 	DeliveryType    DeliveryType `gorm:"references:id"`
 
-	Weight_ID *uint
-	Weight    Weight `gorm:"references:id"`
+	Weight_ID *uint	`valid:"-"`
+	Weight    Weight `gorm:"references:id" valid:"-" `
 
-	Customer_ID *uint
-	Customer    Customer `gorm:"references:id"`
+	Customer_ID *uint	`valid:"-"`
+	Customer    Customer `gorm:"references:id" valid:"-"`
 
 	Bill_status uint
-	Address     string `valid:"address~ที่อยู่เป็นตัวอักษรพิเศษหรือภาษาอังกฤษ,required~จำเป็นต้องกรอกที่อยู่"`
+	Address     string `valid:"minstringlength(15)~โปรดระบุให้ละเอียด,alphabet~ที่อยู่เป็นตัวอักษรพิเศษหรือภาษาอังกฤษ,required~โปรดกรอกที่อยู่"`
 	Bill_Price  float64
 	Bill        []Bill `gorm:"foreignKey:Service_ID"`
 }
 
-func SetServiceValidation() {
-	validator.CustomTypeTagMap.Set("address", validator.CustomTypeValidator(func(address interface{}, context interface{}) bool {
-		str := address.(string)
-		match, _ := regexp.MatchString(`^$`, str)
-		return match
-	}))
-}
 
 /* -------------------------------------------------------------------------- */
 /*                                  Form                                      */
@@ -406,3 +399,17 @@ type Delivery struct {
 // 	gorm.Model
 // 	Name string
 // }
+
+func SetServiceValidation() {
+	validator.CustomTypeTagMap.Set("alphabet", validator.CustomTypeValidator(func(address interface{}, context interface{}) bool {
+		str := address.(string)
+		match, _ := regexp.MatchString(`[0-9ก-๏]`, str)
+		return match
+	}))
+
+	// validator.CustomTypeTagMap.Set("alphabetPro", validator.CustomTypeValidator(func(address interface{}, context interface{}) bool {
+	// 	str := address.(string)
+	// 	match, _ := regexp.MatchString(`[ควย]+[0-9ก-๏]`, str)
+	// 	return match
+	// }))
+}
