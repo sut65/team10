@@ -33,6 +33,8 @@ import BillTable_UI from "./components/bill/BillTable";
 import BillUpdate from "./components/bill/UpdateBill";
 import UpdateReceive from "./components/Receive/UpdateReceive";
 import ReceiveTableUI from "./components/Receive/ReceiveTableUI";
+import UpdateVehicle from "./components/Vehicle/UpdateVehicle";
+import VehicleTableUI from "./components/Vehicle/VehicleTableUI";
 import { Routes } from "react-router-dom/";
 export default function App() {
   const [token, setToken] = React.useState<String>("");
@@ -123,6 +125,8 @@ export default function App() {
               <Route path="/receive/" element={<ReceiveTableUI />} />
               <Route path="/receive/update/:id" element={<UpdateReceive />} />
               <Route path="/vehicle/create" element={<Vehicle />} />
+              <Route path="/vehicle/" element={<VehicleTableUI />} />
+              <Route path="/vehicle/update/:id" element={<UpdateVehicle />} />
               <Route path="/create" element={<CompleteCreate />} />
               <Route path="/complete/info" element={<CompleteTable/>} />
               <Route path="/employee" element={<EmployeeTable />} />

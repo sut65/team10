@@ -31,7 +31,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
 ) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  return <MuiAlert elevation={6} ref={ref} variant="outlined" {...props} />;
 });
 /* -------------------------------------------------------------------------- */
 /*                                    React                                   */
@@ -229,7 +229,7 @@ function Confirmation() {
           onClose={handleCloseSnackBar}
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         >
-          <Alert onClose={handleCloseSnackBar} severity="success">
+          <Alert onClose={handleCloseSnackBar} severity="success" variant="filled">
             Save successfully
           </Alert>
         </Snackbar>
@@ -239,7 +239,7 @@ function Confirmation() {
           onClose={handleCloseSnackBar}
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         >
-          <Alert onClose={handleCloseSnackBar} severity="error">
+          <Alert onClose={handleCloseSnackBar} severity="error" variant="filled">
             Failed "{errorMessage}"
           </Alert>
         </Snackbar>

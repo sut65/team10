@@ -24,14 +24,14 @@ func CreateVehicle(c *gin.Context) {
 
 	// ค้นหา Employee ด้วยไอดี
 	if tx := entity.DB().Where("id = ?", vehicle.Employee_ID).First(&employee); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Employee not found"})
 
 		return
 
 	}
 	//8: ค้นหา branvehicle ด้วยไอดี
 	if tx := entity.DB().Where("id = ?", vehicle.Brand_Vehicle_ID).First(&brand_vehicles); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Brand not found"})
 
 		return
 
@@ -39,7 +39,7 @@ func CreateVehicle(c *gin.Context) {
 
 	//9: ค้นหา engine ด้วยไอดี
 	if tx := entity.DB().Where("id = ?", vehicle.Engine_ID).First(&engines); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Type Game not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Engine not found"})
 
 		return
 
@@ -51,7 +51,7 @@ func CreateVehicle(c *gin.Context) {
 		Brand_Vehicle_ID: vehicle.Brand_Vehicle_ID,
 		Engine_ID:        vehicle.Engine_ID,
 		ListModel:        vehicle.ListModel,
-		Vehicle_Rigis:    vehicle.Vehicle_Rigis,
+		Registration:     vehicle.Registration,
 		Date_Insulance:   vehicle.Date_Insulance.Local(),
 	}
 
@@ -74,7 +74,7 @@ func CreateVehicle(c *gin.Context) {
 func GetVehicle(c *gin.Context) {
 	var vehicle entity.Vehicle
 	id := c.Param("id")
-	if err := entity.DB().Raw("SELECT * FROM vehicles WHERE id = ?", id).Scan(&vehicle).Error; err != nil {
+	if err := entity.DB().Preload("Engine").Preload("Brand_Vehicle").Preload("Employee").Raw("SELECT * FROM vehicles WHERE id = ?", id).Find(&vehicle).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

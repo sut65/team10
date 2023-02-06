@@ -308,8 +308,8 @@ type Receive struct {
 //ระบบจัดการรถขนส่ง
 type Brand_Vehicle struct {
 	gorm.Model
-	Brand_Vehicle string
-	Vehicle       []Vehicle `gorm:"foreignKey:Brand_Vehicle_ID"`
+	Brand_Name string
+	Vehicle    []Vehicle `gorm:"foreignKey:Brand_Vehicle_ID"`
 }
 
 type Engine struct {
@@ -325,8 +325,8 @@ type Vehicle struct {
 	Brand_Vehicle    Brand_Vehicle `gorm:"references:id"`
 	Engine_ID        *uint
 	Engine           Engine `gorm:"references:id"`
-	ListModel        string
-	Vehicle_Rigis    string
+	ListModel        string `valid:"required~จำเป็นต้องกรอกรุ่นของรถ"`
+	Registration     string `valid:"required~จำเป็นต้องกรอกทะเบียนรถ"`
 	Date_Insulance   time.Time
 	Delivery         []Delivery `gorm:"foreignKey:Vehicle_ID"`
 }
@@ -362,12 +362,12 @@ type Complete struct {
 /* -------------------------------------------------------------------------- */
 type Confirmation struct {
 	gorm.Model
-	Complete_ID *uint
-	Complete    Complete `gorm:"references:id"`
-	Customer_ID *uint
-	Customer    Customer `gorm:"references:id"`
+	Complete_ID *uint    `valid:"-"` //prevent valid from this or upper entity
+	Complete    Complete `gorm:"references:id" valid:"-"`
+	Customer_ID *uint    `valid:"-"` //prevent valid from this or upper entity
+	Customer    Customer `gorm:"references:id" valid:"-"`
 	RecvTime    time.Time
-	RecvAddress string
+	RecvAddress string `valid:"required~กรุณากรอกที่อยู่จัดส่ง"`
 	RecvType_ID *uint
 	RecvType    RecvType `gorm:"references:id"`
 	Note        string
@@ -389,10 +389,10 @@ type Delivery struct {
 	Employee        Employee `gorm:"references:id"`
 	Confirmation_ID *uint
 	Confirmation    Confirmation `gorm:"references:id"`
-	Vehicle_ID      *uint
-	Vehicle         Vehicle `gorm:"references:id"`
-	Score           uint
-	Problem         string
+	Vehicle_ID      *uint        `valid:"-"` //prevent valid from this or upper entity
+	Vehicle         Vehicle      `gorm:"references:id" valid:"-"`
+	Score           uint         `valid:"required~กรุณาให้คะแนนสภาพการขนส่ง, range(0|5)~ใส่คะแนนตั้งแต่ 0 ถึง 5"`
+	Problem         string       `valid:"required~กรุณากรอกปัญหา หรือหากไม่มีให้ใส่ '-', maxstringlength(100)~กรอกได้สูงสุด 100 ตัวอักษร"`
 }
 
 // type Test struct {

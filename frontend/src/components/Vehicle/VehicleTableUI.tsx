@@ -2,28 +2,26 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Container from "@mui/material/Container";
-import { Button, Grid } from "@mui/material";
+import { Box, Button, ButtonGroup, CssBaseline, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { VehicleInterface } from "../../models/vehicle/IVehicle";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import VehicleDelete from "./DeleteVehicle";
 import {  Popover, Typography } from "@mui/material";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Dialog } from "@material-ui/core"
 
 function VehicleTableUI() {
   const [vehicle, setVehicle] = useState<VehicleInterface[]>([]);
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
-  const popup = open ? 'simple-popover' : undefined;
-
-
+  const [row_delete, setRow_delete] = useState<VehicleInterface>();
+  const [open_delete, setOpendelete] = React.useState(false);
+  const navigate = useNavigate();
+  const handleClickOpen = (id: VehicleInterface) => { //เซ็ทค่า Dialog
+      setOpendelete(true);
+      setRow_delete(id); //เซ็ตค่าใส่ในตัวแปรเพื่อหา ID
+    };
+  
+    const handleClose = () => { //สั่งปิด Dialog Delete
+      setOpendelete(false);
+    };
   useEffect(() => {
     getVehicle();
   }, []);
@@ -48,93 +46,121 @@ function VehicleTableUI() {
       
   };
 
+  const DeleteVehicle = async (Vehicle_ID: number) => {
+    let data = {          //ประกาศก้อนข้อมูล
+      ID: Vehicle_ID,
+    };
 
-  const vehiclecolumbs: GridColDef[] = [
-    { field: "ID", headerName: "ลำดับ", width: 50 },
-    {
-      field: "Brand_Vehicle",
-      headerName: "ยี่ห้อรถ",
-      width: 130,
-      valueGetter: (params) => params.value.Brand_Vehicle,
-    },
-    {
-      field: "Engine",
-      headerName: "ขนาดเครื่องยนต์",
-      width: 150,
-      valueGetter: (params) => params.value.Engine,
-    },
-    {
-      field: "ListModel",
-      headerName: "รุ่นของรถ",
-      width: 150,
-    },
-    {
-      field: "Vehicle_Rigis",
-      headerName: "ทะเบียนรถ",
-      width: 150,
-    },
-    {
-      field: "Employee",
-      headerName: "ผู้จัดการ",
-      width: 150,
-      valueGetter: (params) => params.value.Name,
-    },
-    { field: "Date_Insulance", headerName: "วันที่ต่อ พรบ.", width: 250 },
-  ];
+    const apiUrl = "http://localhost:8080/vehicle";
+    const requestOptions = {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data),
+    };
+    fetch(`${apiUrl}/${Vehicle_ID}`, requestOptions)
+      .then((response) => response.json())
+      .then((res) => {
+        if (res.data) {
+          window.location.reload();
+        }
+      });
+  };
 
   return (
-    <div>
-    <Grid>
-    <Grid item xs={6} sx={{
-                paddingX: 2, paddingY: 0
-              }}
-        >
-          <div>
-          <Button aria-describedby={popup} variant="contained" color="error"
-            endIcon={<DeleteForeverIcon />}
-            onClick={handleClick}>
-            Delete
-          </Button>
-          <Popover
-            id={popup}
-            open={open}
-            anchorEl={anchorEl}
-            sx={{ paddingBottom: 20 }}
-            marginThreshold={80}
-            onClose={handleClose}
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "left",
-            }}
-          >
-            <VehicleDelete />
-            <Typography sx={{ p: 2 }}>Delete Vehicle</Typography>
-          </Popover>
-          </div>
-          </Grid>
-    <Grid>
-      <Grid
-              container
-              justifyContent={"center"}
-              sx={{
-                paddingY: 2,
-              }}
-            >
-      <Container maxWidth="xl">
-        <div style={{ height: 400, width: "100%", marginTop: "30px" }}>
-          <DataGrid
-            rows={vehicle}
-            getRowId={(row) => row.ID}
-            columns={vehiclecolumbs}
-            pageSize={5}
-            rowsPerPageOptions={[7]}
-          />
-        </div>
+    <React.Fragment>
+      <CssBaseline />
+      <Container maxWidth="lg" sx={{ p: 2 }}>
+        <Paper sx={{ p: 2 }}>
+          <Box display="flex">
+            <Box sx={{ flexGrow: 1 }}>
+              <Typography variant="h6" gutterBottom component="div">
+                VEHICLE
+              </Typography>
+            </Box>
+            <Box>
+              <Button
+                variant="contained"
+                component={RouterLink}
+                to="/vehicle/create"
+                sx={{ p: 1 }}>Create Vehicle</Button>
+            </Box>
+          </Box>
+
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 400, p: 2 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>ID</TableCell>
+                  <TableCell align="right">Brand</TableCell>
+                  <TableCell align="right"> Engine</TableCell>
+                  <TableCell align="right">Model </TableCell>
+                  <TableCell align="right">Registration </TableCell>
+                  <TableCell align="right">Employee</TableCell>
+                  <TableCell align="right">Date Insulance</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {vehicle.map((row) => (
+                  <TableRow
+                    key={row.ID}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.ID}
+                    </TableCell>
+                    <TableCell align="right">{row.Brand_Vehicle.Brand_Name}</TableCell>
+                    <TableCell align="right">{row.Engine.Engine}</TableCell>
+                    <TableCell align="right">{row.ListModel}</TableCell>
+                    <TableCell align="right">{row.Registration}</TableCell>
+                    <TableCell align="right">{row.Employee.Name}</TableCell>
+                    <TableCell align="right">{row.Date_Insulance.toString()}</TableCell>
+                    <TableCell align="right">
+                      <ButtonGroup variant="outlined" aria-lable="outlined button group">
+                        <Button onClick={() => navigate({ pathname: `/vehicle/update/${row.ID}` })} variant="contained" color="success"
+                        >edit</Button>
+                        {/* <Button onClick={() => DeletePromotion(row.ID)} variant="contained"color="error">Delete</Button> */}
+                        <div>
+                          <Button color="error" variant="outlined" onClick={() => handleClickOpen(row) }>
+                            Delete
+                          </Button>
+                          <Dialog
+                            open={open_delete}
+                            onClose={handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                          >
+                            <DialogTitle id="alert-dialog-title">
+                              {"Delete"}
+                            </DialogTitle>
+                            <DialogContent>
+                              <DialogContentText id="alert-dialog-description">
+                                Are You Sure To Delete Vehicle ID {row_delete?.ID}
+                                {/* <br></br>:{row_delete?.Employee.Name} */}
+                              </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                              <Button variant="contained" color="warning" onClick={handleClose}>No</Button>
+                              <Button variant="contained" color="error" onClick={() => DeleteVehicle(row_delete?.ID||0)} autoFocus>
+                                Yes
+                              </Button>
+                            </DialogActions>
+                          </Dialog>
+                        </div>
+                      </ButtonGroup>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
       </Container>
-      </Grid>
-    </Grid>
-    </Grid>
-  </div>
-);
+    </React.Fragment>
+  );
 }
 export default VehicleTableUI;
+
+  
