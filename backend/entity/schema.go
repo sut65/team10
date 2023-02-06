@@ -369,9 +369,9 @@ type Complete struct {
 /* -------------------------------------------------------------------------- */
 type Confirmation struct {
 	gorm.Model
-	Complete_ID *uint    `valid:"-"` //prevent valid from upper table
+	Complete_ID *uint    `valid:"-"` //prevent valid from this or upper entity
 	Complete    Complete `gorm:"references:id" valid:"-"`
-	Customer_ID *uint    `valid:"-"` //prevent valid from upper table
+	Customer_ID *uint    `valid:"-"` //prevent valid from this or upper entity
 	Customer    Customer `gorm:"references:id" valid:"-"`
 	RecvTime    time.Time
 	RecvAddress string `valid:"required~กรุณากรอกที่อยู่จัดส่ง"`
@@ -396,10 +396,10 @@ type Delivery struct {
 	Employee        Employee `gorm:"references:id"`
 	Confirmation_ID *uint
 	Confirmation    Confirmation `gorm:"references:id"`
-	Vehicle_ID      *uint
-	Vehicle         Vehicle `gorm:"references:id"`
-	Score           uint
-	Problem         string
+	Vehicle_ID      *uint        `valid:"-"` //prevent valid from this or upper entity
+	Vehicle         Vehicle      `gorm:"references:id" valid:"-"`
+	Score           uint         `valid:"required~กรุณาให้คะแนนสภาพการขนส่ง, range(0|5)~ใส่คะแนนตั้งแต่ 0 ถึง 5"`
+	Problem         string       `valid:"required~กรุณากรอกปัญหา หรือหากไม่มีให้ใส่ '-', maxstringlength(100)~กรอกได้สูงสุด 100 ตัวอักษร"`
 }
 
 // type Test struct {

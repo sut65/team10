@@ -3,6 +3,7 @@ package controller
 import (
 	"net/http"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"github.com/sut65/team10/entity"
 )
@@ -29,13 +30,13 @@ func CreateDelivery(c *gin.Context) {
 
 	// 10: ค้นหา disease ด้วย id
 	if tx := entity.DB().Where("id = ?", delivery.Confirmation_ID).First(&confirmation); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "complete not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "confirmation not found"})
 		return
 	}
 
 	// 10: ค้นหา disease ด้วย id
 	if tx := entity.DB().Where("id = ?", delivery.Employee_ID).First(&employee); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "customer not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "employee not found"})
 		return
 	}
 
@@ -46,6 +47,12 @@ func CreateDelivery(c *gin.Context) {
 		Employee:     employee,
 		Score:        delivery.Score,
 		Problem:      delivery.Problem,
+	}
+
+	// validate before save
+	if _, err := govalidator.ValidateStruct(d); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
 	}
 
 	// 13: บันทึก
