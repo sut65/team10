@@ -5,6 +5,7 @@ import (
 
 	"regexp"
 
+	"github.com/asaskevich/govalidator"
 	validator "github.com/asaskevich/govalidator"
 	"gorm.io/gorm"
 )
@@ -157,16 +158,16 @@ type Weight struct {
 
 type Service struct {
 	gorm.Model
-	TypeWashing_ID *uint `valid:"-"`
+	TypeWashing_ID *uint       `valid:"-"`
 	TypeWashing    TypeWashing `gorm:"references:id" valid:"-" `
 
 	DeliveryType_ID *uint
 	DeliveryType    DeliveryType `gorm:"references:id"`
 
-	Weight_ID *uint	`valid:"-"`
+	Weight_ID *uint  `valid:"-"`
 	Weight    Weight `gorm:"references:id" valid:"-" `
 
-	Customer_ID *uint	`valid:"-"`
+	Customer_ID *uint    `valid:"-"`
 	Customer    Customer `gorm:"references:id" valid:"-"`
 
 	Bill_status uint
@@ -174,7 +175,6 @@ type Service struct {
 	Bill_Price  float64
 	Bill        []Bill `gorm:"foreignKey:Service_ID"`
 }
-
 
 /* -------------------------------------------------------------------------- */
 /*                                  Form                                      */
@@ -248,14 +248,14 @@ type Reason struct {
 
 type Promotion struct {
 	gorm.Model
-	Codetype_ID *uint
-	Codetype    Codetype `gorm:"references:id"`
-	Reason_ID   *uint
-	Reason      Reason `gorm:"references:id"`
-	Price       uint
-	Amount      uint
-	Employee_ID *uint
-	Employee    Employee `gorm:"references:id"`
+	Codetype_ID *uint    `valid:"-"`
+	Codetype    Codetype `gorm:"references:id" valid:"-"`
+	Reason_ID   *uint    `valid:"-"`
+	Reason      Reason   `gorm:"references:id" valid:"-"`
+	Price       int      `valid:"ValueNotNegative~จำนวนเงินห้ามติดลบ"`
+	Amount      int      `valid:"-"`
+	Employee_ID *uint    `valid:"-"`
+	Employee    Employee `gorm:"references:id" valid:"-"`
 	Time_Stamp  time.Time
 	QuotaCode   []QuotaCode `gorm:"foreignKey:Promotion_ID"`
 }
@@ -263,7 +263,7 @@ type Promotion struct {
 type QuotaCode struct {
 	gorm.Model
 	Promotion_ID *uint
-	Promotion    Promotion `gorm:"references:id"`
+	Promotion    Promotion `gorm:"references:id" valid:"-"`
 	Bill_ID      *uint
 	Bill         *Bill  `gorm:"references:id"`
 	Bill_FK      []Bill `gorm:"foreignKey:QuotaCode_ID"`
@@ -395,11 +395,6 @@ type Delivery struct {
 	Problem         string       `valid:"required~กรุณากรอกปัญหา หรือหากไม่มีให้ใส่ '-', maxstringlength(100)~กรอกได้สูงสุด 100 ตัวอักษร"`
 }
 
-// type Test struct {
-// 	gorm.Model
-// 	Name string
-// }
-
 func SetServiceValidation() {
 	validator.CustomTypeTagMap.Set("alphabet", validator.CustomTypeValidator(func(address interface{}, context interface{}) bool {
 		str := address.(string)
@@ -412,4 +407,16 @@ func SetServiceValidation() {
 	// 	match, _ := regexp.MatchString(`[ควย]+[0-9ก-๏]`, str)
 	// 	return match
 	// }))
+}
+
+func SetPromotionValidation() {
+	govalidator.CustomTypeTagMap.Set("ValueNotNegative", func(i interface{}, context interface{}) bool {
+		p := i.(int)
+		return p >= 0
+	})
+}
+
+func init() {
+	SetPromotionValidation()
+	SetServiceValidation()
 }
