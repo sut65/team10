@@ -149,7 +149,7 @@ function UpdateCustomer() {
         "Content-Type": "application/json",
       },
     };
-    fetch(`http://localhost:8080/customer/${params.id}`, requestOptionsGet)
+    fetch(`http://localhost:8080/customer/${localStorage.getItem("uid")}`, requestOptionsGet)
       .then((response) => response.json())
       .then((res) => {
         if (res.data) {
