@@ -319,14 +319,14 @@ type Engine struct {
 }
 type Vehicle struct {
 	gorm.Model
-	Employee_ID      *uint
-	Employee         Employee `gorm:"references:id"`
-	Brand_Vehicle_ID *uint
-	Brand_Vehicle    Brand_Vehicle `gorm:"references:id"`
-	Engine_ID        *uint
-	Engine           Engine `gorm:"references:id"`
-	ListModel        string `valid:"required~จำเป็นต้องกรอกรุ่นของรถ"`
-	Registration     string `valid:"required~จำเป็นต้องกรอกทะเบียนรถ"`
+	Employee_ID      *uint         `valid:"-"`
+	Employee         Employee      `gorm:"references:id"  valid:"-"`
+	Brand_Vehicle_ID *uint         `valid:"-"`
+	Brand_Vehicle    Brand_Vehicle `gorm:"references:id"  valid:"-"`
+	Engine_ID        *uint         `valid:"-"`
+	Engine           Engine        `gorm:"references:id"  valid:"-"`
+	ListModel        string        `valid:"required~จำเป็นต้องกรอกรุ่นของรถ"`
+	Registration     string        `valid:"required~จำเป็นต้องกรอกทะเบียนรถ"`
 	Date_Insulance   time.Time
 	Delivery         []Delivery `gorm:"foreignKey:Vehicle_ID"`
 }
@@ -427,6 +427,12 @@ func SetPromotionValidation() {
 		t := i.(time.Time) //t มี type เป็น time.Time
 		now := time.Now().Add(time.Minute * 5)
 		return t.Before(now) //ค่าที่จะส่งต้องเป็นเวลาอนาคตไม่เกิน 5นาที
+	})
+	//เวลาห้ามเป็นปัจจุบัน
+	govalidator.CustomTypeTagMap.Set("DateTimeNotPresent", func(i interface{}, context interface{}) bool {
+		t := i.(time.Time) //t มี type เป็น time.Time
+		now := time.Now()
+		return t.Equal(now) //ค่าที่จะส่งต้องเป็นเวลาปัจจุบัน
 	})
 }
 
