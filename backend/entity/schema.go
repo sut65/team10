@@ -297,7 +297,7 @@ type Receive struct {
 	Softener     Softener  `gorm:"references:id" valid:"-"`
 	Det_Quantity int       `valid:"ValueNotNegative~จำนวนผงซักฟอกต้องไม่เป็นลบ"`
 	Sof_Quantity int       `valid:"ValueNotNegative~จำนวนน้ำยาปรับผ้านุ่มต้องไม่เป็นลบ"`
-	Time_Stamp   time.Time
+	Time_Stamp   time.Time `valid:"DateTimeNotPast~เวลาห้ามเป็นอดีต, DateTimeNotFuture~เวลาห้ามเป็นอนาคต"`
 
 	Complete []Complete `gorm:"foreignKey:Receive_ID"`
 }
@@ -327,7 +327,7 @@ type Vehicle struct {
 	Engine           Engine        `gorm:"references:id"  valid:"-"`
 	ListModel        string        `valid:"required~จำเป็นต้องกรอกรุ่นของรถ"`
 	Registration     string        `valid:"required~จำเป็นต้องกรอกทะเบียนรถ"`
-	Date_Insulance   time.Time     `valid:"DateTimeNotPast~เวลาห้ามเป็นอดีต, DateTimeNotFuture~เวลาห้ามเป็นอนาคต"`
+	Date_Insulance   time.Time     `valid:"DateTimeNotPast~เวลาห้ามเป็นอดีต, DateTimeNotPresent~เวลาห้ามเป็นปัจจุบัน"`
 	Delivery         []Delivery    `gorm:"foreignKey:Vehicle_ID"`
 }
 
