@@ -327,8 +327,8 @@ type Vehicle struct {
 	Engine           Engine        `gorm:"references:id"  valid:"-"`
 	ListModel        string        `valid:"required~จำเป็นต้องกรอกรุ่นของรถ"`
 	Registration     string        `valid:"required~จำเป็นต้องกรอกทะเบียนรถ"`
-	Date_Insulance   time.Time
-	Delivery         []Delivery `gorm:"foreignKey:Vehicle_ID"`
+	Date_Insulance   time.Time     `valid:"DateTimeNotPast~เวลาห้ามเป็นอดีต, DateTimeNotFuture~เวลาห้ามเป็นอนาคต"`
+	Delivery         []Delivery    `gorm:"foreignKey:Vehicle_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
