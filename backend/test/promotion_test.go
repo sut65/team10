@@ -32,6 +32,7 @@ func TestPriceNotNegative(t *testing.T) {
 	g.Expect(err.Error()).To(Equal("จำนวนเงินห้ามติดลบ"))
 }
 
+// จำนวน code ห้ามเป็นค่าลบ
 func TestAmountNotNegative(t *testing.T) {
 	g := NewGomegaWithT(t)
 
@@ -54,6 +55,7 @@ func TestAmountNotNegative(t *testing.T) {
 	g.Expect(err.Error()).To(Equal("จำนวน Code ห้ามติดลบ"))
 }
 
+// วันเวลาห้ามเป็นอดีตเกิน5นาที
 func TestDateTimeNotPass(t *testing.T) {
 	g := NewGomegaWithT(t)
 
@@ -76,6 +78,7 @@ func TestDateTimeNotPass(t *testing.T) {
 	g.Expect(err.Error()).To(Equal("เวลาห้ามเป็นอดีต"))
 }
 
+// วันเวลาห้ามเป็นอนาคตเกิน5นาที
 func TestDateTimeNotFuture(t *testing.T) {
 	g := NewGomegaWithT(t)
 
