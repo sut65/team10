@@ -225,7 +225,7 @@ type Bill struct {
 	Paymenttype_ID *uint       `valid:"-"`
 	Paymenttype    Paymenttype `gorm:"references:id" valid:"-"`
 	Bill_Price     uint        `valid:"-"`
-	Time_Stamp     time.Time   `valid:"DateTimeNotFuture~เวลาห้ามเป็นอนาคต"`
+	Time_Stamp     time.Time   `valid:"DateTimeNotFuture~เวลาห้ามเป็นอนาคต, DateTimeNotPast~เวลาห้ามเป็นอดีต"`
 	QuotaCode_FK   []QuotaCode `gorm:"foreignKey:Bill_ID"`
 	Receive        []Receive   `gorm:"foreignKey:Bill_ID"`
 }
@@ -410,7 +410,7 @@ func SetServiceValidation() {
 	// }))
 }
 
-func SetPromotionValidation() {
+func SetTimeandValueValidation() {
 	//จำนวนเงินต้องไม่เป็นค่าติดลบ
 	govalidator.CustomTypeTagMap.Set("ValueNotNegative", func(i interface{}, context interface{}) bool {
 		p := i.(int)  //p มี type เป็น int
@@ -431,6 +431,6 @@ func SetPromotionValidation() {
 }
 
 func init() {
-	SetPromotionValidation()
+	SetTimeandValueValidation()
 	SetServiceValidation()
 }

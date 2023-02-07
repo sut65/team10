@@ -30,3 +30,25 @@ func TestBillDateTimeNotFuture(t *testing.T) {
 	// err.Error ต้องมี error message แสดงออกมา
 	g.Expect(err.Error()).To(Equal("เวลาห้ามเป็นอนาคต"))
 }
+
+// วันเวลาห้ามเป็นอดีตเกิน5นาที
+func TestBillDateTimeNotPass(t *testing.T) {
+	g := NewGomegaWithT(t)
+
+	p := entity.Bill{
+		Bill_Price: 200,
+		Time_Stamp: time.Now().Add(time.Second * -300), // ผิด //เวลาจะผิดไป 1 วินาที เพราะตอน assign ค่าจะมี delay ไป 1s
+	}
+
+	// ตรวจสอบด้วย govalidator
+	ok, err := govalidator.ValidateStruct(p)
+
+	// ok ต้องไม่เป็นค่า true แปลว่าต้องจับ error ได้
+	g.Expect(ok).ToNot(BeTrue())
+
+	// err ต้องไม่เป็นค่า nil แปลว่าต้องจับ error ได้
+	g.Expect(err).ToNot(BeNil())
+
+	// err.Error ต้องมี error message แสดงออกมา
+	g.Expect(err.Error()).To(Equal("เวลาห้ามเป็นอดีต"))
+}
