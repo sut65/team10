@@ -8,10 +8,7 @@ import { Grid } from "@mui/material";
 import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from '@mui/icons-material/Cancel';
-import UpdateIcon from '@mui/icons-material/Update';
 import { Snackbar, Alert } from "@mui/material";
-import Popover from '@mui/material/Popover';
-import Typography from '@mui/material/Typography';
 
 /* combobox */
 import { TextField } from "@mui/material";
@@ -30,8 +27,6 @@ import { BillInterface } from "../../models/bill/IBill";
 import { PaymenttypeInterface } from "../../models/bill/IPaymenttype";
 import { QuotaCodeInterface } from "../../models/promotion/IQuotaCode";
 import { ServiceInterface } from "../../models/service/IService";
-import BillTable_UI from "./BillTable";
-import BillUpdate from "./UpdateBill";
 import { Link as RouterLink } from "react-router-dom";
 //สร้างตัวแปรสำหรับคำนวณค่าใช้จ่าย
 let sum = 0;
@@ -48,6 +43,7 @@ function Bill() {
   const [service, setService] = React.useState<ServiceInterface[]>([]);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
+  const [alertmsg, setAlertmsg] = useState("");
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
   //////////////////////////////////////////////////////////////////////////////////
@@ -119,10 +115,12 @@ function Bill() {
       .then(async (res) => {
         if (res.data) {
           setSuccess(true);
+          setAlertmsg("บันทึกสำเร็จ")
           await timeout(1000); //for 1 sec delay
           window.location.href = "/bill"; 
         } else {
           setError(true);
+          setAlertmsg(res.error)
         }
       });
   }
@@ -234,7 +232,7 @@ function Bill() {
           onClose={handleClose}
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
           <Alert onClose={handleClose} severity="success">
-            บันทึกข้อมูลสำเร็จ
+            {alertmsg}
           </Alert>
         </Snackbar>
 
@@ -244,7 +242,7 @@ function Bill() {
           onClose={handleClose}
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
           <Alert onClose={handleClose} severity="error">
-            บันทึกข้อมูลไม่สำเร็จ
+            {alertmsg}
           </Alert>
         </Snackbar>
 

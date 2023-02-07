@@ -218,14 +218,14 @@ type Paymenttype struct {
 
 type Bill struct {
 	gorm.Model
-	Service_ID     *uint
-	Service        Service `gorm:"references:id"`
-	QuotaCode_ID   *uint
-	QuotaCode      *QuotaCode `gorm:"references:id"`
-	Paymenttype_ID *uint
-	Paymenttype    Paymenttype `gorm:"references:id"`
-	Bill_Price     uint
-	Time_Stamp     time.Time
+	Service_ID     *uint       `valid:"-"` //ทำการปิดเพื่อป้องกันการ validation จากตารางอื่นที่ดึงมาใช้งาน
+	Service        Service     `gorm:"references:id" valid:"-"`
+	QuotaCode_ID   *uint       `valid:"-"`
+	QuotaCode      *QuotaCode  `gorm:"references:id" valid:"-"`
+	Paymenttype_ID *uint       `valid:"-"`
+	Paymenttype    Paymenttype `gorm:"references:id" valid:"-"`
+	Bill_Price     uint        `valid:"-"`
+	Time_Stamp     time.Time   `valid:"DateTimeNotFuture~เวลาห้ามเป็นอนาคต"`
 	QuotaCode_FK   []QuotaCode `gorm:"foreignKey:Bill_ID"`
 	Receive        []Receive   `gorm:"foreignKey:Bill_ID"`
 }
