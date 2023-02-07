@@ -248,25 +248,25 @@ type Reason struct {
 
 type Promotion struct {
 	gorm.Model
-	Codetype_ID *uint    `valid:"-"`
-	Codetype    Codetype `gorm:"references:id" valid:"-"`
-	Reason_ID   *uint    `valid:"-"`
-	Reason      Reason   `gorm:"references:id" valid:"-"`
-	Price       int      `valid:"ValueNotNegative~จำนวนเงินห้ามติดลบ"`
-	Amount      int      `valid:"-"`
-	Employee_ID *uint    `valid:"-"`
-	Employee    Employee `gorm:"references:id" valid:"-"`
-	Time_Stamp  time.Time
+	Codetype_ID *uint       `valid:"-"`
+	Codetype    Codetype    `gorm:"references:id" valid:"-"`
+	Reason_ID   *uint       `valid:"-"`
+	Reason      Reason      `gorm:"references:id" valid:"-"`
+	Price       int         `valid:"ValueNotNegative~จำนวนเงินห้ามติดลบ"`
+	Amount      int         `valid:"ValueNotNegative~จำนวน Code ห้ามติดลบ"`
+	Employee_ID *uint       `valid:"-"`
+	Employee    Employee    `gorm:"references:id" valid:"-"`
+	Time_Stamp  time.Time   `valid:"DateTimeNotPast~เวลาห้ามเป็นอดีต"`
 	QuotaCode   []QuotaCode `gorm:"foreignKey:Promotion_ID"`
 }
 
 type QuotaCode struct {
 	gorm.Model
-	Promotion_ID *uint
+	Promotion_ID *uint     `valid:"-"`
 	Promotion    Promotion `gorm:"references:id" valid:"-"`
-	Bill_ID      *uint
-	Bill         *Bill  `gorm:"references:id"`
-	Bill_FK      []Bill `gorm:"foreignKey:QuotaCode_ID"`
+	Bill_ID      *uint     `valid:"-"`
+	Bill         *Bill     `gorm:"references:id"`
+	Bill_FK      []Bill    `gorm:"foreignKey:QuotaCode_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
@@ -411,10 +411,23 @@ func SetServiceValidation() {
 }
 
 func SetPromotionValidation() {
+	//จำนวนเงินต้องไม่เป็นค่าติดลบ
 	govalidator.CustomTypeTagMap.Set("ValueNotNegative", func(i interface{}, context interface{}) bool {
-		p := i.(int)
-		return p >= 0
+		p := i.(int)  //p มี type เป็น int
+		return p >= 0 //ค่าที่จะถูกส่งออกไปคือ p >=0
 	})
+	//เวลาห้ามเป็นอดีตเกิน 5 นาที
+	govalidator.CustomTypeTagMap.Set("DateTimeNotPast", func(i interface{}, context interface{}) bool {
+		t := i.(time.Time) //t มี type เป็น time.Time
+		now := time.Now().Add(time.Minute * -5)
+		return t.After(now) //ค่าที่จะส่งต้องเป็นเวลาอดีตไม่เกิน 5นาที
+	})
+	//เวลาห้ามเป็นอนาคตเกิน 5นาที
+	// govalidator.CustomTypeTagMap.Set("DateTimeNotFuture", func(i interface{}, context interface{}) bool {
+	// 	t := i.(time.Time) //t มี type เป็น time.Time
+	// 	now := time.Now().Add(time.Minute * 5)
+	// 	return t.Before(now) //ค่าที่จะส่งต้องเป็นเวลาอนาคตไม่เกิน 5นาที
+	// })
 }
 
 func init() {

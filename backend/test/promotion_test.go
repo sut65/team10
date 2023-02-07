@@ -31,3 +31,69 @@ func TestPriceNotNegative(t *testing.T) {
 	// err.Error ต้องมี error message แสดงออกมา
 	g.Expect(err.Error()).To(Equal("จำนวนเงินห้ามติดลบ"))
 }
+
+func TestAmountNotNegative(t *testing.T) {
+	g := NewGomegaWithT(t)
+
+	p := entity.Promotion{
+		Price:      2,
+		Amount:     -2, // ผิด
+		Time_Stamp: time.Now(),
+	}
+
+	// ตรวจสอบด้วย govalidator
+	ok, err := govalidator.ValidateStruct(p)
+
+	// ok ต้องไม่เป็นค่า true แปลว่าต้องจับ error ได้
+	g.Expect(ok).ToNot(BeTrue())
+
+	// err ต้องไม่เป็นค่า nil แปลว่าต้องจับ error ได้
+	g.Expect(err).ToNot(BeNil())
+
+	// err.Error ต้องมี error message แสดงออกมา
+	g.Expect(err.Error()).To(Equal("จำนวน Code ห้ามติดลบ"))
+}
+
+func TestDateTimeNotPass(t *testing.T) {
+	g := NewGomegaWithT(t)
+
+	p := entity.Promotion{
+		Price:      2,
+		Amount:     2,
+		Time_Stamp: time.Now().Add(time.Second * -300), // ผิด //เวลาจะผิดไป 1 วินาที เพราะตอน assign ค่าจะมี delay ไป 1s
+	}
+
+	// ตรวจสอบด้วย govalidator
+	ok, err := govalidator.ValidateStruct(p)
+
+	// ok ต้องไม่เป็นค่า true แปลว่าต้องจับ error ได้
+	g.Expect(ok).ToNot(BeTrue())
+
+	// err ต้องไม่เป็นค่า nil แปลว่าต้องจับ error ได้
+	g.Expect(err).ToNot(BeNil())
+
+	// err.Error ต้องมี error message แสดงออกมา
+	g.Expect(err.Error()).To(Equal("เวลาห้ามเป็นอดีต"))
+}
+
+func TestDateTimeNotFuture(t *testing.T) {
+	g := NewGomegaWithT(t)
+
+	p := entity.Promotion{
+		Price:      2,
+		Amount:     2,
+		Time_Stamp: time.Now().Add(time.Second * 300), // ผิด //เวลาจะเกินไป 1 วินาที
+	}
+
+	// ตรวจสอบด้วย govalidator
+	ok, err := govalidator.ValidateStruct(p)
+
+	// ok ต้องไม่เป็นค่า true แปลว่าต้องจับ error ได้
+	g.Expect(ok).ToNot(BeTrue())
+
+	// err ต้องไม่เป็นค่า nil แปลว่าต้องจับ error ได้
+	g.Expect(err).ToNot(BeNil())
+
+	// err.Error ต้องมี error message แสดงออกมา
+	g.Expect(err.Error()).To(Equal("เวลาห้ามเป็นอนาคต"))
+}
