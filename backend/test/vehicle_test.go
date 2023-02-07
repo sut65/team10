@@ -39,7 +39,7 @@ func TestRegistrationNotBlank(t *testing.T) {
 	vehicle := entity.Vehicle{
 		ListModel:      "Scoopyi",
 		Registration:   "", // ผิด
-		Date_Insulance: time.Now(),
+		Date_Insulance: time.Now().Add(time.Second * 300),
 	}
 
 	// ตรวจสอบด้วย govalidator
