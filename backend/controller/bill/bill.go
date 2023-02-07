@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"time"
 
 	govalidator "github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
@@ -52,50 +53,69 @@ func CreateBill(c *gin.Context) {
 		return
 
 	}
-	//12: สร้าง
-	b := entity.Bill{
-		Service_ID:     bill.Service_ID,
-		QuotaCode_ID:   bill.QuotaCode_ID,
-		Paymenttype_ID: bill.Paymenttype_ID,
-		Bill_Price:     bill.Bill_Price,
-		Time_Stamp:     bill.Time_Stamp.Local(),
+	///////////////////////////////////////////////////////////////////////
+	////////////////////// Validation Time not null ///////////////////////
+	///////////////////////////////////////////////////////////////////////
+
+	//ถ้าเวลาที่รับเข้ามามีค่าเป็น null จะเข้าไปทำใน if และทำการ validation
+	//จำเป็นต้องแยกเช็คเนื่องจาก time.Local() เมื่อดึงเวลาแล้วมันจะนับเวลาใน timezone ของเราเข้าไปด้วย ทำให้ค่าไม่เป็น null จะไม่สามารถ validation DateTimeNull ได้
+	if (bill.Time_Stamp == time.Time{}) {
+		// สร้างข้อมูลสำหรับเวลาที่เป็น null
+		b := entity.Bill{
+			Service_ID:     bill.Service_ID,
+			QuotaCode_ID:   bill.QuotaCode_ID,
+			Paymenttype_ID: bill.Paymenttype_ID,
+			Bill_Price:     bill.Bill_Price,
+			Time_Stamp:     time.Time{},
+		}
+		if _, err := govalidator.ValidateStruct(b); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+	} else {
+		// สร้างข้อมูลสำหรับเวลาที่ถูกต้อง
+		b := entity.Bill{
+			Service_ID:     bill.Service_ID,
+			QuotaCode_ID:   bill.QuotaCode_ID,
+			Paymenttype_ID: bill.Paymenttype_ID,
+			Bill_Price:     bill.Bill_Price,
+			Time_Stamp:     bill.Time_Stamp.Local(),
+		}
+		if _, err := govalidator.ValidateStruct(b); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		//13: บันทึก
+		if err := entity.DB().Create(&b).Error; err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		//สร้าง ข้อมูลสำหรับใช้ในการอัปเดต Quotacode ที่ถูกใช้งานโดยหมายเลขบิล ?
+		q := entity.QuotaCode{
+			Bill_ID: &b.ID,
+		}
+
+		//function สำหรับอัปเดต Quotacode
+		if err := entity.DB().Where("id = ?", bill.QuotaCode_ID).Updates(&q).Error; err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		//สร้าง ข้อมูลสำหรับใช้ในการอัปเดต Bill_Status ใน Service
+		s_u := entity.Service{
+			Bill_status: 1,
+		}
+
+		//function สำหรับอัปเดต Bill_Status Service
+		if err := entity.DB().Where("id = ?", bill.Service_ID).Updates(&s_u).Error; err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"data": b})
 	}
-
-	if _, err := govalidator.ValidateStruct(b); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	//13: บันทึก
-	if err := entity.DB().Create(&b).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	//สร้าง ข้อมูลสำหรับใช้ในการอัปเดต Quotacode ที่ถูกใช้งานโดยหมายเลขบิล ?
-	q := entity.QuotaCode{
-		Bill_ID: &b.ID,
-	}
-
-	//function สำหรับอัปเดต Quotacode
-	if err := entity.DB().Where("id = ?", bill.QuotaCode_ID).Updates(&q).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	//สร้าง ข้อมูลสำหรับใช้ในการอัปเดต Bill_Status ใน Service
-	s_u := entity.Service{
-		Bill_status: 1,
-	}
-
-	//function สำหรับอัปเดต Bill_Status Service
-	if err := entity.DB().Where("id = ?", bill.Service_ID).Updates(&s_u).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"data": b})
-
 }
 
 // GET /bill/:id
@@ -147,24 +167,39 @@ func UpdateBill(c *gin.Context) {
 		return
 	}
 
-	// สร้าง
-	u_b := entity.Bill{
-		Paymenttype_ID: bill.Paymenttype_ID,
-		Time_Stamp:     bill.Time_Stamp.Local(),
+	///////////////////////////////////////////////////////////////////////
+	////////////////////// Validation Time not null ///////////////////////
+	///////////////////////////////////////////////////////////////////////
+
+	//ถ้าเวลาที่รับเข้ามามีค่าเป็น null จะเข้าไปทำใน if และทำการ validation
+	//จำเป็นต้องแยกเช็คเนื่องจาก time.Local() เมื่อดึงเวลาแล้วมันจะนับเวลาใน timezone ของเราเข้าไปด้วย ทำให้ค่าไม่เป็น null จะไม่สามารถ validation DateTimeNull ได้
+	if (bill.Time_Stamp == time.Time{}) {
+		// สร้างข้อมูลสำหรับเวลาที่เป็น null
+		u_b := entity.Bill{
+			Paymenttype_ID: bill.Paymenttype_ID,
+			Time_Stamp:     time.Time{},
+		}
+		if _, err := govalidator.ValidateStruct(u_b); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+	} else {
+		// สร้างข้อมูลสำหรับเวลาที่ถูกต้อง
+		u_b := entity.Bill{
+			Paymenttype_ID: bill.Paymenttype_ID,
+			Time_Stamp:     bill.Time_Stamp.Local(),
+		}
+		if _, err := govalidator.ValidateStruct(u_b); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		if err := entity.DB().Where("id = ?", bill.ID).Updates(&u_b).Error; err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"data": u_b})
 	}
-
-	if _, err := govalidator.ValidateStruct(u_b); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	if err := entity.DB().Where("id = ?", bill.ID).Updates(&u_b).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"data": u_b})
-
 }
 
 // GET /b_services/:id

@@ -100,7 +100,7 @@ function Bill() {
       Bill_Price: bill.Bill_Price,
       Time_Stamp: date,
     };
-
+    console.log(bill_p)
     const apiUrl = "http://localhost:8080";
     const requestOptions = {
       method: "POST",
@@ -117,7 +117,7 @@ function Bill() {
           setSuccess(true);
           setAlertmsg("บันทึกสำเร็จ")
           await timeout(1000); //for 1 sec delay
-          window.location.href = "/bill"; 
+          // window.location.href = "/bill"; 
         } else {
           setError(true);
           setAlertmsg(res.error)

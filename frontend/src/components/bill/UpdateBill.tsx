@@ -37,8 +37,9 @@ function BillUpdate() {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
   const [bill, setBill] = React.useState<Partial<BillInterface>>({});
   const [paymenttype, setPaymenttype] = React.useState<PaymenttypeInterface[]>([]);
-  const [service, setService] = React.useState<ServiceInterface[]>([]);
   const [bill_id, setBill_ID] = React.useState<Number | undefined>(undefined);
+
+  const [alertmsg, setAlertmsg] = useState("");
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
   //////////////////////////////////////////////////////////////////////////////////
@@ -86,10 +87,12 @@ function BillUpdate() {
         console.log(res);
         if (res.data) {
           setSuccess(true);
+          setAlertmsg("บันทึกสำเร็จ")
           await timeout(1000); //for 1 sec delay
-          window.location.href = "/bill"; 
+          // window.location.href = "/bill"; 
         } else {
           setError(true);
+          setAlertmsg(res.error)
           console.log(res.data);
         }
       });
@@ -149,7 +152,7 @@ function BillUpdate() {
           onClose={handleClose}
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
           <Alert onClose={handleClose} severity="success">
-            บันทึกข้อมูลสำเร็จ
+            {alertmsg}
           </Alert>
         </Snackbar>
 
@@ -159,7 +162,7 @@ function BillUpdate() {
           onClose={handleClose}
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
           <Alert onClose={handleClose} severity="error">
-            บันทึกข้อมูลไม่สำเร็จ
+            {alertmsg}
           </Alert>
         </Snackbar>
 
