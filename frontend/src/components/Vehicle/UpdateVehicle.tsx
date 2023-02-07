@@ -16,10 +16,10 @@ import { Link as RouterLink } from "react-router-dom";
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useParams } from "react-router-dom";
 /* Datetimepicker */
-import dayjs, { Dayjs } from "dayjs";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import dayjs, { Dayjs } from 'dayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import { VehicleInterface } from "../../models/vehicle/IVehicle";
 function UpdateVehicle() {
   const params = useParams()
@@ -32,6 +32,14 @@ function UpdateVehicle() {
   const [alertmessage,setAlertMessage] = useState("");
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+
+
+  const isWeekend = (date: Dayjs) => {
+    const day = date.day();
+  
+    return day === 0 || day === 6;
+  };
+
 
   const handleClose = ( // AlertBar
     event?: React.SyntheticEvent | Event,
@@ -139,8 +147,8 @@ function UpdateVehicle() {
         <Grid container spacing={0} sx={{ padding: 2}}>
             <h1>VEHICLE<MopedIcon color="action" sx={{ fontSize: 200 }}/></h1>
             </Grid>
-            <Grid container spacing={2} sx={{ paddingX: 2 }}>
-            <Grid item xs={4}>
+            <Grid container spacing={2} sx={{ paddingX: 20 }}>
+            <Grid item xs={3}>
               <h3>Vehicle ID</h3>
             </Grid>
             <Grid item xs={8} >
@@ -156,8 +164,8 @@ function UpdateVehicle() {
             </Grid>
           </Grid>
 
-          <Grid container spacing={2} sx={{ paddingX: 2 }}>
-            <Grid item xs={4}>
+          <Grid container spacing={2} sx={{ paddingX: 20 }}>
+            <Grid item xs={3}>
               <h3>Model</h3>
             </Grid>
             <Grid item xs={8} >
@@ -173,8 +181,8 @@ function UpdateVehicle() {
             </Grid>
           </Grid>
 
-          <Grid container spacing={2} sx={{ paddingX: 2 }}>
-            <Grid item xs={4}>
+          <Grid container spacing={2} sx={{ paddingX: 20 }}>
+            <Grid item xs={3}>
               <h3>Registration</h3>
             </Grid>
             <Grid item xs={8} >
@@ -190,21 +198,20 @@ function UpdateVehicle() {
             </Grid>
           </Grid>
           
-          <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 2 }}>
-            <Grid item xs={4}>
-              <h3>Date Insulance</h3>
-            </Grid>
-            <Grid item xs={8}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateTimePicker
-                  label="Date Insulance"
-                  renderInput={(params) => <TextField {...params} />}
-                  value={date}
-                  onChange={(newValue: Dayjs | null) => {
-                    setDate(newValue);
-                  }}
-                />
-              </LocalizationProvider>
+          <Grid container spacing={0} sx={{ paddingX: 18, paddingY: 1 }}>
+            <Grid item xs={10}>
+               <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <StaticDatePicker
+                    orientation="landscape"
+                    openTo="day"
+                    value={date}
+                    shouldDisableDate={isWeekend}
+                    onChange={(newValue) => {
+                      setDate(newValue);
+                    }}
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>
             </Grid>
           </Grid>
         </Paper>

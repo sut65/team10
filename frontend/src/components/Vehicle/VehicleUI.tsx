@@ -18,10 +18,10 @@ import { TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 
 /* Datetimepicker */
-import dayjs, { Dayjs } from "dayjs";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import dayjs, { Dayjs } from 'dayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 
 
 /* Interface */
@@ -42,6 +42,13 @@ function VehicleCreate  () {
   const [alertmessage,setAlertMessage] = useState("");
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
+
+  const isWeekend = (date: Dayjs) => {
+    const day = date.day();
+  
+    return day === 0 || day === 6;
+  };
+
 
   const handleClickPopover = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -314,21 +321,24 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
               </Grid>
             </Grid>
                       
-
+{/* 
             <Grid item xs={3}>
                 <h3>Date Insulance</h3>
-              </Grid>
-                      <Grid item xs={5}>
+              </Grid> */}
+                      <Grid item xs={8.5}>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                              <DateTimePicker
-                                  label="Date Insulance"
-                                  renderInput={(params) => <TextField {...params} />}
-                                  value={date}
-                                  onChange={(newValue: Dayjs | null) => {
-                                      setDate(newValue);
-                                  }}
-                              />
+                            <StaticDatePicker
+                              orientation="landscape"
+                              openTo="day"
+                              value={date}
+                              shouldDisableDate={isWeekend}
+                              onChange={(newValue) => {
+                                setDate(newValue);
+                              }}
+                              renderInput={(params) => <TextField {...params} />}
+                            />
                           </LocalizationProvider>
+                      
                       </Grid>
                   </Grid>
               </Paper>
