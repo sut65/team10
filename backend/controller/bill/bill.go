@@ -153,6 +153,11 @@ func UpdateBill(c *gin.Context) {
 		Time_Stamp:     bill.Time_Stamp.Local(),
 	}
 
+	if _, err := govalidator.ValidateStruct(u_b); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	if err := entity.DB().Where("id = ?", bill.ID).Updates(&u_b).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
