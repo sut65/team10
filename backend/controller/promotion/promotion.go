@@ -137,6 +137,11 @@ func UpdatePromotion(c *gin.Context) {
 		Time_Stamp:  promotion.Time_Stamp.Local(),
 	}
 
+	if _, err := govalidator.ValidateStruct(u_p); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	if err := entity.DB().Where("id = ?", promotion.ID).Updates(&u_p).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
