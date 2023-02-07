@@ -29,6 +29,7 @@ function UpdateVehicle() {
   const [vehicle_id, setVehicle_ID] = React.useState<VehicleInterface[]>([]);
   const [model, setModel]  = React.useState<String | undefined>(undefined);
   const [registration, setRegistration]  = React.useState<String | undefined>(undefined);
+  const [alertmessage,setAlertMessage] = useState("");
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
 
@@ -71,12 +72,14 @@ function UpdateVehicle() {
         console.log(res);
         if (res.data) {
           setSuccess(true);
+          setAlertMessage("บันทึกข้อมูลสำเร็จ")
           await timeout(1000); //for 1 sec delay
           window.location.href = "/vehicle";        
           
         } else {
           setError(true);
           console.log(res.data);
+          setAlertMessage(res.error)
         }
       });
   }
@@ -118,7 +121,7 @@ function UpdateVehicle() {
         onClose={handleClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
         <Alert onClose={handleClose} severity="success">
-          บันทึกข้อมูลสำเร็จ
+          {alertmessage}
         </Alert>
       </Snackbar>
 
@@ -128,7 +131,7 @@ function UpdateVehicle() {
         onClose={handleClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
         <Alert onClose={handleClose} severity="error">
-          บันทึกข้อมูลไม่สำเร็จ
+          {alertmessage}
         </Alert>
       </Snackbar>
       <Box sx={{ padding: 2}}>

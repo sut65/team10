@@ -128,6 +128,11 @@ func UpdateReceive(c *gin.Context) {
 		Time_Stamp:   receive.Time_Stamp.Local(),
 	}
 
+	if _, err := govalidator.ValidateStruct(u_rec); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	if err := entity.DB().Where("id = ?", receive.ID).Updates(&u_rec).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
