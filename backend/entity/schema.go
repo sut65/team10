@@ -256,7 +256,7 @@ type Promotion struct {
 	Amount      int         `valid:"ValueNotNegative~จำนวน Code ห้ามติดลบ"`
 	Employee_ID *uint       `valid:"-"`
 	Employee    Employee    `gorm:"references:id" valid:"-"`
-	Time_Stamp  time.Time   `valid:"DateTimeNotPast~เวลาห้ามเป็นอดีต"`
+	Time_Stamp  time.Time   `valid:"DateTimeNotPast~เวลาห้ามเป็นอดีต, DateTimeNotFuture~เวลาห้ามเป็นอนาคต"`
 	QuotaCode   []QuotaCode `gorm:"foreignKey:Promotion_ID"`
 }
 
@@ -423,11 +423,11 @@ func SetPromotionValidation() {
 		return t.After(now) //ค่าที่จะส่งต้องเป็นเวลาอดีตไม่เกิน 5นาที
 	})
 	//เวลาห้ามเป็นอนาคตเกิน 5นาที
-	// govalidator.CustomTypeTagMap.Set("DateTimeNotFuture", func(i interface{}, context interface{}) bool {
-	// 	t := i.(time.Time) //t มี type เป็น time.Time
-	// 	now := time.Now().Add(time.Minute * 5)
-	// 	return t.Before(now) //ค่าที่จะส่งต้องเป็นเวลาอนาคตไม่เกิน 5นาที
-	// })
+	govalidator.CustomTypeTagMap.Set("DateTimeNotFuture", func(i interface{}, context interface{}) bool {
+		t := i.(time.Time) //t มี type เป็น time.Time
+		now := time.Now().Add(time.Minute * 5)
+		return t.Before(now) //ค่าที่จะส่งต้องเป็นเวลาอนาคตไม่เกิน 5นาที
+	})
 }
 
 func init() {
