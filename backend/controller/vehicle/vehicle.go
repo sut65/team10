@@ -111,6 +111,10 @@ func UpdateVehicle(c *gin.Context) {
 		Date_Insulance: vehicle.Date_Insulance.Local(),
 	}
 
+	if _, err := govalidator.ValidateStruct(u_v); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 	if err := entity.DB().Where("id = ?", vehicle.ID).Updates(&u_v).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
