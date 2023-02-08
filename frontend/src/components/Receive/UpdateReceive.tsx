@@ -11,16 +11,15 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useParams } from "react-router-dom";
 import CancelIcon from '@mui/icons-material/Cancel';
 
 /* Datetimepicker */
-import dayjs, { Dayjs } from "dayjs";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs, { Dayjs } from 'dayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { StaticTimePicker } from '@mui/x-date-pickers/StaticTimePicker';
 import { ReceiveInterface } from "../../models/receive/IReceive";
-import { useParams } from "react-router-dom";
 function UpdateReceive() {
   const params = useParams()
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
@@ -139,7 +138,7 @@ function UpdateReceive() {
         <Grid sx={{ padding: 2 }}>
             <h1>RECEIVE<AddShoppingCartIcon color="success" sx={{ fontSize: 200 }}/></h1> 
             </Grid>
-            <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 1 }}>
+            <Grid container spacing={2} sx={{ paddingX: 15 }}>
             <Grid item xs={4}>
               <h3>Bill ID</h3>
             </Grid>
@@ -155,7 +154,7 @@ function UpdateReceive() {
              ></TextField>
             </Grid>
           </Grid>
-          <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 1 }}>
+          <Grid container spacing={2} sx={{ paddingX: 15}}>
             <Grid item xs={4}>
               <h3>Detergent Quantity</h3>
             </Grid>
@@ -170,11 +169,11 @@ function UpdateReceive() {
               />
             </Grid>
           </Grid>
-          <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 1 }}>
+          <Grid container spacing={2} sx={{ paddingX: 15 }}>
             <Grid item xs={4}>
               <h3>Softener Quantity</h3>
             </Grid>
-            <Grid item xs={7}>
+            <Grid item xs={8}>
               <TextField
                 id="outlined-basic"
                 label="Quantity"
@@ -186,23 +185,27 @@ function UpdateReceive() {
             </Grid>
           </Grid>
 
-          <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 1 }}>
-            <Grid item xs={4}>
+          <Grid container spacing={2} sx={{ paddingX: 15 }}>
+            <Grid item xs={3}>
               <h3>Time Stamp</h3>
             </Grid>
-            <Grid item xs={8}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateTimePicker
-                  label="Time Stamp"
-                  renderInput={(params) => <TextField {...params} />}
-                  value={date}
-                  onChange={(newValue: Dayjs | null) => {
-                    setDate(newValue);
-                  }}
-                />
-              </LocalizationProvider>
+           
+            <Grid item xs={8.8}>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <StaticTimePicker
+                          ampm
+                          orientation="landscape"
+                          openTo="minutes"
+                          value={date}
+                          onChange={(newValue: Dayjs | null) => {
+                            setDate(newValue);
+                          }}
+                          renderInput={(params) => <TextField {...params} />}
+                        />
+                      </LocalizationProvider>
+                      </Grid>
             </Grid>
-          </Grid>
+         
         </Paper>
         <Grid container spacing={2}
                     sx={{ paddingY: 1 }}>
