@@ -55,14 +55,14 @@ func TestRegistrationNotBlank(t *testing.T) {
 	g.Expect(err.Error()).To(Equal("จำเป็นต้องกรอกทะเบียนรถ"))
 }
 
-// ตรวจสอบทะเบียนรถแล้วต้องเจอ Error
+// ตรวจสอบเวลาแล้วต้องเจอ Error
 func TestDateInsulanceNotPast(t *testing.T) {
 	g := NewGomegaWithT(t)
 
 	vehicle := entity.Vehicle{
 		ListModel:      "Scoopyi",
 		Registration:   "กษ5336",
-		Date_Insulance: time.Now().Add(time.Second * 300), // ผิด //เวลาจะเกินไป 1 วินาที
+		Date_Insulance: time.Now().Add(time.Second * -300), // ผิด //เวลาจะเกินไป 1 วินาที
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -75,5 +75,28 @@ func TestDateInsulanceNotPast(t *testing.T) {
 	g.Expect(err).ToNot(BeNil())
 
 	// err.Error ต้องมี error message แสดงออกมา
-	g.Expect(err.Error()).To(Equal("เวลาห้ามเป็นอนาคต"))
+	g.Expect(err.Error()).To(Equal("เวลาห้ามเป็นอดีต"))
+}
+
+// ตรวจสอบเวลาแล้วต้องเจอ Error
+func TestDateInsulanceNotPresent(t *testing.T) {
+	g := NewGomegaWithT(t)
+
+	vehicle := entity.Vehicle{
+		ListModel:      "Scoopyi",
+		Registration:   "กษ5336",
+		Date_Insulance: time.Now(), // ผิด //เวลาจะเกินไป 1 วินาที
+	}
+
+	// ตรวจสอบด้วย govalidator
+	ok, err := govalidator.ValidateStruct(vehicle)
+
+	// ok ต้องไม่เป็นค่า true แปลว่าต้องจับ error ได้
+	g.Expect(ok).ToNot(BeTrue())
+
+	// err ต้องไม่เป็นค่า nil แปลว่าต้องจับ error ได้
+	g.Expect(err).ToNot(BeNil())
+
+	// err.Error ต้องมี error message แสดงออกมา
+	g.Expect(err.Error()).To(Equal("เวลาห้ามเป็นปัจจุบัน"))
 }
