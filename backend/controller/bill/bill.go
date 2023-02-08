@@ -79,6 +79,7 @@ func CreateBill(c *gin.Context) {
 			QuotaCode_ID:   bill.QuotaCode_ID,
 			Paymenttype_ID: bill.Paymenttype_ID,
 			Bill_Price:     bill.Bill_Price,
+			Receive_State:  0,
 			Time_Stamp:     bill.Time_Stamp.Local(),
 		}
 		if _, err := govalidator.ValidateStruct(b); err != nil {

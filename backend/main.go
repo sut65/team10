@@ -134,6 +134,7 @@ func main() {
 			p.PATCH("/receives", controllerreceive.UpdateReceive)
 			p.DELETE("/receive/:id", controllerreceive.DeleteReceive)
 
+			p.GET("/receivebillstate", controllerreceive.ListReceiveBillState)
 			//detergent
 			p.GET("/detergents", controllerdetergent.ListDetergents)
 
