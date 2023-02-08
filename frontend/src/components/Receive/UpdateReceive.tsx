@@ -137,7 +137,7 @@ function UpdateReceive() {
       <Box sx={{ padding: 2}}>
         <Paper>
         <Grid sx={{ padding: 2 }}>
-            <h1>RECEIVE</h1>
+            <h1>RECEIVE<AddShoppingCartIcon color="success" sx={{ fontSize: 200 }}/></h1> 
             </Grid>
             <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 1 }}>
             <Grid item xs={4}>
@@ -223,7 +223,7 @@ function UpdateReceive() {
                     <Grid container item xs={2} direction='row-reverse'>
                         <Button
                             variant="contained"
-                            color="success"
+                            color="warning"
                             onClick={update}
                             endIcon={<SaveIcon />}
                         >

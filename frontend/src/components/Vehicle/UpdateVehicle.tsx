@@ -27,8 +27,8 @@ function UpdateVehicle() {
   const [vehicle, setVehicle] = React.useState<Partial<VehicleInterface>>({});
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const [vehicle_id, setVehicle_ID] = React.useState<VehicleInterface[]>([]);
-  const [branname, setBrand_Name]  = React.useState<String | undefined>(undefined);
-  const [engine, setEngine]  = React.useState<String | undefined>(undefined);
+  const [model, setModel]  = React.useState<String | undefined>(undefined);
+  const [registration, setRegistration]  = React.useState<String | undefined>(undefined);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
 
@@ -72,7 +72,7 @@ function UpdateVehicle() {
         if (res.data) {
           setSuccess(true);
           await timeout(1000); //for 1 sec delay
-          window.location.href = "/receive";        
+          window.location.href = "/vehicle";        
           
         } else {
           setError(true);
@@ -98,70 +98,20 @@ function UpdateVehicle() {
         if (res.data) {
           setVehicle(res.data);
           setVehicle_ID(res.data.ID);
+          setModel(res.data.ListModel);
+          setRegistration(res.data.Registration)
+          
         }
       });
   };
 
-  const getBran_Vehicle = async () => {
-    const apiUrl = `http://localhost:8080/brand_vehicle/${localStorage.getItem("uid")}`;
-  
-    const requestOptionsGet = {
-      method: "GET",
-  
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    };
-    //การกระทำ //json
-    fetch(apiUrl, requestOptionsGet)
-      .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
-  
-      .then((res) => {
-        console.log(res.data); //show ข้อมูล
-  
-        if (res.data) {
-          setBrand_Name(res.data.Brand_Name);
-        } else {
-          console.log("else");
-        }
-      });
-  };
-
-  const getEngine = async () => {
-    const apiUrl = `http://localhost:8080/engine/${localStorage.getItem("uid")}`;
-  
-    const requestOptionsGet = {
-      method: "GET",
-  
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    };
-    //การกระทำ //json
-    fetch(apiUrl, requestOptionsGet)
-      .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
-  
-      .then((res) => {
-        console.log(res.data); //show ข้อมูล
-  
-        if (res.data) {
-          setEngine(res.data.Engine);
-        } else {
-          console.log("else");
-        }
-      });
-  };
 
   useEffect(() => {
     getVehicle();
-    getBran_Vehicle();
-    getEngine();
   }, []);
   return (
 
-    <Container maxWidth="xl">
+    <Container maxWidth="md">
       <Snackbar // บันทึกสำเร็จ
         open={success}
         autoHideDuration={3000}
@@ -188,7 +138,7 @@ function UpdateVehicle() {
             </Grid>
             <Grid container spacing={2} sx={{ paddingX: 2 }}>
             <Grid item xs={4}>
-              <h3>Receive ID</h3>
+              <h3>Vehicle ID</h3>
             </Grid>
             <Grid item xs={8} >
             <TextField
@@ -205,7 +155,7 @@ function UpdateVehicle() {
 
           <Grid container spacing={2} sx={{ paddingX: 2 }}>
             <Grid item xs={4}>
-              <h3>Brand</h3>
+              <h3>Model</h3>
             </Grid>
             <Grid item xs={8} >
             <TextField
@@ -214,7 +164,7 @@ function UpdateVehicle() {
                disabled
                type="string"
                size="medium"
-               value={branname}             
+               value={model}             
                sx={{ width : 350 }}
              ></TextField>
             </Grid>
@@ -222,7 +172,7 @@ function UpdateVehicle() {
 
           <Grid container spacing={2} sx={{ paddingX: 2 }}>
             <Grid item xs={4}>
-              <h3>Engine</h3>
+              <h3>Registration</h3>
             </Grid>
             <Grid item xs={8} >
             <TextField
@@ -231,7 +181,7 @@ function UpdateVehicle() {
                disabled
                type="string"
                size="medium"
-               value={engine}             
+               value={registration}             
                sx={{ width : 350 }}
              ></TextField>
             </Grid>
@@ -256,21 +206,32 @@ function UpdateVehicle() {
           </Grid>
         </Paper>
         <Grid container spacing={2}
-          sx={{ paddingY: 2 }}>
-          <Grid item xs={5}
-          >
+                    sx={{ paddingY: 1 }}>
+                    <Grid item xs={8}
+                    >
+                        <Button
+                        component={RouterLink}
+                        to="/vehicle"
+                            variant="contained"
+                            color="error"
+                            endIcon={<CancelIcon />}
+                        >
+                            Cancel
+                        </Button>
+                    </Grid>
+                    <Grid item xs={2}>
           </Grid>
-          <Grid container item xs={7} direction='row-reverse'>
-            <Button
-              variant="contained"
-              color="warning"
-              onClick={update}
-              endIcon={<SaveIcon />}
-            >
-              update
-            </Button>
-          </Grid>
-        </Grid>
+                    <Grid container item xs={2} direction='row-reverse'>
+                        <Button
+                            variant="contained"
+                            color="warning"
+                            onClick={update}
+                            endIcon={<SaveIcon />}
+                        >
+                            Update
+                        </Button>
+                    </Grid>
+                </Grid>
       </Box>
     </Container>
   );
