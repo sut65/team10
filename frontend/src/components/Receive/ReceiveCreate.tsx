@@ -19,11 +19,10 @@ import { TextField } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 
 /* Datetimepicker */
-import dayjs, { Dayjs } from "dayjs";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs, { Dayjs } from 'dayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-
+import { StaticTimePicker } from '@mui/x-date-pickers/StaticTimePicker';
 
 /* Interface */
 import { ReceiveInterface } from "../../models/receive/IReceive";
@@ -382,20 +381,22 @@ return (
                 </Grid>
               </Grid>
 
-              <Grid item xs={3}>
+              <Grid item xs={1.5}>
                 <h3>Time Stamp</h3>
               </Grid>
-                      <Grid item xs={5}>
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
-                              <DateTimePicker
-                                  label="Time Stamp"
-                                  renderInput={(params) => <TextField {...params} />}
-                                  value={date}
-                                  onChange={(newValue: Dayjs | null) => {
-                                      setDate(newValue);
-                                  }}
-                              />
-                          </LocalizationProvider>
+                      <Grid item xs={6.5}>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <StaticTimePicker
+                          ampm
+                          orientation="landscape"
+                          openTo="minutes"
+                          value={date}
+                          onChange={(newValue: Dayjs | null) => {
+                            setDate(newValue);
+                          }}
+                          renderInput={(params) => <TextField {...params} />}
+                        />
+                      </LocalizationProvider>
                       </Grid>
                   </Grid>
               </Paper>
