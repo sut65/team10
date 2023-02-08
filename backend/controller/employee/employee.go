@@ -107,7 +107,7 @@ func GetEmployee(c *gin.Context) {
 	var employee entity.Employee
 	id := c.Param("id")
 
-	if err := entity.DB().Raw("SELECT * FROM employees WHERE id = ?", id).Scan(&employee).Error; err != nil {
+	if err := entity.DB().Preload("Gender").Preload("WorkShift").Preload("Position").Raw("SELECT * FROM employees WHERE id = ?", id).Find(&employee).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -119,7 +119,7 @@ func GetEmployee(c *gin.Context) {
 func ListEmployees(c *gin.Context) {
 	var employees []entity.Employee
 
-	if err := entity.DB().Preload("Gender").Preload("WorkShift").Raw("SELECT * FROM employees").Find(&employees).Error; err != nil {
+	if err := entity.DB().Preload("Gender").Preload("WorkShift").Preload("Position").Raw("SELECT * FROM employees").Find(&employees).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
