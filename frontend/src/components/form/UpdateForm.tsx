@@ -48,6 +48,7 @@ function FormUpdate() {
     const [satisfaction, setsatisfaction] = React.useState<SatisfactionInterface[]>([]);
     const [success, setSuccess] = React.useState(false);
     const [error, setError] = React.useState(false);
+    const [message, setAlertMessage] = React.useState("");
     const handleClose = (
         event?: React.SyntheticEvent | Event,
         reason?: string
@@ -176,10 +177,10 @@ function FormUpdate() {
                 console.log(res)
                 if (res.data) {
                     setSuccess(true);
-                } else {
+                  } else {
+                    setAlertMessage(res.error);
                     setError(true);
-                    console.log(res.data)
-                }
+                  }
             });
     }
 
@@ -217,7 +218,7 @@ function FormUpdate() {
 
                 <Alert onClose={handleClose} severity="error">
 
-                    บันทึกข้อมูลไม่สำเร็จ
+                    {message}
 
                 </Alert>
 

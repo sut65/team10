@@ -171,7 +171,7 @@ type Service struct {
 	Customer    Customer `gorm:"references:id" valid:"-"`
 
 	Bill_status uint
-	Address     string `valid:"minstringlength(15)~โปรดระบุให้ละเอียด,alphabet~ที่อยู่เป็นตัวอักษรพิเศษหรือภาษาอังกฤษ,required~โปรดกรอกที่อยู่"`
+	Address     string `valid:"minstringlength(15)~โปรดระบุให้ละเอียด,matches([A-Za-zก-ฮ./()])~Username must be is Begin with A-Z,required~โปรดกรอกที่อยู่"`
 	Bill_Price  float64
 	Bill        []Bill `gorm:"foreignKey:Service_ID"`
 }
@@ -194,16 +194,16 @@ type FormType struct {
 
 type Form struct {
 	gorm.Model
-	Comment string
+	Comment string	`valid:"maxstringlength(50)~กรอกได้สูงสุด 50 ตัวอักษร,alphabet~ที่อยู่เป็นตัวอักษรพิเศษหรือภาษาอังกฤษ,required~โปรดแสดงความคิดเห็น"`
 
-	SatisfactionID *uint
-	Satisfaction   Satisfaction `gorm:"references:id"`
+	SatisfactionID *uint	`valid:"-"`
+	Satisfaction   Satisfaction `gorm:"references:id" valid:"-"`
 
-	FormTypeID *uint
-	FormType   FormType `gorm:"references:id"`
+	FormTypeID *uint	`valid:"-"`
+	FormType   FormType `gorm:"references:id" valid:"-"`
 
-	Customer_ID *uint
-	Customer    Customer `gorm:"references:id"`
+	Customer_ID *uint	`valid:"-"`
+	Customer    Customer `gorm:"references:id" valid:"-"`
 }
 
 /* -------------------------------------------------------------------------- */
@@ -399,7 +399,7 @@ type Delivery struct {
 func SetServiceValidation() {
 	validator.CustomTypeTagMap.Set("alphabet", validator.CustomTypeValidator(func(address interface{}, context interface{}) bool {
 		str := address.(string)
-		match, _ := regexp.MatchString(`[0-9ก-ฮ]`, str)
+		match, _ := regexp.MatchString(`[0-9ก-ฮ./]`, str)
 		//[0-9ก-๏]
 		return match
 	}))
