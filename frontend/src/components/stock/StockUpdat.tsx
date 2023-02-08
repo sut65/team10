@@ -17,6 +17,7 @@ import { BrandsInterface } from "../../models/Stock/IBrand";
 import dayjs, { Dayjs } from "dayjs";
 
 function StockUpdate_UI() {
+  const stock_id = Number(localStorage.getItem("sid_edit"));
   const [Stock, setStock] = React.useState<Partial<StocksInterface>>(
     {}
   );
@@ -51,6 +52,26 @@ function StockUpdate_UI() {
       .then((res) => {
         if (res.data) {
           setEmployee(res.data);
+        }
+      });
+  };
+
+  const getStock = async () => {
+    //ดึงข้อมูลพนักงาน
+    const apiUrl = `http://localhost:8080/stocks/${stock_id}`;
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    fetch(apiUrl, requestOptions)
+      .then((response) => response.json())
+      .then((res) => {
+        if (res.data) {
+          setStock(res.data);
         }
       });
   };
@@ -128,17 +149,17 @@ function StockUpdate_UI() {
 
   async function update() {
     let data = {
-      ID: Number(localStorage.getItem("sid_edit")),
-      List_number: Number(List_number),
+      ID: stock_id,
+      List_number: Stock.List_number,
       Quantity: Number(Quantity),
-      Employee_ID: Number(localStorage.getItem("uid")),
+      Employee_ID: Stock.Employee_ID,
       TypeID: Stock.TypeID,
       BrandID: Stock.BrandID,
       SizeID: Stock.SizeID,
       Time:Time,
     };
 
-    const apiUrl = "http://localhost:8080/stocks"; //ส่งขอบันทึก
+    const apiUrl = "http://localhost:8080/stocks"; //
     const requestOptions = {
       method: "PATCH",
       headers: {
@@ -171,9 +192,10 @@ function StockUpdate_UI() {
     getEmployee();
     getSize();
     getBrand();
+    getStock();
     getType();
   }, []);
-
+  console.log(Stock);
   return (
     <Box paddingTop={2}>
       <Snackbar //ป้ายบันทึกสำเร็จ
@@ -220,6 +242,8 @@ function StockUpdate_UI() {
                 <Stack>
                   List number
                   <TextField
+                    disabled
+                    value={Stock.List_Number+""}
                     fullWidth
                     id="List_number"
                     type="string"
@@ -239,121 +263,51 @@ function StockUpdate_UI() {
                 </Stack>
                 <Stack>
                   Brand
-                  <Autocomplete
-                    id="brand-autocomplete"
-                    options={brand}
-                    onChange={(event: any, value) => {
-                      setStock({ ...Stock, BrandID: value?.ID }); //Just Set ID to interface
-                    }}
-                    getOptionLabel={(option: any) => `${option.Band_Name}`} //filter value
-                    renderInput={(params) => {
-                      return (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          placeholder="Search..."
-                        />
-                      );
-                    }}
-                    renderOption={(props: any, option: any) => {
-                      return (
-                        <li
-                          {...props}
-                          value={`${option.ID}`}
-                          key={`${option.ID}`}
-                        >{`${option.Band_Name}`}</li>
-                      ); //display value
-                    }}
+                  <TextField
+                    disabled
+                    value={Stock.Brand?.Band_Name+""}
+                    fullWidth
+                    id="List_number"
+                    type="string"
+                    variant="outlined"
+
                   />
                 </Stack>
                 <Stack>
                   Type
-                  <Autocomplete
-                    id="type-autocomplete"
-                    options={types}
-                    onChange={(event: any, value) => {
-                      setStock({ ...Stock, TypeID: value?.ID }); //Just Set ID to interface
-                    }}
-                    getOptionLabel={(option: any) => `${option.Type_Name}`} //filter value
-                    renderInput={(params) => {
-                      return (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          placeholder="Search..."
-                        />
-                      );
-                    }}
-                    renderOption={(props: any, option: any) => {
-                      return (
-                        <li
-                          {...props}
-                          value={`${option.ID}`}
-                          key={`${option.ID}`}
-                        >{`${option.Type_Name}`}</li>
-                      ); //display value
-                    }}
+                  <TextField
+                    disabled
+                    value={Stock.Type?.Type_Name+""}
+                    fullWidth
+                    id="List_number"
+                    type="string"
+                    variant="outlined"
+
                   />
                 </Stack>
         
                 <Stack>
                   Size
-                  <Autocomplete
-                    id="size-autocomplete"
-                    options={size}
-                    onChange={(event: any, value) => {
-                      setStock({ ...Stock, SizeID: value?.ID }); //Just Set ID to interface
-                    }}
-                    getOptionLabel={(option: any) =>
-                      `${option.Size_Name}`
-                    } //filter value
-                    renderInput={(params) => {
-                      return (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          placeholder="Search..."
-                        />
-                      );
-                    }}
-                    renderOption={(props: any, option: any) => {
-                      return (
-                        <li
-                          {...props}
-                          value={`${option.ID}`}
-                          key={`${option.ID}`}
-                        >{`${option.Size_Name}`}</li>
-                      ); //display value
-                    }}
+                  <TextField
+                    disabled
+                    value={Stock.Size?.Size_Name+""}
+                    fullWidth
+                    id="List_number"
+                    type="string"
+                    variant="outlined"
+
                   />
                 </Stack>
                 <Stack>
                   Actor
-                  <Autocomplete
-                    id="employee-autocomplete"
-                    options={employee}
-                    onChange={(event: any, value) => {
-                      setStock({ ...Stock, Employee_ID: value?.ID }); //Just Set ID to interface
-                    }}
-                    getOptionLabel={(option: any) => `${option.Name}`} //filter value
-                    renderInput={(params) => {
-                      return (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          placeholder="Search..."
-                        />
-                      );
-                    }}
-                    renderOption={(props: any, option: any) => {
-                      return (
-                        <li
-                          {...props}
-                          value={`${option.ID}`}
-                          key={`${option.ID}`}
-                        >{`${option.Name}`}</li>
-                      ); //display value
-                    }}
+                  <TextField
+                    disabled
+                    value={Stock.Employee?.Name+""}
+                    fullWidth
+                    id="List_number"
+                    type="string"
+                    variant="outlined"
+
                   />
                 </Stack>
 
