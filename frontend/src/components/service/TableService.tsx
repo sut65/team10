@@ -36,7 +36,7 @@ export default function ServiceTable() {
         "Content-Type": "application/json",
       },
     };
-    fetch(`${apiUrl}/services`, requestOptions)
+    fetch(`${apiUrl}/s_service/${localStorage.getItem("uid")}`, requestOptions)
       .then((response) => response.json())
       .then((res) => {
         if (res.data) {

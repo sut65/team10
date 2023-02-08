@@ -132,6 +132,7 @@ export default function EmployeeTable() {
                   <TableCell align="right">Address</TableCell>
                   <TableCell align="right">Phone</TableCell>
                   <TableCell align="right">Gender</TableCell>
+                  <TableCell align="right">Position</TableCell>
                   <TableCell align="right">Workshift</TableCell>
                 </TableRow>
               </TableHead>
@@ -152,6 +153,9 @@ export default function EmployeeTable() {
                     <TableCell align="right">{row.Phonnumber}</TableCell>
                     <TableCell align="right">
                       {row.Gender.Gender_Name}
+                    </TableCell>
+                    <TableCell align="right">
+                      {row.Position.Position_Name}
                     </TableCell>
                     {/* Bug ตรง Work_shift_Name ก่อนหน้านี้เป็น Work_Shift_Name ตัว S ตัวเดียว */}
                     <TableCell align="right">
@@ -179,6 +183,7 @@ export default function EmployeeTable() {
                           onClick={() => EmployeeDelete(row.ID)}
                           color="error"
                           variant="contained"
+                          sx={{ marginX: 2 }}
                         >
                           Delete
                         </Button>

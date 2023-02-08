@@ -146,10 +146,11 @@ export default function StockTable_UI() {
                       >
                         <Button
                           onClick={() => {
-                            window.localStorage.setItem(
+                            localStorage.setItem(
                               "sid_edit",
                               String(row.ID)
                             );
+                            
                           }}
                           variant="contained"
                           href="/stock/update"

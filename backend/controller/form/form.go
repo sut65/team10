@@ -81,6 +81,7 @@ type extendedForm struct {
 	FormTypeID uint
 	SatisfactionID uint
 	FormType_name string
+	Satisfaction_name string
 }
 
 // POST /users
@@ -144,19 +145,6 @@ func GetForm(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"data": form})
 }
-
-// GET /users
-
-// func ListForms(c *gin.Context) {
-
-// 	var form []entity.Form
-
-// 	if err := entity.DB().Preload("FormType").Preload("Satisfaction").Raw("SELECT * FROM forms").Find(&form).Error; err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-// 		return
-// 	}
-// 	c.JSON(http.StatusOK, gin.H{"data": form})
-// }
 
 func ListForms(c *gin.Context) {
 
@@ -239,4 +227,21 @@ func UpdateForm(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": up_fmc})
+}
+
+func ListFormByUID(c *gin.Context) {
+
+	var form []extendedForm
+	id := c.Param("id")
+
+	if err := entity.DB().Raw("SELECT f.*, ft.form_type_name, s.satisfaction_name FROM forms f JOIN customers c JOIN form_types ft JOIN satisfactions s ON f.customer_id = c.id AND f.form_type_id = ft.id AND f.satisfaction_id = s.id WHERE c.id = ?", id).Find(&form).Error; err != nil {
+
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+
+		return
+
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": form})
+
 }

@@ -155,6 +155,7 @@ func main() {
 
 			//service
 			p.GET("/services", Service_controller.ListServices)
+			p.GET("/s_service/:id", Service_controller.ListServiceByUID)
 			p.GET("/service/:id", Service_controller.GetService)
 			p.POST("/services", Service_controller.CreateService)
 			p.DELETE("/services/:id", Service_controller.DeleteService)
@@ -192,6 +193,7 @@ func main() {
 
 			//Form
 			p.GET("/forms", Form_controller.ListForms)
+			p.GET("/f_form/:id", Form_controller.ListFormByUID)
 			p.GET("/form/:id", Form_controller.GetForm)
 			p.POST("/forms", Form_controller.CreateForm)
 			p.DELETE("/forms/:id", Form_controller.DeleteForm)
@@ -205,7 +207,6 @@ func main() {
 			//Satisfaction
 			p.GET("/satisfactions", Satisfaction_controller.ListSatisfactions)
 			p.GET("/satisfaction/:id", Satisfaction_controller.GetSatisfaction)
-			p.POST("/satisfactions", Satisfaction_controller.CreateSatisfaction)
 
 			p.GET("/delivery/:id", delivery_controller.GetDelivery)
 			p.GET("/delivery", delivery_controller.ListDeliverys)

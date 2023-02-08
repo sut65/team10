@@ -6,7 +6,7 @@ export interface StocksInterface {
     [x: string]: any;
     ID: number,
 
-    List_Number:    number,
+    List_Number:    string,
 
     TypeID:     number,
     Type:       TypesInterface,

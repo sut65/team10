@@ -83,7 +83,7 @@ func GetStock(c *gin.Context) {
 	var stocks entity.Stock
 	id := c.Param("id")
 
-	if err := entity.DB().Raw("SELECT * FROM stocks WHERE id = ?", id).Scan(&stocks).Error; err != nil {
+	if err := entity.DB().Preload("Type").Preload("Size").Preload("Brand").Preload("Employee").Raw("SELECT * FROM stocks WHERE id = ?", id).Find(&stocks).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
