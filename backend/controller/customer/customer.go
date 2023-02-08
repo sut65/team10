@@ -140,7 +140,6 @@ func UpdateCustomer(c *gin.Context) {
 	// println(customer.Customer_Password)
 
 	//** If customer enter the update section they need to update all of above entity
-	//** Because this one check all of above
 	if _, err := govalidator.ValidateStruct(cus); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
