@@ -86,6 +86,7 @@ export default function CompleteTable() {
                   <TableCell align="right">EmployeeName</TableCell>
                   <TableCell align="right">ReceiveID</TableCell>
                   <TableCell align="right">PackagingID</TableCell>
+                  <TableCell align="right">DateTime</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -101,6 +102,7 @@ export default function CompleteTable() {
                     <TableCell align="right">{row.Name}</TableCell>
                     <TableCell align="right">{row.Receive_ID}</TableCell>
                     <TableCell align="right">{row.Packaging_ID}</TableCell>
+                    <TableCell align="right">{row.Complete_datetime.toString()}</TableCell>
                     <TableCell align="right">
                       <ButtonGroup variant="outlined" aria-lable="outlined button group">
                         <Button onClick={() => navigate({ pathname: `/complete/info/complete/update/${row.ID}` })} variant="contained" color="success"

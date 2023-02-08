@@ -141,7 +141,11 @@ func UpdateCustomer(c *gin.Context) {
 		Customer_Password:  customer.Customer_Password,
 		Customer_Address:   customer.Customer_Address,
 	}
-
+	if _, err := govalidator.ValidateStruct(cus); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	
 	if err := entity.DB().Where("id = ?", customer.ID).Updates(&cus).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
