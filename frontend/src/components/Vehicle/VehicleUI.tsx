@@ -28,6 +28,7 @@ import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import { BrandVehicleInterface } from "../../models/vehicle/IBrandVehicle";
 import { EngineInterface } from "../../models/vehicle/IEngine";
 import { VehicleInterface } from "../../models/vehicle/IVehicle";
+import { DatePicker } from "@mui/x-date-pickers";
 
 function VehicleCreate  () {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
@@ -42,13 +43,6 @@ function VehicleCreate  () {
   const [alertmessage,setAlertMessage] = useState("");
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
-
-  const isWeekend = (date: Dayjs) => {
-    const day = date.day();
-  
-    return day === 0 || day === 6;
-  };
-
 
   const handleClickPopover = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -165,7 +159,7 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
             
             <Snackbar // บันทึกสำเร็จ
               open={success}
-              autoHideDuration={3000}
+              autoHideDuration={2000}
               onClose={handleClose}
               anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
               <Alert onClose={handleClose} severity="success">              
@@ -175,7 +169,7 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
 
           <Snackbar // บันทึกไม่สำเร็จ
               open={error} 
-              autoHideDuration={3000} 
+              autoHideDuration={2000} 
               onClose={handleClose} 
               anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
               <Alert onClose={handleClose} severity="error">
@@ -238,7 +232,7 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
                       container
                       justifyContent={"center"}
                       sx={{
-                        paddingY: 1,
+                        paddingY: 2,
                       }}
                     >
                       <Grid item xs={3}>
@@ -281,7 +275,7 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
               container
               justifyContent={"center"}
               sx={{
-                paddingY: 1,
+                paddingY: 0,
               }}
             >
              <Grid item xs={3}>
@@ -303,7 +297,7 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
               container
               justifyContent={"center"}
               sx={{
-                paddingY: 1,
+                paddingY: 2,
               }}
             >
              <Grid item xs={3}>
@@ -321,25 +315,26 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
               </Grid>
             </Grid>
                       
-{/* 
+            <Grid container  justifyContent={"center"}  sx={{
+                paddingY: 0,
+              }}>
             <Grid item xs={3}>
                 <h3>Date Insulance</h3>
-              </Grid> */}
-                      <Grid item xs={8.5}>
+              </Grid>
+                      <Grid item xs={5}>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <StaticDatePicker
-                              orientation="landscape"
-                              openTo="day"
-                              value={date}
-                              shouldDisableDate={isWeekend}
-                              onChange={(newValue: Dayjs | null) => {
-                                setDate(newValue);
-                              }}
-                              renderInput={(params) => <TextField {...params} />}
-                            />
+                          <DatePicker
+                            label="Date Insulance"
+                            value={date}
+                            onChange={(newValue) => {
+                              setDate(newValue);
+                            }}
+                            renderInput={(params) => <TextField {...params} />}
+                          />
                           </LocalizationProvider>
                       
                       </Grid>
+                  </Grid>
                   </Grid>
               </Paper>
               <Grid container spacing={2}
