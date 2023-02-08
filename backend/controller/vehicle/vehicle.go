@@ -2,11 +2,11 @@ package controller
 
 import (
 	"net/http"
+	"time"
 
 	govalidator "github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"github.com/sut65/team10/entity"
-	"gorm.io/gorm"
 )
 
 // POST /vehicles
@@ -44,29 +44,46 @@ func CreateVehicle(c *gin.Context) {
 		return
 
 	}
+	///////////////////////////////////////////////////////////////////////
+	////////////////////// Validation Time not null ///////////////////////
+	///////////////////////////////////////////////////////////////////////
 
-	//10: สร้าง
-	veh := entity.Vehicle{
-		Employee_ID:      vehicle.Employee_ID,
-		Brand_Vehicle_ID: vehicle.Brand_Vehicle_ID,
-		Engine_ID:        vehicle.Engine_ID,
-		ListModel:        vehicle.ListModel,
-		Registration:     vehicle.Registration,
-		Date_Insulance:   vehicle.Date_Insulance.Local(),
+	//ถ้าเวลาที่รับเข้ามามีค่าเป็น null จะเข้าไปทำใน if และทำการ validation
+	//จำเป็นต้องแยกเช็คเนื่องจาก time.Local() เมื่อดึงเวลาแล้วมันจะนับเวลาใน timezone ของเราเข้าไปด้วย ทำให้ค่าไม่เป็น null จะไม่สามารถ validation DateTimeNull ได้
+	if (vehicle.Date_Insulance == time.Time{}) {
+		// สร้างข้อมูลสำหรับเวลาที่เป็น null
+		u_v := entity.Vehicle{
+			Employee_ID:    vehicle.Employee_ID,
+			Date_Insulance: time.Time{},
+		}
+		if _, err := govalidator.ValidateStruct(u_v); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+	} else {
+		//10: สร้าง
+		veh := entity.Vehicle{
+			Employee_ID:      vehicle.Employee_ID,
+			Brand_Vehicle_ID: vehicle.Brand_Vehicle_ID,
+			Engine_ID:        vehicle.Engine_ID,
+			ListModel:        vehicle.ListModel,
+			Registration:     vehicle.Registration,
+			Date_Insulance:   vehicle.Date_Insulance.Local(),
+		}
+
+		if _, err := govalidator.ValidateStruct(veh); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		//11: บันทึก
+		if err := entity.DB().Create(&veh).Error; err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"data": veh})
+
 	}
-
-	if _, err := govalidator.ValidateStruct(veh); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	//11: บันทึก
-	if err := entity.DB().Create(&veh).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{"data": veh})
-
 }
 
 // GET /vehicle/:id
@@ -104,25 +121,60 @@ func UpdateVehicle(c *gin.Context) {
 		return
 	}
 
-	//12: สร้าง
-	u_v := entity.Vehicle{
-		Model:          gorm.Model{ID: vehicle.ID},
-		Employee_ID:    vehicle.Employee_ID,
-		Date_Insulance: vehicle.Date_Insulance.Local(),
-	}
+	///////////////////////////////////////////////////////////////////////
+	////////////////////// Validation Time not null ///////////////////////
+	///////////////////////////////////////////////////////////////////////
 
-	if _, err := govalidator.ValidateStruct(u_v); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	if err := entity.DB().Where("id = ?", vehicle.ID).Updates(&u_v).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	//ถ้าเวลาที่รับเข้ามามีค่าเป็น null จะเข้าไปทำใน if และทำการ validation
+	//จำเป็นต้องแยกเช็คเนื่องจาก time.Local() เมื่อดึงเวลาแล้วมันจะนับเวลาใน timezone ของเราเข้าไปด้วย ทำให้ค่าไม่เป็น null จะไม่สามารถ validation DateTimeNull ได้
+	if (vehicle.Date_Insulance == time.Time{}) {
+		// สร้างข้อมูลสำหรับเวลาที่เป็น null
+		u_v := entity.Vehicle{
+			Employee_ID:    vehicle.Employee_ID,
+			ListModel:      vehicle.ListModel,
+			Registration:   vehicle.Registration,
+			Date_Insulance: time.Time{},
+		}
+		if _, err := govalidator.ValidateStruct(u_v); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+	} else {
 
-	c.JSON(http.StatusOK, gin.H{"data": u_v})
+		//12: สร้าง
+		u_v := entity.Vehicle{
+			Employee_ID:    vehicle.Employee_ID,
+			ListModel:      vehicle.ListModel,
+			Registration:   vehicle.Registration,
+			Date_Insulance: vehicle.Date_Insulance.Local(),
+		}
+
+		if _, err := govalidator.ValidateStruct(u_v); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		if err := entity.DB().Where("id = ?", vehicle.ID).Updates(&u_v).Error; err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"data": u_v})
+	}
 
 }
+
+// // GET /vehicle/:id
+
+// func GetVehicleUpdate(c *gin.Context) {
+// 	var vehicle entity.Vehicle
+// 	id := c.Param("id")
+// 	if err := entity.DB().Preload("Engine").Preload("Brand_Vehicle").Preload("Employee").Raw("SELECT * FROM vehicles WHERE id = ?", id).Find(&vehicle).Error; err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+// 		return
+// 	}
+
+// 	c.JSON(http.StatusOK, gin.H{"data": vehicle})
+// }
 
 // DELETE /vehicle/:id
 func DeleteVehicle(c *gin.Context) {

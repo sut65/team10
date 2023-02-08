@@ -71,6 +71,7 @@ function submit() {
     Sof_Quantity: sof_quantity,
     Time_Stamp: date,
   };
+ 
 
 const apiUrl = "http://localhost:8080";
 const requestOptions = {

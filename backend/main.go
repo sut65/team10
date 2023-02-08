@@ -133,6 +133,7 @@ func main() {
 			p.POST("/receives", controllerreceive.CreateReceive)
 			p.PATCH("/receives", controllerreceive.UpdateReceive)
 			p.DELETE("/receive/:id", controllerreceive.DeleteReceive)
+
 			//detergent
 			p.GET("/detergents", controllerdetergent.ListDetergents)
 
@@ -145,6 +146,8 @@ func main() {
 			p.POST("/vehicle", controllervehicle.CreateVehicle)
 			p.PATCH("/vehicle", controllervehicle.UpdateVehicle)
 			p.DELETE("/vehicle/:id", controllervehicle.DeleteVehicle)
+
+			// p.GET("/vehicle/:id", controllervehicle.GetVehicleUpdate)
 			//brandvehicle
 			p.GET("/brand_vehicles", controllerbrand_vehicles.ListBrand_Vehicles)
 			p.GET("/brand_vehicle/:id", controllerbrand_vehicles.GetBrand_Vehicle)

@@ -21,25 +21,20 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import { VehicleInterface } from "../../models/vehicle/IVehicle";
+import { EngineInterface } from "../../models/vehicle/IEngine";
+import { DatePicker } from "@mui/x-date-pickers";
 function UpdateVehicle() {
   const params = useParams()
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
   const [vehicle, setVehicle] = React.useState<Partial<VehicleInterface>>({});
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const [vehicle_id, setVehicle_ID] = React.useState<VehicleInterface[]>([]);
+  const [engine, setEngine] = React.useState<VehicleInterface[]>([]);
   const [model, setModel]  = React.useState<String | undefined>(undefined);
   const [registration, setRegistration]  = React.useState<String | undefined>(undefined);
   const [alertmessage,setAlertMessage] = useState("");
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
-
-
-  const isWeekend = (date: Dayjs) => {
-    const day = date.day();
-  
-    return day === 0 || day === 6;
-  };
-
 
   const handleClose = ( // AlertBar
     event?: React.SyntheticEvent | Event,
@@ -60,6 +55,8 @@ function UpdateVehicle() {
     let vehicle_update = {
       ID: vehicle.ID,
       Employee_ID: Number(localStorage.getItem("uid")),
+      ListModel: model,
+      Registration: registration,
       Date_Insulance: date,
     };
 
@@ -109,6 +106,7 @@ function UpdateVehicle() {
         if (res.data) {
           setVehicle(res.data);
           setVehicle_ID(res.data.ID);
+         
           setModel(res.data.ListModel);
           setRegistration(res.data.Registration)
           
@@ -147,7 +145,7 @@ function UpdateVehicle() {
         <Grid container spacing={0} sx={{ padding: 2}}>
             <h1>VEHICLE<MopedIcon color="action" sx={{ fontSize: 200 }}/></h1>
             </Grid>
-            <Grid container spacing={2} sx={{ paddingX: 20 }}>
+            <Grid container spacing={2} sx={{ paddingX: 15 }}>
             <Grid item xs={3}>
               <h3>Vehicle ID</h3>
             </Grid>
@@ -164,13 +162,13 @@ function UpdateVehicle() {
             </Grid>
           </Grid>
 
-          <Grid container spacing={2} sx={{ paddingX: 20 }}>
+          <Grid container spacing={2} sx={{ paddingX: 15 }}>
             <Grid item xs={3}>
               <h3>Model</h3>
             </Grid>
             <Grid item xs={8} >
             <TextField
-               id="Brand"
+               id="Model"
                variant="outlined"
                disabled
                type="string"
@@ -181,13 +179,13 @@ function UpdateVehicle() {
             </Grid>
           </Grid>
 
-          <Grid container spacing={2} sx={{ paddingX: 20 }}>
+          <Grid container spacing={2} sx={{ paddingX: 15 }}>
             <Grid item xs={3}>
               <h3>Registration</h3>
             </Grid>
-            <Grid item xs={8} >
+            <Grid item xs={5} >
             <TextField
-               id="Engine"
+               id="Registration"
                variant="outlined"
                disabled
                type="string"
@@ -197,23 +195,24 @@ function UpdateVehicle() {
              ></TextField>
             </Grid>
           </Grid>
-          
-          <Grid container spacing={0} sx={{ paddingX: 18, paddingY: 1 }}>
-            <Grid item xs={10}>
-               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <StaticDatePicker
-                    orientation="landscape"
-                    openTo="day"
-                    value={date}
-                    shouldDisableDate={isWeekend}
-                    onChange={(newValue: Dayjs | null) => {
-                      setDate(newValue);
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                  />
-                </LocalizationProvider>
-            </Grid>
-          </Grid>
+          <Grid container spacing={2} sx={{ paddingX: 15 }}>
+          <Grid item xs={3}>
+                <h3>Date Insulance</h3>
+              </Grid>
+                      <Grid item xs={8.5}>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DatePicker
+                            label="Date Insulance"
+                            value={date}
+                            onChange={(newValue) => {
+                              setDate(newValue);
+                            }}
+                            renderInput={(params) => <TextField {...params} />}
+                          />
+                          </LocalizationProvider>
+                      
+                      </Grid>
+                    </Grid>
         </Paper>
         <Grid container spacing={2}
                     sx={{ paddingY: 1 }}>

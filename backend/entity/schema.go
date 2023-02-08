@@ -1,6 +1,7 @@
 package entity
 
 import (
+	//"fmt"
 	"time"
 
 	"regexp"
@@ -227,6 +228,7 @@ type Bill struct {
 	Time_Stamp     time.Time   `valid:"required~กรุณาใส่เวลาให้ถูกต้อง, DateTimeNotFuture~เวลาห้ามเป็นอนาคต, DateTimeNotPast~เวลาห้ามเป็นอดีต"`
 	QuotaCode_FK   []QuotaCode `gorm:"foreignKey:Bill_ID"`
 	Receive        []Receive   `gorm:"foreignKey:Bill_ID"`
+	Receive_State  uint
 }
 
 /* -------------------------------------------------------------------------- */
@@ -319,14 +321,14 @@ type Engine struct {
 type Vehicle struct {
 	gorm.Model
 	Employee_ID      *uint         `valid:"-"`
-	Employee         Employee      `gorm:"references:id"  valid:"-"`
+	Employee         Employee      `gorm:"references:id" valid:"-"`
 	Brand_Vehicle_ID *uint         `valid:"-"`
-	Brand_Vehicle    Brand_Vehicle `gorm:"references:id"  valid:"-"`
+	Brand_Vehicle    Brand_Vehicle `gorm:"references:id" valid:"-"`
 	Engine_ID        *uint         `valid:"-"`
-	Engine           Engine        `gorm:"references:id"  valid:"-"`
+	Engine           Engine        `gorm:"references:id" valid:"-"`
 	ListModel        string        `valid:"required~จำเป็นต้องกรอกรุ่นของรถ"`
 	Registration     string        `valid:"required~จำเป็นต้องกรอกทะเบียนรถ"`
-	Date_Insulance   time.Time     `valid:"DateTimeNotPast~เวลาห้ามเป็นอดีต, DateTimeNotPresent~เวลาห้ามเป็นปัจจุบัน"`
+	Date_Insulance   time.Time     `valid:"DateTimeNotPast~เวลาห้ามเป็นอดีต, required~กรุณาใส่เวลาให้ถูกต้อง"`
 	Delivery         []Delivery    `gorm:"foreignKey:Vehicle_ID"`
 }
 
@@ -427,12 +429,16 @@ func SetTimeandValueValidation() {
 		now := time.Now().Add(time.Minute * 5)
 		return t.Before(now) //ค่าที่จะส่งต้องเป็นเวลาอนาคตไม่เกิน 5นาที
 	})
-	//เวลาห้ามเป็นปัจจุบัน
-	govalidator.CustomTypeTagMap.Set("DateTimeNotPresent", func(i interface{}, context interface{}) bool {
-		t := i.(time.Time) //t มี type เป็น time.Time
-		now := time.Now()
-		return t.Equal(now) //ค่าที่จะส่งต้องเป็นเวลาปัจจุบัน
-	})
+	// //เวลาห้ามเป็นปัจจุบัน
+	// govalidator.CustomTypeTagMap.Set("DateTimeNotPresent", func(i interface{}, context interface{}) bool {
+	// 	t := i.(time.Time) //t มี type เป็น time.Time
+	// 	yt, mt, dt := t.Date()
+	// 	yn, mn, dn := time.Now().Date()
+	// 	fmt.Println(yt, mt, dt)
+	// 	fmt.Println(yt, mt, dt)
+
+	// 	return (yt != yn) && (mt != mn) && (dt != dn) //ค่าที่จะส่งต้องเป็นเวลาปัจจุบัน
+	// })
 }
 
 func init() {

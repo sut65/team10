@@ -76,6 +76,17 @@ func CreateReceive(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	//สร้าง ข้อมูลสำหรับใช้ในการอัปเดต Receive_State ใน Bill
+	b_u := entity.Bill{
+		Receive_State: 1,
+	}
+
+	//function สำหรับอัปเดต Receive_State Bill
+	if err := entity.DB().Where("id = ?", receive.Bill_ID).Updates(&b_u).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{"data": rec})
 
 }

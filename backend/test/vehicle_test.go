@@ -79,17 +79,17 @@ func TestDateInsulanceNotPast(t *testing.T) {
 }
 
 // ตรวจสอบเวลาแล้วต้องเจอ Error
-func TestDateInsulanceNotPresent(t *testing.T) {
+func TestDateInsulanceNotNull(t *testing.T) {
 	g := NewGomegaWithT(t)
 
-	vehicle := entity.Vehicle{
+	p := entity.Vehicle{
 		ListModel:      "Scoopyi",
 		Registration:   "กษ5336",
-		Date_Insulance: time.Now(), // ผิด //เวลาจะเกินไป 1 วินาที
+		Date_Insulance: time.Time{}, // ผิด 0001-01-01 00:00:00 +0000 UTC
 	}
 
 	// ตรวจสอบด้วย govalidator
-	ok, err := govalidator.ValidateStruct(vehicle)
+	ok, err := govalidator.ValidateStruct(p)
 
 	// ok ต้องไม่เป็นค่า true แปลว่าต้องจับ error ได้
 	g.Expect(ok).ToNot(BeTrue())
@@ -98,5 +98,5 @@ func TestDateInsulanceNotPresent(t *testing.T) {
 	g.Expect(err).ToNot(BeNil())
 
 	// err.Error ต้องมี error message แสดงออกมา
-	g.Expect(err.Error()).To(Equal("เวลาห้ามเป็นปัจจุบัน"))
+	g.Expect(err.Error()).To(Equal("กรุณาใส่เวลาให้ถูกต้อง"))
 }
