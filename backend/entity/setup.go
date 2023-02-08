@@ -460,8 +460,33 @@ func SetupDatabase() {
 
 	//*********************---Bill---*******************//
 	//-- Service
+	TypeWashing1 := TypeWashing{
+		Model:             gorm.Model{},
+		Type_washing:      "ซักรีดปกติ",
+		Description:       "ก็แค่ซักรีดโว้ยย",
+		TypeWashing_Price: 80,
+	}
+	db.Model(&TypeWashing{}).Create(&TypeWashing1)
+
+	Weight1 := Weight{
+		Model:        gorm.Model{},
+		Weight_net:   "ไม่เกิน 3 กิโลกรัม",
+		Weight_price: 0,
+	}
+	db.Model(&Weight{}).Create(&Weight1)
+
+	DeliveryType1 := DeliveryType{
+		Model:                gorm.Model{},
+		DeliveryType_service: "ส่งด่วน",
+		DeliveryType_price:   10,
+	}
+	db.Model(&DeliveryType{}).Create(&DeliveryType1)
+
 	Service1 := Service{
 		Customer: Customer1,
+		TypeWashing: TypeWashing1,
+		Weight: Weight1,
+		DeliveryType: DeliveryType1,
 		Address:  "testbill",
 	}
 	db.Model(&Service{}).Create(&Service1)
@@ -529,13 +554,6 @@ func SetupDatabase() {
 	db.Model(&Receive{}).Create(&Receive3)
 
 	//======================================Service====================================//
-	TypeWashing1 := TypeWashing{
-		Model:             gorm.Model{},
-		Type_washing:      "ซักรีดปกติ",
-		Description:       "ก็แค่ซักรีดโว้ยย",
-		TypeWashing_Price: 80,
-	}
-	db.Model(&TypeWashing{}).Create(&TypeWashing1)
 
 	TypeWashing2 := TypeWashing{
 		Model:             gorm.Model{},
@@ -582,13 +600,6 @@ func SetupDatabase() {
 	}
 	db.Model(&TypeWashing{}).Create(&TypeWashing3)
 
-	Weight1 := Weight{
-		Model:        gorm.Model{},
-		Weight_net:   "ไม่เกิน 3 กิโลกรัม",
-		Weight_price: 0,
-	}
-	db.Model(&Weight{}).Create(&Weight1)
-
 	Weight2 := Weight{
 		Model:        gorm.Model{},
 		Weight_net:   "ไม่เกิน 5 กิโลกรัม",
@@ -602,13 +613,6 @@ func SetupDatabase() {
 		Weight_price: 15,
 	}
 	db.Model(&Weight{}).Create(&Weight3)
-
-	DeliveryType1 := DeliveryType{
-		Model:                gorm.Model{},
-		DeliveryType_service: "ส่งด่วน",
-		DeliveryType_price:   10,
-	}
-	db.Model(&DeliveryType{}).Create(&DeliveryType1)
 
 	DeliveryType2 := DeliveryType{
 		Model:                gorm.Model{},

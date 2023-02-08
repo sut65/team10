@@ -88,51 +88,36 @@ func GetService(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": service})
 }
 
-// GET /users
-// func ListServices(c *gin.Context) {
-
-// 	var service []entity.Service
-
-// 	if err := entity.DB().Preload("TypeWashing").Preload("DeliveryType").Preload("Weight").Raw("SELECT * FROM services").Find(&service).Error; err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-// 		return
-// 	}
-// 	c.JSON(http.StatusOK, gin.H{"data": service})
-// }
 
 func ListServices(c *gin.Context) {
 
 	var service []extendedService
 
-	if err := entity.DB().Preload("TypeWashing").Preload("DeliveryType").Preload("Weight").Raw("SELECT s.*,t.*,d.*,w.* FROM services s JOIN type_washings t JOIN delivery_types d JOIN weights w ON s.id = t.id AND s.id = d.id AND s.id = w.id;").Find(&service).Error; err != nil {
+	if err := entity.DB().Preload("TypeWashing").Preload("DeliveryType").Preload("Weight").Raw("SELECT s.*,t.*,d.*,w.* FROM services s JOIN type_washings t JOIN delivery_types d JOIN weights w ON s.id = t.id AND s.id = d.id AND s.id = w.id").Find(&service).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": service})
 }
 
-// func ListServiceByUID(c *gin.Context) {
+func ListServiceByUID(c *gin.Context) {
 
-// 	var service []entity.Service
-// 	id := c.Param("id")
+	var service []extendedService
+	id := c.Param("id")
 
-// 	if err := entity.DB().Preload("TypeWashing").Preload("DeliveryType").Preload("Weight").Raw("SELECT * FROM services WHERE customer_id = ?",id).Find(&service).Error; err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-// 		return
-// 	}
-// 	c.JSON(http.StatusOK, gin.H{"data": service})
-// }
+	if err := entity.DB().Raw("SELECT s.*, t.type_washing, w.weight_net, d.delivery_type_service FROM services s JOIN customers c JOIN type_washings t JOIN weights w JOIN delivery_types d ON s.customer_id = c.id AND s.type_washing_id = t.id AND s.weight_id = w.id AND s.delivery_type_id = d.id WHERE c.id = ?", id).Find(&service).Error; err != nil {
 
-// func ListSumPircie(c *gin.Context) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 
-// 	var sumprice []Sumprice
+		return
 
-// 	if err := entity.DB().Raw("SELECT * ,(s.bill_price+d.delivery_type_price+w.weight_price+t.type_washing_price) as Sumprice FROM services s JOIN delivery_types d JOIN type_washings t JOIN weights w on  s.id = d.id AND s.id = w.id AND s.id = t.id").Scan(&sumprice).Error; err != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-// 		return
-// 	}
-// 	c.JSON(http.StatusOK, gin.H{"data": sumprice})
-// }
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": service})
+
+}
+
+
 
 // DELETE /users/:id
 func DeleteService(c *gin.Context) {
