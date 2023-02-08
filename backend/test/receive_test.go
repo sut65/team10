@@ -14,7 +14,7 @@ func TestDetQuantityNotNegative(t *testing.T) {
 	g := NewGomegaWithT(t)
 
 	receive := entity.Receive{
-		Det_Quantity: 101, // ผิด
+		Det_Quantity: -1, // ผิด
 		Sof_Quantity: 1,
 		Time_Stamp:   time.Now(),
 	}
@@ -29,7 +29,7 @@ func TestDetQuantityNotNegative(t *testing.T) {
 	g.Expect(err).ToNot(BeNil())
 
 	// err.Error ต้องมี error message แสดงออกมา
-	g.Expect(err.Error()).To(Equal("จำนวนผงซักฟอกห้ามเป็นลบ"))
+	g.Expect(err.Error()).To(Equal("จำนวนผงซักฟอกต้องไม่เป็นลบ"))
 }
 
 // ตรวจสอบจำนวนของน้ำยาปรับผ้านุ่มแล้วต้องเจอ Error
@@ -38,7 +38,7 @@ func TestSofQuantityNotNegative(t *testing.T) {
 
 	receive := entity.Receive{
 		Det_Quantity: 1,
-		Sof_Quantity: 101, // ผิด
+		Sof_Quantity: -1, // ผิด
 		Time_Stamp:   time.Now(),
 	}
 
@@ -52,5 +52,5 @@ func TestSofQuantityNotNegative(t *testing.T) {
 	g.Expect(err).ToNot(BeNil())
 
 	// err.Error ต้องมี error message แสดงออกมา
-	g.Expect(err.Error()).To(Equal("จำนวนน้ำยาปรับผ้านุ่มห้ามเป็นลบ"))
+	g.Expect(err.Error()).To(Equal("จำนวนน้ำยาปรับผ้านุ่มต้องไม่เป็นลบ"))
 }
