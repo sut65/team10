@@ -122,7 +122,7 @@ func DeleteForm(c *gin.Context) {
 // PATCH /users
 
 func UpdateForm(c *gin.Context) {
-
+	var customer entity.Customer
 	var formtype entity.FormType
 	var satisfaction entity.Satisfaction
 	var form entity.Form
@@ -158,6 +158,7 @@ func UpdateForm(c *gin.Context) {
 		Satisfaction: satisfaction,
 		FormType:     formtype,
 		Comment: updateComment,
+		Customer: customer,
 	}
 	if _, err := govalidator.ValidateStruct(up_fmc); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
