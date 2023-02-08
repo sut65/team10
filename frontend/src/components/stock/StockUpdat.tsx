@@ -27,7 +27,6 @@ function StockUpdate_UI() {
 
   const [List_number, SetList_number] = useState<String>("");
 
-  const [Add_number, SetAdd_number] = useState<String>("");
   const [Quantity, setQuantity] = useState<String>("");
   const [Time, setTime] = React.useState<Dayjs | null>(dayjs());
   const [success, setSuccess] = React.useState(false);
@@ -129,15 +128,14 @@ function StockUpdate_UI() {
 
   async function update() {
     let data = {
-      ID: Number(localStorage.getItem("eid_edit")),
-      List_number: List_number,
-      Add_number: Add_number,
-      quantity: Quantity,
-      Employee_ID: Stock.Employee_ID,
-      Type_ID: Stock.Type_ID,
-      Brand_ID: Stock.Brand_ID,
-      Size_ID: Stock.Size_ID,
-      Time: Stock.Time,
+      ID: Number(localStorage.getItem("sid_edit")),
+      List_number: Number(List_number),
+      Quantity: Number(Quantity),
+      Employee_ID: Number(localStorage.getItem("uid")),
+      TypeID: Stock.TypeID,
+      BrandID: Stock.BrandID,
+      SizeID: Stock.SizeID,
+      Time:Time,
     };
 
     const apiUrl = "http://localhost:8080/stocks"; //ส่งขอบันทึก
@@ -233,10 +231,10 @@ function StockUpdate_UI() {
                   Add
                   <TextField
                     fullWidth
-                    id="Add_number"
+                    id="Quantity"
                     type="string"
                     variant="outlined"
-                    onChange={(event: { target: { value: React.SetStateAction<String>; }; }) => SetAdd_number(event.target.value)}
+                    onChange={(event: { target: { value: React.SetStateAction<String>; }; }) => setQuantity(event.target.value)}
                   />
                 </Stack>
                 <Stack>
@@ -365,6 +363,7 @@ function StockUpdate_UI() {
                       <Grid item xs={6}>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                               <DateTimePicker
+                                  disabled
                                   label="DateTimePicker"
                                   renderInput={(params) => <TextField {...params} />}
                                   value={Time}

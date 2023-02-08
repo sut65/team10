@@ -122,7 +122,6 @@ type Stock struct {
 	Size        Size `gorm:"references:id"`
 	Employee_ID *uint
 	Employee    Employee `gorm:"references:id"`
-	Add_number  uint
 	Quantity    uint
 	Time        time.Time
 	Detergent   []Detergent `gorm:"foreignKey:Stock_ID"`

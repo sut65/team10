@@ -15,10 +15,11 @@ import { useNavigate } from "react-router-dom";
 import { Link as RouterLink, useParams } from "react-router-dom";
 import { StocksInterface } from "../../models/Stock/IStock";
 import Stock_UI from "./Stock_UI";
-// import dayjs, { Dayjs } from "dayjs";
+import Moment from "moment";
 
 
 export default function StockTable_UI() {
+  Moment.locale('th');
   /* -------------------------------------------------------------- */
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
@@ -113,13 +114,12 @@ export default function StockTable_UI() {
                 <TableRow>
                   <TableCell align="right">SID</TableCell>
                   <TableCell align="right">List_Number</TableCell>
-                  <TableCell align="right">Add_number</TableCell>
                   <TableCell align="right">Brand</TableCell>
                   <TableCell align="right">Type</TableCell>
                   <TableCell align="right">Size</TableCell>
-                  <TableCell align="right">Quantity</TableCell>
                   <TableCell align="right">Employee</TableCell>
-                  {/* //<TableCell align="right">Time</TableCell> */}
+                  <TableCell align="right">Quantity</TableCell>
+                  <TableCell align="right">Time</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -133,13 +133,12 @@ export default function StockTable_UI() {
                     </TableCell>
                     {/* <TableCell align="right">{row.ID}</TableCell> */}
                     <TableCell align="right">{row.List_Number}</TableCell>
-                    <TableCell align="right">{row.Add_number}</TableCell>
-                    <TableCell align="right">{row.Quantity}</TableCell>
-                    <TableCell align="right">{row.EmployeeID}</TableCell>
-                    <TableCell align="right">{row.Size.Size_Name}</TableCell>
-                    <TableCell align="right">{row.Brand.Brand_Name}</TableCell>
+                    <TableCell align="right">{row.Brand.Band_Name}</TableCell>
                     <TableCell align="right">{row.Type.Type_Name}</TableCell>
-                    {/* //<TableCell align="right">{row.Time}</TableCell> */}
+                    <TableCell align="right">{row.Size.Size_Name}</TableCell> 
+                    <TableCell align="right">{row.Employee.Name}</TableCell>
+                    <TableCell align="right">{row.Quantity}</TableCell>
+                    <TableCell align="right">{`${Moment(row.Time).format('DD MMMM YYYY hh:mm')}`}</TableCell>
                     <TableCell align="right">
                       <ButtonGroup
                         variant="outlined"

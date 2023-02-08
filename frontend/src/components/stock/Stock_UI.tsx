@@ -27,9 +27,8 @@ function Stock_UI() {
   const [brand, setBrand] = React.useState<BrandsInterface[]>([]);
   const [type, setType] = React.useState<TypesInterface[]>([]);
   const [employee, setEmployee] = React.useState<EmployeesInterface[]>([]);
-
-  const [Add_number, SetAdd_number] = useState<String>("");
-  const [List_number, SetList_number] = useState<String>("");
+  const [Quantity, SetQuantity] = useState<String>("");
+  const [List_Number, SetList_number] = useState<String>("");
   const [Time, setTime] = React.useState<Dayjs | null>(dayjs());
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
@@ -139,23 +138,23 @@ function Stock_UI() {
     setError(false);
   };
 
+
+
   function submit() {
     let data = {
       //ประกาศก้อนข้อมูล
 
-      List_Number: stock.List_Number,
+      List_Number: Number(List_Number),
 
       TypeID: stock.TypeID,
 
       BrandID: stock.BrandID,
 
-      EmployeeID: stock.EmployeeID,
-
+      Employee_ID: Number(localStorage.getItem("uid")),
       SizeID: stock.SizeID,
 
-      Add_number: stock.Add_number,
-
-      Time: stock.Time,
+      Quantity: Number(Quantity),
+      Time: Time,
     };
 
     console.log(data);
@@ -323,7 +322,7 @@ function Stock_UI() {
                   onChange={(event: any, value) => {
                     setStock({ ...stock, TypeID : value?.ID }); //Just Set ID to interface
                   }}
-                  getOptionLabel={(option: any) => `${option.ID}`} //filter value
+                  getOptionLabel={(option: any) => `${option.Type_Name}`} //filter value
                   renderInput={(
                     params: JSX.IntrinsicAttributes & TextFieldProps
                   ) => {
@@ -341,7 +340,7 @@ function Stock_UI() {
                         {...props}
                         value={`${option.ID}`}
                         key={`${option.ID}`}
-                      >{`${option.ID}`}</li>
+                      >{`${option.Type_Name}`}</li>
                     ); //display value
                   }}
                 />
@@ -405,7 +404,7 @@ function Stock_UI() {
                   id="employee-autocomplete"
                   options={employee}
                   onChange={(event: any, value) => {
-                    setStock({ ...stock, EmployeeID: value?.ID }); //Just Set ID to interface
+                    setStock({ ...stock, Employee_ID: value?.ID }); //Just Set ID to interface
                   }}
                   getOptionLabel={(option: any) => `${option.Name}`} //filter value
                   renderInput={(
@@ -445,12 +444,12 @@ function Stock_UI() {
               <Grid item xs={6}>
                 <TextField
                   fullWidth
-                  id="add_number"
+                  id="Quantity"
                   type="string"
                   variant="outlined"
                   onChange={(event: {
                     target: { value: React.SetStateAction<String> };
-                  }) => SetAdd_number(event.target.value)}
+                  }) => SetQuantity(event.target.value)}
                 />
               </Grid>
             </Grid>
@@ -469,6 +468,7 @@ function Stock_UI() {
                       <Grid item xs={6}>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                               <DateTimePicker
+                                  disabled
                                   label="DateTimePicker"
                                   renderInput={(params) => <TextField {...params} />}
                                   value={Time}
@@ -488,17 +488,8 @@ function Stock_UI() {
                 marginX: 6,
               }}
             >
-              <Grid container>
-                <Grid justifyContent={"flex-start"} item xs={6}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    component={RouterLink}to="/stock"
-                  >
-                    Back
-                  </Button>
-                </Grid>
-                <Grid alignItems={"flex-end"} item xs={6}>
+                
+                <Grid alignItems={"center"} item xs={12}>
                   <Button
                     variant="contained"
                     color="success"
@@ -509,7 +500,6 @@ function Stock_UI() {
                   </Button>
                 </Grid>
               </Grid>
-            </Grid>
             </Grid>
         </Paper>
       </Container>

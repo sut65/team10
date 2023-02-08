@@ -10,7 +10,7 @@ import (
 // GET
 func ListTypes(c *gin.Context) {
 
-	var types []entity.Brand
+	var types []entity.Type
 
 	if err := entity.DB().Raw("SELECT * FROM types ").Scan(&types).Error; err != nil {
 

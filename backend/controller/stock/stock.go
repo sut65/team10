@@ -25,18 +25,6 @@ func CreateStocks(c *gin.Context) {
 		return
 	}
 
-	//temp fixing bug
-	if stock.Add_number == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "UserName invalid"})
-		return
-	}
-
-	//temp fixing bug
-	if stock.Quantity == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Name invalid"})
-		return
-	}
-
 	// ค้นหา Employee ด้วย id
 	if tx := entity.DB().Where("id = ?", stock.Employee_ID).First(&employee); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "employee not found"})
@@ -69,7 +57,6 @@ func CreateStocks(c *gin.Context) {
 		Employee_ID: stock.Employee_ID,
 		SizeID:      stock.SizeID,
 		Quantity:    stock.Quantity,
-		Add_number:  stock.Add_number,
 		Time:        stock.Time.Local(),
 	}
 
@@ -121,25 +108,27 @@ func UpdateStock(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	if tx := entity.DB().Where("id = ?", stocks.ID).First(&stocks); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "stocks not found"})
-		return
+	stc := entity.Stock{
+		List_Number: stocks.List_Number,
+		TypeID:      stocks.TypeID,
+		BrandID:     stocks.BrandID,
+		Employee_ID: stocks.Employee_ID,
+		SizeID:      stocks.SizeID,
+		Quantity:    stocks.Quantity,
+		Time:        stocks.Time.Local(),
 	}
-
-	if err := entity.DB().Save(&stocks).Error; err != nil {
+	if err := entity.DB().Where("id = ?", stocks.ID).Updates(&stc).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": stocks})
-
+	c.JSON(http.StatusOK, gin.H{"data": stc})
 }
 func AddStock(c *gin.Context) {
 	var stocks entity.Stock
 	id := c.Param("id")
 
-	if err := entity.DB().Raw("UPDATE stocks SET quantity = add_number+quantity WHERE stock.id", id).Scan(&stocks).Error; err != nil {
+	if err := entity.DB().Raw("UPDATE stocks SET quantity = add_number+quantity WHERE stocks.id", id).Scan(&stocks).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
