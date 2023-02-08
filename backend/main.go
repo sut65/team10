@@ -155,6 +155,7 @@ func main() {
 
 			//service
 			p.GET("/services", Service_controller.ListServices)
+			p.GET("/s_service/:id", Service_controller.ListServiceByUID)
 			p.GET("/service/:id", Service_controller.GetService)
 			p.POST("/services", Service_controller.CreateService)
 			p.DELETE("/services/:id", Service_controller.DeleteService)
