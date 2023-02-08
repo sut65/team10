@@ -81,10 +81,10 @@ type Employee struct {
 	Position_ID  *uint
 	Position     Position `gorm:"references:id" valid:"-" `
 	WorkShift_ID *uint
-	WorkShift    WorkShift `gorm:"references:id" valid:"-" `
-	Phonnumber   string `valid:"matches(^(0)([0-9]{9}))~Phonenumber is not valid"`
-	Address      string `valid:"required~กรุณากรอกที่อยู่"`
-	Password     string `valid:"minstringlength(8)~Password must be more than or equal to 8 characters"`
+	WorkShift    WorkShift   `gorm:"references:id" valid:"-" `
+	Phonnumber   string      `valid:"matches(^(0)([0-9]{9}))~Phonenumber is not valid"`
+	Address      string      `valid:"required~กรุณากรอกที่อยู่"`
+	Password     string      `valid:"minstringlength(8)~Password must be more than or equal to 8 characters"`
 	Stock        []Stock     `gorm:"foreignKey:Employee_ID"`
 	Vehicle      []Vehicle   `gorm:"foreignKey:Employee_ID"`
 	Receive      []Receive   `gorm:"foreignKey:Employee_ID"`
@@ -122,9 +122,9 @@ type Stock struct {
 	SizeID      *uint
 	Size        Size `gorm:"references:id" valid:"-" `
 	Employee_ID *uint
-	Employee    Employee `gorm:"references:id" valid:"-" `
-	Quantity    uint `valid:"ValueNotNegative~กรุณากรอกจะนวนให้ถูกต้อง"`
-	Time        time.Time `valid:"DateTimeNotPast~เวลาห้ามเป็นอดีต"`
+	Employee    Employee    `gorm:"references:id" valid:"-" `
+	Quantity    int         `valid:"ValueNotNegative~กรุณากรอกจะนวนให้ถูกต้อง"`
+	Time        time.Time   `valid:"DateTimeNotPast~เวลาห้ามเป็นอดีต"`
 	Detergent   []Detergent `gorm:"foreignKey:Stock_ID"`
 	Softener    []Softener  `gorm:"foreignKey:Stock_ID"`
 }
