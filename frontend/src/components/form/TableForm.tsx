@@ -30,7 +30,7 @@ export default function FormTable() {
                 "Content-Type": "application/json",
             },
         };
-        fetch(`${apiUrl}/forms`, requestOptions)
+        fetch(`${apiUrl}/f_form/${localStorage.getItem("uid")}`, requestOptions)
             .then((response) => response.json())
             .then((res) => {
                 if (res.data) {
@@ -86,9 +86,9 @@ export default function FormTable() {
                             <TableHead>
                                 <TableRow>
                                     <TableCell>ID</TableCell>
-                                    <TableCell align="right">FormTypeID</TableCell>
+                                    <TableCell align="right">หัวข้อประเมิน</TableCell>
                                     {/* <TableCell align="right">หัวข้อประเมิน</TableCell> */}
-                                    <TableCell align="right">SatisfactionID</TableCell>
+                                    <TableCell align="right">ความพึงพอใจ</TableCell>
                                     <TableCell align="right">Comment</TableCell>
                                     <TableCell align="right">Action</TableCell>
                                 </TableRow>
@@ -102,9 +102,9 @@ export default function FormTable() {
                                         <TableCell component="th" scope="row">
                                             {row.ID}
                                         </TableCell>
-                                        <TableCell align="right">{row.FormTypeID}</TableCell>
+                                        <TableCell align="right">{row.FormType_name}</TableCell>
                                         {/* <TableCell align="right">{row.FormType_name}</TableCell> */}
-                                        <TableCell align="right">{row.SatisfactionID}</TableCell>
+                                        <TableCell align="right">{row.Satisfaction_name}</TableCell>
                                         <TableCell align="right">{row.Comment}</TableCell>
                                         <TableCell align="right">
                                             <ButtonGroup variant="outlined" aria-lable="outlined button group">
