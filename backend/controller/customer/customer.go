@@ -1,11 +1,11 @@
 package controller
 
 import (
+	"github.com/asaskevich/govalidator"
+	"github.com/gin-gonic/gin"
 	"github.com/sut65/team10/entity"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
-	"github.com/asaskevich/govalidator"
-	"github.com/gin-gonic/gin"
 
 	"net/http"
 )
@@ -38,13 +38,6 @@ func CreateCustomer(c *gin.Context) {
 		return
 	}
 
-	// Encrypt Password Before save to database
-	hashPassword, err := bcrypt.GenerateFromPassword([]byte(customers.Customer_Password), 14) 
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "error hashing password"})
-		return
-	}
-
 	//create entity customer
 	cus := entity.Customer{
 		Model:              gorm.Model{ID: customers.ID},
@@ -55,13 +48,24 @@ func CreateCustomer(c *gin.Context) {
 		Customer_Username:  customers.Customer_Username,
 		Customer_Phone:     customers.Customer_Phone,
 		Customer_Promptpay: customers.Customer_Promptpay,
-		Customer_Password:  string(hashPassword),
+		Customer_Password:  customers.Customer_Password,
 		Customer_Address:   customers.Customer_Address,
 	}
 	if _, err := govalidator.ValidateStruct(cus); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	// Encrypt Password Before save to database
+	hashPassword, err := bcrypt.GenerateFromPassword([]byte(customers.Customer_Password), 14)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "error hashing password"})
+		return
+	}
+
+	// Assign hashpassword to Customers_Password (replace the un-hash)
+	cus.Customer_Password = string(hashPassword)
+
 	//save customer
 	if err := entity.DB().Create(&cus).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -82,6 +86,8 @@ func GetCustomer(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": customer})
+	// debug
+	// println(customer.Customer_Password)
 }
 
 // GET /Customer
@@ -120,16 +126,6 @@ func UpdateCustomer(c *gin.Context) {
 		return
 	}
 
-	if customer.Customer_Password != "" {
-		hashPassword, err := bcrypt.GenerateFromPassword([]byte(customer.Customer_Password), 14)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "error hashing password"})
-			return
-
-		}
-		customer.Customer_Password = string(hashPassword)
-	}
-
 	cus := entity.Customer{
 		Gender:             customer.Gender,
 		Advertise:          customer.Advertise,
@@ -141,11 +137,27 @@ func UpdateCustomer(c *gin.Context) {
 		Customer_Password:  customer.Customer_Password,
 		Customer_Address:   customer.Customer_Address,
 	}
+	// println(customer.Customer_Password)
+
+	//** If customer enter the update section they need to update all of above entity
+	//** Because this one check all of above
 	if _, err := govalidator.ValidateStruct(cus); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	
+
+	//** if password already hash (from getCustomer) it won't repeat hashing
+	if !(customer.Customer_Password[0:7] == "$2a$14$") {
+		hashPassword, err := bcrypt.GenerateFromPassword([]byte(customer.Customer_Password), 14)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "error hashing password"})
+			return
+
+		}
+		// Assign hashpassword
+		cus.Customer_Password = string(hashPassword)
+	}
+
 	if err := entity.DB().Where("id = ?", customer.ID).Updates(&cus).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

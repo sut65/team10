@@ -34,7 +34,7 @@ type Customer struct {
 	Customer_Username  string `valid:"matches(^[A-Z])~Username must be is Begin with A-Z ,required~Username not blank"`
 	Customer_Phone     string `valid:"matches(^(0)([0-9]{9}))~Phonenumber is not valid,required~Phone not blank"`
 	Customer_Promptpay string `valid:"matches((^[0][0-9]{9}$)|([0-9]{13}))~Promptpay is not valid,required~Promptpay not blank"`
-	Customer_Password  string `valid:"minstringlength(6)~Password must be more than or equal to 6 characters,required~Password not blank"`
+	Customer_Password  string `valid:"minstringlength(8)~Password must be more than or equal to 8 characters,required~Password not blank"`
 	Customer_Address   string `valid:"required~Address not blank"`
 
 	Gender_ID *uint  `valid:"-"`
