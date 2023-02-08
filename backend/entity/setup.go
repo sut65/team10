@@ -425,7 +425,7 @@ func SetupDatabase() {
 	db.Model(&Brand{}).Create(&B2)
 
 	stock1 := Stock{
-		List_Number: 1,
+		List_Number: "1",
 		Type:        t1,
 		Brand:       B2,
 		Size:        s1,
@@ -435,7 +435,7 @@ func SetupDatabase() {
 	db.Model(&Stock{}).Create(&stock1)
 
 	stock2 := Stock{
-		List_Number: 2,
+		List_Number: "2",
 		Type:        t2,
 		Brand:       B1,
 		Size:        s2,

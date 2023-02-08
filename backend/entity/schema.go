@@ -72,18 +72,18 @@ type WorkShift struct {
 
 type Employee struct {
 	gorm.Model
-	Personal_ID  string `gorm:"uniqueIndex"`
-	Username     string `gorm:"uniqueIndex"`
-	Name         string
+	Personal_ID  string `gorm:"uniqueIndex" valid:"matches(^([1-9]{1})([0-9]{12}))~PersonalId is not valid"`
+	Username     string `gorm:"uniqueIndex" valid:"required~กรุณากรอก Username"`
+	Name         string `valid:"required~กรุณากรอกชื่อ - สกุล"`
 	Gender_ID    *uint
-	Gender       Gender `gorm:"references:id"`
+	Gender       Gender `gorm:"references:id" valid:"-" `
 	Position_ID  *uint
-	Position     Position `gorm:"references:id"`
+	Position     Position `gorm:"references:id" valid:"-" `
 	WorkShift_ID *uint
-	WorkShift    WorkShift `gorm:"references:id"`
-	Phonnumber   string
-	Address      string
-	Password     string
+	WorkShift    WorkShift `gorm:"references:id" valid:"-" `
+	Phonnumber   string `valid:"matches(^(0)([0-9]{9}))~Phonenumber is not valid"`
+	Address      string `valid:"required~กรุณากรอกที่อยู่"`
+	Password     string `valid:"minstringlength(8)~Password must be more than or equal to 8 characters"`
 	Stock        []Stock     `gorm:"foreignKey:Employee_ID"`
 	Vehicle      []Vehicle   `gorm:"foreignKey:Employee_ID"`
 	Receive      []Receive   `gorm:"foreignKey:Employee_ID"`
@@ -113,17 +113,17 @@ type Size struct {
 
 type Stock struct {
 	gorm.Model
-	List_Number uint `gorm:"uniqueIndex"`
+	List_Number string `gorm:"uniqueIndex" valid:"matches(^([1-9]{1})([0-9]{9})~รหัสรายการผิด"`
 	TypeID      *uint
-	Type        Type `gorm:"references:id"`
+	Type        Type `gorm:"references:id" valid:"-" `
 	BrandID     *uint
-	Brand       Brand `gorm:"references:id"`
+	Brand       Brand `gorm:"references:id" valid:"-" `
 	SizeID      *uint
-	Size        Size `gorm:"references:id"`
+	Size        Size `gorm:"references:id" valid:"-" `
 	Employee_ID *uint
-	Employee    Employee `gorm:"references:id"`
-	Quantity    uint
-	Time        time.Time
+	Employee    Employee `gorm:"references:id" valid:"-" `
+	Quantity    uint `valid:"ValueNotNegative~กรุณากรอกจะนวนให้ถูกต้อง"`
+	Time        time.Time `valid:"DateTimeNotPast~เวลาห้ามเป็นอดีต"`
 	Detergent   []Detergent `gorm:"foreignKey:Stock_ID"`
 	Softener    []Softener  `gorm:"foreignKey:Stock_ID"`
 }
