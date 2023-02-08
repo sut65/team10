@@ -29,7 +29,7 @@ func TestTimeNotPast(t *testing.T) {
 	g.Expect(err).ToNot(BeNil())
 
 	// err.Error ต้องมี error message แสดงออกมา
-	g.Expect(err.Error()).To(Equal("เวลาห้ามเป็นอดีต"))
+	g.Expect(err.Error()).To(Equal("DateTime Not Past"))
 }
 
 // ตรวจสอบเวลาแล้วต้องเจอ Error
@@ -51,5 +51,25 @@ func TestTimeNotFuture(t *testing.T) {
 	g.Expect(err).ToNot(BeNil())
 
 	// err.Error ต้องมี error message แสดงออกมา
-	g.Expect(err.Error()).To(Equal("เวลาห้ามเป็นอนาคต"))
+	g.Expect(err.Error()).To(Equal("DateTime Not Future"))
+}
+// วันเวลาห้ามเป็นอดีตเกิน5นาที
+func TestTimeNotNull(t *testing.T) {
+	g := NewGomegaWithT(t)
+
+	p := entity.Complete{
+		Complete_datetime: time.Time{}, // ผิด 0001-01-01 00:00:00 +0000 UTC
+	}
+
+	// ตรวจสอบด้วย govalidator
+	ok, err := govalidator.ValidateStruct(p)
+
+	// ok ต้องไม่เป็นค่า true แปลว่าต้องจับ error ได้
+	g.Expect(ok).ToNot(BeTrue())
+
+	// err ต้องไม่เป็นค่า nil แปลว่าต้องจับ error ได้
+	g.Expect(err).ToNot(BeNil())
+
+	// err.Error ต้องมี error message แสดงออกมา
+	g.Expect(err.Error()).To(Equal("DateTime Not Null"))
 }

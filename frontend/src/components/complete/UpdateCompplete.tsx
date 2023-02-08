@@ -165,7 +165,7 @@ function submitUpdate() {
     Packaging_ID: complete.Packaging_ID,
     Employee_Name: complete.Name,
     Receive_ID: complete.Receive_ID,
-    Complete_datetime: complete.Complete_datetime,
+    Complete_datetime: Complete_datetime,
   };
   //---------------------------------------------------------------------------------------------------------------------//
   const apiUrl = "http://localhost:8080";
@@ -184,7 +184,7 @@ function submitUpdate() {
         setAlertMessage("บันทึกสำเร็จ")
         console.log(res.data)
         await timeout(1000); //for 1 sec delay
-        window.location.href = "/complete/info"; 
+        //window.location.href = "/complete/info"; 
       } else {
         setError(true);
         setAlertMessage(res.error);
@@ -305,24 +305,22 @@ function submitUpdate() {
          <Grid item xs={6}>
 
            <FormControl fullWidth variant="outlined">
-
              <p>วัน-เวลาที่บันทึก</p>
                              <LocalizationProvider dateAdapter={AdapterDayjs}>
                              <DateTimePicker
-                  label="DateTimePicker"
-                  renderInput={(params) => <TextField {...params} />}
-                  value={Complete_datetime}
-                  onChange={(newValue: Dayjs | null) => {
-                    setComplete_datetime(newValue);
-                    console.log(newValue)
+                             label="DateTimePicker"
+                             renderInput={(params) => <TextField {...params} />}
+                             value={Complete_datetime}
+                             onChange={(newValue: Dayjs | null) => {
+                                   setComplete_datetime(newValue);
+                                   console.log(newValue)
                   }}
                 />
                             </LocalizationProvider>
            </FormControl>
-
          </Grid>
-         </Grid>
-         </Paper>
+        </Grid>
+        </Paper>
          <Grid container spacing={1} sx={{ padding: 5 }}>
          <Grid item xs={12}>
          <Button 

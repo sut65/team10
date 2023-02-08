@@ -563,7 +563,7 @@ func SetupDatabase() {
 
 	complete1 := Complete{
 		Model:             gorm.Model{},
-		Complete_datetime: time.Time{},
+		Complete_datetime: time.Date(2023, 01, 16, 12, 30, 00, 00, time.Now().Local().Location()),
 		Employee:          E1,
 		Receive:           Receive2,
 		Packaging:         Packaging1,
@@ -572,7 +572,7 @@ func SetupDatabase() {
 
 	complete2 := Complete{
 		Model:             gorm.Model{},
-		Complete_datetime: time.Time{},
+		Complete_datetime: time.Date(2023, 01, 16, 12, 30, 00, 00, time.Now().Local().Location()),
 		Employee:          E1,
 		Receive:           Receive1,
 		Packaging:         Packaging3,
@@ -581,7 +581,7 @@ func SetupDatabase() {
 
 	complete3 := Complete{
 		Model:             gorm.Model{},
-		Complete_datetime: time.Time{},
+		Complete_datetime: time.Date(2023, 01, 16, 12, 30, 00, 00, time.Now().Local().Location()),
 		Employee:          E2,
 		Receive:           Receive3,
 		Packaging:         Packaging4,

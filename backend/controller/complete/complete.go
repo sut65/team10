@@ -143,6 +143,8 @@ func UpdateComplete(c *gin.Context) {
 		return
 	}
 
+	var updatedatetime = complete.Complete_datetime
+
 	//ค้นหา packaging ด้วย id
 	if tx := entity.DB().Where("id = ?", complete.Packaging_ID).First(&packaging); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "packaging not found"})
@@ -170,7 +172,8 @@ func UpdateComplete(c *gin.Context) {
 		Employee:          employee,
 		Receive:           receive,
 		Packaging:         packaging,
-		Complete_datetime: complete.Complete_datetime,
+		Complete_datetime: updatedatetime.Local(),
+
 	}
 
 	if _, err := govalidator.ValidateStruct(updatecom); err != nil {
@@ -178,7 +181,7 @@ func UpdateComplete(c *gin.Context) {
 		return
 	}
 
-	//update customer
+	//update complete
 	if err := entity.DB().Save(&updatecom).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

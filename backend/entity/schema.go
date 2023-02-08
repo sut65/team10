@@ -342,7 +342,7 @@ type Packaging struct {
 
 type Complete struct {
 	gorm.Model
-	Complete_datetime time.Time `valid:" DateTimeNotPast~เวลาห้ามเป็นอดีต, DateTimeNotFuture~เวลาห้ามเป็นอนาคต"`
+	Complete_datetime time.Time `valid:"required~DateTime Not Null, DateTimeNotPast~DateTime Not Past, DateTimeNotFuture~DateTime Not Future"`
 
 	Employee_ID *uint    `valid:"-"`
 	Employee    Employee `gorm:"references:id" valid:"-"`
