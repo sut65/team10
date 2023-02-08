@@ -29,7 +29,7 @@ function UpdateReceive() {
   const [Sof_Quantity, setSof_Quantity] = React.useState<number | null>(null);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const [receive_id, setReceive_ID] = React.useState<ReceiveInterface[]>([]);
-
+  const [alertmessage,setAlertMessage] = useState("");
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
 
@@ -74,11 +74,13 @@ function UpdateReceive() {
         console.log(res);
         if (res.data) {
           setSuccess(true);
+          setAlertMessage("บันทึกข้อมูลสำเร็จ")
           await timeout(1000); //for 1 sec delay
           window.location.href = "/receive";      
           
         } else {
           setError(true);
+          setAlertMessage(res.error)
           console.log(res.data);
         }
       });
@@ -119,7 +121,7 @@ function UpdateReceive() {
         onClose={handleClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
         <Alert onClose={handleClose} severity="success">
-          บันทึกข้อมูลสำเร็จ
+          {alertmessage}
         </Alert>
       </Snackbar>
 
@@ -129,7 +131,7 @@ function UpdateReceive() {
         onClose={handleClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
         <Alert onClose={handleClose} severity="error">
-          บันทึกข้อมูลไม่สำเร็จ
+          {alertmessage}
         </Alert>
       </Snackbar>
       <Box sx={{ padding: 2}}>
