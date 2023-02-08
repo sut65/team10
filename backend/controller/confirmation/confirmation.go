@@ -122,10 +122,22 @@ func GetConfirmation(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": confirmation})
 }
 
-// GET /confirmation
+// GET /confirmations
 func ListConfirmations(c *gin.Context) {
 	var confirmations []entity.Confirmation
 	if err := entity.DB().Preload("RecvType").Preload("Customer").Preload("Complete").Raw("SELECT * FROM confirmations").Find(&confirmations).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": confirmations})
+}
+
+// GET /confirmations/:id
+func ListConfirmationsByID(c *gin.Context) {
+	var confirmations []entity.Confirmation
+	customer_id := c.Param("id")
+	if err := entity.DB().Preload("RecvType").Preload("Customer").Preload("Complete").Raw("SELECT * FROM confirmations WHERE customer_id = ?", customer_id).Find(&confirmations).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

@@ -24,6 +24,7 @@ import { RecvTypeInterface } from "../../models/confirmation/IRecvType";
 import { ConfirmationInterface } from "../../models/confirmation/IConfirmation";
 import { CompleteInterface } from "../../models/complete/IComplete";
 import ConfirmationUpdate from "./ConfirmationUpdate";
+import ConfTable from "./ConfTable";
 /* -------------------------------------------------------------------------- */
 /*                                    Style                                   */
 /* -------------------------------------------------------------------------- */
@@ -221,15 +222,19 @@ function Confirmation() {
   /*                                  HTML CSS                                  */
   /* -------------------------------------------------------------------------- */
   return (
-    <Box flexGrow={1} paddingTop={2}>
-      <Container maxWidth="md">
+    <Box flexGrow={1} paddingTop={0}>
+      <Container maxWidth="lg">
         <Snackbar
           open={success}
           autoHideDuration={3000}
           onClose={handleCloseSnackBar}
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         >
-          <Alert onClose={handleCloseSnackBar} severity="success" variant="filled">
+          <Alert
+            onClose={handleCloseSnackBar}
+            severity="success"
+            variant="filled"
+          >
             Save successfully
           </Alert>
         </Snackbar>
@@ -239,7 +244,11 @@ function Confirmation() {
           onClose={handleCloseSnackBar}
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         >
-          <Alert onClose={handleCloseSnackBar} severity="error" variant="filled">
+          <Alert
+            onClose={handleCloseSnackBar}
+            severity="error"
+            variant="filled"
+          >
             Failed "{errorMessage}"
           </Alert>
         </Snackbar>
@@ -296,6 +305,23 @@ function Confirmation() {
                       size="small"
                       disabled
                     />
+                  </Box>
+                </Paper>
+              </Stack>
+              <Stack paddingLeft={2} paddingBottom={2}>
+                <Paper style={{ background: "rgba(255,201,60,1)" }}>
+                  <Box paddingX={2} paddingBottom={2}>
+                    <div
+                      style={{
+                        fontSize: "15px",
+                        fontWeight: "bold",
+                        marginBottom: 10,
+                      }}
+                    >
+                      Confirmation History
+                    </div>
+                    {/* call the table  */}
+                    <ConfTable/>
                   </Box>
                 </Paper>
               </Stack>
