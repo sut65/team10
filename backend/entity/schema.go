@@ -36,13 +36,13 @@ type Customer struct {
 	Customer_Password  string `valid:"minstringlength(6)~Password must be more than or equal to 6 characters,required~Password not blank"`
 	Customer_Address   string `valid:"required~Address not blank"`
 
-	Gender_ID *uint   `valid:"-"`
+	Gender_ID *uint  `valid:"-"`
 	Gender    Gender `gorm:"references:id" valid:"-"`
 
-	Advertise_ID *uint `valid:"-"`
+	Advertise_ID *uint     `valid:"-"`
 	Advertise    Advertise `gorm:"references:id" valid:"-"`
 
-	Career_ID *uint `valid:"-"`
+	Career_ID *uint  `valid:"-"`
 	Career    Career `gorm:"references:id" valid:"-"`
 
 	Confirmation []Confirmation `gorm:"foreignKey:Customer_ID"`
@@ -287,16 +287,16 @@ type Softener struct {
 }
 type Receive struct {
 	gorm.Model
-	Employee_ID  *uint
-	Employee     Employee `gorm:"references:id"`
-	Bill_ID      *uint
-	Bill         Bill `gorm:"references:id"`
-	Detergent_ID *uint
-	Detergent    Detergent `gorm:"references:id"`
-	Softener_ID  *uint
-	Softener     Softener `gorm:"references:id"`
-	Det_Quantity uint
-	Sof_Quantity uint
+	Employee_ID  *uint     `valid:"-"`
+	Employee     Employee  `gorm:"references:id" valid:"-"`
+	Bill_ID      *uint     `valid:"-"`
+	Bill         Bill      `gorm:"references:id" valid:"-"`
+	Detergent_ID *uint     `valid:"-"`
+	Detergent    Detergent `gorm:"references:id" valid:"-"`
+	Softener_ID  *uint     `valid:"-"`
+	Softener     Softener  `gorm:"references:id" valid:"-"`
+	Det_Quantity int       `valid:"ValueNotNegative~จำนวนผงซักฟอกต้องไม่เป็นลบ"`
+	Sof_Quantity int       `valid:"ValueNotNegative~จำนวนน้ำยาปรับผ้านุ่มต้องไม่เป็นลบ"`
 	Time_Stamp   time.Time
 
 	Complete []Complete `gorm:"foreignKey:Receive_ID"`
