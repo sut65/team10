@@ -50,6 +50,7 @@ function FormCreate() {
     const [form1, setForm1] = React.useState<FormInterface[]>([]);
     const [success, setSuccess] = React.useState(false);
     const [error, setError] = React.useState(false);
+    const [message, setAlertMessage] = React.useState("");
     const handleClose = (
         event?: React.SyntheticEvent | Event,
         reason?: string
@@ -199,10 +200,10 @@ function FormCreate() {
                 console.log(res)
                 if (res.data) {
                     setSuccess(true);
-                    window.location.reload();
-                } else {
+                  } else {
+                    setAlertMessage(res.error);
                     setError(true);
-                }
+                  }
             });
     }
 
@@ -240,7 +241,7 @@ function FormCreate() {
 
                 <Alert onClose={handleClose} severity="error">
 
-                    บันทึกข้อมูลไม่สำเร็จ
+                    {message}
 
                 </Alert>
 
