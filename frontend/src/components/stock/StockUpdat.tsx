@@ -168,7 +168,7 @@ function StockUpdate_UI() {
       },
       body: JSON.stringify(data),
     };
-    fetch(apiUrl, requestOptions) //ขอการส่งกลับมาเช็คว่าบันทึกสำเร็จมั้ย
+    fetch(apiUrl, requestOptions) //ขอการส่งกลับมาเช็คว่าupdateสำเร็จมั้ย
       .then((response) => response.json())
       .then((res) => {
         if (res.data) {
@@ -267,7 +267,7 @@ function StockUpdate_UI() {
                     disabled
                     value={Stock.Brand?.Band_Name+""}
                     fullWidth
-                    id="List_number"
+                    id="brand"
                     type="string"
                     variant="outlined"
 
@@ -279,7 +279,7 @@ function StockUpdate_UI() {
                     disabled
                     value={Stock.Type?.Type_Name+""}
                     fullWidth
-                    id="List_number"
+                    id="types"
                     type="string"
                     variant="outlined"
 
@@ -292,7 +292,7 @@ function StockUpdate_UI() {
                     disabled
                     value={Stock.Size?.Size_Name+""}
                     fullWidth
-                    id="List_number"
+                    id="size"
                     type="string"
                     variant="outlined"
 
@@ -304,7 +304,7 @@ function StockUpdate_UI() {
                     disabled
                     value={Stock.Employee?.Name+""}
                     fullWidth
-                    id="List_number"
+                    id="employee"
                     type="string"
                     variant="outlined"
 

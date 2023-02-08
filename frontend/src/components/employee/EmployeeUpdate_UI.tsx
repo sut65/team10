@@ -12,6 +12,7 @@ import { WorkShiftsInterface } from "../../models/Employee/IWorkShift";
 import { PositionsInterface } from "../../models/Employee/IPosition";
 
 function EmployeeUpdate_UI() {
+  const employee_id = Number(localStorage.getItem("eid_edit"));
   const [employee, setEmployee] = React.useState<Partial<EmployeesInterface>>(
     {}
   );
@@ -32,6 +33,25 @@ function EmployeeUpdate_UI() {
   const [noAccess, setNoAccess] = React.useState(false);
 
   const [errorMessage, setErrorMessage] = useState("");
+
+  const getEmployee = async () => {
+    //ดึงข้อมูลพนักงาน
+    const apiUrl = `http://localhost:8080/employees/${employee_id}`;
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    };
+    fetch(apiUrl, requestOptions)
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.data) {
+        setEmployee(res.data);
+      }
+    });
+};
 
   const getGender = async () => {
     //ดึงข้อมูลเพศ
@@ -107,8 +127,8 @@ function EmployeeUpdate_UI() {
 
   async function update() {
     let data = {
-      ID: Number(localStorage.getItem("eid_edit")),
-      Personal_ID: Personal_ID,
+      ID: employee_id,
+      Personal_ID: employee.Personal_ID,
       Username: Username,
       Name: Name,
       Gender_ID: employee.Gender_ID,
@@ -150,6 +170,7 @@ function EmployeeUpdate_UI() {
   React.useEffect(() => {
     //เรียกข้อมูล
     getGender();
+    getEmployee();
     getWorkShift();
     getPosition();
   }, []);
@@ -200,6 +221,8 @@ function EmployeeUpdate_UI() {
                 <Stack>
                   Personal ID
                   <TextField
+                  disabled
+                  value={employee.Personal_ID+""}
                     fullWidth
                     id="Personal_ID"
                     type="string"
@@ -219,60 +242,24 @@ function EmployeeUpdate_UI() {
                 </Stack>
                 <Stack>
                   Gender
-                  <Autocomplete
-                    id="gender-autocomplete"
-                    options={gender}
-                    onChange={(event: any, value) => {
-                      setEmployee({ ...employee, Gender_ID: value?.ID }); //Just Set ID to interface
-                    }}
-                    getOptionLabel={(option: any) => `${option.Gender_Name}`} //filter value
-                    renderInput={(params) => {
-                      return (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          placeholder="Search..."
-                        />
-                      );
-                    }}
-                    renderOption={(props: any, option: any) => {
-                      return (
-                        <li
-                          {...props}
-                          value={`${option.ID}`}
-                          key={`${option.ID}`}
-                        >{`${option.Gender_Name}`}</li>
-                      ); //display value
-                    }}
+                  <TextField
+                  disabled
+                  value={employee.Gender?.Gender_Name+""}
+                    fullWidth
+                    id="Gender"
+                    type="string"
+                    variant="outlined"
                   />
                 </Stack>
                 <Stack>
                   Position
-                  <Autocomplete
-                    id="position-autocomplete"
-                    options={position}
-                    onChange={(event: any, value) => {
-                      setEmployee({ ...employee, Position_ID: value?.ID }); //Just Set ID to interface
-                    }}
-                    getOptionLabel={(option: any) => `${option.Position_Name}`} //filter value
-                    renderInput={(params) => {
-                      return (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          placeholder="Search..."
-                        />
-                      );
-                    }}
-                    renderOption={(props: any, option: any) => {
-                      return (
-                        <li
-                          {...props}
-                          value={`${option.ID}`}
-                          key={`${option.ID}`}
-                        >{`${option.Position_Name}`}</li>
-                      ); //display value
-                    }}
+                  <TextField
+                  disabled
+                  value={employee.Position?.Position_Name+""}
+                    fullWidth
+                    id="Position"
+                    type="string"
+                    variant="outlined"
                   />
                 </Stack>
                 <Stack>
@@ -319,33 +306,13 @@ function EmployeeUpdate_UI() {
                 </Stack>
                 <Stack>
                   Workshift
-                  <Autocomplete
-                    id="workshift-autocomplete"
-                    options={workshift}
-                    onChange={(event: any, value) => {
-                      setEmployee({ ...employee, WorkShift_ID: value?.ID }); //Just Set ID to interface
-                    }}
-                    getOptionLabel={(option: any) =>
-                      `${option.Work_shift_Name}`
-                    } //filter value
-                    renderInput={(params) => {
-                      return (
-                        <TextField
-                          {...params}
-                          variant="outlined"
-                          placeholder="Search..."
-                        />
-                      );
-                    }}
-                    renderOption={(props: any, option: any) => {
-                      return (
-                        <li
-                          {...props}
-                          value={`${option.ID}`}
-                          key={`${option.ID}`}
-                        >{`${option.Work_shift_Name}`}</li>
-                      ); //display value
-                    }}
+                  <TextField
+                  disabled
+                  value={employee.WorkShift?.Work_shift_Name+""}
+                    fullWidth
+                    id="Position"
+                    type="string"
+                    variant="outlined"
                   />
                 </Stack>
                 <Grid container justifyContent={"center"} paddingY={4}>
