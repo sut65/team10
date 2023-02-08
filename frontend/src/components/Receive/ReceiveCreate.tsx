@@ -110,7 +110,7 @@ const open = Boolean(anchorEl);
 const popover = open ? "simple-popover" : undefined;
 
 const getBill = async () => {
-  const apiUrl = `http://localhost:8080/bill`;
+  const apiUrl = `http://localhost:8080/receivebillstate`;
   const requestOptions = {
     method: "GET",
     headers: {

@@ -18,6 +18,7 @@ func CreateReceive(c *gin.Context) {
 	var detergent entity.Detergent
 	var softener entity.Softener
 	var employee entity.Employee
+	//var stock entity.Stock
 
 	if err := c.ShouldBindJSON(&receive); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -87,6 +88,17 @@ func CreateReceive(c *gin.Context) {
 		return
 	}
 
+	//สร้าง ข้อมูลสำหรับใช้ในการอัปเดต Stock
+	s_u := entity.Stock{
+		Quantity: 8,
+	}
+
+	//function สำหรับอัปเดต Receive_State Bill
+	if err := entity.DB().Where("id = ?", receive.Detergent.Stock_ID).Updates(&s_u).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{"data": rec})
 
 }
@@ -114,6 +126,19 @@ func ListReceives(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"data": receive})
+
+}
+
+// GET /bills
+
+func ListReceiveBillState(c *gin.Context) {
+	var receivebillstate []entity.Bill
+	if err := entity.DB().Preload("Service.Customer").Preload("QuotaCode").Preload("Paymenttype").Raw("SELECT * FROM bills WHERE Receive_State = 0").Find(&receivebillstate).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": receivebillstate})
 
 }
 
