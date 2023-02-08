@@ -206,7 +206,7 @@ function UpdateVehicle() {
                     openTo="day"
                     value={date}
                     shouldDisableDate={isWeekend}
-                    onChange={(newValue) => {
+                    onChange={(newValue: Dayjs | null) => {
                       setDate(newValue);
                     }}
                     renderInput={(params) => <TextField {...params} />}

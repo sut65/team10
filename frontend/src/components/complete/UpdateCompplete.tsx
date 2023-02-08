@@ -43,6 +43,8 @@ function UpdateComplete() {
  const [eid, setEid] = React.useState<Number | undefined>(undefined);
  const [success, setSuccess] = React.useState(false);
  const [error, setError] = React.useState(false);
+ const [message, setAlertMessage] = React.useState("");
+
  const handleClose = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -150,6 +152,10 @@ const handleChange = (event: SelectChangeEvent<number>) => {
   });
 };
 
+function timeout(delay: number) {
+  return new Promise( res => setTimeout(res, delay) );
+}
+
 console.log(complete.Employee_ID)
 
 function submitUpdate() {
@@ -172,11 +178,16 @@ function submitUpdate() {
 
   fetch(`${apiUrl}/completes`, requestOptionsPost)
     .then((response) => response.json())
-    .then((res) => {
+    .then(async(res) => {
       if (res.data) {
         setSuccess(true);
+        setAlertMessage("บันทึกสำเร็จ")
+        console.log(res.data)
+        await timeout(1000); //for 1 sec delay
+        window.location.href = "/complete/info"; 
       } else {
         setError(true);
+        setAlertMessage(res.error);
         console.log(res.data)
       }
     });
@@ -198,7 +209,7 @@ function submitUpdate() {
        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
      >
        <Alert onClose={handleClose} severity="success">
-         บันทึกข้อมูลสำเร็จ
+        {message}
        </Alert>
      </Snackbar>
 
@@ -209,7 +220,7 @@ function submitUpdate() {
        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
      >
        <Alert onClose={handleClose} severity="error">
-         บันทึกข้อมูลไม่สำเร็จ
+         {message}
        </Alert>
      </Snackbar>
      <Box sx={{ padding: 2
@@ -298,11 +309,14 @@ function submitUpdate() {
              <p>วัน-เวลาที่บันทึก</p>
                              <LocalizationProvider dateAdapter={AdapterDayjs}>
                              <DateTimePicker
-                        value={Complete_datetime}
-                        onChange={handleDateTime}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-
+                  label="DateTimePicker"
+                  renderInput={(params) => <TextField {...params} />}
+                  value={Complete_datetime}
+                  onChange={(newValue: Dayjs | null) => {
+                    setComplete_datetime(newValue);
+                    console.log(newValue)
+                  }}
+                />
                             </LocalizationProvider>
            </FormControl>
 

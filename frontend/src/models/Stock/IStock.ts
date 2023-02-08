@@ -19,10 +19,9 @@ export interface StocksInterface {
 
 	Size:			SizesInterface,
 
-    EmployeeID:     number,
+    Employee_ID:     number,
     Employee:       EmployeesInterface,
 	
-	Add_number:     number,
     Quantity:       number,
     Time:            Date,
   }

@@ -51,6 +51,7 @@ function UpdateCustomer() {
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("");
+  const [message, setAlertMessage] = React.useState("");
 
   const handleClose = (
     event?: React.SyntheticEvent | Event,
@@ -205,15 +206,15 @@ function UpdateCustomer() {
     fetch(`http://localhost:8080/customers`, requestOptionsPost)
       .then((response) => response.json())
       .then((res) => {
+        console.log(res);
         if (res.data) {
           setSuccess(true);
-          setErrorMessage("");
           localStorage.clear();
           window.location.reload();
           window.location.href = "/";
         } else {
           setError(true);
-          setErrorMessage(res.error);
+          setAlertMessage(res.error);
         }
       });
   }
@@ -244,7 +245,7 @@ function UpdateCustomer() {
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
         <Alert onClose={handleClose} severity="error">
-          บันทึกข้อมูลไม่สำเร็จ
+        {message}
         </Alert>
       </Snackbar>
       <Box sx={{

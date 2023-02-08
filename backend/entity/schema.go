@@ -122,7 +122,6 @@ type Stock struct {
 	Size        Size `gorm:"references:id"`
 	Employee_ID *uint
 	Employee    Employee `gorm:"references:id"`
-	Add_number  uint
 	Quantity    uint
 	Time        time.Time
 	Detergent   []Detergent `gorm:"foreignKey:Stock_ID"`
@@ -343,16 +342,16 @@ type Packaging struct {
 
 type Complete struct {
 	gorm.Model
-	Complete_datetime time.Time
+	Complete_datetime time.Time `valid:" DateTimeNotPast~เวลาห้ามเป็นอดีต, DateTimeNotFuture~เวลาห้ามเป็นอนาคต"`
 
-	Employee_ID *uint
-	Employee    Employee `gorm:"references:id"`
+	Employee_ID *uint    `valid:"-"`
+	Employee    Employee `gorm:"references:id" valid:"-"`
 
-	Receive_ID *uint
-	Receive    Receive `gorm:"references:id"`
+	Receive_ID *uint   `valid:"-"`
+	Receive    Receive `gorm:"references:id" valid:"-"`
 
-	Packaging_ID *uint
-	Packaging    Packaging `gorm:"references:id"`
+	Packaging_ID *uint     `valid:"-"`
+	Packaging    Packaging `gorm:"references:id" valid:"-"`
 
 	Confirmation []Confirmation `gorm:"foreignKey:Complete_ID"`
 }

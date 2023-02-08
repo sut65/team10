@@ -68,7 +68,9 @@ function CompleteCreate() {
  const [eid, setEid] = React.useState<Number | undefined>(undefined);
  const [success, setSuccess] = React.useState(false);
  const [error, setError] = React.useState(false);
- const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+ const [message, setAlertMessage] = React.useState("");
+
+ 
  const getPackaging = async () => {
   const apiUrl = `http://localhost:8080/packagings`;
   const requestOptions = {
@@ -182,6 +184,10 @@ const handleChange = (event: SelectChangeEvent<number>) => {
   });
 };
 
+function timeout(delay: number) {
+  return new Promise( res => setTimeout(res, delay) );
+}
+
 function submit() {
   let data = {
 
@@ -190,33 +196,33 @@ function submit() {
     Packaging_ID: complete.Packaging_ID,
     Employee_Name: complete.Name,
     Receive_ID: complete.Receive_ID,
-    Complete_datetime: complete.Complete_datetime,
+    Complete_datetime: Complete_datetime,
   };
   
   const apiUrl = "http://localhost:8080";
   const requestOptions = {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify(data),
   };
 
 
   fetch(`${apiUrl}/completes`, requestOptions)
-
     .then((response) => response.json())
-
-    .then((res) => {
-
+    .then(async(res) => {
       if (res.data) {
-
         setSuccess(true);
-
+        setAlertMessage("บันทึกสำเร็จ")
+        console.log(res.data)
+        await timeout(1000); //for 1 sec delay
+        window.location.href = "/complete/info"; 
       } else {
-
+        setAlertMessage(res.error);
         setError(true);
-
       }
-
     });
 }
 
@@ -239,7 +245,7 @@ function submit() {
        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
      >
        <Alert onClose={handleClose} severity="success">
-         บันทึกข้อมูลสำเร็จ
+       {message}
        </Alert>
      </Snackbar>
 
@@ -250,7 +256,7 @@ function submit() {
        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
      >
        <Alert onClose={handleClose} severity="error">
-         บันทึกข้อมูลไม่สำเร็จ
+       {message}
        </Alert>
      </Snackbar>
      <Box sx={{ padding: 2
@@ -365,11 +371,14 @@ function submit() {
              <p>วัน-เวลาที่บันทึก</p>
                              <LocalizationProvider dateAdapter={AdapterDayjs}>
                              <DateTimePicker
-                        value={Complete_datetime}
-                        onChange={handleDateTime}
-                        renderInput={(params) => <TextField {...params} />}
-                      />
-
+                  label="DateTimePicker"
+                  renderInput={(params) => <TextField {...params} />}
+                  value={Complete_datetime}
+                  onChange={(newValue: Dayjs | null) => {
+                    setComplete_datetime(newValue);
+                    console.log(newValue)
+                  }}
+                />
                             </LocalizationProvider>
            </FormControl>
 

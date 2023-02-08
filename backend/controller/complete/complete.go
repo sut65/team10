@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/asaskevich/govalidator"
 	"github.com/sut65/team10/entity"
 
 	"gorm.io/gorm"
@@ -36,7 +37,7 @@ func CreateComplete(c *gin.Context) {
 
 	//ค้นหาด้วย packaging ด้วย id
 	if tx := entity.DB().Where("id = ?", complete.Packaging_ID).First(&packaging); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "complete not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "packaging not found"})
 		return
 	}
 
@@ -52,8 +53,14 @@ func CreateComplete(c *gin.Context) {
 		Employee:          employee,
 		Receive:           receive,
 		Packaging:         packaging,
-		Complete_datetime: complete.Complete_datetime,
+		Complete_datetime: complete.Complete_datetime.Local(),
 	}
+
+	if _, err := govalidator.ValidateStruct(com); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	if err := entity.DB().Create(&com).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -165,6 +172,12 @@ func UpdateComplete(c *gin.Context) {
 		Packaging:         packaging,
 		Complete_datetime: complete.Complete_datetime,
 	}
+
+	if _, err := govalidator.ValidateStruct(updatecom); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	//update customer
 	if err := entity.DB().Save(&updatecom).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

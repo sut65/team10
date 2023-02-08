@@ -430,7 +430,6 @@ func SetupDatabase() {
 		Brand:       B2,
 		Size:        s1,
 		Employee:    E1,
-		Add_number:  11,
 		Quantity:    12,
 		Time:        time.Date(2022, 10, 23, 12, 30, 00, 00, time.Now().Local().Location())}
 	db.Model(&Stock{}).Create(&stock1)
@@ -441,7 +440,6 @@ func SetupDatabase() {
 		Brand:       B1,
 		Size:        s2,
 		Employee:    E1,
-		Add_number:  11,
 		Quantity:    15,
 		Time:        time.Date(2022, 10, 25, 12, 40, 00, 00, time.Now().Local().Location())}
 	db.Model(&Stock{}).Create(&stock2)
