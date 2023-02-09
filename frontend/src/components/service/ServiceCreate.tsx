@@ -26,11 +26,17 @@ import Typography from "@mui/material/Typography";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import { TypeWashingInterface } from "../../models/service/IService";
 import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
-import { blue, blueGrey, green, purple, red, yellow } from "@mui/material/colors";
-import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
-import UndoIcon from '@mui/icons-material/Undo';
-import { color } from "@material-ui/system";
-import { dark } from "@mui/material/styles/createPalette";
+import {
+  blue,
+  blueGrey,
+  green,
+  purple,
+  red,
+  yellow,
+} from "@mui/material/colors";
+import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
+import UndoIcon from "@mui/icons-material/Undo";
+import Swal from 'sweetalert2'
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -40,7 +46,9 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-var sum = 0;
+
+
+
 
 const ServiceCreate = () => {
   const params = useParams();
@@ -224,6 +232,35 @@ const ServiceCreate = () => {
     //================================================================================================================//
 
     const apiUrl = "http://localhost:8080";
+    Swal.fire({
+      title: "คุณต้องการส่งรายการซักรีดใช่มั้ย",
+      showDenyButton: false,
+      showCancelButton: true,
+      confirmButtonText: "บันทึก",
+    }).then((data: any) => {
+      if (data.isConfirmed) {
+        fetch(`${apiUrl}/services`, requestOptionsPost)
+          .then((response) => response.json())
+          .then((res) => {
+            console.log(res);
+            if (res.data) {
+              Swal.fire({
+                icon: "success",
+                title: "Saved!",
+                text: "บันทึกสำเร็จ",
+              });
+              // setSuccess(true);
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: res.error,
+              });
+              // setError(true);
+            }
+          });
+      }
+    });
 
     const requestOptionsPost = {
       method: "POST",
@@ -233,26 +270,25 @@ const ServiceCreate = () => {
       },
       body: JSON.stringify(data),
     };
+    // fetch(`${apiUrl}/services`, requestOptionsPost)
+    //   .then((response) => response.json())
+    //   .then((res) => {
+    //     console.log(res);
+    //     // if (res.data) {
+    //     //   setSuccess(true);
+    //     //   window.location.reload();
 
-    fetch(`${apiUrl}/services`, requestOptionsPost)
-      .then((response) => response.json())
-      .then((res) => {
-        console.log(res);
-        // if (res.data) {
-        //   setSuccess(true);
-        //   window.location.reload();
+    //     // } else {
 
-        // } else {
-
-        //   setError(true);
-        // }
-        if (res.data) {
-          setSuccess(true);
-        } else {
-          setAlertMessage(res.error);
-          setError(true);
-        }
-      });
+    //     //   setError(true);
+    //     // }
+    //     if (res.data) {
+    //       setSuccess(true);
+    //     } else {
+    //       setAlertMessage(res.error);
+    //       setError(true);
+    //     }
+    //   });
   }
 
   //================================================================================================================//
@@ -397,7 +433,7 @@ const ServiceCreate = () => {
                       </Select>
                     </FormControl>
                   </Grid>
-{/* 
+                  {/* 
                   <Grid item xs={4}>
                     <FormControl fullWidth variant="outlined">
                       <p>ราคา</p>
@@ -430,8 +466,8 @@ const ServiceCreate = () => {
                       component={RouterLink}
                       to="/serviceinfo"
                       variant="outlined"
-                      sx={{border:3 ,color: yellow[800]}}
-                      startIcon={<UndoIcon/>}
+                      sx={{ border: 3, color: yellow[800] }}
+                      startIcon={<UndoIcon />}
                     >
                       Back
                     </Button>
@@ -440,8 +476,8 @@ const ServiceCreate = () => {
                       style={{ float: "right" }}
                       onClick={submit}
                       variant="contained"
-                      sx={{border:2 ,color: green["A400"]}}
-                      endIcon={<FileDownloadDoneIcon/>}
+                      sx={{ border: 2, color: green["A400"] }}
+                      endIcon={<FileDownloadDoneIcon />}
                     >
                       Submit
                     </Button>
@@ -478,21 +514,27 @@ const ServiceCreate = () => {
                         <p>การจัดส่ง: {delidetail?.DeliveryType_service}</p>
                         <Divider />
                         <Grid item xs={1}>
-                          <p><h3>ราคา: </h3></p>
+                          <p>
+                            <h3>ราคา: </h3>
+                          </p>
                         </Grid>
                         <Grid item xs={1}>
-                        <Typography
-                          align="right"
-                          variant="h1"
-
-                          sx={{ marginLeft: 12, p: 0, pt: 0, color: purple["A400"]}}
-                        >
+                          <Typography
+                            align="right"
+                            variant="h1"
+                            sx={{
+                              marginLeft: 12,
+                              p: 0,
+                              pt: 0,
+                              color: purple["A400"],
+                            }}
+                          >
                             {add(
                               typewashingdetail?.TypeWashing_Price,
                               weightdetail?.Weight_price,
                               delidetail?.DeliveryType_price
                             )}
-                        </Typography>
+                          </Typography>
                         </Grid>
                       </Typography>
                     </FormControl>

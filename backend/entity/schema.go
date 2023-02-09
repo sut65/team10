@@ -171,7 +171,7 @@ type Service struct {
 	Customer    Customer `gorm:"references:id" valid:"-"`
 
 	Bill_status uint
-	Address     string `valid:"minstringlength(8)~โปรดระบุให้ละเอียด,matches([0-9ก-ฮ./])~ที่อยู่เป็นตัวอักษรพิเศษหรือภาษาอังกฤษ,required~โปรดกรอกที่อยู่"`
+	Address     string `valid:"minstringlength(8)~โปรดระบุให้ละเอียด,alphabet~ที่อยู่เป็นตัวอักษรพิเศษหรือภาษาอังกฤษ,required~โปรดกรอกที่อยู่"`
 	Bill_Price  float64
 	Bill        []Bill `gorm:"foreignKey:Service_ID"`
 }
