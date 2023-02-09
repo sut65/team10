@@ -4,9 +4,13 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import {
   Button,
-  ButtonGroup,
+  IconButton,
+  Modal,
   Paper,
+  Slide,
   SwipeableDrawer,
+  TableFooter,
+  TablePagination,
   Typography,
 } from "@mui/material";
 import Table from "@mui/material/Table";
@@ -19,14 +23,51 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ServiceInterface } from "../../models/service/IService";
 import { Link as RouterLink } from "react-router-dom";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { yellow } from "@mui/material/colors";
+import EditIcon from "@mui/icons-material/Edit";
+import ServiceUpdate from "./UpdateService";
+import { TransitionProps } from "@mui/material/transitions";
+// import Table from '@mui/joy/Table';
+
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export default function ServiceTable() {
   const params = useParams();
   const navigate = useNavigate();
 
   const [service, setService] = React.useState<ServiceInterface[]>([]);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [page, setPage] = React.useState(0);
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - service.length) : 0;
 
   const apiUrl = "http://localhost:8080";
+  const [open, setOpen] = React.useState(false);
+
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleChangePage = (
+    event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number,
+) => {
+    setPage(newPage);
+};
+const handleChangeRowsPerPage = (
+  event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+) => {
+  setRowsPerPage(parseInt(event.target.value, 10));
+  setPage(0);
+};
 
   const getServices = async () => {
     const requestOptions = {
@@ -91,27 +132,36 @@ export default function ServiceTable() {
           </Box>
 
           <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 400, p: 2 }} aria-label="simple table">
+            <Table
+              sx={{ minWidth: 400, p: 2 }}
+              aria-label="simple table"
+              stickyHeader
+            >
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
-                  {/* <TableCell align="right">TypeWashingID</TableCell>
-                  <TableCell align="right">WeightID</TableCell>
-                  <TableCell align="right">Address</TableCell>
-                  <TableCell align="right">Delivery</TableCell> */}
                   <TableCell align="right">ประเภทการซัก</TableCell>
                   <TableCell align="right">น้ำหนัก</TableCell>
                   <TableCell align="center">ที่อยู่</TableCell>
                   <TableCell align="right">ประเภทการจัดส่ง</TableCell>
                   <TableCell align="right">Price/THB</TableCell>
-                  <TableCell align="right">Action</TableCell>
+                  <TableCell align="center">แก้ไข</TableCell>
+                  <TableCell align="center">ลบ</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {service.map((row) => (
+                {(rowsPerPage > 0
+                  ? service.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : service
+                ).map((row) => (
+                  // {service.map((row) => (
                   <TableRow
                     key={row.ID}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    // sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    sx={{ width: "auto" }}
                   >
                     <TableCell component="th" scope="row">
                       {row.ID}
@@ -119,32 +169,64 @@ export default function ServiceTable() {
                     <TableCell align="right">{row.Type_washing}</TableCell>
                     <TableCell align="right">{row.Weight_net}</TableCell>
                     <TableCell align="center">{row.Address}</TableCell>
-                    <TableCell align="right">{row.DeliveryType_service}</TableCell>
-                    <TableCell align="right">{row.Bill_Price}</TableCell>
                     <TableCell align="right">
-                      <ButtonGroup
-                        variant="outlined"
-                        aria-lable="outlined button group"
+                      {row.DeliveryType_service}
+                    </TableCell>
+                    <TableCell align="right">{row.Bill_Price}</TableCell>
+                    <TableCell align="center">
+                      <IconButton
+                        size="large"
+                        aria-label="Edit"
+                        onClick={() => {
+                          navigate({ pathname: `/service/${row.ID}` });
+                        }}
+                        sx={{ color: yellow[800] }}
                       >
-                        <Button
-                          onClick={() =>
-                            navigate({ pathname: `/service/${row.ID}` })
-                          }
-                          variant="contained"
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          onClick={() => ServiceDelete(row.ID)}
-                          color="error"
-                        >
-                          Delete
-                        </Button>
-                      </ButtonGroup>
+                        <EditIcon fontSize="inherit" />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell align="center">
+                      <IconButton
+                        size="large"
+                        aria-label="delete"
+                        onClick={() => ServiceDelete(row.ID)}
+                        sx={{ color: yellow[800] }}
+                      >
+                        <DeleteIcon fontSize="inherit" />
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 ))}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 53 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
               </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[
+                      5,
+                      10,
+                      25,
+                      { label: "All", value: -1 },
+                    ]}
+                    colSpan={service.length}
+                    count={service.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      inputProps: {
+                        "aria-label": "rows per page",
+                      },
+                      native: true,
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </TableRow>
+              </TableFooter>
             </Table>
           </TableContainer>
         </Paper>
