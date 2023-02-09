@@ -50,12 +50,7 @@ export default function ServiceTable() {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - service.length) : 0;
 
   const apiUrl = "http://localhost:8080";
-  const [open, setOpen] = React.useState(false);
 
-
-  const handleClose = () => {
-    setOpen(false);
-  };
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
