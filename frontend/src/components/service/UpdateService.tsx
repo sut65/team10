@@ -24,6 +24,7 @@ import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import { TypeWashingInterface } from "../../models/service/IService";
 import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
 import DeleteIcon from '@mui/icons-material/Delete';
+import { red } from "@mui/material/colors";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -52,9 +53,9 @@ const ServiceUpdate = () => {
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
   // const id_customer = localStorage.getItem("id");'
-  const [typewashingprice, setTypewashingprice] = React.useState<TypeWashingInterface>()
-  const [weightprice, setWeightprice] = React.useState<WeightInterface>()
-  const [deliprice, setDeliprice] = React.useState<DeliveryTypeInterface>()
+  const [typewashingdetail, setTypewashingdetail] = React.useState<TypeWashingInterface>()
+  const [weightdetail, setWeightdetail] = React.useState<WeightInterface>()
+  const [delidetail, setDelidetail] = React.useState<DeliveryTypeInterface>()
   // const [sumprice,setSumprice] = React.useState<number>(0);
   const [message, setAlertMessage] = React.useState("");
 
@@ -218,13 +219,13 @@ const ServiceUpdate = () => {
       [name]: event.target.value,
     });
     if (event.target.name === "TypeWashing_ID") {
-      setTypewashingprice(typewashing.find((r) => r.ID === event.target.value));
+      setTypewashingdetail(typewashing.find((r) => r.ID === event.target.value));
     }
     if (event.target.name === "Weight_ID") {
-      setWeightprice(weight.find((r) => r.ID === event.target.value));
+      setWeightdetail(weight.find((r) => r.ID === event.target.value));
     }
     if (event.target.name === "DeliveryType_ID") {
-      setDeliprice(deliverytype.find((r) => r.ID === event.target.value));
+      setDelidetail(deliverytype.find((r) => r.ID === event.target.value));
     }
 
 
@@ -311,178 +312,232 @@ const ServiceUpdate = () => {
             </Alert>
           </Snackbar>
 
-          {/* <Paper variant="elevation"> */}
-          <Grid container spacing={2} sx={{ padding: 2 }}>
-            <Grid item xs={4}>
-              <Card sx={{ minWidth: 275 }}>
-                <CardContent>
-                  <FormControl fullWidth variant="outlined">
-                    <TextField
-                      id="TypWashing_ID"
-                      variant="outlined"
-                      disabled
-                      type="string"
-                      size="medium"
-                      value={service.Description}
-                      defaultValue={"รายละเอียด"}
-                      sx={{ width: 240 }}
-                    ></TextField>
-                  </FormControl>
-                </CardContent>
-              </Card>
-            </Grid>
+          <Grid container rowSpacing={1} sx={{ padding: 2 }}>
+            <Grid item xs={10} sx={{ paddingRight: 2 }}>
+              <Paper
+                variant="elevation"
+                elevation={12}
+                style={{
+                  background:
+                    "linear-gradient(180deg, #AFEEEE 0%,#F0FFFF 100%, #F5DEB3 100%)",
+                }}
+              >
+                <Box
+                  display="flex"
+                  maxWidth="lg"
+                  sx={{
+                    marginTop: 2,
+                  }}
+                >
+                  <Box sx={{ paddingX: 2, paddingY: 1 }}>
+                    <Typography
+                      component="h2"
+                      variant="h6"
+                      color="primary"
+                      gutterBottom
+                      mt={2}
+                      align="center"
+                    >
+                      <h2>ระบบเลือกบริการ</h2>
+                    </Typography>
+                  </Box>
+                </Box>
+                <Divider />
+                <Grid container rowSpacing={1} sx={{ padding: 2 }}>
+                  <Grid item xs={6.5}>
+                    <p>รูปแบบการซัก</p>
+                    <FormControl fullWidth variant="outlined">
+                      <Select
+                        sx={{ width: 300 }}
+                        value={service.TypeWashing_ID}
+                        onChange={handleChange}
+                        inputProps={{
+                          name: "TypeWashing_ID",
+                        }}
+                      >
+                        {typewashing.map((item: TypeWashingInterface) => (
+                          <MenuItem value={item.ID}>
+                            {item.Type_washing}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
 
-            <Grid item xs={4}>
-              <Card sx={{ minWidth: 275 }}>
-                <CardContent></CardContent>
-              </Card>
-            </Grid>
+                  <Grid item xs={4}>
+                    <p>น้ำหนัก</p>
+                    <FormControl fullWidth variant="outlined">
+                      <Select
+                        sx={{ width: 300 }}
+                        value={service.Weight_ID}
+                        onChange={handleChange}
+                        inputProps={{
+                          name: "Weight_ID",
+                        }}
+                      >
+                        {weight.map((item: WeightInterface) => (
+                          <MenuItem value={item.ID}>{item.Weight_net}</MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
 
-            <Grid item xs={4}>
-              <Card sx={{ minWidth: 275 }}>
-                <CardContent></CardContent>
-              </Card>
+                  <Grid item xs={12}>
+                    <FormControl fullWidth variant="outlined">
+                      <p>ที่อยู่</p>
+                      <TextField
+                        id="Address"
+                        variant="outlined"
+                        type="string"
+                        size="medium"
+                        inputProps={{
+                          style: {
+                            height: 200,
+                            width: 450,
+                          },
+                        }}
+                        sx={{ fontFamily: "Mitr-Regular" }}
+                        multiline
+                        value={service.Address}
+                        onChange={handleInputChange}
+                      />
+                    </FormControl>
+                  </Grid>
+
+                  <Grid item xs={7.5}>
+                    <p>การจัดส่ง</p>
+                    <FormControl fullWidth variant="outlined">
+                      <Select
+                        sx={{ width: 300 }}
+                        value={service.DeliveryType_ID}
+                        onChange={handleChange}
+                        inputProps={{
+                          name: "DeliveryType_ID",
+                        }}
+                      >
+                        {deliverytype.map((item: DeliveryTypeInterface) => (
+                          <MenuItem value={item.ID}>
+                            {item.DeliveryType_service}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+
+                  <Grid item xs={4}>
+                    <FormControl fullWidth variant="outlined">
+                      <p>ราคา</p>
+                      <TextField
+                        disabled
+                        color="warning"
+                        variant="outlined"
+                        type="string"
+                        size="medium"
+                        inputProps={{
+                          style: {
+                            width: 490,
+                          },
+                        }}
+                        value={add(
+                          typewashingdetail?.TypeWashing_Price,
+                          weightdetail?.Weight_price,
+                          delidetail?.DeliveryType_price
+                        )}
+                        sx={{ fontFamily: "Mitr-Regular" }}
+                        multiline
+                      >
+                        {typewashingdetail?.Description}
+                      </TextField>
+                      {/* <Textarea
+                    color="warning"
+                    disabled={true}
+                    minRows={2}
+                    placeholder=""
+                    size="md"
+                    variant="outlined"
+                    value={add(
+                      typewashingdetail?.TypeWashing_Price,
+                      weightdetail?.Weight_price,
+                      delidetail?.DeliveryType_price
+                    )}
+                  /> */}
+                    </FormControl>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Button
+                      component={RouterLink}
+                      to="/serviceinfo"
+                      variant="contained"
+                      startIcon
+                    >
+                      Back
+                    </Button>
+
+                    <Button
+                      style={{ float: "right" }}
+                      onClick={update}
+                      variant="contained"
+                      color="primary"
+                    >
+                      Submit
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Paper>
+            </Grid>
+            <Grid item xs={2}>
+              <Paper
+                variant="elevation"
+                elevation={12}
+                style={{
+                  background:
+                    "linear-gradient(180deg, #AFEEEE 0%,#F0FFFF 100%, #F5DEB3 100%)",
+                }}
+              >
+                <Card
+                  sx={{ minWidth: 275 }}
+                  style={{
+                    background:
+                      "linear-gradient(180deg, #AFEEEE 0%,#F0FFFF 100%, #F5DEB3 100%)",
+                  }}
+                >
+                  <CardContent>
+                    <FormControl fullWidth variant="outlined">
+                      <Typography>
+                        รายละเอียดเสื้อผ้าและราคา
+                        <Divider />
+                        <p>
+                          ประเภท {typewashingdetail?.Type_washing}:{" "}
+                          {typewashingdetail?.Description}
+                        </p>
+                        <p>น้ำหนัก: {weightdetail?.Weight_net}</p>
+                        <p>การจัดส่ง: {delidetail?.DeliveryType_service}</p>
+                        <Divider />
+                        <Grid item xs={1}>
+                          <p><h3>ราคา: </h3></p>
+                        </Grid>
+                        <Grid item xs={1}>
+                        <Typography
+                          align="right"
+                          variant="h1"
+
+                          sx={{ marginLeft: 12, p: 0, pt: 0, color: red[400]}}
+                        >
+                            {add(
+                              typewashingdetail?.TypeWashing_Price,
+                              weightdetail?.Weight_price,
+                              delidetail?.DeliveryType_price
+                            )}
+                        </Typography>
+                        </Grid>
+                      </Typography>
+                    </FormControl>
+                  </CardContent>
+                </Card>
+              </Paper>
             </Grid>
           </Grid>
-          {/* </Paper> */}
-
-          <Paper variant="elevation">
-            <Box
-              display="flex"
-              maxWidth="lg"
-              sx={{
-                marginTop: 2,
-              }}
-            >
-              <Box sx={{ paddingX: 2, paddingY: 1 }}>
-                <Typography
-                  component="h2"
-                  variant="h6"
-                  color="primary"
-                  gutterBottom
-                  mt={2}
-                  align="center"
-                >
-                  <h2>ระบบเลือกบริการ</h2>
-                </Typography>
-              </Box>
-            </Box>
-            <Divider />
-            <Grid container rowSpacing={1} sx={{ padding: 2 }}>
-              <Grid item xs={7.5}>
-                <p>รูปแบบการซัก</p>
-                <FormControl fullWidth variant="outlined">
-                  <Select
-                    sx={{ width: 300 }}
-                    value={service.TypeWashing_ID}
-                    onChange={handleChange}
-                    inputProps={{
-                      name: "TypeWashing_ID",
-                    }}
-                  >
-                    {typewashing.map((item: TypeWashingInterface) => (
-                      <MenuItem value={item.ID}>{item.Type_washing}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-
-              <Grid item xs={4}>
-                <p>น้ำหนัก</p>
-                <FormControl fullWidth variant="outlined">
-                  <Select
-                    sx={{ width: 300 }}
-                    value={service.Weight_ID}
-                    onChange={handleChange}
-                    inputProps={{
-                      name: "Weight_ID",
-                    }}
-                  >
-                    {weight.map((item: WeightInterface) => (
-                      <MenuItem value={item.ID}>{item.Weight_net}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-
-              <Grid item xs={12}>
-                <FormControl fullWidth variant="outlined">
-                  <p>ที่อยู่</p>
-                  <TextField
-                    id="Address"
-                    variant="outlined"
-                    type="string"
-                    size="medium"
-                    inputProps={{
-                      style: {
-                        height: 200,
-                        width: 450,
-                      },
-                    }}
-                    sx={{ fontFamily: "Mitr-Regular" }}
-                    multiline
-                    value={service.Address}
-                    onChange={handleInputChange}
-                  />
-                </FormControl>
-              </Grid>
-
-              <Grid item xs={7.5}>
-                <p>การจัดส่ง</p>
-                <FormControl fullWidth variant="outlined">
-                  <Select
-                    sx={{ width: 300 }}
-                    value={service.DeliveryType_ID}
-                    onChange={handleChange}
-                    inputProps={{
-                      name: "DeliveryType_ID",
-                    }}
-                  >
-                    {deliverytype.map((item: DeliveryTypeInterface) => (
-                      <MenuItem value={item.ID}>{item.DeliveryType_service}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-
-              <Grid item xs={4}>
-                <FormControl fullWidth variant="outlined">
-                  <p>ราคา</p>
-                  <TextField
-                    disabled
-                    // id="Price"
-                    variant="outlined"
-                    type="string"
-                    size="medium"
-                    inputProps={{
-                      style: {
-                        width: 490,
-                      },
-                    }}
-                    value={add(typewashingprice?.TypeWashing_Price, weightprice?.Weight_price, deliprice?.DeliveryType_price)}
-                    // onChange={()=> setSumprice(total)}
-                    sx={{ fontFamily: "Mitr-Regular" }}
-                    multiline
-                  />
-                </FormControl>
-              </Grid>
-
-              <Grid item xs={12}>
-                <Button component={RouterLink} to="/serviceinfo" variant="contained">
-                  Back
-                </Button>
-
-                <Button
-                  style={{ float: "right" }}
-                  onClick={update}
-                  variant="contained"
-                  color="primary"
-                >
-                  Submit
-                </Button>
-              </Grid>
-            </Grid>
-          </Paper>
         </div>
       </Container>
     </div>

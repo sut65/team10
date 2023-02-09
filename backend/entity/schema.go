@@ -171,7 +171,7 @@ type Service struct {
 	Customer    Customer `gorm:"references:id" valid:"-"`
 
 	Bill_status uint
-	Address     string `valid:"minstringlength(15)~โปรดระบุให้ละเอียด,matches([A-Za-zก-ฮ./()])~Username must be is Begin with A-Z,required~โปรดกรอกที่อยู่"`
+	Address     string `valid:"minstringlength(8)~โปรดระบุให้ละเอียด,matches([0-9ก-ฮ./])~ที่อยู่เป็นตัวอักษรพิเศษหรือภาษาอังกฤษ,required~โปรดกรอกที่อยู่"`
 	Bill_Price  float64
 	Bill        []Bill `gorm:"foreignKey:Service_ID"`
 }
@@ -194,7 +194,7 @@ type FormType struct {
 
 type Form struct {
 	gorm.Model
-	Comment string	`valid:"maxstringlength(50)~กรอกได้สูงสุด 50 ตัวอักษร,alphabet~ที่อยู่เป็นตัวอักษรพิเศษหรือภาษาอังกฤษ,required~โปรดแสดงความคิดเห็น"`
+	Comment string	`valid:"maxstringlength(50)~กรอกได้สูงสุด 50 ตัวอักษร,matches([A-Za-zก-ฮ./()])~ห้ามใช้ตัวอักษรพิเศษ,required~โปรดแสดงความคิดเห็น"`
 
 	SatisfactionID *uint	`valid:"-"`
 	Satisfaction   Satisfaction `gorm:"references:id" valid:"-"`
