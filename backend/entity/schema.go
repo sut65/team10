@@ -396,7 +396,7 @@ type Delivery struct {
 	Problem         string       `valid:"required~กรุณากรอกปัญหา หรือหากไม่มีให้ใส่ '-', maxstringlength(100)~กรอกได้สูงสุด 100 ตัวอักษร"`
 }
 
-func SetServiceValidation() {
+func SetSpecialCharactersValidation() {
 	validator.CustomTypeTagMap.Set("alphabet", validator.CustomTypeValidator(func(address interface{}, context interface{}) bool {
 		str := address.(string)
 		match, _ := regexp.MatchString(`[0-9ก-ฮ./]`, str)
@@ -455,6 +455,6 @@ func SetConfTimeValidation() {
 
 func init() {
 	SetTimeandValueValidation()
-	SetServiceValidation()
+	SetSpecialCharactersValidation()
 	SetConfTimeValidation()
 }
