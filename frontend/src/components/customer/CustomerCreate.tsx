@@ -200,17 +200,14 @@ function CustomerCreate() {
       <Box sx={{
         padding: 2
       }}>
-        <Paper>
-          <Grid container spacing={0} sx={{
-            padding: 2
-          }}>
-            <h1>CUSTOMER<PersonAddAltSharpIcon color="primary" sx={{ fontSize: 45 }} /></h1>
-          </Grid>
-
+        <Paper style={{ background: "rgba(0, 0, 0, 0.2)" }}>
+          <h1 style={{ textAlign: "center", paddingTop: 20, color: "white" }}>
+            <PersonAddAltSharpIcon style={{ fontSize: 30 }} />
+            &nbsp;CUSTOMER
+          </h1>
           <Divider />
-
-
-          <Grid container spacing={1} sx={{ padding: 5 }}>
+          <Paper sx={{ml:5, mr:5, mt:1}}>
+          <Grid container spacing={1} sx={{ paddingLeft:5,paddingRight:5, paddingBottom:5 }}>
               <Grid item xs={12}>
                 <p>ชื่อ - นามสกุล</p>
                 <FormControl fullWidth variant="outlined">
@@ -218,11 +215,12 @@ function CustomerCreate() {
                     id="Customer_Name"
                     variant="outlined"
                     type="string"
-                    size="medium"
+                    size="small"
                     value={customer.Customer_Name}
-                    sx={{ width: 350 }}
+                    sx={{ width: 300 }}
                     onChange={handleInputChange}
                   />
+                  
                 </FormControl>
               </Grid>
 
@@ -230,36 +228,76 @@ function CustomerCreate() {
               <Grid item xs={6}>
                 <FormControl fullWidth variant="outlined">
                   <p>เพศ</p>
-                  <Select
-                    sx={{ width: 300 }}
-                    value={customer.Gender_ID}
-                    onChange={handleChange}
-                    inputProps={{
-                      name: "Gender_ID",
-                    }}
-                  >
-                    {gender.map((item: GendersInterface) => (
-                      <MenuItem value={item.ID}>{item.Gender_Name}</MenuItem>
-                    ))}
-                  </Select>
+                  <Autocomplete
+                        id="gender-autocomplete"
+                        options={gender}
+                        fullWidth
+                        size="small"
+                        sx={{ width : 300 }}
+                        onChange={(event: any, value) => {
+                          setCustomer({
+                            ...customer,
+                            Gender_ID: value?.ID,
+                          }); //Just Set ID to interface
+                        }}
+                        getOptionLabel={(option: any) => `${option.ID}`} //filter value
+                        renderInput={(params) => {
+                          return (
+                            <TextField
+                              {...params}
+                              variant="outlined"
+                              placeholder="เพศ"
+                            />
+                          );
+                        }}
+                        renderOption={(props: any, option: any) => {
+                          return (
+                            <li
+                              {...props}
+                              value={`${option.ID}`}
+                              key={`${option.ID}`}
+                            >{`${option.Gender_Name}`}</li>
+                          ); //display value
+                        }}
+                      />
                 </FormControl>
               </Grid>
 
               <Grid item xs={6}>
                 <p>อาชีพ</p>
                 <FormControl fullWidth variant="outlined">
-                  <Select
-                    sx={{ width: 300 }}
-                    value={customer.Career_ID}
-                    onChange={handleChange}
-                    inputProps={{
-                      name: "Career_ID",
-                    }}
-                  >
-                    {career.map((item: CareerInterface) => (
-                      <MenuItem value={item.ID}>{item.Career_Name}</MenuItem>
-                    ))}
-                  </Select>
+                <Autocomplete
+                        id="career-autocomplete"
+                        options={career}
+                        fullWidth
+                        size="small"
+                        sx={{ width : 300 }}
+                        onChange={(event: any, value) => {
+                          setCustomer({
+                            ...customer,
+                            Career_ID: value?.ID,
+                          }); //Just Set ID to interface
+                        }}
+                        getOptionLabel={(option: any) => `${option.ID}`} //filter value
+                        renderInput={(params) => {
+                          return (
+                            <TextField
+                              {...params}
+                              variant="outlined"
+                              placeholder="อาชีพ"
+                            />
+                          );
+                        }}
+                        renderOption={(props: any, option: any) => {
+                          return (
+                            <li
+                              {...props}
+                              value={`${option.ID}`}
+                              key={`${option.ID}`}
+                            >{`${option.Career_Name}`}</li>
+                          ); //display value
+                        }}
+                      />
                 </FormControl>
               </Grid>
 
@@ -270,7 +308,7 @@ function CustomerCreate() {
                     id="Customer_Username"
                     variant="outlined"
                     type="string"
-                    size="medium"
+                    size="small"
                     sx={{ width: 300 }}
                     value={customer.Customer_Username}
                     onChange={handleInputChange}
@@ -285,7 +323,7 @@ function CustomerCreate() {
                     id="Customer_Password"
                     variant="outlined"
                     type="password"
-                    size="medium"
+                    size="small"
                     sx={{ width: 300 }}
                     value={customer.Customer_Password}
                     onChange={handleInputChange}
@@ -300,7 +338,7 @@ function CustomerCreate() {
                     id="Customer_Phone"
                     variant="outlined"
                     type="string"
-                    size="medium"
+                    size="small"
                     sx={{ width: 300 }}
                     value={customer.Customer_Phone}
                     onChange={handleInputChange}
@@ -315,11 +353,47 @@ function CustomerCreate() {
                     id="Customer_Promptpay"
                     variant="outlined"
                     type="string"
-                    size="medium"
-                    sx={{ width: 300 }}
+                    size="small"
+                    sx={{ width: 300 ,marginBottom:2}}
                     value={customer.Customer_Promptpay}
                     onChange={handleInputChange}
                   />
+                   </FormControl>
+
+                <p>คุณรู้จักเราได้จากที่ไหน</p>
+                <FormControl fullWidth variant="outlined">
+                <Autocomplete
+                        id="advertise-autocomplete"
+                        options={advertise}
+                        fullWidth
+                        size="small"
+                        sx={{ width : 300 }}
+                        onChange={(event: any, value) => {
+                          setCustomer({
+                            ...customer,
+                            Advertise_ID: value?.ID,
+                          }); //Just Set ID to interface
+                        }}
+                        getOptionLabel={(option: any) => `${option.ID}`} //filter value
+                        renderInput={(params) => {
+                          return (
+                            <TextField
+                              {...params}
+                              variant="outlined"
+                              placeholder="คุณรู้จักเราได้จากที่ไหน"
+                            />
+                          );
+                        }}
+                        renderOption={(props: any, option: any) => {
+                          return (
+                            <li
+                              {...props}
+                              value={`${option.ID}`}
+                              key={`${option.ID}`}
+                            >{`${option.Advertise_Type}`}</li>
+                          ); //display value
+                        }}
+                      />
                 </FormControl>
               </Grid>
 
@@ -330,31 +404,21 @@ function CustomerCreate() {
                     id="Customer_Address"
                     variant="outlined"
                     type="string"
-                    size="medium"
-                    sx={{ width: 300 }}
+                    size="small"
+                    multiline
+                    inputProps={{
+                      style: {
+                        height: 135,
+                        width: 300,
+                      },
+                    }}
                     value={customer.Customer_Address}
                     onChange={handleInputChange}
                   />
                 </FormControl>
               </Grid>
-              <Grid item xs={12}>
-                <p>คุณรู้จักเราได้จากที่ไหน</p>
-                <FormControl fullWidth variant="outlined">
-                  <Select
-                    sx={{ width: 300 }}
-                    value={customer.Advertise_ID}
-                    onChange={handleChange}
-                    inputProps={{
-                      name: "Advertise_ID",
-                    }}
-                  >
-                    {advertise.map((item: AdvertiseInterface) => (
-                      <MenuItem value={item.ID}>{item.Advertise_Type}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
             </Grid>
+          </Paper>
         </Paper>
         <Grid container spacing={3} sx={{ padding: 2 }}>
           <Grid item xs={12}>

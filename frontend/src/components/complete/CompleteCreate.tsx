@@ -26,7 +26,7 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
 import { CompleteInterface } from "../../models/complete/IComplete";
-
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
@@ -261,16 +261,14 @@ function submit() {
      </Snackbar>
      <Box sx={{ padding: 2
                      }}>
-     <Paper>
-                    <Grid container spacing={0} sx={{ padding: 2
-                     }}>
-                    <h1>COMPLETE<TaskAltIcon color="success" sx={{ fontSize: 100 }}/></h1> 
-                    </Grid>
-
+         <Paper style={{ background: "rgba(0, 0, 0, 0.2)" }}>
+          <h1 style={{ textAlign: "center", paddingTop: 20, color: "white" }}>
+          &nbsp;COMPLETE
+            <CheckCircleOutlineIcon style={{ fontSize: 30 }} />
+          </h1>
        <Divider />
-    
-       
-       <Grid container spacing={1} sx={{ padding: 5 }}>
+       <Paper sx={{ml:5, mr:5, mt:1}}>
+          <Grid container spacing={1} sx={{ paddingLeft:5,paddingRight:5, paddingBottom:5 }}>
         <Grid item xs={6}>
           <p>เลขประจำตัวพนักงาน</p>
           <FormControl fullWidth variant="outlined">
@@ -282,7 +280,7 @@ function submit() {
                size="medium"
                value={eid}
                defaultValue={"Employee ID"}
-               sx={{ width : 350 }}
+               sx={{ width : 250 }}
                onChange={handleInputChange}
              ></TextField>
            </FormControl>
@@ -313,8 +311,8 @@ function submit() {
                         options={receive}
                         fullWidth
                         size="medium"
+                        sx={{ width : 250 }}
                         onChange={(event: any, value) => {
-                          //Get ID from ...interface
                           setComplete({
                             ...complete,
                             Receive_ID: value?.ID,
@@ -326,7 +324,7 @@ function submit() {
                             <TextField
                               {...params}
                               variant="outlined"
-                              placeholder="Search..."
+                              placeholder="Recive"
                             />
                           );
                         }}
@@ -340,27 +338,43 @@ function submit() {
                           ); //display value
                         }}
                       />
-
            </FormControl>
         </Grid>
-        <Grid item xs={6}>
-          
-          <FormControl fullWidth variant="outlined">
-              
-              <p>บรรจุภัณฑ์</p>
-              <Select
-                    sx={{ width: 300 }}
-                    value={complete.Packaging_ID}
-                    onChange={handleChange}
-                    inputProps={{
-                      name: "Packaging_ID",
-                    }}
-                  >
-                    {packaging.map((item: PackagingInterface) => (
-                      <MenuItem value={item.ID}>{item.Packaging_Type}</MenuItem>
-                    ))}
-                  </Select>
-                
+        <Grid item xs={6}>  
+        <p>บรรจุภัณฑ์</p>        
+          <FormControl fullWidth variant="outlined"> 
+              <Autocomplete
+                        id="packaging-autocomplete"
+                        options={packaging}
+                        fullWidth
+                        size="medium"
+                        sx={{ width : 300 }}
+                        onChange={(event: any, value) => {
+                          setComplete({
+                            ...complete,
+                            Packaging_ID: value?.ID,
+                          }); //Just Set ID to interface
+                        }}
+                        getOptionLabel={(option: any) => `${option.ID}`} //filter value
+                        renderInput={(params) => {
+                          return (
+                            <TextField
+                              {...params}
+                              variant="outlined"
+                              placeholder="Packaging"
+                            />
+                          );
+                        }}
+                        renderOption={(props: any, option: any) => {
+                          return (
+                            <li
+                              {...props}
+                              value={`${option.ID}`}
+                              key={`${option.ID}`}
+                            >{`${option.Packaging_Type}`}</li>
+                          ); //display value
+                        }}
+                      />
             </FormControl>
         </Grid>
 
@@ -381,10 +395,10 @@ function submit() {
                 />
                             </LocalizationProvider>
            </FormControl>
-
-         </Grid>
-         </Grid>
-         </Paper>
+          </Grid>
+        </Grid>
+      </Paper>
+    </Paper>
          <Grid container spacing={1} sx={{ padding: 5 }}>
          <Grid item xs={12}>
            <Button 
