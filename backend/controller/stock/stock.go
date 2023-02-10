@@ -3,7 +3,9 @@ package controller
 import (
 	"net/http"
 
-	//"github.com/asaskevich/govalidator"
+	"gorm.io/gorm"
+
+	govalidator "github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"github.com/sut65/team10/entity"
 )
@@ -51,6 +53,7 @@ func CreateStocks(c *gin.Context) {
 
 	// 14: สร้าง  stock
 	stc := entity.Stock{
+		Model:       gorm.Model{ID: stock.ID},
 		List_Number: stock.List_Number,
 		TypeID:      stock.TypeID,
 		BrandID:     stock.BrandID,
@@ -60,11 +63,11 @@ func CreateStocks(c *gin.Context) {
 		Time:        stock.Time.Local(),
 	}
 
-	// ขั้นตอนการ validate ที่นำมาจาก unit test
-	// if _, err := govalidator.ValidateStruct(stc); err != nil {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	// 	return
-	// }
+	//ขั้นตอนการ validate ที่นำมาจาก unit test
+	if _, err := govalidator.ValidateStruct(stc); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
 	if err := entity.DB().Create(&stc).Error; err != nil {
 

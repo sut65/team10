@@ -107,7 +107,6 @@ type Brand struct {
 	Stock     []Stock `gorm:"foreignKey:BrandID"`
 }
 type Size struct {
-
 	gorm.Model
 	Size_Name string
 	Stock     []Stock `gorm:"foreignKey:SizeID"`
@@ -115,7 +114,7 @@ type Size struct {
 
 type Stock struct {
 	gorm.Model
-	List_Number string `gorm:"uniqueIndex" valid:"matches(^([1-9]{1})([0-9]{9})~รหัสรายการผิด"`
+	List_Number string `gorm:"uniqueIndex" valid:"matches(^([1-9]{1})([0-9]{9}))~ListNumber is not valid ,required~กรุณากรอกรหัสรายการ"`
 	TypeID      *uint
 	Type        Type `gorm:"references:id" valid:"-" `
 	BrandID     *uint
@@ -124,8 +123,8 @@ type Stock struct {
 	Size        Size `gorm:"references:id" valid:"-" `
 	Employee_ID *uint
 	Employee    Employee    `gorm:"references:id" valid:"-" `
-	Quantity    int         `valid:"ValueNotNegative~กรุณากรอกจะนวนให้ถูกต้อง"`
-	Time        time.Time   `valid:"DateTimeNotPast~เวลาห้ามเป็นอดีต"`
+	Quantity    int         `valid:"ValuePositive~กรุณากรอกจำนวนเป็นจำนวนเต็มบวก ,required~กรุณากรอกจำนวน"`
+	Time        time.Time   `valid:"DateTimeNotPast~กรุณากรอกวันเวลาปัจจุบัน ไม่เป็นอดีต ,DateTimeNotFuture~กรุณากรอกวันเวลาปัจจุบัน ไม่เป็นอนาคต"`
 	Detergent   []Detergent `gorm:"foreignKey:Stock_ID"`
 	Softener    []Softener  `gorm:"foreignKey:Stock_ID"`
 }
@@ -195,15 +194,15 @@ type FormType struct {
 
 type Form struct {
 	gorm.Model
-	Comment string	`valid:"maxstringlength(50)~กรอกได้สูงสุด 50 ตัวอักษร,matches([A-Za-zก-ฮ./()])~ห้ามใช้ตัวอักษรพิเศษ,required~โปรดแสดงความคิดเห็น"`
+	Comment string `valid:"maxstringlength(50)~กรอกได้สูงสุด 50 ตัวอักษร,matches([A-Za-zก-ฮ./()])~ห้ามใช้ตัวอักษรพิเศษ,required~โปรดแสดงความคิดเห็น"`
 
-	SatisfactionID *uint	`valid:"-"`
+	SatisfactionID *uint        `valid:"-"`
 	Satisfaction   Satisfaction `gorm:"references:id" valid:"-"`
 
-	FormTypeID *uint	`valid:"-"`
+	FormTypeID *uint    `valid:"-"`
 	FormType   FormType `gorm:"references:id" valid:"-"`
 
-	Customer_ID *uint	`valid:"-"`
+	Customer_ID *uint    `valid:"-"`
 	Customer    Customer `gorm:"references:id" valid:"-"`
 }
 
@@ -364,12 +363,12 @@ type Complete struct {
 /* -------------------------------------------------------------------------- */
 type Confirmation struct {
 	gorm.Model
-	Complete_ID *uint    `valid:"-"` //prevent valid from this or upper entity
-	Complete    Complete `gorm:"references:id" valid:"-"`
-	Customer_ID *uint    `valid:"-"` //prevent valid from this or upper entity
-	Customer    Customer `gorm:"references:id" valid:"-"`
-	RecvTime    time.Time
-	RecvAddress string `valid:"required~กรุณากรอกที่อยู่จัดส่ง"`
+	Complete_ID *uint     `valid:"-"` //prevent valid from this or upper entity
+	Complete    Complete  `gorm:"references:id" valid:"-"`
+	Customer_ID *uint     `valid:"-"` //prevent valid from this or upper entity
+	Customer    Customer  `gorm:"references:id" valid:"-"`
+	RecvTime    time.Time `valid:"required~ต้องใส่ข้อมูลเวลา,current_time_as_min~เวลาต้องไม่เป็นอดีต"`
+	RecvAddress string    `valid:"required~กรุณากรอกที่อยู่จัดส่ง"`
 	RecvType_ID *uint
 	RecvType    RecvType `gorm:"references:id"`
 	Note        string
@@ -387,10 +386,10 @@ type RecvType struct {
 /* -------------------------------------------------------------------------- */
 type Delivery struct {
 	gorm.Model
-	Employee_ID     *uint
-	Employee        Employee `gorm:"references:id"`
-	Confirmation_ID *uint
-	Confirmation    Confirmation `gorm:"references:id"`
+	Employee_ID     *uint        `valid:"-"`
+	Employee        Employee     `gorm:"references:id" valid:"-"`
+	Confirmation_ID *uint        `valid:"-"`
+	Confirmation    Confirmation `gorm:"references:id" valid:"-"`
 	Vehicle_ID      *uint        `valid:"-"` //prevent valid from this or upper entity
 	Vehicle         Vehicle      `gorm:"references:id" valid:"-"`
 	Score           uint         `valid:"required~กรุณาให้คะแนนสภาพการขนส่ง, range(0|5)~ใส่คะแนนตั้งแต่ 0 ถึง 5"`
@@ -418,6 +417,10 @@ func SetTimeandValueValidation() {
 		p := i.(int)  //p มี type เป็น int
 		return p >= 0 //ค่าที่จะถูกส่งออกไปคือ p >=0
 	})
+	govalidator.CustomTypeTagMap.Set("ValuePositive", func(i interface{}, context interface{}) bool {
+		p := i.(int)  //p มี type เป็น int
+		return p > 0 //ค่าที่จะถูกส่งออกไปคือ p >0
+	})
 	//เวลาห้ามเป็นอดีตเกิน 5 นาที
 	govalidator.CustomTypeTagMap.Set("DateTimeNotPast", func(i interface{}, context interface{}) bool {
 		t := i.(time.Time) //t มี type เป็น time.Time
@@ -442,7 +445,16 @@ func SetTimeandValueValidation() {
 	// })
 }
 
+func SetConfTimeValidation() {
+	govalidator.CustomTypeTagMap.Set("current_time_as_min", func(i interface{}, context interface{}) bool {
+		t := i.(time.Time)
+		now := time.Now().Local()
+		return t.After(now) || t.Equal(now) //Value not less than now
+	})
+}
+
 func init() {
 	SetTimeandValueValidation()
 	SetServiceValidation()
+	SetConfTimeValidation()
 }
