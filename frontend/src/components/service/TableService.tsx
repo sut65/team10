@@ -54,15 +54,15 @@ export default function ServiceTable() {
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
-) => {
+  ) => {
     setPage(newPage);
-};
-const handleChangeRowsPerPage = (
-  event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-) => {
-  setRowsPerPage(parseInt(event.target.value, 10));
-  setPage(0);
-};
+  };
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   const getServices = async () => {
     const requestOptions = {
@@ -147,9 +147,9 @@ const handleChangeRowsPerPage = (
               <TableBody>
                 {(rowsPerPage > 0
                   ? service.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
-                    )
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
                   : service
                 ).map((row) => (
                   // {service.map((row) => (
@@ -173,7 +173,7 @@ const handleChangeRowsPerPage = (
                         size="large"
                         aria-label="Edit"
                         onClick={() => {
-                          navigate({ pathname: `/service/${row.ID}` });
+                          navigate({ pathname: `/serviceupdate/${row.ID}` });
                         }}
                         sx={{ color: yellow[800] }}
                       >

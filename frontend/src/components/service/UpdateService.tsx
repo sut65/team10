@@ -17,14 +17,26 @@ import {
   TextField,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
-import { DeliveryTypeInterface, ServiceInterface, WeightInterface, } from "../../models/service/IService";
+import {
+  DeliveryTypeInterface,
+  ServiceInterface,
+  WeightInterface,
+} from "../../models/service/IService";
 import Typography from "@mui/material/Typography";
-import { ThemeContext } from "@emotion/react";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import { TypeWashingInterface } from "../../models/service/IService";
 import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
-import DeleteIcon from '@mui/icons-material/Delete';
-import { red } from "@mui/material/colors";
+import {
+  blue,
+  blueGrey,
+  green,
+  purple,
+  red,
+  yellow,
+} from "@mui/material/colors";
+import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
+import UndoIcon from "@mui/icons-material/Undo";
+import Swal from 'sweetalert2'
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -34,28 +46,28 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-var sum = 0;
+
+
+
 
 const ServiceUpdate = () => {
   const params = useParams();
   const navigate = useNavigate();
-  const [service, setService] = React.useState<Partial<ServiceInterface>>({
-    // TypeWashing_ID: 0,
-    // Weight_ID: 0,
-    // DeliveryType_ID: 0,
-  });
+  const [service, setService] = React.useState<Partial<ServiceInterface>>({});
   const [typewashing, setTypewashing] = React.useState<TypeWashingInterface[]>(
     []
   );
-  const [typewashing1, setTypeWashing1] = React.useState<TypeWashingInterface>();
-  const [deliverytype, setDelivery] = React.useState<DeliveryTypeInterface[]>([]);
+  const [deliverytype, setDelivery] = React.useState<DeliveryTypeInterface[]>(
+    []
+  );
   const [weight, setWeight] = React.useState<WeightInterface[]>([]);
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
   // const id_customer = localStorage.getItem("id");'
-  const [typewashingdetail, setTypewashingdetail] = React.useState<TypeWashingInterface>()
-  const [weightdetail, setWeightdetail] = React.useState<WeightInterface>()
-  const [delidetail, setDelidetail] = React.useState<DeliveryTypeInterface>()
+  const [typewashingdetail, setTypewashingdetail] =
+    React.useState<TypeWashingInterface>();
+  const [weightdetail, setWeightdetail] = React.useState<WeightInterface>();
+  const [delidetail, setDelidetail] = React.useState<DeliveryTypeInterface>();
   // const [sumprice,setSumprice] = React.useState<number>(0);
   const [message, setAlertMessage] = React.useState("");
 
@@ -116,7 +128,6 @@ const ServiceUpdate = () => {
 
   const getDelivery = async () => {
     const apiUrl = `http://localhost:8080/deliverytypes`;
-
     const requestOptions = {
       method: "GET",
 
@@ -138,32 +149,16 @@ const ServiceUpdate = () => {
         }
       });
   };
+  const apiUrlty = `http://localhost:8080/typewashing`;
 
-  const getTypewashing1 = async () => {
-    const apiUrl = `http://localhost:8080/typewashing`;
+  const requestOptions = {
+    method: "GET",
 
-    const requestOptions = {
-      method: "GET",
-
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-    };
-    //การกระทำ //json
-    fetch(`${apiUrl}/1`, requestOptions)
-      .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
-      .then((res) => {
-        console.log(res.data); //show ข้อมูล
-
-        if (res.data) {
-          setTypeWashing1(res.data);
-        } else {
-          console.log("else");
-        }
-      });
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      "Content-Type": "application/json",
+    },
   };
-
   const getCurrentService = async () => {
     const apiUrl = `http://localhost:8080/service`;
 
@@ -188,7 +183,6 @@ const ServiceUpdate = () => {
       });
   };
 
-
   //================================================================================================================//
 
   const handleClose = (
@@ -212,14 +206,19 @@ const ServiceUpdate = () => {
     setService({ ...service, [id]: value });
   };
 
-  const handleChange = (event: SelectChangeEvent<number>,) => {
+  const handleChange = (event: SelectChangeEvent<any>) => {
     const name = event.target.name as keyof typeof service;
+    const value = event.target.value;
     setService({
       ...service,
       [name]: event.target.value,
     });
+    console.log(`${name}: ${value}`);
+
     if (event.target.name === "TypeWashing_ID") {
-      setTypewashingdetail(typewashing.find((r) => r.ID === event.target.value));
+      setTypewashingdetail(
+        typewashing.find((r) => r.ID === event.target.value)
+      );
     }
     if (event.target.name === "Weight_ID") {
       setWeightdetail(weight.find((r) => r.ID === event.target.value));
@@ -227,36 +226,66 @@ const ServiceUpdate = () => {
     if (event.target.name === "DeliveryType_ID") {
       setDelidetail(deliverytype.find((r) => r.ID === event.target.value));
     }
-
-
   };
-
+  const convertType = (data: string | number | undefined) => {
+    let val = typeof data === "string" ? parseInt(data) : data;
+    return val;
+  };
 
   var total = 0;
   let add = function (num1: any, num2: any, num3: any) {
-    if ((num1 === undefined) || (num2 === undefined) || (num3 === undefined)) {
+    if (num1 === undefined || num2 === undefined || num3 === undefined) {
       return 0;
     } else {
       total = num1 + num2 + num3;
       return total;
     }
+  };
 
-  }
-
-
+  console.log(total);
   function update() {
-
     let data = {
-      Customer_ID: Number(localStorage.getItem('uid')),
+      Customer_ID: Number(localStorage.getItem("uid")),
       ID: service.ID,
       TypeWashing_ID: service.TypeWashing_ID,
       Weight_ID: service.Weight_ID,
       Address: service.Address,
       DeliveryType_ID: service.DeliveryType_ID,
-      Bill_Price: total
+      Bill_Price: total,
     };
 
+    //================================================================================================================//
+
     const apiUrl = "http://localhost:8080";
+    Swal.fire({
+      title: "คุณต้องการแก้ไขรายการซักรีดผ้าใช่มั้ย",
+      showDenyButton: false,
+      showCancelButton: true,
+      confirmButtonText: "บันทึก",
+    }).then((data: any) => {
+      if (data.isConfirmed) {
+        fetch(`${apiUrl}/services`, requestOptionsPost)
+          .then((response) => response.json())
+          .then((res) => {
+            console.log(res);
+            if (res.data) {
+              Swal.fire({
+                icon: "success",
+                title: "Saved!",
+                text: "บันทึกสำเร็จ",
+              });
+              // setSuccess(true);
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: res.error,
+              });
+              // setError(true);
+            }
+          });
+      }
+    });
 
     const requestOptionsPost = {
       method: "PATCH",
@@ -266,18 +295,25 @@ const ServiceUpdate = () => {
       },
       body: JSON.stringify(data),
     };
+    // fetch(`${apiUrl}/services`, requestOptionsPost)
+    //   .then((response) => response.json())
+    //   .then((res) => {
+    //     console.log(res);
+    //     // if (res.data) {
+    //     //   setSuccess(true);
+    //     //   window.location.reload();
 
-    fetch(`${apiUrl}/services`, requestOptionsPost)
-      .then((response) => response.json())
-      .then((res) => {
-        console.log(res)
-        if (res.data) {
-          setSuccess(true);
-        } else {
-          setAlertMessage(res.error);
-          setError(true);
-        }
-      });
+    //     // } else {
+
+    //     //   setError(true);
+    //     // }
+    //     if (res.data) {
+    //       setSuccess(true);
+    //     } else {
+    //       setAlertMessage(res.error);
+    //       setError(true);
+    //     }
+    //   });
   }
 
   //================================================================================================================//
@@ -286,10 +322,10 @@ const ServiceUpdate = () => {
     getTypeWashing();
     getWeight();
     getDelivery();
-    getTypewashing1();
     getCurrentService();
-  }, []);
 
+    // getServices();
+  }, []);
 
   return (
     <div>
@@ -349,7 +385,7 @@ const ServiceUpdate = () => {
                     <FormControl fullWidth variant="outlined">
                       <Select
                         sx={{ width: 300 }}
-                        value={service.TypeWashing_ID}
+                        value={service?.TypeWashing_ID + ""}
                         onChange={handleChange}
                         inputProps={{
                           name: "TypeWashing_ID",
@@ -369,7 +405,7 @@ const ServiceUpdate = () => {
                     <FormControl fullWidth variant="outlined">
                       <Select
                         sx={{ width: 300 }}
-                        value={service.Weight_ID}
+                        value={service.Weight_ID + ""}
                         onChange={handleChange}
                         inputProps={{
                           name: "Weight_ID",
@@ -409,7 +445,7 @@ const ServiceUpdate = () => {
                     <FormControl fullWidth variant="outlined">
                       <Select
                         sx={{ width: 300 }}
-                        value={service.DeliveryType_ID}
+                        value={service.DeliveryType_ID + ""}
                         onChange={handleChange}
                         inputProps={{
                           name: "DeliveryType_ID",
@@ -423,7 +459,7 @@ const ServiceUpdate = () => {
                       </Select>
                     </FormControl>
                   </Grid>
-
+                  {/* 
                   <Grid item xs={4}>
                     <FormControl fullWidth variant="outlined">
                       <p>ราคา</p>
@@ -448,28 +484,16 @@ const ServiceUpdate = () => {
                       >
                         {typewashingdetail?.Description}
                       </TextField>
-                      {/* <Textarea
-                    color="warning"
-                    disabled={true}
-                    minRows={2}
-                    placeholder=""
-                    size="md"
-                    variant="outlined"
-                    value={add(
-                      typewashingdetail?.TypeWashing_Price,
-                      weightdetail?.Weight_price,
-                      delidetail?.DeliveryType_price
-                    )}
-                  /> */}
                     </FormControl>
-                  </Grid>
+                  </Grid> */}
 
                   <Grid item xs={12}>
                     <Button
                       component={RouterLink}
                       to="/serviceinfo"
-                      variant="contained"
-                      startIcon
+                      variant="outlined"
+                      sx={{ border: 3, color: yellow[800] }}
+                      startIcon={<UndoIcon />}
                     >
                       Back
                     </Button>
@@ -478,9 +502,10 @@ const ServiceUpdate = () => {
                       style={{ float: "right" }}
                       onClick={update}
                       variant="contained"
-                      color="primary"
+                      sx={{ border: 2, color: green["A400"] }}
+                      endIcon={<FileDownloadDoneIcon />}
                     >
-                      Submit
+                      บันทึก
                     </Button>
                   </Grid>
                 </Grid>
@@ -515,21 +540,27 @@ const ServiceUpdate = () => {
                         <p>การจัดส่ง: {delidetail?.DeliveryType_service}</p>
                         <Divider />
                         <Grid item xs={1}>
-                          <p><h3>ราคา: </h3></p>
+                          <p>
+                            <h3>ราคา: </h3>
+                          </p>
                         </Grid>
                         <Grid item xs={1}>
-                        <Typography
-                          align="right"
-                          variant="h1"
-
-                          sx={{ marginLeft: 12, p: 0, pt: 0, color: red[400]}}
-                        >
+                          <Typography
+                            align="right"
+                            variant="h1"
+                            sx={{
+                              marginLeft: 12,
+                              p: 0,
+                              pt: 0,
+                              color: purple["A400"],
+                            }}
+                          >
                             {add(
                               typewashingdetail?.TypeWashing_Price,
                               weightdetail?.Weight_price,
                               delidetail?.DeliveryType_price
                             )}
-                        </Typography>
+                          </Typography>
                         </Grid>
                       </Typography>
                     </FormControl>
@@ -545,3 +576,5 @@ const ServiceUpdate = () => {
 };
 
 export default ServiceUpdate;
+
+
