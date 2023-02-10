@@ -149,9 +149,12 @@ func UpdateForm(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Satisfaction not found"})
 		return
 	}
-
+	if tx := entity.DB().Where("id = ?", form.Customer_ID).First(&customer); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Customer not found"})
+		return
+	}
 	
-	if tx := entity.DB().Where("id = ?", form.ID).Find(&form); tx.RowsAffected == 0 {
+	if tx := entity.DB().Where("id = ?", form.ID).First(&form); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "form not found"})
 		return
 	}

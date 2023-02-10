@@ -26,7 +26,7 @@ import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
 import { FormInterface, FormTypeInterface, SatisfactionInterface } from "../../models/form/IForm";
 import { ButtonGroup, MenuItem, Select, SelectChangeEvent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-
+import Swal from 'sweetalert2'
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
@@ -114,23 +114,6 @@ function FormCreate() {
             });
     };
 
-    const FormDelete = async (ID: number) => {
-        const apiUrl = `http://localhost:8080`;
-        const requestOptions = {
-            method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-                "Content-Type": "application/json",
-            },
-        };
-        fetch(`${apiUrl}/forms/${ID}`, requestOptions)
-            .then((response) => response.json())
-            .then((res) => {
-                if (res.data) {
-                    window.location.reload();
-                }
-            });
-    };
     
     const getSatisfaction = async () => {
         const apiUrl = `http://localhost:8080/satisfactions`;
@@ -158,7 +141,7 @@ function FormCreate() {
             });
     };
 
-    const handleChange = (event: SelectChangeEvent<number>) => {
+    const handleChange = (event: SelectChangeEvent<any>) => {
         const name = event.target.name as keyof typeof form;
         setForm({
             ...form,
@@ -184,27 +167,45 @@ function FormCreate() {
         };
 
         const apiUrl = "http://localhost:8080";
-
-        const requestOptionsPost = {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        };
-
-        fetch(`${apiUrl}/forms`, requestOptionsPost)
-            .then((response) => response.json())
-            .then((res) => {
-                console.log(res)
+        Swal.fire({
+          title: "คุณต้องการบันทึกความคิดเห็นใช่มั้ย",
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: "บันทึก",
+        }).then((data: any) => {
+          if (data.isConfirmed) {
+            fetch(`${apiUrl}/forms`, requestOptionsPost)
+              .then((response) => response.json())
+              .then((res) => {
+                console.log(res);
                 if (res.data) {
-                    setSuccess(true);
-                  } else {
-                    setAlertMessage(res.error);
-                    setError(true);
-                  }
-            });
+                  Swal.fire({
+                    icon: "success",
+                    title: "Saved!",
+                    text: "บันทึกสำเร็จ",
+                  });
+                //   window.location.href = "/forminfo";
+                  // setSuccess(true);
+                } else {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: res.error,
+                  });
+                  // setError(true);
+                }
+              });
+          }
+        });
+    
+        const requestOptionsPost = {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        };
     }
 
 
@@ -292,7 +293,7 @@ function FormCreate() {
                         <FormControl fullWidth variant="outlined">
                             <Select
                                 sx={{ width: 300 }}
-                                value={form.FormTypeID}
+                                value={form.FormTypeID +""}
                                 onChange={handleChange}
                                 inputProps={{
                                     name: "FormTypeID",
@@ -310,7 +311,7 @@ function FormCreate() {
                         <FormControl fullWidth variant="outlined">
                             <Select
                                 sx={{ width: 300 }}
-                                value={form.SatisfactionID}
+                                value={form.SatisfactionID +""}
                                 onChange={handleChange}
                                 inputProps={{
                                     name: "SatisfactionID",
