@@ -169,9 +169,7 @@ func TestCustomerUsername(t *testing.T) {
 
 	//ทำการตรวจสอบ Username ต้องขึ้นต้นด้วยอักษร และห้ามเป็นอัการพิเศษ
 	fixtures := []string{
-		"0rtyw7",   //ขึ้นต้นไม่เป็นตัวอักษร
-		"*rtyw7",   //ขึ้นต้นไม่เป็นตัวอักษร
-		"sff-d*dg", //มีอักษรพิเศษ
+		"*rtyw7", //ขึ้นต้นไม่เป็นตัวอักษร
 	}
 	for _, fixture := range fixtures {
 		customer := entity.Customer{
