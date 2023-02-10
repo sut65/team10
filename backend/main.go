@@ -39,7 +39,7 @@ import (
 func main() {
 
 	entity.SetupDatabase()
-	entity.SetServiceValidation()
+	entity.SetSpecialCharactersValidation()
 	r := gin.Default()
 	r.Use(CORSMiddleware())
 
