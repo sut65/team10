@@ -365,7 +365,7 @@ const ServiceCreate = () => {
                     <FormControl fullWidth variant="outlined">
                       <Select
                         sx={{ width: 300 }}
-                        value={service.TypeWashing_ID +""}
+                        value={service.TypeWashing_ID}
                         onChange={handleChange}
                         inputProps={{
                           name: "TypeWashing_ID",
@@ -385,7 +385,7 @@ const ServiceCreate = () => {
                     <FormControl fullWidth variant="outlined">
                       <Select
                         sx={{ width: 300 }}
-                        value={service.Weight_ID +""}
+                        value={service.Weight_ID}
                         onChange={handleChange}
                         inputProps={{
                           name: "Weight_ID",
@@ -425,7 +425,7 @@ const ServiceCreate = () => {
                     <FormControl fullWidth variant="outlined">
                       <Select
                         sx={{ width: 300 }}
-                        value={service.DeliveryType_ID +""}
+                        value={service.DeliveryType_ID}
                         onChange={handleChange}
                         inputProps={{
                           name: "DeliveryType_ID",
