@@ -1,10 +1,11 @@
 package controller
 
 import (
-	"github.com/sut65/team10/entity"
-	"gorm.io/gorm"
 	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
+	"github.com/sut65/team10/entity"
+	"gorm.io/gorm"
+	// "gorm.io/gorm/clause"
 
 	"net/http"
 )
@@ -82,7 +83,8 @@ func GetService(c *gin.Context) {
 	var service entity.Service
 	id := c.Param("id")
 	if err := entity.DB().Raw("SELECT * FROM services WHERE id = ?", id).Scan(&service).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	// if tx := entity.DB().Preload(clause.Associations).Where("id = ?", id).First(&service); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Serevice Not Found"})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": service})
@@ -191,3 +193,4 @@ func UpdateService(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"data": up_sv})
 }
+

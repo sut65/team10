@@ -206,6 +206,11 @@ const ServiceCreate = () => {
     }
   };
 
+  const convertType = (data: string | number | undefined) => {
+    let val = typeof data === "string" ? parseInt(data) : data;
+    return val;
+  };
+
   var total = 0;
   let add = function (num1: any, num2: any, num3: any) {
     if (num1 === undefined || num2 === undefined || num3 === undefined) {
@@ -221,7 +226,7 @@ const ServiceCreate = () => {
     let data = {
       Customer_ID: Number(localStorage.getItem("uid")),
       ID: service.ID,
-      TypeWashing_ID: service.TypeWashing_ID,
+      TypeWashing_ID: convertType(service.TypeWashing_ID),
       Weight_ID: service.Weight_ID,
       Address: service.Address,
       DeliveryType_ID: service.DeliveryType_ID,
@@ -249,6 +254,7 @@ const ServiceCreate = () => {
                 title: "Saved!",
                 text: "บันทึกสำเร็จ",
               });
+              window.location.href = "/bill/create";
               // setSuccess(true);
             } else {
               Swal.fire({
@@ -550,3 +556,5 @@ const ServiceCreate = () => {
 };
 
 export default ServiceCreate;
+
+

@@ -51,3 +51,11 @@ func ListFormTypes(c *gin.Context) {
 	
 	c.JSON(http.StatusOK, gin.H{"data": formtype})
 }
+
+type formtypeError struct {
+	msg string
+}
+
+func (e formtypeError) Error() string {
+	return e.msg
+}

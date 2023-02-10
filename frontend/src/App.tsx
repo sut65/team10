@@ -86,15 +86,14 @@ export default function App() {
               <Route path="/bill" element={<BillTable_UI />} />
               <Route path="/bill/create" element={<Bill />} />
               <Route path="/bills/update/:id" element={<BillUpdate />} />
-              <Route path="/service/create" element={<ServiceCreate />} />
               <Route path="/customer/update" element={<UpdateCustomer />} />
               {/* <Route path="/form" element={<FormTable />} /> */}
               <Route path="/service" element={<ServiceCreate />} />
               <Route path="/serviceinfo" element={<ServiceTable />} />
-              <Route path="/form" element={<FormCreate/>} />
+              <Route path="/form" element={<FormCreate />} />
               <Route path="/forminfo" element={<FormTable />} />
               <Route path="/formsupdate/:id" element={<FormUpdate />} />
-              <Route path="/service/:id" element={<ServiceUpdate />} />
+              <Route path="/serviceupdate/:id" element={<ServiceUpdate />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
@@ -128,7 +127,7 @@ export default function App() {
               <Route path="/vehicle/" element={<VehicleTableUI />} />
               <Route path="/vehicle/update/:id" element={<UpdateVehicle />} />
               <Route path="/create" element={<CompleteCreate />} />
-              <Route path="/complete/info" element={<CompleteTable/>} />
+              <Route path="/complete/info" element={<CompleteTable />} />
               <Route path="/employee" element={<EmployeeTable />} />
               <Route path="/complete/info/complete/update/:id" element={<UpdateComplete />} />
               {/* <Route path="/employee/create" element={<EmployeeCreate_UI />} /> */}
