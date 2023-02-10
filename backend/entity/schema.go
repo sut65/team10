@@ -107,7 +107,6 @@ type Brand struct {
 	Stock     []Stock `gorm:"foreignKey:BrandID"`
 }
 type Size struct {
-
 	gorm.Model
 	Size_Name string
 	Stock     []Stock `gorm:"foreignKey:SizeID"`
@@ -195,15 +194,15 @@ type FormType struct {
 
 type Form struct {
 	gorm.Model
-	Comment string	`valid:"maxstringlength(50)~กรอกได้สูงสุด 50 ตัวอักษร,matches([A-Za-zก-ฮ./()])~ห้ามใช้ตัวอักษรพิเศษ,required~โปรดแสดงความคิดเห็น"`
+	Comment string `valid:"maxstringlength(50)~กรอกได้สูงสุด 50 ตัวอักษร,matches([A-Za-zก-ฮ./()])~ห้ามใช้ตัวอักษรพิเศษ,required~โปรดแสดงความคิดเห็น"`
 
-	SatisfactionID *uint	`valid:"-"`
+	SatisfactionID *uint        `valid:"-"`
 	Satisfaction   Satisfaction `gorm:"references:id" valid:"-"`
 
-	FormTypeID *uint	`valid:"-"`
+	FormTypeID *uint    `valid:"-"`
 	FormType   FormType `gorm:"references:id" valid:"-"`
 
-	Customer_ID *uint	`valid:"-"`
+	Customer_ID *uint    `valid:"-"`
 	Customer    Customer `gorm:"references:id" valid:"-"`
 }
 
@@ -364,12 +363,12 @@ type Complete struct {
 /* -------------------------------------------------------------------------- */
 type Confirmation struct {
 	gorm.Model
-	Complete_ID *uint    `valid:"-"` //prevent valid from this or upper entity
-	Complete    Complete `gorm:"references:id" valid:"-"`
-	Customer_ID *uint    `valid:"-"` //prevent valid from this or upper entity
-	Customer    Customer `gorm:"references:id" valid:"-"`
-	RecvTime    time.Time
-	RecvAddress string `valid:"required~กรุณากรอกที่อยู่จัดส่ง"`
+	Complete_ID *uint     `valid:"-"` //prevent valid from this or upper entity
+	Complete    Complete  `gorm:"references:id" valid:"-"`
+	Customer_ID *uint     `valid:"-"` //prevent valid from this or upper entity
+	Customer    Customer  `gorm:"references:id" valid:"-"`
+	RecvTime    time.Time `valid:"required~ต้องใส่ข้อมูลเวลา,current_time_as_min~เวลาต้องไม่เป็นอดีต"`
+	RecvAddress string    `valid:"required~กรุณากรอกที่อยู่จัดส่ง"`
 	RecvType_ID *uint
 	RecvType    RecvType `gorm:"references:id"`
 	Note        string
@@ -442,7 +441,16 @@ func SetTimeandValueValidation() {
 	// })
 }
 
+func SetConfTimeValidation() {
+	govalidator.CustomTypeTagMap.Set("current_time_as_min", func(i interface{}, context interface{}) bool {
+		t := i.(time.Time)
+		now := time.Now().Local()
+		return t.After(now) || t.Equal(now) //Value not less than now
+	})
+}
+
 func init() {
 	SetTimeandValueValidation()
 	SetServiceValidation()
+	SetConfTimeValidation()
 }
