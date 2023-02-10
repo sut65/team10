@@ -36,7 +36,7 @@ import {
 } from "@mui/material/colors";
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 import UndoIcon from "@mui/icons-material/Undo";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -45,10 +45,6 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 ) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
-
-
-
-
 
 const ServiceCreate = () => {
   const params = useParams();
@@ -213,8 +209,26 @@ const ServiceCreate = () => {
 
   var total = 0;
   let add = function (num1: any, num2: any, num3: any) {
-    if (num1 === undefined || num2 === undefined || num3 === undefined) {
-      return 0;
+    if (num1 === undefined && num2 === undefined && num3 === undefined) {
+      return total;
+    } else if (num2 === undefined && num3 === undefined) {
+      total = num1;
+      return total;
+    } else if (num1 === undefined && num3 === undefined) {
+      total = num2;
+      return total;
+    } else if (num1 === undefined && num2 === undefined) {
+      total = num3;
+      return total;
+    } else if (num1 === undefined) {
+      total = num3 + num2;
+      return total;
+    } else if (num2 === undefined) {
+      total = num1 + num3;
+      return total;
+    } else if (num3 === undefined) {
+      total = num1 + num2;
+      return total;
     } else {
       total = num1 + num2 + num3;
       return total;
@@ -555,5 +569,3 @@ const ServiceCreate = () => {
 };
 
 export default ServiceCreate;
-
-
