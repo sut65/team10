@@ -165,6 +165,7 @@ function CustomerCreate() {
         console.log(res);
         if (res.data) {
           setSuccess(true);
+          window.location.href = "/";
           // setErrorMessage("");
         } else {
           setAlertMessage(res.error);

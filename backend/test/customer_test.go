@@ -2,6 +2,7 @@ package test
 
 import (
 	"testing"
+
 	"github.com/asaskevich/govalidator"
 	. "github.com/onsi/gomega"
 	"github.com/sut65/team10/entity"
@@ -38,8 +39,8 @@ func TestUsernameNotBlank(t *testing.T) {
 	g := NewGomegaWithT(t)
 
 	customer := entity.Customer{
-		Customer_Name:      "สุดารัตน์ พร้อมจิตต์", 
-		Customer_Username:  "",//ผิด
+		Customer_Name:      "สุดารัตน์ พร้อมจิตต์",
+		Customer_Username:  "", //ผิด
 		Customer_Phone:     "0967436705",
 		Customer_Promptpay: "0912345265",
 		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234 //On test Purpose
@@ -64,11 +65,11 @@ func TestPhoneNotBlank(t *testing.T) {
 	g := NewGomegaWithT(t)
 
 	customer := entity.Customer{
-		Customer_Name:      "สุดารัตน์ พร้อมจิตต์", 
+		Customer_Name:      "สุดารัตน์ พร้อมจิตต์",
 		Customer_Username:  "Cream_9",
 		Customer_Phone:     "", //ผิด
 		Customer_Promptpay: "0912345265",
-		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234 //On test Purpose
+		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //12345678 //On test Purpose
 		Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
 	}
 
@@ -90,11 +91,11 @@ func TestPromptpayNotBlank(t *testing.T) {
 	g := NewGomegaWithT(t)
 
 	customer := entity.Customer{
-		Customer_Name:      "สุดารัตน์ พร้อมจิตต์", 
+		Customer_Name:      "สุดารัตน์ พร้อมจิตต์",
 		Customer_Username:  "Cream_9",
 		Customer_Phone:     "0967436705",
-		Customer_Promptpay: "",  //ผิด
-		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234 //On test Purpose
+		Customer_Promptpay: "",                                                             //ผิด
+		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //12345678 //On test Purpose
 		Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
 	}
 
@@ -116,11 +117,11 @@ func TestPasswordNotBlank(t *testing.T) {
 	g := NewGomegaWithT(t)
 
 	customer := entity.Customer{
-		Customer_Name:      "สุดารัตน์ พร้อมจิตต์", 
+		Customer_Name:      "สุดารัตน์ พร้อมจิตต์",
 		Customer_Username:  "Cream_9",
 		Customer_Phone:     "0967436705",
-		Customer_Promptpay: "0912345265",  
-		Customer_Password:  "",  //ผิด
+		Customer_Promptpay: "0912345265",
+		Customer_Password:  "", //ผิด
 		Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
 	}
 
@@ -137,18 +138,17 @@ func TestPasswordNotBlank(t *testing.T) {
 	g.Expect(err.Error()).To(Equal("Password not blank"))
 }
 
-
 // ตรวจสอบPasswordแล้วต้องเจอ Error
 func TestAddressdNotBlank(t *testing.T) {
 	g := NewGomegaWithT(t)
 
 	customer := entity.Customer{
-		Customer_Name:      "สุดารัตน์ พร้อมจิตต์", 
+		Customer_Name:      "สุดารัตน์ พร้อมจิตต์",
 		Customer_Username:  "Cream_9",
 		Customer_Phone:     "0967436705",
-		Customer_Promptpay: "0912345265",  
-		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234 //On test Purpose
-		Customer_Address:   "", //ผิด
+		Customer_Promptpay: "0912345265",
+		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //12345678 //On test Purpose
+		Customer_Address:   "",                                                             //ผิด
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -167,18 +167,20 @@ func TestAddressdNotBlank(t *testing.T) {
 func TestCustomerUsername(t *testing.T) {
 	g := NewGomegaWithT(t)
 
-	//ทำการตรวจสอบ Username ต้องขึ้นต้นด้วยอักษร พิมพ์ใหญ่เท่านั้น
+	//ทำการตรวจสอบ Username ต้องขึ้นต้นด้วยอักษร และห้ามเป็นอัการพิเศษ
 	fixtures := []string{
-		"rtyw7", //คำนำหน้าเป็นพิมพ์เล็ก
+		"0rtyw7",  //ขึ้นต้นไม่เป็นตัวอักษร
+		"*rtyw7",  //ขึ้นต้นไม่เป็นตัวอักษร
+		"sff-d*dg", //มีอักษรพิเศษ
 	}
 	for _, fixture := range fixtures {
 		customer := entity.Customer{
-			Customer_Name:      "สุดารัตน์ พร้อมจิตต์", 
-		    Customer_Username:  fixture,
-		    Customer_Phone:     "0967436705",
-		    Customer_Promptpay: "0912345265",
-		    Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234 //On test Purpose , 
-	    	Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
+			Customer_Name:      "สุดารัตน์ พร้อมจิตต์",
+			Customer_Username:  fixture,
+			Customer_Phone:     "0967436705",
+			Customer_Promptpay: "0912345265",
+			Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //12345678 //On test Purpose ,
+			Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
 		}
 
 		ok, err := govalidator.ValidateStruct(customer)
@@ -194,22 +196,22 @@ func TestCustomerUsername(t *testing.T) {
 func TestCustomerPhone(t *testing.T) {
 	g := NewGomegaWithT(t)
 
-		//ทำการตรวจสอบ Phone ต้องมีตัวเลข 0-9 เท่ากับ 10 ตัว ไม่มีตัวอักษร และขึ้นต้นด้วย 0
+	//ทำการตรวจสอบ Phone ต้องมีตัวเลข 0-9 เท่ากับ 10 ตัว ไม่มีตัวอักษร และขึ้นต้นด้วย 0
 	fixtures := []string{
-		"09647854", //ผิดเพราะเลขไม่ครบ 10 
-		"096478547492", //ผิดเพราะเลขเกิน 10 
-		"14585265", // ผิดเพราะเลขไม่ครบ 10 และตัวนำหน้าไม่ใช่ 0
+		"09647854",     //ผิดเพราะเลขไม่ครบ 10
+		"096478547492", //ผิดเพราะเลขเกิน 10
+		"14585265",     // ผิดเพราะเลขไม่ครบ 10 และตัวนำหน้าไม่ใช่ 0
 		"c096743670",   // ผิดเพราะมีตัวอักษร
-		"c0967ft70",   // ผิดเพราะมีตัวอักษร
+		"c0967ft70",    // ผิดเพราะมีตัวอักษร
 	}
 	for _, fixture := range fixtures {
 		customer := entity.Customer{
-			Customer_Name:      "สุดารัตน์ พร้อมจิตต์", 
-		    Customer_Username:  "Cream_9",
-		    Customer_Phone:     fixture,
-		    Customer_Promptpay: "0912345265",
-		    Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234 //On test Purpose , 
-	    	Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
+			Customer_Name:      "สุดารัตน์ พร้อมจิตต์",
+			Customer_Username:  "Cream_9",
+			Customer_Phone:     fixture,
+			Customer_Promptpay: "0912345265",
+			Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //12345678 //On test Purpose ,
+			Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
 		}
 
 		ok, err := govalidator.ValidateStruct(customer)
@@ -226,24 +228,24 @@ func TestCustomerPhone(t *testing.T) {
 func TestCustomerPromptpay(t *testing.T) {
 	g := NewGomegaWithT(t)
 
-		//ทำการตรวจสอบ Promptpay ต้องมีตัวเลข 0-9 เท่ากับ 10 ตัว ไม่มีตัวอักษรและขึ้นต้นด้วยเลข 0  หรือ ต้องมีตัวเลข 0-9 เท่ากับ 13 ตัว ไม่มีตัวอักษร
+	//ทำการตรวจสอบ Promptpay ต้องมีตัวเลข 0-9 เท่ากับ 10 ตัว ไม่มีตัวอักษรและขึ้นต้นด้วยเลข 0  หรือ ต้องมีตัวเลข 0-9 เท่ากับ 13 ตัว ไม่มีตัวอักษร
 	fixtures := []string{
-		"09647854", //ผิดเพราะเลขไม่ครบ 10 
-		"14585265", // ผิดเพราะเลขไม่ครบ 10 และตัวนำหน้าไม่ใช่ 0
-		"c096743670",   // ผิดเพราะมีตัวอักษร
-		"1857945678",   // ผิดเพราะเลขไม่ครบ 13
-		"18579456784784525",   // ผิดเพราะเลขเกิน 13
+		"09647854",          //ผิดเพราะเลขไม่ครบ 10
+		"14585265",          // ผิดเพราะเลขไม่ครบ 10 และตัวนำหน้าไม่ใช่ 0
+		"c096743670",        // ผิดเพราะมีตัวอักษร
+		"1857945678",        // ผิดเพราะเลขไม่ครบ 13
+		"18579456784784525", // ผิดเพราะเลขเกิน 13
 		"185794567847GER",   // ผิดเพราะเลขเกิน 13 และมีตัวอักษร
-		"Er07899452367",   // ผิดเพราะมีตัวอักษร
+		"Er07899452367",     // ผิดเพราะมีตัวอักษร
 	}
 	for _, fixture := range fixtures {
 		customer := entity.Customer{
-			Customer_Name:      "สุดารัตน์ พร้อมจิตต์", 
-		    Customer_Username:  "Cream_9",
-		    Customer_Phone:     "0967436705",
-		    Customer_Promptpay: fixture,
-		    Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234 //On test Purpose , 
-	    	Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
+			Customer_Name:      "สุดารัตน์ พร้อมจิตต์",
+			Customer_Username:  "Cream_9",
+			Customer_Phone:     "0967436705",
+			Customer_Promptpay: fixture,
+			Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //12345678 //On test Purpose ,
+			Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
 		}
 
 		ok, err := govalidator.ValidateStruct(customer)
@@ -260,20 +262,20 @@ func TestCustomerPromptpay(t *testing.T) {
 func TestCustomerPassword(t *testing.T) {
 	g := NewGomegaWithT(t)
 
-		//ทำการตรวจสอบ Password ต้องมีตัวเลข 0-9 หรือ ตัวอักษร อย่างน้อย 6 ตัว 
+	//ทำการตรวจสอบ Password ต้องมีตัวเลข 0-9 หรือ ตัวอักษร อย่างน้อย 6 ตัว
 	fixtures := []string{
-		"0000", //ผิดเพราะเลขไม่ครบ 6 
-		"cream",   // ผิดเพราะตัวอักษรไม่ครบ 6
-		"cre6", //ผิดเพราะไม่ครบ 6 
+		"0000",  //ผิดเพราะเลขไม่ครบ 6
+		"cream", // ผิดเพราะตัวอักษรไม่ครบ 6
+		"cre6",  //ผิดเพราะไม่ครบ 6
 	}
 	for _, fixture := range fixtures {
 		customer := entity.Customer{
-			Customer_Name:      "สุดารัตน์ พร้อมจิตต์", 
-		    Customer_Username:  "Cream_9",
-		    Customer_Phone:     "0967436705",
-		    Customer_Promptpay: "0912345265",
-		    Customer_Password:  fixture , 
-	    	Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
+			Customer_Name:      "สุดารัตน์ พร้อมจิตต์",
+			Customer_Username:  "Cream_9",
+			Customer_Phone:     "0967436705",
+			Customer_Promptpay: "0912345265",
+			Customer_Password:  fixture,
+			Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
 		}
 
 		ok, err := govalidator.ValidateStruct(customer)

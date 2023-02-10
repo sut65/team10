@@ -31,8 +31,8 @@ type Career struct {
 type Customer struct {
 	gorm.Model
 	Customer_Name      string `valid:"required~Name not blank"`
-	Customer_Username  string `valid:"matches(^[A-Z])~Username must be is Begin with A-Z ,required~Username not blank"`
-	Customer_Phone     string `valid:"matches(^(0)([0-9]{9}))~Phonenumber is not valid,required~Phone not blank"`
+	Customer_Username  string `valid:"matches(^[_A-z0-9]*((-)*[_A-z0-9])*$)~Username not special characters ,required~Username not blank"`
+	Customer_Phone     string `valid:"matches(^[0][0-9]{9}$)~Phonenumber is not valid,required~Phone not blank"`
 	Customer_Promptpay string `valid:"matches((^[0][0-9]{9}$)|([0-9]{13}))~Promptpay is not valid,required~Promptpay not blank"`
 	Customer_Password  string `valid:"minstringlength(8)~Password must be more than or equal to 8 characters,required~Password not blank"`
 	Customer_Address   string `valid:"required~Address not blank"`
@@ -194,15 +194,15 @@ type FormType struct {
 
 type Form struct {
 	gorm.Model
-	Comment string	`valid:"maxstringlength(50)~กรอกได้สูงสุด 50 ตัวอักษร,alphabet~ที่อยู่เป็นตัวอักษรพิเศษหรือภาษาอังกฤษ,required~โปรดแสดงความคิดเห็น"`
+	Comment string `valid:"maxstringlength(50)~กรอกได้สูงสุด 50 ตัวอักษร,alphabet~ที่อยู่เป็นตัวอักษรพิเศษหรือภาษาอังกฤษ,required~โปรดแสดงความคิดเห็น"`
 
-	SatisfactionID *uint	`valid:"-"`
+	SatisfactionID *uint        `valid:"-"`
 	Satisfaction   Satisfaction `gorm:"references:id" valid:"-"`
 
-	FormTypeID *uint	`valid:"-"`
+	FormTypeID *uint    `valid:"-"`
 	FormType   FormType `gorm:"references:id" valid:"-"`
 
-	Customer_ID *uint	`valid:"-"`
+	Customer_ID *uint    `valid:"-"`
 	Customer    Customer `gorm:"references:id" valid:"-"`
 }
 
