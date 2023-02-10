@@ -347,7 +347,7 @@ function submit() {
                         id="packaging-autocomplete"
                         options={packaging}
                         fullWidth
-                        size="medium"
+                        size="small"
                         sx={{ width : 300 }}
                         onChange={(event: any, value) => {
                           setComplete({
@@ -355,7 +355,7 @@ function submit() {
                             Packaging_ID: value?.ID,
                           }); //Just Set ID to interface
                         }}
-                        getOptionLabel={(option: any) => `${option.ID}`} //filter value
+                        getOptionLabel={(option: any) => `${option.Packaging_Type}`} //filter value
                         renderInput={(params) => {
                           return (
                             <TextField

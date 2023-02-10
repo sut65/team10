@@ -168,7 +168,7 @@ function UpdateCustomer() {
     setCustomer({ ...customer, [id]: value });
   };
 
-  const handleChange = (event: SelectChangeEvent<number>) => {
+  const handleChange = (event: SelectChangeEvent<any>) => {
     const name = event.target.name as keyof typeof customer;
     setCustomer({
       ...customer,
@@ -279,76 +279,42 @@ function UpdateCustomer() {
               <Grid item xs={6}>
                 <FormControl fullWidth variant="outlined">
                   <p>เพศ</p>
-                  <Autocomplete
-                        id="gender-autocomplete"
-                        options={gender}
-                        fullWidth
+                  <Select
+                        sx={{ width: 300 }}
+                        value={customer.Gender_ID + ""}
+                        onChange={handleChange}
                         size="small"
-                        sx={{ width : 300 }}
-                        onChange={(event: any, value) => {
-                          setCustomer({
-                            ...customer,
-                            Gender_ID: value?.ID,
-                          }); //Just Set ID to interface
+                        inputProps={{
+                          name: "Gender_ID",
                         }}
-                        getOptionLabel={(option: any) => `${option.ID}`} //filter value
-                        renderInput={(params) => {
-                          return (
-                            <TextField
-                              {...params}
-                              variant="outlined"
-                              placeholder="เพศ"
-                            />
-                          );
-                        }}
-                        renderOption={(props: any, option: any) => {
-                          return (
-                            <li
-                              {...props}
-                              value={`${option.ID}`}
-                              key={`${option.ID}`}
-                            >{`${option.Gender_Name}`}</li>
-                          ); //display value
-                        }}
-                      />
+                      >
+                        {gender.map((item: GendersInterface) => (
+                          <MenuItem value={item.ID}>
+                            {item.Gender_Name}
+                          </MenuItem>
+                        ))}
+                      </Select>
                 </FormControl>
               </Grid>
 
               <Grid item xs={6}>
                 <p>อาชีพ</p>
                 <FormControl fullWidth variant="outlined">
-                <Autocomplete
-                        id="career-autocomplete"
-                        options={career}
-                        fullWidth
+                <Select
+                        sx={{ width: 300 }}
+                        value={customer.Career_ID + ""}
+                        onChange={handleChange}
                         size="small"
-                        sx={{ width : 300 }}
-                        onChange={(event: any, value) => {
-                          setCustomer({
-                            ...customer,
-                            Career_ID: value?.ID,
-                          }); //Just Set ID to interface
+                        inputProps={{
+                          name: "Career_ID",
                         }}
-                        getOptionLabel={(option: any) => `${option.ID}`} //filter value
-                        renderInput={(params) => {
-                          return (
-                            <TextField
-                              {...params}
-                              variant="outlined"
-                              placeholder="อาชีพ"
-                            />
-                          );
-                        }}
-                        renderOption={(props: any, option: any) => {
-                          return (
-                            <li
-                              {...props}
-                              value={`${option.ID}`}
-                              key={`${option.ID}`}
-                            >{`${option.Career_Name}`}</li>
-                          ); //display value
-                        }}
-                      />
+                      >
+                        {career.map((item: CareerInterface) => (
+                          <MenuItem value={item.ID}>
+                            {item.Career_Name}
+                          </MenuItem>
+                        ))}
+                      </Select>
                 </FormControl>
               </Grid>
 
@@ -413,38 +379,21 @@ function UpdateCustomer() {
 
                 <p>คุณรู้จักเราได้จากที่ไหน</p>
                 <FormControl fullWidth variant="outlined">
-                <Autocomplete
-                        id="advertise-autocomplete"
-                        options={advertise}
-                        fullWidth
+                <Select
+                        sx={{ width: 300 }}
+                        value={customer.Advertise_ID + ""}
+                        onChange={handleChange}
                         size="small"
-                        sx={{ width : 300 }}
-                        onChange={(event: any, value) => {
-                          setCustomer({
-                            ...customer,
-                            Advertise_ID: value?.ID,
-                          }); //Just Set ID to interface
+                        inputProps={{
+                          name: "Advertise_ID",
                         }}
-                        getOptionLabel={(option: any) => `${option.ID}`} //filter value
-                        renderInput={(params) => {
-                          return (
-                            <TextField
-                              {...params}
-                              variant="outlined"
-                              placeholder="คุณรู้จักเราได้จากที่ไหน"
-                            />
-                          );
-                        }}
-                        renderOption={(props: any, option: any) => {
-                          return (
-                            <li
-                              {...props}
-                              value={`${option.ID}`}
-                              key={`${option.ID}`}
-                            >{`${option.Advertise_Type}`}</li>
-                          ); //display value
-                        }}
-                      />
+                      >
+                        {advertise.map((item: AdvertiseInterface) => (
+                          <MenuItem value={item.ID}>
+                            {item.Advertise_Type}
+                          </MenuItem>
+                        ))}
+                      </Select>
                 </FormControl>
               </Grid>
 
