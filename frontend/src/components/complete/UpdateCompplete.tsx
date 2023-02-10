@@ -18,12 +18,13 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { ReceiveInterface } from "../../models/receive/IReceive";
 import { PackagingInterface } from "../../models/complete/IPackagink";
 import { EmployeesInterface } from "../../models/Employee/IEmployee";
-import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { Autocomplete, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
 import CancelIcon from '@mui/icons-material/Cancel';
 import SaveIcon from "@mui/icons-material/Save";
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
  props,
@@ -184,7 +185,7 @@ function submitUpdate() {
         setAlertMessage("บันทึกสำเร็จ")
         console.log(res.data)
         await timeout(1000); //for 1 sec delay
-        //window.location.href = "/complete/info"; 
+        window.location.href = "/complete/info"; 
       } else {
         setError(true);
         setAlertMessage(res.error);
@@ -225,15 +226,14 @@ function submitUpdate() {
      </Snackbar>
      <Box sx={{ padding: 2
                      }}>
-     <Paper>
-                    <Grid container spacing={0} sx={{ padding: 2
-                     }}>
-                    <h1>COMPLETE<TaskAltIcon color="success" sx={{ fontSize: 100 }}/></h1> 
-                    </Grid>
-
+     <Paper style={{ background: "rgba(0, 0, 0, 0.2)" }}>
+          <h1 style={{ textAlign: "center", paddingTop: 20, color: "white" }}>
+          &nbsp;COMPLETE
+            <CheckCircleOutlineIcon style={{ fontSize: 30 }} />
+          </h1>
        <Divider />
-       
-       <Grid container spacing={1} sx={{ padding: 5 }}>
+       <Paper sx={{ml:5, mr:5, mt:1}}>
+          <Grid container spacing={1} sx={{ paddingLeft:5,paddingRight:5, paddingBottom:5 }}>
         <Grid item xs={6}>
           <p>เลขประจำตัวพนักงาน</p>
           <FormControl fullWidth variant="outlined">
@@ -245,7 +245,7 @@ function submitUpdate() {
                size="medium"
                value={eid}
                defaultValue={"Employee ID"}
-               sx={{ width : 350 }}
+               sx={{ width : 250 }}
                onChange={handleInputChange}
              ></TextField>
            </FormControl>
@@ -278,27 +278,46 @@ function submitUpdate() {
                type="string"
                size="medium"
                value={complete.Receive_ID}
-               sx={{ width : 350 }}
+               sx={{ width : 250 }}
                onChange={handleInputChange}
              />
            </FormControl>
         </Grid>
         <Grid item xs={6}>
+          <p>บรรจุภัณฑ์</p>
           <FormControl fullWidth variant="outlined">  
-              <p>บรรจุภัณฑ์</p>
-              <Select
-                    sx={{ width: 300 }}
-                    value={complete.Packaging_ID}
-                    onChange={handleChange}
-                    inputProps={{
-                      name: "Packaging_ID",
-                    }}
-                  >
-                    {packaging.map((item: PackagingInterface) => (
-                      <MenuItem value={item.ID}>{item.Packaging_Type}</MenuItem>
-                    ))}
-                  </Select>
-                
+          <Autocomplete
+                        id="packaging-autocomplete"
+                        options={packaging}
+                        fullWidth
+                        size="medium"
+                        sx={{ width : 300 }}
+                        onChange={(event: any, value) => {
+                          setComplete({
+                            ...complete,
+                            Packaging_ID: value?.ID,
+                          }); //Just Set ID to interface
+                        }}
+                        getOptionLabel={(option: any) => `${option.ID}`} //filter value
+                        renderInput={(params) => {
+                          return (
+                            <TextField
+                              {...params}
+                              variant="outlined"
+                              placeholder="Packaging"
+                            />
+                          );
+                        }}
+                        renderOption={(props: any, option: any) => {
+                          return (
+                            <li
+                              {...props}
+                              value={`${option.ID}`}
+                              key={`${option.ID}`}
+                            >{`${option.Packaging_Type}`}</li>
+                          ); //display value
+                        }}
+                      />
             </FormControl>
         </Grid>
 
@@ -306,21 +325,22 @@ function submitUpdate() {
 
            <FormControl fullWidth variant="outlined">
              <p>วัน-เวลาที่บันทึก</p>
-                             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                             <DateTimePicker
-                             label="DateTimePicker"
-                             renderInput={(params) => <TextField {...params} />}
-                             value={Complete_datetime}
-                             onChange={(newValue: Dayjs | null) => {
-                                   setComplete_datetime(newValue);
-                                   console.log(newValue)
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateTimePicker
+                  label="DateTimePicker"
+                  renderInput={(params) => <TextField {...params} />}
+                  value={Complete_datetime}
+                  onChange={(newValue: Dayjs | null) => {
+                  setComplete_datetime(newValue);
+                  console.log(newValue)
                   }}
                 />
-                            </LocalizationProvider>
+                  </LocalizationProvider>
            </FormControl>
          </Grid>
         </Grid>
-        </Paper>
+      </Paper>
+    </Paper>
          <Grid container spacing={1} sx={{ padding: 5 }}>
          <Grid item xs={12}>
          <Button 

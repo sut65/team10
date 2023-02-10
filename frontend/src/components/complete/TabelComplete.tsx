@@ -2,7 +2,7 @@ import * as React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import { Button, ButtonGroup, Paper, SwipeableDrawer, Typography } from "@mui/material";
+import { Button, ButtonGroup, IconButton, Paper, SwipeableDrawer, Typography } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -13,6 +13,11 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { CompleteInterface } from "../../models/complete/IComplete";
 import { Link as RouterLink } from "react-router-dom";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import { red } from "@mui/material/colors";
+import { lightGreen } from "@mui/material/colors";
+import AddIcon from '@mui/icons-material/Add';
 
 export default function CompleteTable() {
   const params = useParams();
@@ -61,20 +66,27 @@ export default function CompleteTable() {
     <React.Fragment>
       <CssBaseline />
       <Container maxWidth="lg" sx={{ p: 2 }}>
-        <Paper sx={{ p: 2 }}>
+        <Paper sx={{ p: 2 }} 
+        style={{
+                  background:
+                    "linear-gradient(180deg, #ffdd72 0%,#F0FFFF 100%, #F5DEB3 100%)",
+                }}>
           <Box display="flex">
             <Box sx={{ flexGrow: 1 }}>
               <Typography variant="h6" gutterBottom component="div">
-                Complete
+              <h2>Complete</h2>
               </Typography>
             </Box>
+            <h2>
             <Box>
               <Button 
               variant="contained" 
               component={RouterLink}
               to="/create"
-              sx={{p: 1}}>Create Complete</Button>
+              endIcon = {<AddIcon/>}
+              sx={{p: 1}}>Create </Button>
             </Box>
+            </h2>
           </Box>
 
           <TableContainer component={Paper}>
@@ -87,6 +99,8 @@ export default function CompleteTable() {
                   <TableCell align="right">ReceiveID</TableCell>
                   <TableCell align="right">PackagingID</TableCell>
                   <TableCell align="right">DateTime</TableCell>
+                  <TableCell align="center">แก้ไข</TableCell>
+                  <TableCell align="center">ลบ</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -104,11 +118,26 @@ export default function CompleteTable() {
                     <TableCell align="right">{row.Packaging_ID}</TableCell>
                     <TableCell align="right">{row.Complete_datetime.toString()}</TableCell>
                     <TableCell align="right">
-                      <ButtonGroup variant="outlined" aria-lable="outlined button group">
-                        <Button onClick={() => navigate({ pathname: `/complete/info/complete/update/${row.ID}` })} variant="contained" color="success"
-                          >แก้ไข</Button>
-                        <Button onClick={() => CompleteDelete(row.ID)} color="error">Delete</Button>
-                      </ButtonGroup>
+                    <IconButton
+                        size="large"
+                        aria-label="Edit"
+                        onClick={() => {
+                          navigate({ pathname: `/complete/info/complete/update/${row.ID}` });
+                        }}
+                        sx={{ color: lightGreen[600] }}
+                      >
+                        <EditIcon fontSize="inherit" />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell align="center">
+                      <IconButton
+                        size="large"
+                        aria-label="delete"
+                        onClick={() => CompleteDelete(row.ID)}
+                        sx={{ color: red[900] }}
+                      >
+                        <DeleteIcon fontSize="inherit" />
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 ))}
