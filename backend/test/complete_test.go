@@ -9,7 +9,6 @@ import (
 	"github.com/sut65/team10/entity"
 )
 
-
 // ตรวจสอบเวลาแล้วต้องเจอ Error
 func TestTimeNotPast(t *testing.T) {
 	g := NewGomegaWithT(t)
@@ -53,6 +52,7 @@ func TestTimeNotFuture(t *testing.T) {
 	// err.Error ต้องมี error message แสดงออกมา
 	g.Expect(err.Error()).To(Equal("DateTime Not Future"))
 }
+
 // วันเวลาห้ามเป็นอดีตเกิน5นาที
 func TestTimeNotNull(t *testing.T) {
 	g := NewGomegaWithT(t)

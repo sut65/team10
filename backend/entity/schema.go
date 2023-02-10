@@ -344,7 +344,7 @@ type Packaging struct {
 
 type Complete struct {
 	gorm.Model
-	Complete_datetime time.Time `valid:"required~DateTime Not Null, DateTimeNotPast~DateTime Not Past, DateTimeNotFuture~DateTime Not Future"`
+	Complete_datetime time.Time `valid:"required~DateTime Not Null, DateTimeNotPast~DateTime Not Past,DateTimeNotFuture~DateTime Not Future"`
 
 	Employee_ID *uint    `valid:"-"`
 	Employee    Employee `gorm:"references:id" valid:"-"`
@@ -418,7 +418,7 @@ func SetTimeandValueValidation() {
 		return p >= 0 //ค่าที่จะถูกส่งออกไปคือ p >=0
 	})
 	govalidator.CustomTypeTagMap.Set("ValuePositive", func(i interface{}, context interface{}) bool {
-		p := i.(int)  //p มี type เป็น int
+		p := i.(int) //p มี type เป็น int
 		return p > 0 //ค่าที่จะถูกส่งออกไปคือ p >0
 	})
 	//เวลาห้ามเป็นอดีตเกิน 5 นาที
