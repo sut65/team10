@@ -28,7 +28,7 @@ import { yellow } from "@mui/material/colors";
 import EditIcon from "@mui/icons-material/Edit";
 import ServiceUpdate from "./UpdateService";
 import { TransitionProps } from "@mui/material/transitions";
-// import Table from '@mui/joy/Table';
+import Swal from 'sweetalert2'
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -82,6 +82,7 @@ export default function ServiceTable() {
       });
   };
 
+  
   const ServiceDelete = async (ID: number) => {
     const requestOptions = {
       method: "DELETE",
@@ -90,14 +91,28 @@ export default function ServiceTable() {
         "Content-Type": "application/json",
       },
     };
+    Swal.fire({
+      title: "คุณต้องการลบรายการซักรีดใช่มั้ย",
+      showDenyButton: false,
+      showCancelButton: true,
+      confirmButtonText: "ใช่สิ๊",
+    }).then((data: any) => {
+      if (data.isConfirmed) {
     fetch(`${apiUrl}/services/${ID}`, requestOptions)
       .then((response) => response.json())
       .then((res) => {
         if (res.data) {
+          Swal.fire({
+            icon: "success",
+            title: "Delete!",
+            text: "ลบสำเร็จ",
+          });
           window.location.reload();
         }
       });
-  };
+    }
+  });
+}
 
   useEffect(() => {
     getServices();

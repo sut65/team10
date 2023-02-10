@@ -231,7 +231,6 @@ const ServiceCreate = () => {
       Address: service.Address,
       DeliveryType_ID: service.DeliveryType_ID,
       Bill_Price: total,
-      Description: 1,
     };
 
     //================================================================================================================//

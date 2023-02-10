@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import { Link as RouterLink, useParams } from "react-router-dom";
+import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
 
 import TextField from "@mui/material/TextField";
 
@@ -25,8 +25,8 @@ import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 
 import { FormInterface, FormTypeInterface, SatisfactionInterface } from "../../models/form/IForm";
-import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
-
+import { ButtonGroup, MenuItem, Select, SelectChangeEvent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import Swal from 'sweetalert2'
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
@@ -41,11 +41,13 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 
-function FormUpdate() {
+function FormCreate() {
     const params = useParams()
+    const navigate = useNavigate();
     const [form, setForm] = React.useState<Partial<FormInterface>>({});
     const [formtype, setFormType] = React.useState<FormTypeInterface[]>([]);
     const [satisfaction, setsatisfaction] = React.useState<SatisfactionInterface[]>([]);
+    const [form1, setForm1] = React.useState<FormInterface[]>([]);
     const [success, setSuccess] = React.useState(false);
     const [error, setError] = React.useState(false);
     const [message, setAlertMessage] = React.useState("");
@@ -58,6 +60,32 @@ function FormUpdate() {
         }
         setSuccess(false);
         setError(false);
+    };
+
+    const getForm = async () => {
+        const apiUrl = `http://localhost:8080/forms`;
+
+        const requestOptionsGet = {
+            method: "GET",
+
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                "Content-Type": "application/json",
+            },
+        };
+        //การกระทำ //json
+        fetch(apiUrl, requestOptionsGet)
+            .then((response) => response.json()) //เรียกได้จะให้แสดงเป็น json ซึ่ง json คือ API
+
+            .then((res) => {
+                console.log(res.data); //show ข้อมูล
+
+                if (res.data) {
+                    setForm1(res.data);
+                } else {
+                    console.log("else");
+                }
+            });
     };
 
     const getFormType = async () => {
@@ -86,6 +114,7 @@ function FormUpdate() {
             });
     };
 
+    
     const getSatisfaction = async () => {
         const apiUrl = `http://localhost:8080/satisfactions`;
 
@@ -132,7 +161,7 @@ function FormUpdate() {
             });
     };
 
-    const handleChange = (event: SelectChangeEvent<number>) => {
+    const handleChange = (event: SelectChangeEvent<any>) => {
         const name = event.target.name as keyof typeof form;
         setForm({
             ...form,
@@ -143,12 +172,12 @@ function FormUpdate() {
     const handleInputChange = (
         event: React.ChangeEvent<{ id?: string; value: any }>
     ) => {
-        const id = event.target.id as keyof typeof FormUpdate;
+        const id = event.target.id as keyof typeof FormCreate;
         const { value } = event.target;
         setForm({ ...form, [id]: value });
     };
 
-    function submitUpdate() {
+    function submit() {
         let data = {
             Customer_ID: Number(localStorage.getItem('uid')),
             ID: form.ID,
@@ -157,37 +186,53 @@ function FormUpdate() {
             Comment: form.Comment,
         };
 
-        //================================================================================================================//
-
         const apiUrl = "http://localhost:8080";
-
-        const requestOptionsPost = {
-            method: "PATCH",
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        };
-        console.log(JSON.stringify(data));
-
-        fetch(`${apiUrl}/forms`, requestOptionsPost)
-            .then((response) => response.json())
-            .then((res) => {
-                console.log(res)
+        Swal.fire({
+          title: "คุณต้องการบันทึกความคิดเห็นใช่มั้ย",
+          showDenyButton: false,
+          showCancelButton: true,
+          confirmButtonText: "บันทึก",
+        }).then((data: any) => {
+          if (data.isConfirmed) {
+            fetch(`${apiUrl}/forms`, requestOptionsPost)
+              .then((response) => response.json())
+              .then((res) => {
+                console.log(res);
                 if (res.data) {
-                    setSuccess(true);
-                  } else {
-                    setAlertMessage(res.error);
-                    setError(true);
-                  }
-            });
+                  Swal.fire({
+                    icon: "success",
+                    title: "Saved!",
+                    text: "บันทึกสำเร็จ",
+                  });
+                //   window.location.href = "/forminfo";
+                  // setSuccess(true);
+                } else {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Error!",
+                    text: res.error,
+                  });
+                  // setError(true);
+                }
+              });
+          }
+        });
+    
+        const requestOptionsPost = {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        };
     }
 
 
     useEffect(() => {
         getFormType();
         getSatisfaction();
+        getForm();
         getCurrentForm();
     }, []);
     return (
@@ -325,7 +370,7 @@ function FormUpdate() {
 
                     <Grid item xs={12}>
 
-                        <Button component={RouterLink} to="/form" variant="contained">
+                        <Button component={RouterLink} to="/forminfo" variant="contained">
 
                             Back
 
@@ -335,7 +380,7 @@ function FormUpdate() {
 
                             style={{ float: "right" }}
 
-                            onClick={submitUpdate}
+                            onClick={submit}
 
                             variant="contained"
 
@@ -343,7 +388,7 @@ function FormUpdate() {
 
                         >
 
-                            SAVE
+                            Submit
 
                         </Button>
 
@@ -360,4 +405,4 @@ function FormUpdate() {
 }
 
 
-export default FormUpdate;
+export default FormCreate;

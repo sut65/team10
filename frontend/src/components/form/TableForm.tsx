@@ -26,6 +26,7 @@ import { useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { yellow } from "@mui/material/colors";
 import EditIcon from "@mui/icons-material/Edit";
+import Swal from 'sweetalert2'
 
 export default function FormTable() {
   const params = useParams();
@@ -78,14 +79,28 @@ export default function FormTable() {
         "Content-Type": "application/json",
       },
     };
+    Swal.fire({
+      title: "คุณต้องการลบผลการประเมินใช่มั้ย",
+      showDenyButton: false,
+      showCancelButton: true,
+      confirmButtonText: "ใช่สิ๊",
+    }).then((data: any) => {
+      if (data.isConfirmed) {
     fetch(`${apiUrl}/forms/${ID}`, requestOptions)
       .then((response) => response.json())
       .then((res) => {
         if (res.data) {
+          Swal.fire({
+            icon: "success",
+            title: "Delete!",
+            text: "ลบสำเร็จ",
+          });
           window.location.reload();
         }
       });
-  };
+    }
+  });
+};
 
   useEffect(() => {
     getForm();
