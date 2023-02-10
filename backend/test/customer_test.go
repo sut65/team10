@@ -69,7 +69,7 @@ func TestPhoneNotBlank(t *testing.T) {
 		Customer_Username:  "Cream_9",
 		Customer_Phone:     "", //ผิด
 		Customer_Promptpay: "0912345265",
-		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234 //On test Purpose
+		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //12345678 //On test Purpose
 		Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
 	}
 
@@ -167,9 +167,11 @@ func TestAddressdNotBlank(t *testing.T) {
 func TestCustomerUsername(t *testing.T) {
 	g := NewGomegaWithT(t)
 
-	//ทำการตรวจสอบ Username ต้องขึ้นต้นด้วยอักษร พิมพ์ใหญ่เท่านั้น
+	//ทำการตรวจสอบ Username ต้องขึ้นต้นด้วยอักษร และห้ามเป็นอัการพิเศษ
 	fixtures := []string{
-		"rtyw7", //คำนำหน้าเป็นพิมพ์เล็ก
+		"0rtyw7",   //ขึ้นต้นไม่เป็นตัวอักษร
+		"*rtyw7",   //ขึ้นต้นไม่เป็นตัวอักษร
+		"sff-d*dg", //มีอักษรพิเศษ
 	}
 	for _, fixture := range fixtures {
 		customer := entity.Customer{
@@ -187,7 +189,7 @@ func TestCustomerUsername(t *testing.T) {
 
 		g.Expect(err).ToNot(BeNil())
 
-		g.Expect(err.Error()).To(Equal("Username must be is Begin with A-Z"))
+		g.Expect(err.Error()).To(Equal("Username not special characters"))
 	}
 
 }
