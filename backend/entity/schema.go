@@ -73,7 +73,7 @@ type WorkShift struct {
 
 type Employee struct {
 	gorm.Model
-	Personal_ID  string `gorm:"uniqueIndex" valid:"matches(^([1-9]{1})([0-9]{12}))~PersonalId is not valid"`
+	Personal_ID  string `gorm:"uniqueIndex" valid:"matches(^([1-9]{1})([0-9]{12}))~PersonalId is not valid ,required~กรุณากรอกรหัสประจำตัวประชาชน"`
 	Username     string `gorm:"uniqueIndex" valid:"required~กรุณากรอก Username"`
 	Name         string `valid:"required~กรุณากรอกชื่อ - สกุล"`
 	Gender_ID    *uint
@@ -82,9 +82,9 @@ type Employee struct {
 	Position     Position `gorm:"references:id" valid:"-" `
 	WorkShift_ID *uint
 	WorkShift    WorkShift   `gorm:"references:id" valid:"-" `
-	Phonnumber   string      `valid:"matches(^(0)([0-9]{9}))~Phonenumber is not valid"`
+	Phonnumber   string      `valid:"matches(^(0)([0-9]{9}))~Phonenumber is not valid ,required~กรุณากรอกเบอร์โทร"`
 	Address      string      `valid:"required~กรุณากรอกที่อยู่"`
-	Password     string      `valid:"minstringlength(8)~Password must be more than or equal to 8 characters"`
+	Password     string      `valid:"minstringlength(8)~Password must be more than or equal to 8 characters ,required~กรุณากรอกรหัสผ่าน"`
 	Stock        []Stock     `gorm:"foreignKey:Employee_ID"`
 	Vehicle      []Vehicle   `gorm:"foreignKey:Employee_ID"`
 	Receive      []Receive   `gorm:"foreignKey:Employee_ID"`
@@ -107,6 +107,7 @@ type Brand struct {
 	Stock     []Stock `gorm:"foreignKey:BrandID"`
 }
 type Size struct {
+
 	gorm.Model
 	Size_Name string
 	Stock     []Stock `gorm:"foreignKey:SizeID"`
