@@ -386,10 +386,10 @@ type RecvType struct {
 /* -------------------------------------------------------------------------- */
 type Delivery struct {
 	gorm.Model
-	Employee_ID     *uint
-	Employee        Employee `gorm:"references:id"`
-	Confirmation_ID *uint
-	Confirmation    Confirmation `gorm:"references:id"`
+	Employee_ID     *uint        `valid:"-"`
+	Employee        Employee     `gorm:"references:id" valid:"-"`
+	Confirmation_ID *uint        `valid:"-"`
+	Confirmation    Confirmation `gorm:"references:id" valid:"-"`
 	Vehicle_ID      *uint        `valid:"-"` //prevent valid from this or upper entity
 	Vehicle         Vehicle      `gorm:"references:id" valid:"-"`
 	Score           uint         `valid:"required~กรุณาให้คะแนนสภาพการขนส่ง, range(0|5)~ใส่คะแนนตั้งแต่ 0 ถึง 5"`
