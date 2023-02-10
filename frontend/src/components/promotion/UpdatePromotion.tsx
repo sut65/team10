@@ -26,6 +26,8 @@ function UpdatePromotion() {
   const [promotion, setPromotion] = React.useState<Partial<PromotionInterface>>({});
   const [price, setPrice] = React.useState<number | null>(null);
   const [promotion_id, setPromotion_ID] = React.useState<Number | undefined>(undefined);
+  const [promotion_Codetype, setPromotion_Codetype] = React.useState<String | undefined>("");
+  const [promotion_Reason, setPromotion_Reason] = React.useState<String | undefined>("");
 
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -96,6 +98,8 @@ function UpdatePromotion() {
         if (res.data) {
           setPromotion(res.data);
           setPromotion_ID(res.data.ID);
+          setPromotion_Codetype(res.data.Codetype.Type);
+          setPromotion_Reason(res.data.Reason.Reason);
         }
       });
   };
@@ -131,22 +135,52 @@ function UpdatePromotion() {
           <Grid sx={{ padding: 2 }}>
             <h1>Promotion</h1>
             </Grid>
+            
             <Grid container spacing={2} sx={{ paddingX: 2 }}>
             <Grid item xs={2}>
               <h3>ID</h3>
             </Grid>
-            <Grid item xs={10} >
+            <Grid item xs={4} >
             <TextField
-               id="Employee_ID"
+               id="Codetype_ID"
                variant="outlined"
                disabled
                type="string"
                size="medium"
                value={promotion_id}
-               sx={{ width : 350 }}
+               sx={{ width : 250 }}
+             ></TextField>
+            </Grid>
+            <Grid item xs={2}>
+              <h3>Code Type</h3>
+            </Grid>
+            <Grid item xs={4} >
+            <TextField
+               id="Codetype_ID"
+               variant="outlined"
+               disabled
+               type="string"
+               size="medium"
+               value={promotion_Codetype}
+               sx={{ width : 250 }}
+             ></TextField>
+            </Grid>
+            <Grid item xs={2}>
+              <h3>Reason</h3>
+            </Grid>
+            <Grid item xs={2}>
+            <TextField
+               id="Reason_ID"
+               variant="outlined"
+               disabled
+               type="string"
+               size="medium"
+               value={promotion_Reason}
+               sx={{ width : 250 }}
              ></TextField>
             </Grid>
           </Grid>
+          
 
 
           <Grid container spacing={2} sx={{ paddingX: 2, paddingY: 2 }}>
@@ -158,8 +192,9 @@ function UpdatePromotion() {
                 id="outlined-basic"
                 label="Price"
                 variant="outlined"
-                defaultValue="0"
+                defaultValue={"0"}
                 onChange={(event) => setPrice(Number(event.target.value))}
+                sx={{ width : 250 }}
               />
             </Grid>
           </Grid>
