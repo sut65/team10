@@ -91,7 +91,7 @@ func CreatePromotion(c *gin.Context) {
 func GetPromotion(c *gin.Context) {
 	var promotion entity.Promotion
 	id := c.Param("id")
-	if err := entity.DB().Raw("SELECT * FROM promotions WHERE id = ?", id).Scan(&promotion).Error; err != nil {
+	if err := entity.DB().Preload("Codetype").Preload("Employee").Preload("Reason").Raw("SELECT * FROM promotions WHERE id = ?", id).Find(&promotion).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
