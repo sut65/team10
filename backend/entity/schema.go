@@ -161,7 +161,7 @@ type Service struct {
 	TypeWashing_ID *uint       `valid:"-"`
 	TypeWashing    TypeWashing `gorm:"references:id" valid:"-" `
 
-	DeliveryType_ID *uint
+	DeliveryType_ID *uint	`valid:"-"`
 	DeliveryType    DeliveryType `gorm:"references:id"`
 
 	Weight_ID *uint  `valid:"-"`
@@ -172,7 +172,7 @@ type Service struct {
 
 	Bill_status uint
 	Address     string `valid:"minstringlength(8)~โปรดระบุให้ละเอียด,alphabet~ที่อยู่เป็นตัวอักษรพิเศษหรือภาษาอังกฤษ,required~โปรดกรอกที่อยู่"`
-	Bill_Price  float64
+	Bill_Price  int `valid:"ValuePositive~ราคาเท่ากับ 0"`
 	Bill        []Bill `gorm:"foreignKey:Service_ID"`
 }
 
@@ -419,7 +419,7 @@ func SetTimeandValueValidation() {
 	})
 	govalidator.CustomTypeTagMap.Set("ValuePositive", func(i interface{}, context interface{}) bool {
 		p := i.(int) //p มี type เป็น int
-		return p > 0 //ค่าที่จะถูกส่งออกไปคือ p >0
+		return p > 0  //ค่าที่จะถูกส่งออกไปคือ p >0
 	})
 	//เวลาห้ามเป็นอดีตเกิน 5 นาที
 	govalidator.CustomTypeTagMap.Set("DateTimeNotPast", func(i interface{}, context interface{}) bool {
@@ -453,7 +453,15 @@ func SetConfTimeValidation() {
 	})
 }
 
+func Checkzero() {
+	govalidator.CustomTypeTagMap.Set("NotZeroNumber", func(i interface{}, context interface{}) bool {
+		n := i.(int)
+		return n > 0
+	})
+}
+
 func init() {
+	Checkzero()
 	SetTimeandValueValidation()
 	SetSpecialCharactersValidation()
 	SetConfTimeValidation()

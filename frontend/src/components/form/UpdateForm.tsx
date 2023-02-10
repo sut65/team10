@@ -314,7 +314,7 @@ function FormCreate() {
                         <FormControl fullWidth variant="outlined">
                             <Select
                                 sx={{ width: 300 }}
-                                value={form.FormTypeID}
+                                value={form.FormTypeID +""}
                                 onChange={handleChange}
                                 inputProps={{
                                     name: "FormTypeID",
@@ -332,7 +332,7 @@ function FormCreate() {
                         <FormControl fullWidth variant="outlined">
                             <Select
                                 sx={{ width: 300 }}
-                                value={form.SatisfactionID}
+                                value={form.SatisfactionID +""}
                                 onChange={handleChange}
                                 inputProps={{
                                     name: "SatisfactionID",
