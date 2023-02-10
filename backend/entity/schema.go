@@ -114,7 +114,7 @@ type Size struct {
 
 type Stock struct {
 	gorm.Model
-	List_Number string `gorm:"uniqueIndex" valid:"matches(^([1-9]{1})([0-9]{9})~รหัสรายการผิด"`
+	List_Number string `gorm:"uniqueIndex" valid:"matches(^([1-9]{1})([0-9]{9}))~ListNumber is not valid ,required~กรุณากรอกรหัสรายการ"`
 	TypeID      *uint
 	Type        Type `gorm:"references:id" valid:"-" `
 	BrandID     *uint
@@ -123,8 +123,8 @@ type Stock struct {
 	Size        Size `gorm:"references:id" valid:"-" `
 	Employee_ID *uint
 	Employee    Employee    `gorm:"references:id" valid:"-" `
-	Quantity    int         `valid:"ValueNotNegative~กรุณากรอกจะนวนให้ถูกต้อง"`
-	Time        time.Time   `valid:"DateTimeNotPast~เวลาห้ามเป็นอดีต"`
+	Quantity    int         `valid:"ValuePositive~กรุณากรอกจำนวนเป็นจำนวนเต็มบวก ,required~กรุณากรอกจำนวน"`
+	Time        time.Time   `valid:"DateTimeNotPast~กรุณากรอกวันเวลาปัจจุบัน ไม่เป็นอดีต ,DateTimeNotFuture~กรุณากรอกวันเวลาปัจจุบัน ไม่เป็นอนาคต"`
 	Detergent   []Detergent `gorm:"foreignKey:Stock_ID"`
 	Softener    []Softener  `gorm:"foreignKey:Stock_ID"`
 }
@@ -416,6 +416,10 @@ func SetTimeandValueValidation() {
 	govalidator.CustomTypeTagMap.Set("ValueNotNegative", func(i interface{}, context interface{}) bool {
 		p := i.(int)  //p มี type เป็น int
 		return p >= 0 //ค่าที่จะถูกส่งออกไปคือ p >=0
+	})
+	govalidator.CustomTypeTagMap.Set("ValuePositive", func(i interface{}, context interface{}) bool {
+		p := i.(int)  //p มี type เป็น int
+		return p > 0 //ค่าที่จะถูกส่งออกไปคือ p >0
 	})
 	//เวลาห้ามเป็นอดีตเกิน 5 นาที
 	govalidator.CustomTypeTagMap.Set("DateTimeNotPast", func(i interface{}, context interface{}) bool {

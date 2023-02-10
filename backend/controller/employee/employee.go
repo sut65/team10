@@ -3,7 +3,7 @@ package controller
 import (
 	"net/http"
 
-	"github.com/asaskevich/govalidator"
+	govalidator "github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"github.com/sut65/team10/entity"
 	"golang.org/x/crypto/bcrypt"
