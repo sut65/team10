@@ -126,7 +126,7 @@ func TestDateTimeNotfuture(t *testing.T) {
 	p := entity.Stock{
 		List_Number: "1234567890",
 		Quantity:    12,
-		Time:        time.Now().Add(time.Second * 360), // ผิด //เวลาจะเกินไป 1 วินาที
+		Time:        time.Now().Local().Add(time.Second * 5000), // ผิด //เวลาจะเกินไป 1 วินาที
 	}
 
 	// ตรวจสอบด้วย govalidator

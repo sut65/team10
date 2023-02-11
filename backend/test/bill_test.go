@@ -15,7 +15,7 @@ func TestBillDateTimeNotFuture(t *testing.T) {
 
 	p := entity.Bill{
 		Bill_Price: 2,
-		Time_Stamp: time.Now().Add(time.Second * 300), // ผิด //เวลาจะเกินไป 1 วินาที
+		Time_Stamp: time.Now().Local().Add(time.Second * 5000), // ผิด //เวลาจะเกินไป
 	}
 
 	// ตรวจสอบด้วย govalidator

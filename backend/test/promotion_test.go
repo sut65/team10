@@ -85,7 +85,7 @@ func TestDateTimeNotFuture(t *testing.T) {
 	p := entity.Promotion{
 		Price:      2,
 		Amount:     2,
-		Time_Stamp: time.Now().Add(time.Second * 300), // ผิด //เวลาจะเกินไป 1 วินาที
+		Time_Stamp: time.Now().Local().Add(time.Second * 5000), // ผิด //เวลาจะเกินไป 1 วินาที
 	}
 
 	// ตรวจสอบด้วย govalidator
