@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import { Snackbar, Alert } from "@mui/material";
-import {  Popover, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { Container } from "@mui/system";
 import TextField from '@mui/material/TextField';
@@ -12,7 +11,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Button from "@mui/material/Button";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from '@mui/icons-material/Cancel';
-import UpdateIcon from '@mui/icons-material/Update';
+
 
 import { Link as RouterLink } from "react-router-dom";
 import StorefrontIcon from '@mui/icons-material/Storefront';
@@ -26,8 +25,6 @@ import { CodetypeInterface } from "../../models/promotion/ICodetype";
 import { ReasonInterface } from "../../models/promotion/IReason";
 import { PromotionInterface } from "../../models/promotion/IPromotion";
 
-import PromotionTable_UI from "./PromotiontableUI";
-import UpdatePromotion from "./UpdatePromotion";
 function Promotion() {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
   const [promotion, setPromotion] = React.useState<Partial<PromotionInterface>>({});
@@ -92,20 +89,6 @@ function Promotion() {
       });
   }
 
-
-
-  const handleClickPopover = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-
-  const handleClosePopover = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
-  const popover = open ? "simple-popover" : undefined;
-
   const getCodetype = async () => {
     const apiUrl = "http://localhost:8080/codetype";
     const requestOptions = {
@@ -152,8 +135,11 @@ function Promotion() {
   }, []);
   return (
 
-    <Container maxWidth="xl">
-      <StorefrontIcon color="primary" sx={{ fontSize: 80 }} />
+    <Container maxWidth="lg">
+      <Paper style={{ background: "rgba(0, 0, 0, 0.2)" }}>
+          <h1 style={{ textAlign: "center", paddingTop: 20, color: "white" }}>
+          Promotion<StorefrontIcon/>
+          </h1>
       <Snackbar // บันทึกสำเร็จ
         open={success}
         autoHideDuration={3000}
@@ -297,7 +283,7 @@ function Promotion() {
                 />
               </LocalizationProvider>
             </Grid>
-          </Grid>
+          </Grid> 
         </Paper>
         <Grid container spacing={2}
           sx={{ paddingY: 2 }}>
@@ -328,6 +314,7 @@ function Promotion() {
           </Grid>
         </Grid>
       </Box>
+      </Paper>
     </Container>
   );
 }

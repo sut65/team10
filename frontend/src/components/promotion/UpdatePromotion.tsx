@@ -43,10 +43,24 @@ function UpdatePromotion() {
     setError(false);
   };
 
+  //////////////////////////////////////////////////////////////////////
+  ///////////////////     ฟังก์ชันในการรับค่าไปเปลี่ยน   //////////////////////
+  //////////////////////////////////////////////////////////////////////
+  const handleInputChange = (
+    event: React.ChangeEvent<{ id?: string; value: any }>
+  ) => {
+    const id = event.target.id as keyof typeof UpdatePromotion;
+    const { value } = event.target;
+    setPromotion({ ...promotion, [id]: value });
+  };
+
   function timeout(delay: number) {
     return new Promise( res => setTimeout(res, delay) );
 }
 
+  //////////////////////////////////////////////////////////////////////
+  ////////////////     ฟังก์ชันในส่งข้อมูลเข้าไปอัพเดท     ////////////////////
+  //////////////////////////////////////////////////////////////////////
   function update() {
     let promotion_u = {
       ID: promotion.ID,
@@ -80,9 +94,9 @@ function UpdatePromotion() {
       });
   }
 
-
-
-
+  //////////////////////////////////////////////////////////////////////
+  ///////////////////     ฟังก์ชันในการดึงโปรโมชั่น     //////////////////////
+  //////////////////////////////////////////////////////////////////////
   const getPromotion = async () => {
     const requestOptions = {
       method: "GET",
@@ -104,13 +118,17 @@ function UpdatePromotion() {
       });
   };
 
+
   useEffect(() => {
     getPromotion();
   }, []);
   return (
 
-    <Container maxWidth="md">
-      <StorefrontIcon color="primary" sx={{ fontSize: 80 }} />
+    <Container maxWidth="lg">
+      <Paper style={{ background: "rgba(0, 0, 0, 0.2)" }}>
+          <h1 style={{ textAlign: "center", paddingTop: 20, color: "white" }}>
+          Promotion<StorefrontIcon/>
+          </h1>
       <Snackbar // บันทึกสำเร็จ
         open={success}
         autoHideDuration={3000}
@@ -189,11 +207,12 @@ function UpdatePromotion() {
             </Grid>
             <Grid item xs={4}>
               <TextField
-                id="outlined-basic"
+                id="Price"
                 label="Price"
                 variant="outlined"
                 defaultValue={"0"}
-                onChange={(event) => setPrice(Number(event.target.value))}
+                value={promotion.Price}
+                onChange={handleInputChange}
                 sx={{ width : 250 }}
               />
             </Grid>
@@ -244,6 +263,7 @@ function UpdatePromotion() {
           </Grid>
         </Grid>
       </Box>
+      </Paper>
     </Container>
   );
 }
