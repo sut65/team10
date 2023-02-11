@@ -2,14 +2,14 @@ import * as React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import { Button, ButtonGroup, IconButton, Paper, SwipeableDrawer, Typography } from "@mui/material";
+import { Alert, Button, ButtonGroup, IconButton, Paper, Snackbar, SwipeableDrawer, Typography } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { CompleteInterface } from "../../models/complete/IComplete";
 import { Link as RouterLink } from "react-router-dom";
@@ -22,6 +22,11 @@ import AddIcon from '@mui/icons-material/Add';
 export default function CompleteTable() {
   const params = useParams();
   const navigate = useNavigate();
+  const [alertmsg, setAlertmsg] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+  const [row_delete, setRow_delete] = useState<CompleteInterface>();
+  const [open_delete, setOpendelete] = React.useState(false);
   const [complete, setComplete] = React.useState<CompleteInterface[]>([]);
   useEffect(() => {
     getComplete();
@@ -45,21 +50,40 @@ export default function CompleteTable() {
         }
       });
   };
+  function timeout(delay: number) {
+    return new Promise(res => setTimeout(res, delay));
+  }
 
   const CompleteDelete = async (ID: number) => {
     const requestOptions = {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json"
+      },
     };
     fetch(`${apiUrl}/completes/${ID}`, requestOptions)
       .then((response) => response.json())
-      .then((res) => {
+      .then(async(res) => {
         if (res.data) {
+          setSuccess(true);
+          setAlertmsg("ลบสำเร็จ")
+          await timeout(3000); //for 1 sec delay
           window.location.reload();
+        }else{
+          setError(true);
+          setAlertmsg(res.error)
         }
       });
   };
+  const handleClickOpen = (id: CompleteInterface) => { //เซ็ทค่า Dialog
+    setOpendelete(true);
+    setRow_delete(id); //เซ็ตค่าใส่ในตัวแปรเพื่อหา ID
+  };
 
+  const handleClose = () => { //สั่งปิด Dialog Delete
+    setOpendelete(false);
+  };
   
 
   return (
@@ -71,6 +95,25 @@ export default function CompleteTable() {
                   background:
                     "linear-gradient(180deg, #ffdd72 0%,#F0FFFF 100%, #F5DEB3 100%)",
                 }}>
+          <Snackbar // ลบสำเร็จ
+        open={success}
+        autoHideDuration={50000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
+        <Alert onClose={handleClose} severity="success">
+          {alertmsg}
+        </Alert>
+      </Snackbar>
+
+      <Snackbar // ลบไม่สำเร็จ
+        open={error}
+        autoHideDuration={50000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
+        <Alert onClose={handleClose} severity="error">
+          {alertmsg}
+        </Alert>
+      </Snackbar>
           <Box display="flex">
             <Box sx={{ flexGrow: 1 }}>
               <Typography variant="h6" gutterBottom component="div">

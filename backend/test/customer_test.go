@@ -167,7 +167,7 @@ func TestAddressdNotBlank(t *testing.T) {
 func TestCustomerUsername(t *testing.T) {
 	g := NewGomegaWithT(t)
 
-	//ทำการตรวจสอบ Username ต้องขึ้นต้นด้วยอักษร และห้ามเป็นอัการพิเศษ
+	//ทำการตรวจสอบ Username ห้ามเป็นอักษรพิเศษ
 	fixtures := []string{
 		"*rtyw7", //ขึ้นต้นไม่เป็นตัวอักษร
 	}

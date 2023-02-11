@@ -89,7 +89,7 @@ function UpdateCustomer() {
         }
       });
   };
-
+  console.log(localStorage.getItem("token"))
   const getCareers = async () => {
     const apiUrl = `http://localhost:8080/careers`;
 
@@ -209,9 +209,9 @@ function UpdateCustomer() {
         console.log(res);
         if (res.data) {
           setSuccess(true);
-          localStorage.clear();
-          window.location.reload();
-          window.location.href = "/";
+          // localStorage.clear();
+          //window.location.reload();
+          // window.location.href = "/";
         } else {
           setError(true);
           setAlertMessage(res.error);
@@ -279,7 +279,8 @@ function UpdateCustomer() {
               <Grid item xs={6}>
                 <FormControl fullWidth variant="outlined">
                   <p>เพศ</p>
-                  <Select
+                  <Select 
+                        native
                         sx={{ width: 300 }}
                         value={customer.Gender_ID + ""}
                         onChange={handleChange}
@@ -289,9 +290,9 @@ function UpdateCustomer() {
                         }}
                       >
                         {gender.map((item: GendersInterface) => (
-                          <MenuItem value={item.ID}>
+                          <option value={item.ID}>
                             {item.Gender_Name}
-                          </MenuItem>
+                          </option>
                         ))}
                       </Select>
                 </FormControl>
@@ -301,6 +302,7 @@ function UpdateCustomer() {
                 <p>อาชีพ</p>
                 <FormControl fullWidth variant="outlined">
                 <Select
+                        native
                         sx={{ width: 300 }}
                         value={customer.Career_ID + ""}
                         onChange={handleChange}
@@ -310,9 +312,9 @@ function UpdateCustomer() {
                         }}
                       >
                         {career.map((item: CareerInterface) => (
-                          <MenuItem value={item.ID}>
+                          <option value={item.ID}>
                             {item.Career_Name}
-                          </MenuItem>
+                          </option>
                         ))}
                       </Select>
                 </FormControl>
@@ -381,6 +383,7 @@ function UpdateCustomer() {
                 <FormControl fullWidth variant="outlined">
                 <Select
                         sx={{ width: 300 }}
+                        native
                         value={customer.Advertise_ID + ""}
                         onChange={handleChange}
                         size="small"
@@ -389,9 +392,9 @@ function UpdateCustomer() {
                         }}
                       >
                         {advertise.map((item: AdvertiseInterface) => (
-                          <MenuItem value={item.ID}>
+                          <option value={item.ID}>
                             {item.Advertise_Type}
-                          </MenuItem>
+                          </option>
                         ))}
                       </Select>
                 </FormControl>

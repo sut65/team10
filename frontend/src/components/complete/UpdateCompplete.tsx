@@ -182,10 +182,10 @@ function UpdateComplete() {
       .then(async (res) => {
         if (res.data) {
           setSuccess(true);
-          setAlertMessage("บันทึกสำเร็จ")
+          setAlertMessage("แก้ไขสำเร็จ")
           console.log(res.data)
           await timeout(1000); //for 1 sec delay
-          window.location.href = "/complete/info";
+          //window.location.href = "/complete/info";
         } else {
           setError(true);
           setAlertMessage(res.error);
@@ -327,7 +327,7 @@ function UpdateComplete() {
         <Grid container spacing={1} sx={{ padding: 5 }}>
           <Grid item xs={12}>
             <Button
-              component={RouterLink} to="/complete/info"
+             component={RouterLink} to="/complete/info"
               variant="contained"
               color="error"
               endIcon={<CancelIcon />}
