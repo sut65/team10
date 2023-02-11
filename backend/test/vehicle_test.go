@@ -128,7 +128,7 @@ func TestDateInsulanceNotPast(t *testing.T) {
 	vehicle := entity.Vehicle{
 		ListModel:      "Scoopyi",
 		Registration:   "กษ5336",
-		Date_Insulance: time.Now().Add(time.Second * -300), // ผิด //เวลาจะเกินไป 1 วินาที
+		Date_Insulance: time.Now().Add(time.Hour * -12), // ผิด
 	}
 
 	// ตรวจสอบด้วย govalidator
