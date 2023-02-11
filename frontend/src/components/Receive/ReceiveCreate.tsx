@@ -178,8 +178,7 @@ const getBill = async () => {
   }, []);
 
 return (
-      <Container maxWidth="md">
-              
+      <Container maxWidth="md">              
               <Snackbar // บันทึกสำเร็จ
                 open={success}
                 autoHideDuration={3000}
@@ -189,7 +188,6 @@ return (
                     {alertmessage}
                 </Alert>
             </Snackbar>
-
             <Snackbar // บันทึกไม่สำเร็จ
                 open={error} 
                 autoHideDuration={3000} 
@@ -249,8 +247,6 @@ return (
                     }}
                   />
                   </Grid>
-                      
-
                         <Grid
                         container
                         justifyContent={"center"}
