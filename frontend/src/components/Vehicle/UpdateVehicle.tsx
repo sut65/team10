@@ -29,7 +29,8 @@ function UpdateVehicle() {
   const [vehicle, setVehicle] = React.useState<Partial<VehicleInterface>>({});
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const [vehicle_id, setVehicle_ID] = React.useState<VehicleInterface[]>([]);
-  const [engine, setEngine] = React.useState<VehicleInterface[]>([]);
+  const [branvehicle, setBrandVehicle]  = React.useState<String | undefined>(undefined);
+  const [engine, setEngine]  = React.useState<Number | undefined>(undefined);
   const [model, setModel]  = React.useState<String | undefined>(undefined);
   const [registration, setRegistration]  = React.useState<String | undefined>(undefined);
   const [alertmessage,setAlertMessage] = useState("");
@@ -112,10 +113,10 @@ function UpdateVehicle() {
         if (res.data) {
           setVehicle(res.data);
           setVehicle_ID(res.data.ID);
-         
           setModel(res.data.ListModel);
           setRegistration(res.data.Registration)
-          
+          setBrandVehicle(res.data.Brand_Vehicle.Brand_Name)
+          setEngine(res.date.Engine.Engine)         
         }
       });
   };
@@ -163,6 +164,23 @@ function UpdateVehicle() {
                type="string"
                size="medium"
                value={vehicle_id}             
+               sx={{ width : 350 }}
+             ></TextField>
+            </Grid>
+          </Grid>
+
+          <Grid container spacing={2} sx={{ paddingX: 15 }}>
+            <Grid item xs={3}>
+              <h3>Brand</h3>
+            </Grid>
+            <Grid item xs={8} >
+            <TextField
+               id="Brand"
+               variant="outlined"
+               disabled
+               type="string"
+               size="medium"
+               value={branvehicle}             
                sx={{ width : 350 }}
              ></TextField>
             </Grid>
