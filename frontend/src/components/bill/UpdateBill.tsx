@@ -89,7 +89,7 @@ function BillUpdate() {
           setSuccess(true);
           setAlertmsg("บันทึกสำเร็จ")
           await timeout(1000); //for 1 sec delay
-          // window.location.href = "/bill"; 
+          window.location.href = "/bill"; 
         } else {
           setError(true);
           setAlertmsg(res.error)
