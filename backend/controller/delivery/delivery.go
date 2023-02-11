@@ -6,6 +6,7 @@ import (
 	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"github.com/sut65/team10/entity"
+	"gorm.io/gorm/clause"
 )
 
 // POST /delivery
@@ -74,15 +75,16 @@ func GetDelivery(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": delivery})
 }
 
-// GET /delivery
-func ListDeliverys(c *gin.Context) {
-	var deliverys []entity.Delivery
-	if err := entity.DB().Raw("SELECT * FROM deliveries").Find(&deliverys).Error; err != nil {
+// GET /deliveries/:id
+func ListDeliveriesByID(c *gin.Context) {
+	var deliveries []entity.Delivery
+	employee_id := c.Param("id")
+	if err := entity.DB().Preload(clause.Associations).Where("employee_id =?", employee_id).Find(&deliveries).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": deliverys})
+	c.JSON(http.StatusOK, gin.H{"data": deliveries})
 }
 
 // DELETE /deliverys/:id

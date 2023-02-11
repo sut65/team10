@@ -213,8 +213,8 @@ func main() {
 			p.GET("/satisfactions", Satisfaction_controller.ListSatisfactions)
 			p.GET("/satisfaction/:id", Satisfaction_controller.GetSatisfaction)
 
-			p.GET("/delivery/:id", delivery_controller.GetDelivery)
-			p.GET("/delivery", delivery_controller.ListDeliverys)
+			p.GET("/deliverys/:id", delivery_controller.GetDelivery)
+			p.GET("/deliveries/:id", delivery_controller.ListDeliveriesByID)
 			p.POST("/delivery", delivery_controller.CreateDelivery)
 
 		}

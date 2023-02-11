@@ -392,7 +392,7 @@ type Delivery struct {
 	Confirmation    Confirmation `gorm:"references:id" valid:"-"`
 	Vehicle_ID      *uint        `valid:"-"` //prevent valid from this or upper entity
 	Vehicle         Vehicle      `gorm:"references:id" valid:"-"`
-	Score           uint         `valid:"required~กรุณาให้คะแนนสภาพการขนส่ง, range(0|5)~ใส่คะแนนตั้งแต่ 0 ถึง 5"`
+	Score           uint         `valid:"required~กรุณาให้คะแนนสภาพการขนส่ง, range(1|5)~ใส่คะแนนตั้งแต่ 1 ถึง 5"`
 	Problem         string       `valid:"required~กรุณากรอกปัญหา หรือหากไม่มีให้ใส่ '-', maxstringlength(100)~กรอกได้สูงสุด 100 ตัวอักษร"`
 }
 
