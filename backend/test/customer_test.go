@@ -69,7 +69,7 @@ func TestPhoneNotBlank(t *testing.T) {
 		Customer_Username:  "Cream_9",
 		Customer_Phone:     "", //ผิด
 		Customer_Promptpay: "0912345265",
-		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //12345678 //On test Purpose
+		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234 //On test Purpose
 		Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
 	}
 
