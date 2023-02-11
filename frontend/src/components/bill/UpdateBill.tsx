@@ -24,7 +24,6 @@ import LocalAtmIcon from '@mui/icons-material/LocalAtm';
 /* Interface */
 import { BillInterface } from "../../models/bill/IBill";
 import { PaymenttypeInterface } from "../../models/bill/IPaymenttype";
-import { ServiceInterface } from "../../models/service/IService";
 import { Link as RouterLink } from "react-router-dom";
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useParams } from "react-router-dom";
@@ -38,6 +37,9 @@ function BillUpdate() {
   const [bill, setBill] = React.useState<Partial<BillInterface>>({});
   const [paymenttype, setPaymenttype] = React.useState<PaymenttypeInterface[]>([]);
   const [bill_id, setBill_ID] = React.useState<Number | undefined>(undefined);
+  const [b_price, setB_price] = React.useState<Number | undefined>(undefined);
+  const [r_state, setR_state] = React.useState<Number | undefined>(undefined);
+  const [servicename, setServicename] = React.useState("");
 
   const [alertmsg, setAlertmsg] = useState("");
   const [success, setSuccess] = useState(false);
@@ -66,8 +68,9 @@ function BillUpdate() {
   //////////////////////////////////////////////////////////////////////////////////
   function update() {
     let bill_u = {
-      ID: bill.ID,
+      ID: bill_id,
       Paymenttype_ID: bill.Paymenttype_ID,
+      Receive_State: r_state,
       Time_Stamp: date,
     };
 
@@ -93,7 +96,6 @@ function BillUpdate() {
         } else {
           setError(true);
           setAlertmsg(res.error)
-          console.log(res.data);
         }
       });
   }
@@ -112,7 +114,6 @@ function BillUpdate() {
     fetch(apiUrl, requestOptions)
       .then((response) => response.json())
       .then((res) => {
-        console.log(res)
         if (res.data) {
           setPaymenttype(res.data);
         }
@@ -128,12 +129,16 @@ function BillUpdate() {
       },
     };
 
-    fetch(`http://localhost:8080/bill/${params.id}`, requestOptions )
+    fetch(`http://localhost:8080/bill_serviceupdate/${params.id}`, requestOptions )
       .then((response) => response.json())
       .then((res) => {
+        console.log(res.data)
         if (res.data) {
           setBill(res.data);
-          setBill_ID(res.data.ID);
+          setBill_ID(res.data[0].ID);
+          setServicename(res.data[0].Service.Customer.Customer_Name);
+          setB_price(res.data[0].Bill_Price);
+          setR_state(res.data[0].Receive_State);
         }
       });
   };
@@ -166,11 +171,37 @@ function BillUpdate() {
           </Alert>
         </Snackbar>
 
-        <LocalAtmIcon color="success" sx={{ fontSize: 80 }} />
+        <Paper style={{ background: "rgba(0, 0, 0, 0.2)" }}>
+          <h1 style={{ textAlign: "center", paddingTop: 20, color: "white" }}>
+            <LocalAtmIcon color="success" style={{ fontSize: 80 }} />
+          </h1>
         <Paper>
           <Grid sx={{ padding: 2 }}>
             <h1>Receipt</h1></Grid>
           <Grid container spacing={2}>
+            <Grid
+              container
+              justifyContent={"center"}
+              sx={{
+                paddingY: 2,
+              }}
+            >
+              <Grid item xs={3}>
+                <h3>Service Name</h3>
+              </Grid>
+              <Grid item xs={5}>
+                <TextField
+                  id="Service_Name"
+                  variant="outlined"
+                  disabled
+                  type="string"
+                  size="medium"
+                  value={servicename}
+                  sx={{ width: 350 }}
+                ></TextField>
+              </Grid>
+            </Grid>
+
             <Grid
               container
               justifyContent={"center"}
@@ -193,6 +224,7 @@ function BillUpdate() {
                 ></TextField>
               </Grid>
             </Grid>
+            
 
             <Grid
               container
@@ -210,7 +242,7 @@ function BillUpdate() {
                   options={paymenttype}
                   fullWidth
                   size="medium"
-                  onChange={(event: any, value) => {
+                  onChange={(event: any, value:any) => {
                     setBill({ ...bill, Paymenttype_ID: value?.ID }); //Just Set ID to interface
                   }}
                   getOptionLabel={(option: any) =>
@@ -234,9 +266,35 @@ function BillUpdate() {
                       >{`${option.Type}`}</li>
                     ); //display value
                   }}
+                  sx={{ width: 350 }}
                 />
               </Grid>
             </Grid>
+
+            <Grid
+              container
+              justifyContent={"center"}
+              sx={{
+                paddingY: 2,
+              }}
+            >
+              <Grid item xs={3}>
+                <h3>Price</h3>
+              </Grid>
+              <Grid item xs={5}>
+                <TextField
+                  id="Price"
+                  variant="outlined"
+                  disabled
+                  type="string"
+                  size="medium"
+                  value={b_price}
+                  sx={{ width: 350 }}
+                ></TextField>
+              </Grid>
+            </Grid>
+
+
             <Grid
               container
               justifyContent={"center"}
@@ -286,6 +344,7 @@ function BillUpdate() {
             </Button>
           </Grid>
         </Grid>
+        </Paper>
       </Box>
     </Container>
   );
