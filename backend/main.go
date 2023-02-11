@@ -70,6 +70,7 @@ func main() {
 
 			p.GET("/bills/:id", controllerbill.ListBills_Customer)
 			p.GET("/b_services/:id", controllerbill.ListServiceBill)
+			p.GET("/bill_serviceupdate/:id", controllerbill.ListBills_ServiceID)
 			// --Paymenttype
 			p.GET("/paymenttype", controllerbill.ListPaymenttypes)
 
@@ -118,7 +119,7 @@ func main() {
 			// p.GET("/stocks/:id", stock_controller.AddStock)
 
 			// Confirmation
-			p.GET("/confirmation", controllerconfirmation.ListConfirmations)
+			p.GET("/confirmations", controllerconfirmation.ListConfirmations)
 			p.GET("/confirmation/:id", controllerconfirmation.GetConfirmation)
 			p.POST("/confirmations", controllerconfirmation.CreateConfirmation)
 			p.PATCH("/confirmations", controllerconfirmation.UpdateConfirmation)

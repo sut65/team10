@@ -4,14 +4,19 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import { PromotionInterface } from "../../models/promotion/IPromotion";
 import { QuotaCodeInterface } from "../../models/promotion/IQuotaCode";
-import { Alert, Box, ButtonGroup, CssBaseline, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Paper, Snackbar, TableCell } from "@mui/material";
+import { Alert, Box, ButtonGroup, CssBaseline, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Snackbar, TableCell } from "@mui/material";
 import {  Typography } from "@mui/material";
-
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import EditIcon from "@mui/icons-material/Edit";
+import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import CancelIcon from '@mui/icons-material/Cancel';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import StorefrontIcon from '@mui/icons-material/Storefront';
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { Dialog } from "@material-ui/core";
 function PromotionTable_UI() {
@@ -114,6 +119,10 @@ function PromotionTable_UI() {
     <React.Fragment>
       <CssBaseline />
       <Container maxWidth="lg" sx={{ p: 2 }}>
+      <Paper style={{ background: "rgba(0, 0, 0, 0.2)" }}>
+          <h1 style={{ textAlign: "center", paddingTop: 20, color: "white" }}>
+          Promotion<StorefrontIcon/>
+          </h1>
         <Paper sx={{ p: 2 }}>
         <Snackbar // บันทึกสำเร็จ
         open={success}
@@ -145,7 +154,7 @@ function PromotionTable_UI() {
                 variant="contained"
                 component={RouterLink}
                 to="/promotion/create"
-                sx={{ p: 1 }}>Create Promotion</Button>
+                sx={{ p: 1 }}>Create Promotion<NoteAddIcon/></Button>
             </Box>
           </Box>
 
@@ -180,11 +189,11 @@ function PromotionTable_UI() {
                     <TableCell align="right">
                       <ButtonGroup variant="outlined" aria-lable="outlined button group">
                         <Button onClick={() => navigate({ pathname: `/promotion/update/${row.ID}` })} variant="contained" color="success"
-                        >edit</Button>
+                        >edit<EditIcon /></Button>
                         {/* <Button onClick={() => DeletePromotion(row.ID)} variant="contained"color="error">Delete</Button> */}
                         <div>
                           <Button color="error" variant="outlined" onClick={() => handleClickOpen(row) }>
-                            Delete
+                            Delete<AutoDeleteIcon/>
                           </Button>
                           <Dialog
                             open={open_delete}
@@ -202,9 +211,9 @@ function PromotionTable_UI() {
                               </DialogContentText>
                             </DialogContent>
                             <DialogActions>
-                              <Button variant="contained" color="warning" onClick={handleClose}>No</Button>
+                              <Button variant="contained" color="warning" onClick={handleClose}>No<CancelIcon/></Button>
                               <Button variant="contained" color="error" onClick={() => DeletePromotion(row_delete?.ID||0)} autoFocus>
-                                Yes
+                                Yes<DeleteForeverIcon/>
                               </Button>
                             </DialogActions>
                           </Dialog>
@@ -216,6 +225,7 @@ function PromotionTable_UI() {
               </TableBody>
             </Table>
           </TableContainer>
+          </Paper>
         </Paper>
       </Container>
     </React.Fragment>

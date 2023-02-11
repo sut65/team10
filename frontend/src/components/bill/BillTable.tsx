@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import { BillInterface } from "../../models/bill/IBill";
-import { Box, Button, ButtonGroup, CssBaseline, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Paper, TableCell, Typography } from "@mui/material";
-
+import { Box, Button, ButtonGroup, CssBaseline,  Paper, TableCell, Typography } from "@mui/material";
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { Dialog } from "@material-ui/core";
+import EditIcon from "@mui/icons-material/Edit";
 import React from "react";
 
 function BillTable_UI() {
@@ -58,7 +58,7 @@ function BillTable_UI() {
                 variant="contained"
                 component={RouterLink}
                 to="/bill/create"
-                sx={{ p: 1 }}>Create Bill</Button>
+                sx={{ p: 1 }}>Create Bill<NoteAddIcon/></Button>
             </Box>
           </Box>
 
@@ -68,9 +68,9 @@ function BillTable_UI() {
                 <TableRow>
                   <TableCell>ID</TableCell>
                   <TableCell align="right">Service_name</TableCell>
-                  <TableCell align="right">QuotaCode_ID</TableCell>
                   <TableCell align="right">Paymenttype</TableCell>
                   <TableCell align="right">Bill_Price</TableCell>
+                  <TableCell align="right">Bill Status</TableCell>
                   <TableCell align="right">Time_Stamp</TableCell>
                 </TableRow>
               </TableHead>
@@ -84,14 +84,14 @@ function BillTable_UI() {
                       {row.ID}
                     </TableCell>
                     <TableCell align="right">{row.Service.Customer.Customer_Name}</TableCell>
-                    <TableCell align="right">{row.QuotaCode_ID}</TableCell>
                     <TableCell align="right">{row.Paymenttype.Type}</TableCell>
                     <TableCell align="right">{row.Bill_Price}</TableCell>
+                    <TableCell align="right">{row.Receive_State}</TableCell>
                     <TableCell align="right">{row.Time_Stamp.toString()}</TableCell>
                     <TableCell align="right">
                       <ButtonGroup variant="outlined" aria-lable="outlined button group">
                         <Button onClick={() => navigate({ pathname: `/bills/update/${row.ID}` })} variant="contained" color="success"
-                        >edit</Button>
+                        >edit<EditIcon /></Button>
                       </ButtonGroup>
                     </TableCell>
                   </TableRow>

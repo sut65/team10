@@ -172,7 +172,7 @@ type Service struct {
 
 	Bill_status uint
 	Address     string `valid:"minstringlength(8)~โปรดระบุให้ละเอียด,alphabet~ที่อยู่เป็นตัวอักษรพิเศษหรือภาษาอังกฤษ,required~โปรดกรอกที่อยู่"`
-	Bill_Price  int    `valid:"-"`
+	Bill_Price  int    
 	Bill        []Bill `gorm:"foreignKey:Service_ID"`
 }
 
@@ -328,7 +328,7 @@ type Vehicle struct {
 	Engine           Engine        `gorm:"references:id" valid:"-"`
 	ListModel        string        `valid:"required~จำเป็นต้องกรอกรุ่นของรถ"`
 	Registration     string        `valid:"required~จำเป็นต้องกรอกทะเบียนรถ"`
-	Date_Insulance   time.Time     `valid:"DateTimeNotPast~เวลาห้ามเป็นอดีต, required~กรุณาใส่เวลาให้ถูกต้อง"`
+	Date_Insulance   time.Time     `valid:"DateNotPast~เวลาห้ามเป็นอดีต, required~กรุณาใส่เวลาให้ถูกต้อง"`
 	Delivery         []Delivery    `gorm:"foreignKey:Vehicle_ID"`
 }
 
@@ -433,6 +433,14 @@ func SetTimeandValueValidation() {
 		now := time.Now().Add(time.Minute * 5)
 		return t.Before(now) //ค่าที่จะส่งต้องเป็นเวลาอนาคตไม่เกิน 5นาที
 	})
+
+	//เวลาห้ามเป็นอดีต
+	govalidator.CustomTypeTagMap.Set("DateNotPast", func(i interface{}, context interface{}) bool {
+		t := i.(time.Time) //t มี type เป็น time.Time
+		now := time.Now().Add(time.Hour * -24)
+		return t.After(now)
+	})
+
 	// //เวลาห้ามเป็นปัจจุบัน
 	// govalidator.CustomTypeTagMap.Set("DateTimeNotPresent", func(i interface{}, context interface{}) bool {
 	// 	t := i.(time.Time) //t มี type เป็น time.Time
