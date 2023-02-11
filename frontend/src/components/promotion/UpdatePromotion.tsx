@@ -72,7 +72,7 @@ function UpdatePromotion() {
         if (res.data) {
           setSuccess(true);
           await timeout(1000); //for 1 sec delay
-          window.location.reload();     
+          window.location.href = "/promotion";     
           
         } else {
           setError(true);
