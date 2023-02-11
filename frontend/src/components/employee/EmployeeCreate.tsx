@@ -29,6 +29,7 @@ function EmployeeCreate_UI() {
   const [Address, SetAddress] = useState<String>("");
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState("");
   const [noAccess, setNoAccess] = React.useState(false);
 
   const Item = styled(Paper)(({ theme }) => ({
@@ -109,6 +110,7 @@ function EmployeeCreate_UI() {
     }
     setSuccess(false);
     setError(false);
+    setErrorMessage("")
   };
 
   async function create() {
@@ -120,7 +122,7 @@ function EmployeeCreate_UI() {
       Position_ID: employee.Position_ID,
       WorkShift_ID: employee.WorkShift_ID,
       Phonnumber: Phonnumber,
-      Address: Address,
+      Address: Address || "",
       Password: Password,
     };
 
@@ -142,8 +144,12 @@ function EmployeeCreate_UI() {
           setSuccess(true);
         } else {
           setError(true);
+          setErrorMessage(res.error);
         }
       });
+      const x = parseInt(localStorage.getItem("reRender")+"")||0
+      localStorage.setItem("reRender", `${x+1}`);
+      console.log(x)
   }
 
   React.useEffect(() => {
@@ -173,7 +179,7 @@ function EmployeeCreate_UI() {
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
         <Alert onClose={handleClose} severity="error" variant="filled">
-          บันทึกข้อมูลไม่สำเร็จ
+          บันทึกข้อมูลไม่สำเร็จ: {errorMessage}
         </Alert>
       </Snackbar>
 

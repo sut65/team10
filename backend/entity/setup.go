@@ -178,7 +178,7 @@ func SetupDatabase() {
 	db.Model(&Reason{}).Create(&Reason6)
 
 	E1 := Employee{
-		Personal_ID: "0000000000001",
+		Personal_ID: "1400000000001",
 		Username:    "pnp1",
 		Name:        "พรนภา แสนต่างใจ",
 		Gender:      female,
@@ -190,7 +190,7 @@ func SetupDatabase() {
 	}
 	db.Model(&Employee{}).Create(&E1)
 	E2 := Employee{
-		Personal_ID: "0000000000002",
+		Personal_ID: "1400000000002",
 		Username:    "pubthee",
 		Name:        "พับพีร์ ธีร์",
 		Gender:      female,

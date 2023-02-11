@@ -68,6 +68,10 @@ export default function StockTable_UI() {
   useEffect(() => {
     getStock();
   }, []);
+  useEffect(() => {
+    getStock();
+    console.log(localStorage.getItem("reRender"))
+  }, [localStorage.getItem("reRender")]);
   /* -------------------------------------------------------------------------- */
   /*                                  HTML CSS                                  */
   /* -------------------------------------------------------------------------- */
