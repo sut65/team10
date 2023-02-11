@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import { PromotionInterface } from "../../models/promotion/IPromotion";
 import { QuotaCodeInterface } from "../../models/promotion/IQuotaCode";
-import { Box, ButtonGroup, CssBaseline, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Paper, TableCell } from "@mui/material";
+import { Alert, Box, ButtonGroup, CssBaseline, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Paper, Snackbar, TableCell } from "@mui/material";
 import {  Typography } from "@mui/material";
 
 import Table from "@mui/material/Table";
@@ -19,6 +19,10 @@ function PromotionTable_UI() {
   const [quotacode, setQuotacode] = useState<QuotaCodeInterface[]>([]);
   const [row_delete, setRow_delete] = useState<PromotionInterface>();
   const [open_delete, setOpendelete] = React.useState(false);
+
+  const [alertmsg, setAlertmsg] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
   const navigate = useNavigate();
 
   const handleClickOpen = (id: PromotionInterface) => { //เซ็ทค่า Dialog
@@ -96,7 +100,12 @@ function PromotionTable_UI() {
       .then((response) => response.json())
       .then((res) => {
         if (res.data) {
+          setSuccess(true);
+          setAlertmsg("ลบสำเร็จ")
           window.location.reload();
+        }else{
+          setError(true);
+          setAlertmsg(res.error)
         }
       });
   };
@@ -106,6 +115,25 @@ function PromotionTable_UI() {
       <CssBaseline />
       <Container maxWidth="lg" sx={{ p: 2 }}>
         <Paper sx={{ p: 2 }}>
+        <Snackbar // บันทึกสำเร็จ
+        open={success}
+        autoHideDuration={10000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
+        <Alert onClose={handleClose} severity="success">
+          {alertmsg}
+        </Alert>
+      </Snackbar>
+
+      <Snackbar // บันทึกไม่สำเร็จ
+        open={error}
+        autoHideDuration={10000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
+        <Alert onClose={handleClose} severity="error">
+          {alertmsg}
+        </Alert>
+      </Snackbar>
           <Box display="flex">
             <Box sx={{ flexGrow: 1 }}>
               <Typography variant="h6" gutterBottom component="div">
