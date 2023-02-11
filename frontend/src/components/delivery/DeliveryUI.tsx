@@ -11,12 +11,16 @@ import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { Link as RouterLink } from "react-router-dom";
 
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Cancel";
+import SendIcon from "@mui/icons-material/Send";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import StarHalfIcon from "@mui/icons-material/StarHalf";
+import DeliveryDiningIcon from "@mui/icons-material/DeliveryDining";
 
 import { ConfirmationInterface } from "../../models/confirmation/IConfirmation";
 import { DeliveryInterface } from "../../models/delivery/IDelivery";
 import { VehicleInterface } from "../../models/vehicle/IVehicle";
+import DeliTable from "./DeliveryTable";
 /* -------------------------------------------------------------------------- */
 /*                                    Style                                   */
 /* -------------------------------------------------------------------------- */
@@ -113,6 +117,7 @@ function Delivery() {
         if (res.data) {
           setSuccess(true);
           setErrorMessage("");
+          window.location.reload();
         } else {
           setError(true);
           setErrorMessage(res.error);
@@ -122,17 +127,6 @@ function Delivery() {
   /* -------------------------------------------------------------------------- */
   /*                                     GET                                    */
   /* -------------------------------------------------------------------------- */
-  const getDelivery = async () => {
-    fetch(`${apiUrl}/delivery`, requestOptions)
-      .then((response) => response.json())
-      .then((res) => {
-        if (res.data) {
-          setDelivery(res.data);
-        } else {
-          console.log("else");
-        }
-      });
-  };
   const getConfirmation = async () => {
     fetch(`${apiUrl}/confirmation`, requestOptions)
       .then((response) => response.json())
@@ -158,7 +152,6 @@ function Delivery() {
   };
 
   useEffect(() => {
-    getDelivery();
     getVehicle();
     getConfirmation();
   }, []);
@@ -199,230 +192,271 @@ function Delivery() {
           </Alert>
         </Snackbar>
       </div>
-      <Box flexGrow={1} paddingTop={2}>
-        <Container maxWidth="md">
-          <Paper style={{ background: "rgba(0, 0, 0, 0.2)" }}>
-            <h2 style={{ textAlign: "center", paddingTop: 20, color: "white" }}>
-              Delivery
-            </h2>
-            <Grid container>
-              <Grid xs={6}>
-                <Stack paddingLeft={2}>
-                  <Paper style={{ background: "rgba(255,201,60,1)" }}>
-                    <Box paddingLeft={2} paddingBottom={2}>
-                      <div
-                        style={{
-                          fontSize: "15px",
-                          fontWeight: "bold",
-                          textAlign: "center",
-                        }}
-                      >
-                        Customer Info
-                      </div>
-                      <Box paddingRight={2} paddingX={2}>
-                        <Paper
-                          elevation={10}
-                          style={{ background: "rgba(255,201,60,1)" }}
-                        >
-                          <Box padding={2}>
-                            <div>Name Surname</div>
-                            <div
-                              style={{
-                                background: "#feefd1",
-                                color: "#0081C9",
-                              }}
+      <Grid container>
+        <Grid xs={7}>
+          <Box flexGrow={1} paddingTop={2}>
+            <Container maxWidth="md">
+              <Paper
+                style={{ background: "rgba(0, 0, 0, 0.2)", paddingBottom: 20 }}
+              >
+                <h2
+                  style={{
+                    textAlign: "center",
+                    paddingTop: 20,
+                    color: "white",
+                  }}
+                >
+                  Delivery
+                </h2>
+                <Grid container>
+                  <Grid xs={6}>
+                    <Stack paddingLeft={2}>
+                      <Paper style={{ background: "rgba(255,201,60,1)" }}>
+                        <Box paddingLeft={2} paddingBottom={2}>
+                          <div
+                            style={{
+                              fontSize: "15px",
+                              fontWeight: "bold",
+                              textAlign: "center",
+                            }}
+                          >
+                            Customer Info
+                          </div>
+                          <Box paddingRight={2} paddingX={2}>
+                            <Paper
+                              elevation={10}
+                              style={{ background: "rgba(255,201,60,1)" }}
                             >
-                              &#8205;{cust_name}
-                            </div>
-                            <div>Receive Address</div>
-                            <div
-                              style={{
-                                background: "#feefd1",
-                                color: "#0081C9",
-                              }}
-                            >
-                              &#8205;{conf_recvAddress}
-                            </div>
-                            <div>Receive Method</div>
-                            <div
-                              style={{
-                                background: "#feefd1",
-                                color: "#0081C9",
-                              }}
-                            >
-                              &#8205;{conf_recvType}
-                            </div>
-                            <div>Receive Time</div>
-                            <div
-                              style={{
-                                background: "#feefd1",
-                                color: "#0081C9",
-                              }}
-                            >
-                              &#8205;{conf_recvTime}
-                            </div>
-                            <div>Note</div>
-                            <div
-                              style={{
-                                background: "#feefd1",
-                                color: "#0081C9",
-                              }}
-                            >
-                              &#8205;{conf_note}
-                            </div>
+                              <Box padding={2}>
+                                <div>Name Surname</div>
+                                <div
+                                  style={{
+                                    background: "#feefd1",
+                                    color: "#0081C9",
+                                  }}
+                                >
+                                  &#8205;{cust_name}
+                                </div>
+                                <div>Receive Address</div>
+                                <div
+                                  style={{
+                                    background: "#feefd1",
+                                    color: "#0081C9",
+                                  }}
+                                >
+                                  &#8205;{conf_recvAddress}
+                                </div>
+                                <div>Receive Method</div>
+                                <div
+                                  style={{
+                                    background: "#feefd1",
+                                    color: "#0081C9",
+                                  }}
+                                >
+                                  &#8205;{conf_recvType}
+                                </div>
+                                <div>Receive Time</div>
+                                <div
+                                  style={{
+                                    background: "#feefd1",
+                                    color: "#0081C9",
+                                  }}
+                                >
+                                  &#8205;{conf_recvTime}
+                                </div>
+                                <div>Note</div>
+                                <div
+                                  style={{
+                                    background: "#feefd1",
+                                    color: "#0081C9",
+                                  }}
+                                >
+                                  &#8205;{conf_note}
+                                </div>
+                              </Box>
+                            </Paper>
                           </Box>
-                        </Paper>
-                      </Box>
-                    </Box>
-                    <Box paddingX={2} paddingBottom={2}>
-                      Confirmation ID
-                      <Autocomplete
-                        id="confirmation-autocomplete"
-                        options={confirmation}
-                        fullWidth
-                        size="small"
-                        style={{ background: "#feefd1" }}
-                        onChange={(event: any, value) => {
-                          //Get ID from ...interface
-                          setDelivery({
-                            ...delivery,
-                            Confirmation_ID: value?.ID,
-                          });
-                          setCustomerName(value?.Customer.Customer_Name);
-                          setRecvAdress(value?.RecvAddress);
-                          setRecvTime(value?.RecvTime);
-                          setRecvType(value?.RecvType.Name);
-                          setNote(value?.Note);
-                          //Just Set ID to interface
-                        }}
-                        sx={{ bgcolor: "#feefd1" }}
-                        getOptionLabel={(option: any) => `${option.ID}`} //filter value
-                        renderInput={(params) => {
-                          return (
-                            <TextField
-                              {...params}
-                              variant="outlined"
-                              placeholder="Search..."
-                            />
-                          );
-                        }}
-                        renderOption={(props: any, option: any) => {
-                          return (
-                            <li
-                              {...props}
-                              value={`${option.ID}`}
-                              key={`${option.ID}`}
-                            >{`${option.ID}`}</li>
-                          ); //display value
-                        }}
-                      />
-                    </Box>
-                  </Paper>
-                </Stack>
-              </Grid>
-              <Grid xs={6}>
-                <Stack paddingX={2}>
-                  <Paper style={{ background: "rgba(255,201,60,1)" }}>
-                    <Box paddingX={2} paddingBottom={2}>
-                      Vehicle
-                      <Autocomplete
-                        id="vehicle-autocomplete"
-                        options={vehicle}
-                        fullWidth
-                        size="small"
-                        style={{ background: "#feefd1" }}
-                        onChange={(event: any, value) => {
-                          //Get ID from ...interface
-                          setDelivery({
-                            ...delivery,
-                            Vehicle_ID: value?.ID,
-                          }); //Just Set ID to interface
-                        }}
-                        sx={{ bgcolor: "#feefd1" }}
-                        getOptionLabel={(option: any) => `${option.ID}`} //filter value
-                        renderInput={(params) => {
-                          return (
-                            <TextField
-                              {...params}
-                              variant="outlined"
-                              placeholder="Search..."
-                            />
-                          );
-                        }}
-                        renderOption={(props: any, option: any) => {
-                          return (
-                            <li
-                              {...props}
-                              value={`${option.ID}`}
-                              key={`${option.ID}`}
-                            >{`${option.ID}`}</li>
-                          ); //display value
-                        }}
-                      />
-                    </Box>
-                    <Box paddingX={2} paddingBottom={2}>
-                      <div>Score</div>
-                      <FormControl fullWidth variant="outlined">
-                        <TextField
-                          id="Score"
-                          variant="outlined"
-                          size="medium"
-                          placeholder="Score"
-                          value={delivery.Score || ""}
-                          onChange={handleInputChange}
-                          sx={{ bgcolor: "#feefd1" }}
-                          inputProps={{ type: "number" }}
-                        />
-                      </FormControl>
-                    </Box>
-                    <Box paddingX={2} paddingBottom={2}>
-                      Problem
-                      <FormControl fullWidth variant="outlined">
-                        <TextField
-                          id="Problem"
-                          variant="outlined"
-                          type="string"
-                          size="medium"
-                          multiline={true}
-                          minRows={2}
-                          maxRows={2}
-                          placeholder="Input Problem"
-                          value={delivery.Problem || ""}
-                          onChange={handleInputChange}
-                          sx={{ bgcolor: "#feefd1" }}
-                        />
-                      </FormControl>
-                    </Box>
-                    <Grid
-                      container
-                      style={{ marginTop: 10, justifyContent: "flex-end" }}
-                    >
-                      <Button
-                        component={RouterLink}
-                        to="/"
-                        variant="contained"
-                        color="error"
-                        endIcon={<CancelIcon />}
-                        sx={{ paddingLeft: 2, marginRight: 2 }}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={submit}
-                        endIcon={<SaveIcon />}
-                      >
-                        Submit
-                      </Button>
-                    </Grid>
-                  </Paper>
-                </Stack>
-              </Grid>
-            </Grid>
-          </Paper>
-        </Container>
-      </Box>
+                        </Box>
+                        <Box paddingX={2} paddingBottom={2}>
+                          Confirmation ID
+                          <Autocomplete
+                            id="confirmation-autocomplete"
+                            options={confirmation}
+                            fullWidth
+                            size="small"
+                            style={{ background: "#feefd1" }}
+                            onChange={(event: any, value) => {
+                              //Get ID from ...interface
+                              setDelivery({
+                                ...delivery,
+                                Confirmation_ID: value?.ID,
+                              });
+                              setCustomerName(value?.Customer.Customer_Name);
+                              setRecvAdress(value?.RecvAddress);
+                              setRecvTime(value?.RecvTime);
+                              setRecvType(value?.RecvType.Name);
+                              setNote(value?.Note);
+                              //Just Set ID to interface
+                            }}
+                            sx={{ bgcolor: "#feefd1" }}
+                            getOptionLabel={(option: any) => `${option.ID}`} //filter value
+                            renderInput={(params) => {
+                              return (
+                                <TextField
+                                  {...params}
+                                  variant="outlined"
+                                  placeholder="Search..."
+                                />
+                              );
+                            }}
+                            renderOption={(props: any, option: any) => {
+                              return (
+                                <li
+                                  {...props}
+                                  value={`${option.ID}`}
+                                  key={`${option.ID}`}
+                                >{`${option.ID}`}</li>
+                              ); //display value
+                            }}
+                          />
+                        </Box>
+                      </Paper>
+                    </Stack>
+                  </Grid>
+                  <Grid xs={6}>
+                    <Stack paddingX={2}>
+                      <Paper style={{ background: "rgba(255,201,60,1)" }}>
+                        <Box paddingX={2} paddingBottom={2} paddingTop={2}>
+                          Vehicle
+                          <Grid container>
+                            <Grid xs={1}>
+                              <DeliveryDiningIcon />
+                            </Grid>
+                            <Grid xs={11}>
+                              <Autocomplete
+                                id="vehicle-autocomplete"
+                                options={vehicle}
+                                fullWidth
+                                size="small"
+                                style={{ background: "#feefd1" }}
+                                onChange={(event: any, value) => {
+                                  //Get ID from ...interface
+                                  setDelivery({
+                                    ...delivery,
+                                    Vehicle_ID: value?.ID,
+                                  }); //Just Set ID to interface
+                                }}
+                                sx={{ bgcolor: "#feefd1" }}
+                                getOptionLabel={(option: any) => `${option.ID}`} //filter value
+                                renderInput={(params) => {
+                                  return (
+                                    <TextField
+                                      {...params}
+                                      variant="outlined"
+                                      placeholder="Search..."
+                                    />
+                                  );
+                                }}
+                                renderOption={(props: any, option: any) => {
+                                  return (
+                                    <li
+                                      {...props}
+                                      value={`${option.ID}`}
+                                      key={`${option.ID}`}
+                                    >{`${option.ID}`}</li>
+                                  ); //display value
+                                }}
+                              />
+                            </Grid>
+                          </Grid>
+                        </Box>
+                        <Box paddingX={2} paddingBottom={2}>
+                          Score
+                          <Grid container>
+                            <Grid xs={1}>
+                              <StarHalfIcon />
+                            </Grid>
+                            <Grid xs={11}>
+                              <FormControl fullWidth variant="outlined">
+                                <TextField
+                                  id="Score"
+                                  variant="outlined"
+                                  size="medium"
+                                  placeholder="1 - 5"
+                                  value={delivery.Score || ""}
+                                  onChange={handleInputChange}
+                                  sx={{ bgcolor: "#feefd1" }}
+                                  inputProps={{ type: "number" }}
+                                />
+                              </FormControl>
+                            </Grid>
+                          </Grid>
+                        </Box>
+                        <Box paddingX={2} paddingBottom={2}>
+                          Problem
+                          <Grid container>
+                            <Grid xs={1}>
+                              <ReportProblemIcon />
+                            </Grid>
+                            <Grid xs={11}>
+                              <FormControl fullWidth variant="outlined">
+                                <TextField
+                                  id="Problem"
+                                  variant="outlined"
+                                  type="string"
+                                  size="medium"
+                                  multiline={true}
+                                  minRows={2}
+                                  maxRows={2}
+                                  placeholder="Input Problem"
+                                  value={delivery.Problem || ""}
+                                  onChange={handleInputChange}
+                                  sx={{ bgcolor: "#feefd1" }}
+                                />
+                              </FormControl>
+                            </Grid>
+                          </Grid>
+                        </Box>
+                        <Grid
+                          container
+                          style={{
+                            marginTop: 10,
+                            justifyContent: "flex-end",
+                            paddingBottom: 10,
+                            paddingRight: 20,
+                          }}
+                        >
+                          <Button
+                            component={RouterLink}
+                            to="/"
+                            variant="contained"
+                            color="error"
+                            startIcon={<ArrowBackIcon />}
+                            sx={{ paddingLeft: 2, marginRight: 2 }}
+                          >
+                            Back
+                          </Button>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={submit}
+                            endIcon={<SendIcon />}
+                          >
+                            Submit
+                          </Button>
+                        </Grid>
+                      </Paper>
+                    </Stack>
+                  </Grid>
+                </Grid>
+              </Paper>
+            </Container>
+          </Box>
+        </Grid>
+        <Grid xs={5} style={{paddingTop: 20}}>
+          <DeliTable/>
+        </Grid>
+      </Grid>
     </Box>
   );
 }
