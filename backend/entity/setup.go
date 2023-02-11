@@ -178,7 +178,7 @@ func SetupDatabase() {
 	db.Model(&Reason{}).Create(&Reason6)
 
 	E1 := Employee{
-		Personal_ID: "0000000000001",
+		Personal_ID: "1400000000001",
 		Username:    "pnp1",
 		Name:        "พรนภา แสนต่างใจ",
 		Gender:      female,
@@ -190,7 +190,7 @@ func SetupDatabase() {
 	}
 	db.Model(&Employee{}).Create(&E1)
 	E2 := Employee{
-		Personal_ID: "0000000000002",
+		Personal_ID: "1400000000002",
 		Username:    "pubthee",
 		Name:        "พับพีร์ ธีร์",
 		Gender:      female,
@@ -631,10 +631,36 @@ func SetupDatabase() {
 		FormType_name: "การบริการ",
 	}
 	db.Model(&FormType{}).Create(&FormType1)
+	
+		FormType2 := FormType{
+		Model:         gorm.Model{},
+		FormType_name: "การขนส่ง",
+	}
+	db.Model(&FormType{}).Create(&FormType2)
+		FormType3 := FormType{
+		Model:         gorm.Model{},
+		FormType_name: "ความสะอาดเรียบร้อย",
+	}
+	db.Model(&FormType{}).Create(&FormType3)
 
 	Satisfaction1 := Satisfaction{
 		Model:             gorm.Model{},
 		Satisfaction_name: "พอใจมาก",
 	}
 	db.Model(&Satisfaction{}).Create(&Satisfaction1)
+		Satisfaction2 := Satisfaction{
+		Model:             gorm.Model{},
+		Satisfaction_name: "พอใจ",
+	}
+	db.Model(&Satisfaction{}).Create(&Satisfaction2)
+		Satisfaction3 := Satisfaction{
+		Model:             gorm.Model{},
+		Satisfaction_name: "ปรับปรุง",
+	}
+	db.Model(&Satisfaction{}).Create(&Satisfaction3)
+		Satisfaction4 := Satisfaction{
+		Model:             gorm.Model{},
+		Satisfaction_name: "แก้ไข",
+	}
+	db.Model(&Satisfaction{}).Create(&Satisfaction4)
 }

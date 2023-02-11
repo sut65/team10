@@ -81,6 +81,10 @@ export default function EmployeeTable() {
   useEffect(() => {
     getEmployee();
   }, []);
+  useEffect(() => {
+    getEmployee();
+    console.log(localStorage.getItem("reRender"))
+  }, [localStorage.getItem("reRender")]);
   /* -------------------------------------------------------------------------- */
   /*                                  HTML CSS                                  */
   /* -------------------------------------------------------------------------- */

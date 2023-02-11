@@ -42,7 +42,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 
 function FormCreate() {
-    
+
     const navigate = useNavigate();
     const [form, setForm] = React.useState<Partial<FormInterface>>({});
     const [formtype, setFormType] = React.useState<FormTypeInterface[]>([]);
@@ -114,7 +114,7 @@ function FormCreate() {
             });
     };
 
-    
+
     const getSatisfaction = async () => {
         const apiUrl = `http://localhost:8080/satisfactions`;
 
@@ -168,43 +168,43 @@ function FormCreate() {
 
         const apiUrl = "http://localhost:8080";
         Swal.fire({
-          title: "คุณต้องการบันทึกความคิดเห็นใช่มั้ย",
-          showDenyButton: false,
-          showCancelButton: true,
-          confirmButtonText: "บันทึก",
+            title: "คุณต้องการบันทึกความคิดเห็นใช่มั้ย",
+            showDenyButton: false,
+            showCancelButton: true,
+            confirmButtonText: "บันทึก",
         }).then((data: any) => {
-          if (data.isConfirmed) {
-            fetch(`${apiUrl}/forms`, requestOptionsPost)
-              .then((response) => response.json())
-              .then((res) => {
-                console.log(res);
-                if (res.data) {
-                  Swal.fire({
-                    icon: "success",
-                    title: "Saved!",
-                    text: "บันทึกสำเร็จ",
-                  });
-                //   window.location.href = "/forminfo";
-                  // setSuccess(true);
-                } else {
-                  Swal.fire({
-                    icon: "error",
-                    title: "Error!",
-                    text: res.error,
-                  });
-                  // setError(true);
-                }
-              });
-          }
+            if (data.isConfirmed) {
+                fetch(`${apiUrl}/forms`, requestOptionsPost)
+                    .then((response) => response.json())
+                    .then((res) => {
+                        console.log(res);
+                        if (res.data) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Saved!",
+                                text: "บันทึกสำเร็จ",
+                            });
+                            //   window.location.href = "/forminfo";
+                            // setSuccess(true);
+                        } else {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error!",
+                                text: res.error,
+                            });
+                            // setError(true);
+                        }
+                    });
+            }
         });
-    
+
         const requestOptionsPost = {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
         };
     }
 
@@ -248,7 +248,7 @@ function FormCreate() {
 
             </Snackbar>
 
-            <Paper>
+            <Paper style={{ background: "rgba(255,201,60,1)" }}>
 
                 <Box
 
@@ -270,7 +270,7 @@ function FormCreate() {
 
                             variant="h6"
 
-                            color="primary"
+                            color="Black"
 
                             gutterBottom
 
@@ -285,95 +285,96 @@ function FormCreate() {
                 </Box>
 
                 <Divider />
+                <Paper sx={{marginLeft: 3, marginRight: 3, marginTop: 2}}>
+                    <Grid container spacing={3} sx={{ padding: 2 }}>
 
-                <Grid container spacing={3} sx={{ padding: 2 }}>
+                        <Grid item xs={6}>
+                            <p>หัวข้อประเมิน</p>
+                            <FormControl fullWidth variant="outlined">
+                                <Select
+                                    sx={{ width: 300 }}
+                                    value={form.FormTypeID + ""}
+                                    onChange={handleChange}
+                                    inputProps={{
+                                        name: "FormTypeID",
+                                    }}
+                                >
+                                    {formtype.map((item: FormTypeInterface) => (
+                                        <MenuItem value={item.ID}>{item.FormType_name}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
 
-                    <Grid item xs={6}>
-                        <p>หัวข้อประเมิน</p>
-                        <FormControl fullWidth variant="outlined">
-                            <Select
-                                sx={{ width: 300 }}
-                                value={form.FormTypeID +""}
-                                onChange={handleChange}
-                                inputProps={{
-                                    name: "FormTypeID",
-                                }}
+                        <Grid item xs={6} >
+                            <p>ความพึงพอใจ</p>
+                            <FormControl fullWidth variant="outlined">
+                                <Select
+                                    sx={{ width: 300, }}
+                                    value={form.SatisfactionID + ""}
+                                    onChange={handleChange}
+                                    inputProps={{
+                                        name: "SatisfactionID",
+                                    }}
+                                >
+                                    {satisfaction.map((item: SatisfactionInterface) => (
+                                        <MenuItem value={item.ID}>{item.Satisfaction_name}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            <FormControl fullWidth variant="outlined">
+                                <p>แสดงความคิดเห็น</p>
+                                <TextField
+                                    id="Comment"
+                                    variant="outlined"
+                                    type="string"
+                                    size="medium"
+                                    inputProps={{
+                                        style: {
+                                            height: 200,
+                                            width: 450,
+                                        },
+                                    }}
+                                    sx={{ fontFamily: 'Mitr-Regular' }}
+                                    multiline
+                                    value={form.Comment}
+                                    onChange={handleInputChange}
+                                />
+                            </FormControl>
+                        </Grid>
+
+
+                        <Grid item xs={12}>
+
+                            <Button component={RouterLink} to="/forminfo" variant="contained">
+
+                                Back
+
+                            </Button>
+
+                            <Button
+
+                                style={{ float: "right" }}
+
+                                onClick={submit}
+
+                                variant="contained"
+
+                                color="primary"
+
                             >
-                                {formtype.map((item: FormTypeInterface) => (
-                                    <MenuItem value={item.ID}>{item.FormType_name}</MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    </Grid>
 
-                    <Grid item xs={6}>
-                        <p>ความพึงพอใจ</p>
-                        <FormControl fullWidth variant="outlined">
-                            <Select
-                                sx={{ width: 300 }}
-                                value={form.SatisfactionID +""}
-                                onChange={handleChange}
-                                inputProps={{
-                                    name: "SatisfactionID",
-                                }}
-                            >
-                                {satisfaction.map((item: SatisfactionInterface) => (
-                                    <MenuItem value={item.ID}>{item.Satisfaction_name}</MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    </Grid>
+                                Submit
 
-                    <Grid item xs={12}>
-                        <FormControl fullWidth variant="outlined">
-                            <p>แสดงความคิดเห็น</p>
-                            <TextField
-                                id="Comment"
-                                variant="outlined"
-                                type="string"
-                                size="medium"
-                                inputProps={{
-                                    style: {
-                                        height: 200,
-                                        width: 450,
-                                    },
-                                }}
-                                sx={{ fontFamily: 'Mitr-Regular' }}
-                                multiline
-                                value={form.Comment}
-                                onChange={handleInputChange}
-                            />
-                        </FormControl>
-                    </Grid>
+                            </Button>
 
-
-                    <Grid item xs={12}>
-
-                        <Button component={RouterLink} to="/forminfo" variant="contained">
-
-                            Back
-
-                        </Button>
-
-                        <Button
-
-                            style={{ float: "right" }}
-
-                            onClick={submit}
-
-                            variant="contained"
-
-                            color="primary"
-
-                        >
-
-                            Submit
-
-                        </Button>
+                        </Grid>
 
                     </Grid>
-
-                </Grid>
+                </Paper>
 
             </Paper>
 

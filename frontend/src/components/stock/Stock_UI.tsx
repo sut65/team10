@@ -32,6 +32,7 @@ function Stock_UI() {
   const [Time, setTime] = React.useState<Dayjs | null>(dayjs());
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState("");
   const [noAccess, setNoAccess] = React.useState(false);
 
   const Item = styled(Paper)(({ theme }) => ({
@@ -134,7 +135,7 @@ function Stock_UI() {
     }
 
     setSuccess(false);
-
+    setErrorMessage("");
     setError(false);
   };
 
@@ -144,7 +145,7 @@ function Stock_UI() {
     let data = {
       //ประกาศก้อนข้อมูล
 
-      List_Number: Number(List_Number),
+      List_Number: (List_Number)+"",
 
       TypeID: stock.TypeID,
 
@@ -180,8 +181,15 @@ function Stock_UI() {
           setSuccess(true);
         } else {
           setError(true);
+          setErrorMessage(res.error);
         }
       });
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 1000);
+      const x = parseInt(localStorage.getItem("reRender")+"")||0
+      localStorage.setItem("reRender", `${x+1}`);
+      console.log(x)
   }
 
   React.useEffect(() => {
@@ -212,7 +220,7 @@ function Stock_UI() {
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
         <Alert onClose={handleClose} severity="error">
-          บันทึกข้อมูลไม่สำเร็จ
+          บันทึกข้อมูลไม่สำเร็จ: {errorMessage}
         </Alert>
       </Snackbar>
 
@@ -254,7 +262,7 @@ function Stock_UI() {
                 <TextField
                   fullWidth
                   id="List_Number"
-                  type="string"
+                  type="number"
                   variant="outlined"
                   onChange={(event: {
                     target: { value: React.SetStateAction<String> };

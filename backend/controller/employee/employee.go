@@ -26,25 +26,6 @@ func CreateEmployees(c *gin.Context) {
 		return
 	}
 
-	if employee.Username == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "UserName invalid"})
-		return
-	}
-
-	if employee.Name == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Name invalid"})
-		return
-	}
-	if employee.Address == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Address invalid"})
-		return
-	}
-
-	if employee.Password == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "password invalid"})
-		return
-	}
-
 	// ค้นหา gender ด้วย id
 	if tx := entity.DB().Where("id = ?", employee.Gender_ID).First(&gender); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "gender not found"})

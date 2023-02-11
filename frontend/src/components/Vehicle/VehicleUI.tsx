@@ -236,7 +236,7 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
                       container
                       justifyContent={"center"}
                       sx={{
-                        paddingY: 2,
+                        paddingY: 1,
                       }}
                     >
                       <Grid item xs={3}>
@@ -301,7 +301,7 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
               container
               justifyContent={"center"}
               sx={{
-                paddingY: 2,
+                paddingY: 1,
               }}
             >
              <Grid item xs={3}>
@@ -320,9 +320,9 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
             </Grid>
                       
             <Grid container  justifyContent={"center"}  sx={{
-                paddingX: 1,
+                paddingY: 0,
               }}>
-                  <Grid item xs={8.1}>
+                  <Grid item xs={8}>
                     <h3>Date Insulance</h3>              
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <StaticDatePicker
