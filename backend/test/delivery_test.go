@@ -69,7 +69,7 @@ func TestDeliveryScoreNotInRange(t *testing.T) {
 	ok, err := govalidator.ValidateStruct(deli)
 	g.Expect(ok).ToNot(BeTrue())
 	g.Expect(err).ToNot(BeNil())
-	g.Expect(err.Error()).To(Equal("ใส่คะแนนตั้งแต่ 0 ถึง 5"))
+	g.Expect(err.Error()).To(Equal("ใส่คะแนนตั้งแต่ 1 ถึง 5"))
 }
 
 func TestDeliveryProblemNotNull(t *testing.T) {
