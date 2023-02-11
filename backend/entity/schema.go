@@ -172,7 +172,7 @@ type Service struct {
 
 	Bill_status uint
 	Address     string `valid:"minstringlength(8)~โปรดระบุให้ละเอียด,alphabet~ที่อยู่เป็นตัวอักษรพิเศษหรือภาษาอังกฤษ,required~โปรดกรอกที่อยู่"`
-	Bill_Price  int    `valid:"ValuePositive~ราคาเท่ากับ 0"`
+	Bill_Price  int    `valid:"-"`
 	Bill        []Bill `gorm:"foreignKey:Service_ID"`
 }
 

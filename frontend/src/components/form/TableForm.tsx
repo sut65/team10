@@ -124,7 +124,7 @@ export default function FormTable() {
                 to="/form"
                 sx={{ p: 1 }}
               >
-                Create Form
+                ประเมิน
               </Button>
             </Box>
           </Box>

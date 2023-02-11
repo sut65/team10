@@ -34,7 +34,7 @@ import {
   red,
   yellow,
 } from "@mui/material/colors";
-import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
+import SaveIcon from '@mui/icons-material/Save';
 import UndoIcon from "@mui/icons-material/Undo";
 import Swal from "sweetalert2";
 
@@ -484,8 +484,8 @@ const ServiceCreate = () => {
                     <Button
                       component={RouterLink}
                       to="/serviceinfo"
-                      variant="outlined"
-                      sx={{ border: 3, color: yellow[800] }}
+                      variant="contained"
+                      color="warning"
                       startIcon={<UndoIcon />}
                     >
                       Back
@@ -494,9 +494,10 @@ const ServiceCreate = () => {
                     <Button
                       style={{ float: "right" }}
                       onClick={submit}
+                      color="primary"
                       variant="contained"
-                      sx={{ border: 2, color: green["A400"] }}
-                      endIcon={<FileDownloadDoneIcon />}
+                      // sx={{ border: 2, color: "primary" }}
+                      endIcon={<SaveIcon />}
                     >
                       Submit
                     </Button>
