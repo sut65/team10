@@ -136,7 +136,7 @@ export default function ServiceTable() {
                 to="/service"
                 sx={{ p: 1 }}
               >
-                Create Service
+                เลือกบริการ
               </Button>
             </Box>
           </Box>

@@ -14,6 +14,7 @@ import {
   Select,
   SelectChangeEvent,
   Snackbar,
+  TableCell,
   TextField,
 } from "@mui/material";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -173,6 +174,9 @@ const ServiceUpdate = () => {
         console.log(res.data); //show ข้อมูล
         if (res.data) {
           setService(res.data);
+          setTypewashingdetail(res.data);
+          setWeightdetail(res.data);
+          setDelidetail(res.data);
         } else {
           console.log("else");
         }
@@ -398,6 +402,7 @@ const ServiceUpdate = () => {
                     <p>รูปแบบการซัก</p>
                     <FormControl fullWidth variant="outlined">
                       <Select
+                      disabled
                         sx={{ width: 300 }}
                         value={service?.TypeWashing_ID + ""}
                         onChange={handleChange}
@@ -416,8 +421,10 @@ const ServiceUpdate = () => {
 
                   <Grid item xs={4}>
                     <p>น้ำหนัก</p>
+                    
                     <FormControl fullWidth variant="outlined">
                       <Select
+                        disabled
                         sx={{ width: 300 }}
                         value={service.Weight_ID + ""}
                         onChange={handleChange}
@@ -458,6 +465,7 @@ const ServiceUpdate = () => {
                     <p>การจัดส่ง</p>
                     <FormControl fullWidth variant="outlined">
                       <Select
+                        disabled
                         sx={{ width: 300 }}
                         value={service.DeliveryType_ID + ""}
                         onChange={handleChange}
@@ -544,22 +552,32 @@ const ServiceUpdate = () => {
                   <CardContent>
                     <FormControl fullWidth variant="outlined">
                       <Typography>
-                        รายละเอียดเสื้อผ้าและราคา
+                        <h3>ราคา: </h3>
                         <Divider />
-                        <p>
+                        {/* <p>
                           ประเภท {typewashingdetail?.Type_washing}:{" "}
                           {typewashingdetail?.Description}
-                        </p>
-                        <p>น้ำหนัก: {weightdetail?.Weight_net}</p>
-                        <p>การจัดส่ง: {delidetail?.DeliveryType_service}</p>
+                        </p> */}
+                        {/* <Grid container sx={{}}>
+                        <Box flexGrow={1} sx={{ wordWrap: "break-word", width: 0.3, fontSize: 15, }}>ประเภท: {service?.TypeWashing?.Type_washing}</Box>
+                        </Grid>
+                        <Grid container sx={{}}>
+                        <Box flexGrow={1} sx={{ wordWrap: "break-word", width: 0.3, fontSize: 15, }}>น้ำหนัก: {service?.Type_washing}</Box> */}
+                        {/* <p>น้ำหนัก: {weightdetail?.Weight_net}</p>
+                        <p>การจัดส่ง: {delidetail?.DeliveryType_service}</p> */}
+                          {/* <Grid container sx={{}}>
+                            <Box flexGrow={1} sx={{ wordWrap: "break-word", width: 0.3, fontSize: 15, }}>การจัดส่ง: {service?.Type_washing}</Box>
+                          </Grid>
+                        </Grid> */}
                         <Divider />
                         <Grid item xs={1}>
-                          <p>
+                          {/* <p >
                             <h3>ราคา: </h3>
-                          </p>
+                          </p> */}
                         </Grid>
-                        <Grid item xs={1}>
-                          <Typography
+                        <Grid container sx={{}}>
+                          <Box flexGrow={1} sx={{ wordWrap: "break-word", width: 0.3, fontSize: 100, textAlign: "right", color: purple["A400"], }}>{service?.Bill_Price}</Box>
+                          {/* <Typography
                             align="right"
                             variant="h1"
                             sx={{
@@ -573,7 +591,7 @@ const ServiceUpdate = () => {
                                 typewashingdetail?.TypeWashing_Price,
                                 weightdetail?.Weight_price,
                                 delidetail?.DeliveryType_price
-                              ) + ""}
+                              ) + ""} */}
                             {/* <TextField
                               disabled
                               color="warning"
@@ -581,22 +599,18 @@ const ServiceUpdate = () => {
                               type="string"
                               size="medium"
                               inputProps={{
-                                name: "Bill_Price",
+                                // name: "Bill_Price",
                                 style: {
+                                  border:0,
                                   width: 490,
                                 },
                               }}
-                              value={add(
-                                typewashingdetail?.TypeWashing_Price,
-                                weightdetail?.Weight_price,
-                                delidetail?.DeliveryType_price
-                              ) + ""}
+                              value={service?.Bill_Price}
                               sx={{ fontFamily: "Mitr-Regular" }}
                               multiline
                             >
-                              {typewashingdetail?.Description}
                             </TextField> */}
-                          </Typography>
+                          {/* </Typography> */}
                         </Grid>
                       </Typography>
                     </FormControl>

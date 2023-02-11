@@ -269,7 +269,7 @@ function FormCreate() {
 
             </Snackbar>
 
-            <Paper>
+            <Paper style={{ background: "rgba(255,201,60,1)" }}>
 
                 <Box
 
@@ -291,7 +291,7 @@ function FormCreate() {
 
                             variant="h6"
 
-                            color="primary"
+                            color="black"
 
                             gutterBottom
 
@@ -306,6 +306,7 @@ function FormCreate() {
                 </Box>
 
                 <Divider />
+                <Paper sx={{ marginLeft: 3, marginRight: 3, marginTop: 2 }}>
 
                 <Grid container spacing={3} sx={{ padding: 2 }}>
 
@@ -313,6 +314,7 @@ function FormCreate() {
                         <p>หัวข้อประเมิน</p>
                         <FormControl fullWidth variant="outlined">
                             <Select
+                            disabled
                                 sx={{ width: 300 }}
                                 value={form.FormTypeID +""}
                                 onChange={handleChange}
@@ -395,6 +397,7 @@ function FormCreate() {
                     </Grid>
 
                 </Grid>
+            </Paper>
 
             </Paper>
 
