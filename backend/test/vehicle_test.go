@@ -60,7 +60,7 @@ func TestRegistrationLength7(t *testing.T) {
 
 	vehicle := entity.Vehicle{
 		ListModel:      "Scoopyi",
-		Registration:   "11กษ5336", // ผิด
+		Registration:   "11กษ53366", // ผิด
 		Date_Insulance: time.Now().Add(time.Second * 300),
 	}
 
@@ -128,7 +128,7 @@ func TestDateInsulanceNotPast(t *testing.T) {
 	vehicle := entity.Vehicle{
 		ListModel:      "Scoopyi",
 		Registration:   "กษ5336",
-		Date_Insulance: time.Now().Add(time.Hour * -12), // ผิด
+		Date_Insulance: time.Now().Add(time.Hour * -25), // ผิด
 	}
 
 	// ตรวจสอบด้วย govalidator

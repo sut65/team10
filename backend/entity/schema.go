@@ -327,8 +327,8 @@ type Vehicle struct {
 	Engine_ID        *uint         `valid:"-"`
 	Engine           Engine        `gorm:"references:id" valid:"-"`
 	ListModel        string        `valid:"required~จำเป็นต้องกรอกรุ่นของรถ"`
-	Registration     string        `valid:"required~จำเป็นต้องกรอกทะเบียนรถ"`
-	Date_Insulance   time.Time     `valid:"DateNotPast~เวลาห้ามเป็นอดีต, required~กรุณาใส่เวลาให้ถูกต้อง"`
+	Registration     string        `valid:"required~จำเป็นต้องกรอกทะเบียนรถ , maxstringlength(8)~กรอกทะเบียนรถได้สูงสุด 7 ตัว , alphabet1~ต้องมีตัวเลขอย่างน้อย 1 ตัว , alphabet2~ต้องมีตัวอักษรภาษาไทยอย่างน้อย 1 ตัว"`
+	Date_Insulance   time.Time     `valid:"DateNotPast~เวลาห้ามเป็นอดีต"`
 	Delivery         []Delivery    `gorm:"foreignKey:Vehicle_ID"`
 }
 
@@ -401,6 +401,20 @@ func SetSpecialCharactersValidation() {
 		str := address.(string)
 		match, _ := regexp.MatchString(`[0-9ก-ฮ./]`, str)
 		//[0-9ก-๏]
+		return match
+	}))
+
+	validator.CustomTypeTagMap.Set("alphabet1", validator.CustomTypeValidator(func(address interface{}, context interface{}) bool {
+		str := address.(string)
+		match, _ := regexp.MatchString(`[0-9./]`, str)
+		//[0-9]
+		return match
+	}))
+
+	validator.CustomTypeTagMap.Set("alphabet2", validator.CustomTypeValidator(func(address interface{}, context interface{}) bool {
+		str := address.(string)
+		match, _ := regexp.MatchString(`[ก-ฮ./]`, str)
+		//[ก-๏]
 		return match
 	}))
 
