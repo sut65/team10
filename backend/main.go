@@ -70,6 +70,7 @@ func main() {
 
 			p.GET("/bills/:id", controllerbill.ListBills_Customer)
 			p.GET("/b_services/:id", controllerbill.ListServiceBill)
+			p.GET("/bill_serviceupdate/:id", controllerbill.ListBills_ServiceID)
 			// --Paymenttype
 			p.GET("/paymenttype", controllerbill.ListPaymenttypes)
 

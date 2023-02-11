@@ -66,6 +66,7 @@ func CreateBill(c *gin.Context) {
 			QuotaCode_ID:   bill.QuotaCode_ID,
 			Paymenttype_ID: bill.Paymenttype_ID,
 			Bill_Price:     bill.Bill_Price,
+			Receive_State:  0,
 			Time_Stamp:     time.Time{},
 		}
 		if _, err := govalidator.ValidateStruct(b); err != nil {
@@ -139,7 +140,7 @@ func GetBill(c *gin.Context) {
 
 func ListBills(c *gin.Context) {
 	var bill []entity.Bill
-	if err := entity.DB().Preload("Service.Customer").Preload("QuotaCode").Preload("Paymenttype").Raw("SELECT * FROM bills").Find(&bill).Error; err != nil {
+	if err := entity.DB().Preload("Service.Customer").Preload("QuotaCode.Promotion.Codetype").Preload("Paymenttype").Raw("SELECT * FROM bills").Find(&bill).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -152,7 +153,20 @@ func ListBills(c *gin.Context) {
 func ListBills_Customer(c *gin.Context) {
 	var bill []entity.Bill
 	customer_id := c.Param("id")
-	if err := entity.DB().Preload("Service.Customer").Preload("QuotaCode").Preload("Paymenttype").Raw("SELECT bills.id,service_id,quota_code_id,paymenttype_id,bills.bill_price,type_washing_id,delivery_type_id,weight_id,customer_id,bill_status,address,time_stamp FROM bills join services WHERE services.id = bills.id AND customer_id = ?", customer_id).Find(&bill).Error; err != nil {
+	if err := entity.DB().Preload("Service.Customer").Preload("QuotaCode.Promotion.Codetype").Preload("Paymenttype").Raw("SELECT bills.id,receive_state,service_id,quota_code_id,paymenttype_id,bills.bill_price,type_washing_id,delivery_type_id,weight_id,customer_id,bill_status,address,time_stamp FROM bills join services WHERE services.id = bills.id AND customer_id = ?", customer_id).Find(&bill).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": bill})
+
+}
+
+// ใช้สำหรับค้นหา service_id ของลูกค้าเพื่อทำการอัพเดท
+func ListBills_ServiceID(c *gin.Context) {
+	var bill []entity.Bill
+	service_id := c.Param("id")
+	if err := entity.DB().Preload("Service.Customer").Preload("QuotaCode").Preload("Paymenttype").Raw("SELECT bills.id,receive_state,service_id,quota_code_id,paymenttype_id,bills.bill_price,type_washing_id,delivery_type_id,weight_id,customer_id,bill_status,address,time_stamp FROM bills join services WHERE services.id = bills.id AND service_id = ?", service_id).Find(&bill).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -188,21 +202,26 @@ func UpdateBill(c *gin.Context) {
 			return
 		}
 	} else {
-		// สร้างข้อมูลสำหรับเวลาที่ถูกต้อง
-		u_b := entity.Bill{
-			Paymenttype_ID: bill.Paymenttype_ID,
-			Time_Stamp:     bill.Time_Stamp.Local(),
-		}
-		if _, err := govalidator.ValidateStruct(u_b); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		if bill.Receive_State == 1 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "รายการของคุณได้ถูกรับรายการไปแล้วไม่สามารถแก้ไขได้ กรุณาติดต่อเจ้าหน้าที่"})
 			return
-		}
-		if err := entity.DB().Where("id = ?", bill.ID).Updates(&u_b).Error; err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
+		} else {
+			// สร้างข้อมูลสำหรับเวลาที่ถูกต้อง
+			u_b := entity.Bill{
+				Paymenttype_ID: bill.Paymenttype_ID,
+				Time_Stamp:     bill.Time_Stamp.Local(),
+			}
+			if _, err := govalidator.ValidateStruct(u_b); err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				return
+			}
+			if err := entity.DB().Where("id = ?", bill.ID).Updates(&u_b).Error; err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				return
+			}
 
-		c.JSON(http.StatusOK, gin.H{"data": u_b})
+			c.JSON(http.StatusOK, gin.H{"data": u_b})
+		}
 	}
 }
 

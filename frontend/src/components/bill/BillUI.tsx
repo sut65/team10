@@ -246,7 +246,10 @@ function Bill() {
           </Alert>
         </Snackbar>
 
-        <LocalAtmIcon color="success" sx={{ fontSize: 80 }} />
+        <Paper style={{ background: "rgba(0, 0, 0, 0.2)" }}>
+          <h1 style={{ textAlign: "center", paddingTop: 20, color: "white" }}>
+            <LocalAtmIcon color="success" style={{ fontSize: 80 }} />
+          </h1>
         <Paper>
           <Grid sx={{ padding: 2 }}>
             <h1>Receipt</h1></Grid>
@@ -439,6 +442,7 @@ function Bill() {
             </Button>
           </Grid>
         </Grid>
+        </Paper>
       </Box>
     </Container>
   );

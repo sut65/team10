@@ -10,6 +10,7 @@ export interface BillInterface {
   Paymenttype_ID:   number,
   Paymenttype:  PaymenttypeInterface,
   Bill_Price:   number,
+  Receive_State:  number,
   Time_Stamp:   Date,
 
 }
