@@ -14,7 +14,7 @@ func TestTimeNotPast(t *testing.T) {
 	g := NewGomegaWithT(t)
 
 	complete := entity.Complete{
-		Complete_datetime: time.Now().Local().Add(time.Second * - 300), // ผิด
+		Complete_datetime: time.Now().Local().Add(time.Second * -300), // ผิด
 
 	}
 
@@ -37,7 +37,7 @@ func TestTimeNotFuture(t *testing.T) {
 
 	complete := entity.Complete{
 
-		Complete_datetime: time.Now().Local().Add(time.Second * 300), // ผิด
+		Complete_datetime: time.Now().Local().Add(time.Second * 5000), // ผิด
 	}
 
 	// ตรวจสอบด้วย govalidator

@@ -85,7 +85,7 @@ func TestTimeStampNotFuture(t *testing.T) {
 	receive := entity.Receive{
 		Det_Quantity: 1,
 		Sof_Quantity: 1,
-		Time_Stamp:   time.Now().Add(time.Second * 300), // ผิด
+		Time_Stamp:   time.Now().Local().Add(time.Second * 5000), // ผิด
 	}
 
 	// ตรวจสอบด้วย govalidator

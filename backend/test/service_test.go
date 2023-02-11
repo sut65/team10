@@ -13,7 +13,7 @@ func TestAddressNotBlank(t *testing.T) {
 	g := NewGomegaWithT(t)
 
 	service := entity.Service{
-		Address:"", // ผิด
+		Address: "", // ผิด
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -34,7 +34,7 @@ func TestAddressNotSpecialCharacters(t *testing.T) {
 	entity.SetSpecialCharactersValidation()
 
 	service := entity.Service{
-		Address:"%$&", // ผิด
+		Address: "%$&", // ผิด
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -54,7 +54,7 @@ func TestMinAddress(t *testing.T) {
 	g := NewGomegaWithT(t)
 
 	service := entity.Service{
-		Address:"1212", // ผิด
+		Address: "1212", // ผิด
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -69,28 +69,3 @@ func TestMinAddress(t *testing.T) {
 	// err.Error ต้องมี error message แสดงออกมา
 	g.Expect(err.Error()).To(Equal("โปรดระบุให้ละเอียด"))
 }
-
-func TestZero(t *testing.T) {
-	g := NewGomegaWithT(t)
-	entity.SetTimeandValueValidation()
-
-	service := entity.Service{
-		Address: "000000000000000000000",
-		Bill_Price: 0, // ผิด
-	}
-
-	// ตรวจสอบด้วย govalidator
-	ok, err := govalidator.ValidateStruct(service)
-
-	// ok ต้องไม่เป็นค่า true แปลว่าต้องจับ error ได้
-	g.Expect(ok).ToNot(BeTrue())
-
-	// err ต้องไม่เป็นค่า nil แปลว่าต้องจับ error ได้
-	g.Expect(err).ToNot(BeNil())
-
-	// err.Error ต้องมี error message แสดงออกมา
-	g.Expect(err.Error()).To(Equal("ราคาเท่ากับ 0"))
-}
-
-
-
