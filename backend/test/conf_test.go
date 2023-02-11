@@ -57,7 +57,7 @@ func TestRecvAddressNotNull(t *testing.T) {
 	g := NewGomegaWithT(t)
 
 	conf := entity.Confirmation{
-		RecvTime:    time.Now().Local(),
+		RecvTime:    time.Now().Local().Add(time.Minute * 1),
 		RecvAddress: "",
 	}
 
