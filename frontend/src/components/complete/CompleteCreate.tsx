@@ -218,7 +218,7 @@ function submit() {
         setAlertMessage("บันทึกสำเร็จ")
         console.log(res.data)
         await timeout(1000); //for 1 sec delay
-        window.location.href = "/complete/info"; 
+       // window.location.href = "/complete/info"; 
       } else {
         setAlertMessage(res.error);
         setError(true);
@@ -347,7 +347,7 @@ function submit() {
                         id="packaging-autocomplete"
                         options={packaging}
                         fullWidth
-                        size="small"
+                        size="medium"
                         sx={{ width : 300 }}
                         onChange={(event: any, value) => {
                           setComplete({

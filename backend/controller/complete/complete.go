@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"time"
+
 	"github.com/asaskevich/govalidator"
 	"github.com/sut65/team10/entity"
 
@@ -46,7 +48,27 @@ func CreateComplete(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "receive not found"})
 		return
 	}
+	///////////////////////////////////////////////////////////////////////
+	////////////////////// Validation Time not null ///////////////////////
+	///////////////////////////////////////////////////////////////////////
 
+	//ถ้าเวลาที่รับเข้ามามีค่าเป็น null จะเข้าไปทำใน if และทำการ validation
+	//จำเป็นต้องแยกเช็คเนื่องจาก time.Local() เมื่อดึงเวลาแล้วมันจะนับเวลาใน timezone ของเราเข้าไปด้วย ทำให้ค่าไม่เป็น null จะไม่สามารถ validation DateTimeNull ได้
+	if (complete.Complete_datetime == time.Time{}) {
+		// สร้างข้อมูลสำหรับเวลาที่เป็น null
+		com := entity.Complete{
+			Model:             gorm.Model{ID: complete.ID},
+			Employee:          employee,
+			Receive:           receive,
+			Packaging:         packaging,
+			Complete_datetime: time.Time{},
+	
+		}
+		if _, err := govalidator.ValidateStruct(com); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		} else {
 	//create entity customer
 	com := entity.Complete{
 		Model:             gorm.Model{ID: complete.ID},
@@ -66,7 +88,7 @@ func CreateComplete(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": com})
-
+   }
 }
 
 // GET /Complete/:id
@@ -142,9 +164,28 @@ func UpdateComplete(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error not access": err.Error()})
 		return
 	}
-
 	var updatedatetime = complete.Complete_datetime
+    ///////////////////////////////////////////////////////////////////////
+	////////////////////// Validation Time not null ///////////////////////
+	///////////////////////////////////////////////////////////////////////
 
+	//ถ้าเวลาที่รับเข้ามามีค่าเป็น null จะเข้าไปทำใน if และทำการ validation
+	//จำเป็นต้องแยกเช็คเนื่องจาก time.Local() เมื่อดึงเวลาแล้วมันจะนับเวลาใน timezone ของเราเข้าไปด้วย ทำให้ค่าไม่เป็น null จะไม่สามารถ validation DateTimeNull ได้
+	if (complete.Complete_datetime == time.Time{}) {
+		// สร้างข้อมูลสำหรับเวลาที่เป็น null
+		updatecom := entity.Complete{
+			Model:             gorm.Model{ID: complete.ID},
+			Employee:          employee,
+			Receive:           receive,
+			Packaging:         packaging,
+			Complete_datetime: time.Time{},
+	
+		}
+		if _, err := govalidator.ValidateStruct(updatecom); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+	} else {
 	//ค้นหา packaging ด้วย id
 	if tx := entity.DB().Where("id = ?", complete.Packaging_ID).First(&packaging); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "packaging not found"})
@@ -187,5 +228,5 @@ func UpdateComplete(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"data": updatecom})
-
+	}
 }
