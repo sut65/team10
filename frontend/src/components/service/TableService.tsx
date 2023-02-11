@@ -81,7 +81,6 @@ export default function ServiceTable() {
         }
       });
   };
-
   
   const ServiceDelete = async (ID: number) => {
     const requestOptions = {
@@ -107,7 +106,10 @@ export default function ServiceTable() {
             title: "Delete!",
             text: "ลบสำเร็จ",
           });
-          window.location.reload();
+          // setTimeout(function () {
+            window.location.reload();
+          // }, 5000);
+
         }
       });
     }

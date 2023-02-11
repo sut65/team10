@@ -35,7 +35,7 @@ import {
   red,
   yellow,
 } from "@mui/material/colors";
-import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
+import SaveIcon from '@mui/icons-material/Save';
 import UndoIcon from "@mui/icons-material/Undo";
 import Swal from "sweetalert2";
 
@@ -269,7 +269,7 @@ const ServiceUpdate = () => {
       Weight_ID: service.Weight_ID,
       Address: service.Address,
       DeliveryType_ID: service.DeliveryType_ID,
-      Bill_Price: total,
+      Bill_Price: service.Bill_Price,
     };
 
     //================================================================================================================//
@@ -513,8 +513,8 @@ const ServiceUpdate = () => {
                     <Button
                       component={RouterLink}
                       to="/serviceinfo"
-                      variant="outlined"
-                      sx={{ border: 3, color: yellow[800] }}
+                      variant="contained"
+                      color="warning"
                       startIcon={<UndoIcon />}
                     >
                       Back
@@ -523,9 +523,10 @@ const ServiceUpdate = () => {
                     <Button
                       style={{ float: "right" }}
                       onClick={update}
+                      color="primary"
                       variant="contained"
-                      sx={{ border: 2, color: green["A400"] }}
-                      endIcon={<FileDownloadDoneIcon />}
+                      // sx={{ border: 2, color: "primary" }}
+                      endIcon={<SaveIcon />}
                     >
                       บันทึก
                     </Button>
@@ -592,24 +593,26 @@ const ServiceUpdate = () => {
                                 weightdetail?.Weight_price,
                                 delidetail?.DeliveryType_price
                               ) + ""} */}
-                            {/* <TextField
-                              disabled
-                              color="warning"
-                              variant="standard"
-                              type="string"
-                              size="medium"
-                              inputProps={{
-                                // name: "Bill_Price",
-                                style: {
-                                  border:0,
-                                  width: 490,
-                                },
-                              }}
-                              value={service?.Bill_Price}
-                              sx={{ fontFamily: "Mitr-Regular" }}
-                              multiline
-                            >
-                            </TextField> */}
+                        {/* <FormControl fullWidth variant="outlined">
+                          <p>ที่อยู่</p>
+                          <TextField
+                            id="Bill_Price"
+                            variant="outlined"
+                            type="string"
+                            size="medium"
+                            inputProps={{
+                              name: "Bill_Price",
+                              style: {
+                                height: 200,
+                                width: 450,
+                              },
+                            }}
+                            sx={{ fontFamily: "Mitr-Regular" }}
+                            multiline
+                            value={service.Bill_Price}
+                            onChange={handleInputChange}
+                          />
+                        </FormControl> */}
                           {/* </Typography> */}
                         </Grid>
                       </Typography>
