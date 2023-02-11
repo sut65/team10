@@ -36,6 +36,12 @@ function UpdateVehicle() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
 
+  const isWeekend = (date: Dayjs) => {
+    const day = date.day();
+  
+    return  day === 7;
+  };
+
   const handleClose = ( // AlertBar
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -195,24 +201,25 @@ function UpdateVehicle() {
              ></TextField>
             </Grid>
           </Grid>
-          <Grid container spacing={2} sx={{ paddingX: 15 }}>
-          <Grid item xs={3}>
-                <h3>Date Insulance</h3>
+          <Grid container  justifyContent={"center"}  sx={{
+                paddingX: 1,
+              }}>
+                  <Grid item xs={8.6}>
+                    <h3>Date Insulance</h3>              
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <StaticDatePicker
+                          orientation="landscape"
+                          openTo="day"
+                          value={date}
+                          shouldDisableDate={isWeekend}
+                          onChange={(newValue) => {
+                            setDate(newValue);
+                          }}
+                          renderInput={(params) => <TextField {...params} />}
+                        />
+                      </LocalizationProvider>                      
+                  </Grid>
               </Grid>
-                      <Grid item xs={8.5}>
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DatePicker
-                            label="Date Insulance"
-                            value={date}
-                            onChange={(newValue) => {
-                              setDate(newValue);
-                            }}
-                            renderInput={(params) => <TextField {...params} />}
-                          />
-                          </LocalizationProvider>
-                      
-                      </Grid>
-                    </Grid>
         </Paper>
         <Grid container spacing={2}
                     sx={{ paddingY: 1 }}>
