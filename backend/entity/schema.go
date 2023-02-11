@@ -161,7 +161,7 @@ type Service struct {
 	TypeWashing_ID *uint       `valid:"-"`
 	TypeWashing    TypeWashing `gorm:"references:id" valid:"-" `
 
-	DeliveryType_ID *uint	`valid:"-"`
+	DeliveryType_ID *uint        `valid:"-"`
 	DeliveryType    DeliveryType `gorm:"references:id"`
 
 	Weight_ID *uint  `valid:"-"`
@@ -172,7 +172,7 @@ type Service struct {
 
 	Bill_status uint
 	Address     string `valid:"minstringlength(8)~โปรดระบุให้ละเอียด,alphabet~ที่อยู่เป็นตัวอักษรพิเศษหรือภาษาอังกฤษ,required~โปรดกรอกที่อยู่"`
-	Bill_Price  int `valid:"ValuePositive~ราคาเท่ากับ 0"`
+	Bill_Price  int    `valid:"ValuePositive~ราคาเท่ากับ 0"`
 	Bill        []Bill `gorm:"foreignKey:Service_ID"`
 }
 
@@ -327,8 +327,8 @@ type Vehicle struct {
 	Engine_ID        *uint         `valid:"-"`
 	Engine           Engine        `gorm:"references:id" valid:"-"`
 	ListModel        string        `valid:"required~จำเป็นต้องกรอกรุ่นของรถ"`
-	Registration     string        `valid:"required~จำเป็นต้องกรอกทะเบียนรถ"`
-	Date_Insulance   time.Time     `valid:"DateTimeNotPast~เวลาห้ามเป็นอดีต, required~กรุณาใส่เวลาให้ถูกต้อง"`
+	Registration     string        `valid:"required~จำเป็นต้องกรอกทะเบียนรถ, maxstringlength(8)~กรอกทะเบียนรถได้สูงสุด 8 ตัว,alphabet1~ต้องมีตัวเลขอย่างน้อย 1 ตัว,alphabet2~ต้องมีตัวอักษรภาษาไทยอย่างน้อย 1 ตัว"`
+	Date_Insulance   time.Time     `valid:"DateTimeNotPast~เวลาห้ามเป็นอดีต"`
 	Delivery         []Delivery    `gorm:"foreignKey:Vehicle_ID"`
 }
 
@@ -404,6 +404,20 @@ func SetSpecialCharactersValidation() {
 		return match
 	}))
 
+	validator.CustomTypeTagMap.Set("alphabet1", validator.CustomTypeValidator(func(address interface{}, context interface{}) bool {
+		str := address.(string)
+		match, _ := regexp.MatchString(`[0-9./]`, str)
+		//[0-9]
+		return match
+	}))
+
+	validator.CustomTypeTagMap.Set("alphabet2", validator.CustomTypeValidator(func(address interface{}, context interface{}) bool {
+		str := address.(string)
+		match, _ := regexp.MatchString(`[ก-ฮ./]`, str)
+		//ก-๏]
+		return match
+	}))
+
 	// validator.CustomTypeTagMap.Set("alphabetPro", validator.CustomTypeValidator(func(address interface{}, context interface{}) bool {
 	// 	str := address.(string)
 	// 	match, _ := regexp.MatchString(`[ควย]+[0-9ก-๏]`, str)
@@ -419,7 +433,7 @@ func SetTimeandValueValidation() {
 	})
 	govalidator.CustomTypeTagMap.Set("ValuePositive", func(i interface{}, context interface{}) bool {
 		p := i.(int) //p มี type เป็น int
-		return p > 0  //ค่าที่จะถูกส่งออกไปคือ p >0
+		return p > 0 //ค่าที่จะถูกส่งออกไปคือ p >0
 	})
 	//เวลาห้ามเป็นอดีตเกิน 5 นาที
 	govalidator.CustomTypeTagMap.Set("DateTimeNotPast", func(i interface{}, context interface{}) bool {

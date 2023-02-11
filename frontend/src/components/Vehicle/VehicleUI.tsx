@@ -44,11 +44,15 @@ function VehicleCreate  () {
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState(false);
 
+  const isWeekend = (date: Dayjs) => {
+    const day = date.day();
+  
+    return  day === 7;
+  };
+
   const handleClickPopover = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  
-  
   const handleClosePopover = () => {
     setAnchorEl(null);
   };
@@ -316,26 +320,25 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
             </Grid>
                       
             <Grid container  justifyContent={"center"}  sx={{
-                paddingY: 0,
+                paddingX: 1,
               }}>
-            <Grid item xs={3}>
-                <h3>Date Insulance</h3>
+                  <Grid item xs={8.1}>
+                    <h3>Date Insulance</h3>              
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <StaticDatePicker
+                          orientation="landscape"
+                          openTo="day"
+                          value={date}
+                          shouldDisableDate={isWeekend}
+                          onChange={(newValue) => {
+                            setDate(newValue);
+                          }}
+                          renderInput={(params) => <TextField {...params} />}
+                        />
+                      </LocalizationProvider>                      
+                  </Grid>
               </Grid>
-                      <Grid item xs={5}>
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DatePicker
-                            label="Date Insulance"
-                            value={date}
-                            onChange={(newValue) => {
-                              setDate(newValue);
-                            }}
-                            renderInput={(params) => <TextField {...params} />}
-                          />
-                          </LocalizationProvider>
-                      
-                      </Grid>
-                  </Grid>
-                  </Grid>
+              </Grid>
               </Paper>
               <Grid container spacing={2}
                     sx={{ paddingY: 1 }}>
