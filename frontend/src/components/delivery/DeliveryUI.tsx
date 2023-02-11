@@ -53,6 +53,7 @@ function Delivery() {
   /* ------------------------------- error text ------------------------------- */
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+  const [errorNull, setErrorNull] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [noAccess, setNoAccess] = React.useState(false);
   /* -------------------------------------------------------------------------- */
@@ -128,13 +129,14 @@ function Delivery() {
   /*                                     GET                                    */
   /* -------------------------------------------------------------------------- */
   const getConfirmation = async () => {
-    fetch(`${apiUrl}/confirmation`, requestOptions)
+    fetch(`${apiUrl}/confirmations`, requestOptions)
       .then((response) => response.json())
       .then((res) => {
         if (res.data) {
           setConfirmation(res.data);
         } else {
-          console.log("else");
+          setErrorNull(true);
+          setErrorMessage(res.error);
         }
       });
   };
@@ -189,6 +191,15 @@ function Delivery() {
         >
           <Alert onClose={handleCloseSnackBar} severity="warning">
             คุณไม่มีสิทธิการเข้าถึง
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={errorNull}
+          onClose={handleCloseSnackBar}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        >
+          <Alert onClose={handleCloseSnackBar} severity="warning">
+            {errorMessage}
           </Alert>
         </Snackbar>
       </div>

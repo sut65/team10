@@ -16,6 +16,7 @@ import (
 // }
 
 // POST /confirmation
+/* ---------------------------- ConfirmationUI used --------------------------- */
 func CreateConfirmation(c *gin.Context) {
 
 	var confirmation entity.Confirmation
@@ -110,6 +111,7 @@ func CreateConfirmation(c *gin.Context) {
 
 // wrong commit close
 // GET /confirmation/:id
+/* ------------------------- ConfirmationUpdate used ------------------------ */
 func GetConfirmation(c *gin.Context) {
 	var confirmation entity.Confirmation
 	customer_id := c.Param("id")
@@ -120,18 +122,59 @@ func GetConfirmation(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": confirmation})
 }
 
+/* -------------------------------------------------------------------------- */
+/*         List Confirmation (confirmation_id) if it not yet Delivery         */
+/* -------------------------------------------------------------------------- */
 // GET /confirmations
+/* -------------------------- Delivery use this one ------------------------- */
+// If avaible (not yet in "Delivery" Table(Entity))
+// step refer from each line
 func ListConfirmations(c *gin.Context) {
+	// Load confirmation table
 	var confirmations []entity.Confirmation
-	if err := entity.DB().Preload("RecvType").Preload("Customer").Preload("Complete").Raw("SELECT * FROM confirmations").Find(&confirmations).Error; err != nil {
+	if err := entity.DB().Preload("RecvType").Preload("Customer").Preload("Complete").Find(&confirmations).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	// Load delivery table
+	var deliveries []entity.Delivery
+	if err := entity.DB().Find(&deliveries).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": confirmations})
+	// variable to map used confirmation_id "uint" to store id & "bool" to store true false
+	usedIDs := make(map[uint]bool)
+
+	// for loop to check confirmation_id not yet in deliveries table
+	for _, delivery := range deliveries {
+		if delivery.Confirmation_ID != nil {
+			usedIDs[*delivery.Confirmation_ID] = true
+		}
+	}
+
+	// Create new variable that check usedId(confirmation_id) to prepare to send to http request
+	var newConfirmations []entity.Confirmation
+	for _, confirmation := range confirmations {
+		if !usedIDs[confirmation.ID] {
+			newConfirmations = append(newConfirmations, confirmation)
+		}
+	}
+
+	if len(newConfirmations) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "รายการยืนยันรับผ้าถูกนำส่งหมดแล้ว กรุณาลองใหม่ในภายหลัง"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": newConfirmations})
 }
 
+/* -------------------------------------------------------------------------- */
+/*                      End of list confirmation delivery                     */
+/* -------------------------------------------------------------------------- */
+
 // GET /confirmations/:id
+/* ----------------------- ConfirmationTable use this one ---------------------- */
 func ListConfirmationsByID(c *gin.Context) {
 	var confirmations []entity.Confirmation
 	customer_id := c.Param("id")
@@ -144,6 +187,7 @@ func ListConfirmationsByID(c *gin.Context) {
 }
 
 // DELETE /confirmations/:id
+/* ------------------------------- no one use ------------------------------- */
 func DeleteConfirmation(c *gin.Context) {
 	id := c.Param("id")
 	if tx := entity.DB().Exec("DELETE FROM confirmations WHERE id = ?", id); tx.RowsAffected == 0 {
@@ -155,6 +199,7 @@ func DeleteConfirmation(c *gin.Context) {
 }
 
 // PATCH /confirmations
+/* ----------------------- confirmationUpdate use this ---------------------- */
 func UpdateConfirmation(c *gin.Context) {
 	var confirmation entity.Confirmation
 
@@ -193,10 +238,10 @@ func ListComplete(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": complete})
 }
 
-// func RegisterCurrentTimeAsMin(v *validator.Validate) {
-// 	v.RegisterValidation("current_time_as_min", func(fl validator.FieldLevel) bool {
-// 		value := fl.Field().Interface().(time.Time)
-// 		currentTime := time.Now().Local()
-// 		return value.After(currentTime)
-// 	})
-// }
+//	func RegisterCurrentTimeAsMin(v *validator.Validate) {
+//		v.RegisterValidation("current_time_as_min", func(fl validator.FieldLevel) bool {
+//			value := fl.Field().Interface().(time.Time)
+//			currentTime := time.Now().Local()
+//			return value.After(currentTime)
+//		})
+//	}
