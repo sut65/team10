@@ -230,11 +230,7 @@ function Confirmation() {
           onClose={handleCloseSnackBar}
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         >
-          <Alert
-            onClose={handleCloseSnackBar}
-            severity="success"
-            variant="filled"
-          >
+          <Alert onClose={handleCloseSnackBar} severity="success">
             Save successfully
           </Alert>
         </Snackbar>
@@ -244,11 +240,7 @@ function Confirmation() {
           onClose={handleCloseSnackBar}
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         >
-          <Alert
-            onClose={handleCloseSnackBar}
-            severity="error"
-            variant="filled"
-          >
+          <Alert onClose={handleCloseSnackBar} severity="error">
             Failed "{errorMessage}"
           </Alert>
         </Snackbar>
@@ -321,7 +313,7 @@ function Confirmation() {
                       Confirmation History
                     </div>
                     {/* call the table  */}
-                    <ConfTable/>
+                    <ConfTable />
                   </Box>
                 </Paper>
               </Stack>

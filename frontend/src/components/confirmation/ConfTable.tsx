@@ -30,7 +30,6 @@ function ConfTable() {
       .then((res) => {
         if (res.data) {
           setConfirmation(res.data);
-          console.log(res.data);
         } else {
           console.log("else");
         }
