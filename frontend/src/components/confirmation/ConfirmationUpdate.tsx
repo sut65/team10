@@ -195,6 +195,7 @@ function Confirmation() {
           window.location.reload();
         } else {
           setError(true);
+          setErrorMessage(res.error);
         }
       });
   }
@@ -222,7 +223,7 @@ function Confirmation() {
           onClose={handleCloseSnackBar}
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         >
-          <Alert onClose={handleCloseSnackBar} severity="success" variant="filled">
+          <Alert onClose={handleCloseSnackBar} severity="success">
             <div>Update successfully</div>
             <div>Refresh to see changes</div>
           </Alert>
@@ -233,7 +234,7 @@ function Confirmation() {
           onClose={handleCloseSnackBar}
           anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         >
-          <Alert onClose={handleCloseSnackBar} severity="error" variant="filled">
+          <Alert onClose={handleCloseSnackBar} severity="error">
             Failed "{errorMessage}"
           </Alert>
         </Snackbar>

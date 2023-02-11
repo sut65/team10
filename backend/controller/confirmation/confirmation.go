@@ -215,6 +215,11 @@ func UpdateConfirmation(c *gin.Context) {
 		RecvType_ID: confirmation.RecvType_ID,
 	}
 
+	if _, err := govalidator.ValidateStruct(conf); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	if err := entity.DB().Where("id = ?", confirmation.ID).Updates(&conf).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
