@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Container from "@mui/material/Container";
-import { Box, Button, ButtonGroup, CssBaseline, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Alert, Box, Button, ButtonGroup, CssBaseline, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Paper, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { VehicleInterface } from "../../models/vehicle/IVehicle";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import {  Popover, Typography } from "@mui/material";
@@ -14,6 +14,10 @@ function VehicleTableUI() {
   const [row_delete, setRow_delete] = useState<VehicleInterface>();
   const [open_delete, setOpendelete] = React.useState(false);
   const navigate = useNavigate();
+  const [alertmsg, setAlertmsg] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+  
   const handleClickOpen = (id: VehicleInterface) => { //เซ็ทค่า Dialog
       setOpendelete(true);
       setRow_delete(id); //เซ็ตค่าใส่ในตัวแปรเพื่อหา ID
@@ -64,7 +68,12 @@ function VehicleTableUI() {
       .then((response) => response.json())
       .then((res) => {
         if (res.data) {
+          setSuccess(true);
+          setAlertmsg("ลบข้อมูลสำเร็จ")
           window.location.reload();
+        }else{
+          setError(true);
+          setAlertmsg(res.error)
         }
       });
   };
@@ -74,6 +83,25 @@ function VehicleTableUI() {
       <CssBaseline />
       <Container maxWidth="lg" sx={{ p: 2 }}>
         <Paper sx={{ p: 2 }}>
+        <Snackbar // บันทึกสำเร็จ
+          open={success}
+          autoHideDuration={10000}
+          onClose={handleClose}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
+          <Alert onClose={handleClose} severity="success">
+            {alertmsg}
+          </Alert>
+        </Snackbar>
+
+        <Snackbar // บันทึกไม่สำเร็จ
+          open={error}
+          autoHideDuration={10000}
+          onClose={handleClose}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
+          <Alert onClose={handleClose} severity="error">
+            {alertmsg}
+          </Alert>
+        </Snackbar>
           <Box display="flex">
             <Box sx={{ flexGrow: 1 }}>
               <Typography variant="h6" gutterBottom component="div">
