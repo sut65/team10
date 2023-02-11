@@ -235,6 +235,7 @@ const ServiceCreate = () => {
     }
   };
 
+ 
   console.log(total);
   function submit() {
     let data = {
@@ -267,7 +268,7 @@ const ServiceCreate = () => {
                 title: "Saved!",
                 text: "บันทึกสำเร็จ",
               });
-              window.location.href = "/bill/create";
+              // window.location.href = "/bill/create";
               // setSuccess(true);
             } else {
               Swal.fire({
@@ -377,6 +378,7 @@ const ServiceCreate = () => {
                     <p>รูปแบบการซัก</p>
                     <FormControl fullWidth variant="outlined">
                       <Select
+                      
                         sx={{ width: 300 }}
                         value={service.TypeWashing_ID}
                         onChange={handleChange}
@@ -397,6 +399,7 @@ const ServiceCreate = () => {
                     <p>น้ำหนัก</p>
                     <FormControl fullWidth variant="outlined">
                       <Select
+              
                         sx={{ width: 300 }}
                         value={service.Weight_ID}
                         onChange={handleChange}
