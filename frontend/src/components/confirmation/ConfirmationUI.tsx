@@ -25,6 +25,7 @@ import { ConfirmationInterface } from "../../models/confirmation/IConfirmation";
 import { CompleteInterface } from "../../models/complete/IComplete";
 import ConfirmationUpdate from "./ConfirmationUpdate";
 import ConfTable from "./ConfTable";
+import Swal from "sweetalert2";
 /* -------------------------------------------------------------------------- */
 /*                                    Style                                   */
 /* -------------------------------------------------------------------------- */
@@ -137,6 +138,7 @@ function Confirmation() {
     fetch(`${apiUrl}/c_complete/${localStorage.getItem("uid")}`, requestOptions)
       .then((response) => response.json())
       .then((res) => {
+        // console.log(res)
         if (res.data) {
           // Check length of res array
           let length = res.data.length;
@@ -145,6 +147,11 @@ function Confirmation() {
           setLastComplete(res.data[length - 1]);
           setLastCompleteID(res.data[length - 1].ID);
         } else {
+          Swal.fire({
+            icon: 'warning',
+            title: 'อุ๊ปส์...',
+            text: res.error,
+          })
           console.log("else");
         }
       });
