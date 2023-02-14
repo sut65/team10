@@ -286,8 +286,7 @@ fetch(`${apiUrl}/vehicle`, requestOptions)
                 <h3>Model</h3>
                 </Grid>
               <Grid item xs={5}>
-                <TextField
-                 
+                <TextField                
                   id="Model"
                   label="Model"
                   variant="outlined"

@@ -15,8 +15,8 @@ import (
 func CreateReceive(c *gin.Context) {
 	var receive entity.Receive
 	var bill entity.Bill
-	var detergent entity.Detergent
-	var softener entity.Softener
+	var detergent entity.Stock
+	var softener entity.Stock
 	var employee entity.Employee
 	var stock entity.Stock
 	var stock2 entity.Stock
@@ -85,7 +85,7 @@ func CreateReceive(c *gin.Context) {
 	}
 
 	//ค้นหา stock ของ detergent
-	if tx := entity.DB().Where("id = ?", detergent.Stock_ID).First(&stock); tx.RowsAffected == 0 {
+	if tx := entity.DB().Where("id = ?", receive.Detergent_ID).First(&stock); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Detergent not found"})
 
 		return
@@ -98,7 +98,7 @@ func CreateReceive(c *gin.Context) {
 	}
 
 	//ค้นหา stock ของ softener
-	if tx := entity.DB().Where("id = ?", softener.Stock_ID).First(&stock2); tx.RowsAffected == 0 {
+	if tx := entity.DB().Where("id = ?", receive.Softener_ID).First(&stock2); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Softener not found"})
 
 		return
@@ -123,12 +123,12 @@ func CreateReceive(c *gin.Context) {
 	}
 	if d_u.Quantity >= 0 && s_u.Quantity >= 0 {
 		//function สำหรับอัพเดท stock ของ detergent
-		if err := entity.DB().Where("id = ?", detergent.Stock_ID).Updates(&d_u).Error; err != nil {
+		if err := entity.DB().Where("id = ?", receive.Detergent_ID).Updates(&d_u).Error; err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 		//function สำหรับอัพเดท stock ของ softener
-		if err := entity.DB().Where("id = ?", softener.Stock_ID).Updates(&s_u).Error; err != nil {
+		if err := entity.DB().Where("id = ?", receive.Softener_ID).Updates(&s_u).Error; err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
@@ -141,6 +141,26 @@ func CreateReceive(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"data": rec})
 
+}
+
+// GET /detergents
+func ListDetergents(c *gin.Context) {
+	var detergent []entity.Stock
+	if err := entity.DB().Preload("Brand").Raw("SELECT * FROM stocks WHERE type_id = 1").Find(&detergent).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": detergent})
+}
+
+// GET /softeners
+func ListSofteners(c *gin.Context) {
+	var softener []entity.Stock
+	if err := entity.DB().Preload("Brand").Raw("SELECT * FROM stocks WHERE type_id = 2").Find(&softener).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"data": softener})
 }
 
 // GET /receive/:id
@@ -160,7 +180,7 @@ func GetReceive(c *gin.Context) {
 
 func ListReceives(c *gin.Context) {
 	var receive []entity.Receive
-	if err := entity.DB().Preload("Bill").Preload("Detergent.Stock.Brand").Preload("Softener.Stock.Brand").Preload("Employee").Raw("SELECT * FROM receives").Find(&receive).Error; err != nil {
+	if err := entity.DB().Preload("Bill").Preload("Detergent.Brand").Preload("Softener.Brand").Preload("Employee").Raw("SELECT * FROM receives").Find(&receive).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
