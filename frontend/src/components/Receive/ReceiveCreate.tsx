@@ -267,7 +267,7 @@ return (
                         setReceive({ ...receive, Detergent_ID: value?.ID }); //Just Set ID to interface
                     }}
                     getOptionLabel={(option: any) =>
-                      `${option.Brand.Band_Name}`
+                      `${option.Brand.Band_Name} ${option.Size.Size_Name}`
                     } //filter value
                     renderInput={(params) => {
                       return (
@@ -284,7 +284,7 @@ return (
                           {...props}
                           value={`${option.ID}`}
                           key={`${option.ID}`}
-                        >{`${option.Brand.Band_Name}`}</li>
+                        >{`${option.Brand.Band_Name} ${option.Size.Size_Name}`}</li>
                       ); //display value
                     }}
                   />
@@ -332,7 +332,7 @@ return (
                         setReceive({ ...receive, Softener_ID: value?.ID }); //Just Set ID to interface
                     }}
                     getOptionLabel={(option: any) =>
-                      `${option.Brand.Band_Name}`
+                      `${option.Brand.Band_Name}  ${option.Size.Size_Name}`
                     } //filter value
                     renderInput={(params) => {
                       return (
@@ -349,7 +349,7 @@ return (
                           {...props}
                           value={`${option.ID}`}
                           key={`${option.ID}`}
-                        >{`${option.Brand.Band_Name}`}</li>
+                        >{`${option.Brand.Band_Name}  ${option.Size.Size_Name}`}</li>
                       ); //display value
                     }}
                   />

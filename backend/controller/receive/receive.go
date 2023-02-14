@@ -146,7 +146,7 @@ func CreateReceive(c *gin.Context) {
 // GET /detergents
 func ListDetergents(c *gin.Context) {
 	var detergent []entity.Stock
-	if err := entity.DB().Preload("Brand").Raw("SELECT * FROM stocks WHERE type_id = 1").Find(&detergent).Error; err != nil {
+	if err := entity.DB().Preload("Brand").Preload("Size").Raw("SELECT * FROM stocks WHERE type_id = 1").Find(&detergent).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -156,7 +156,7 @@ func ListDetergents(c *gin.Context) {
 // GET /softeners
 func ListSofteners(c *gin.Context) {
 	var softener []entity.Stock
-	if err := entity.DB().Preload("Brand").Raw("SELECT * FROM stocks WHERE type_id = 2").Find(&softener).Error; err != nil {
+	if err := entity.DB().Preload("Brand").Preload("Size").Raw("SELECT * FROM stocks WHERE type_id = 2").Find(&softener).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -180,7 +180,7 @@ func GetReceive(c *gin.Context) {
 
 func ListReceives(c *gin.Context) {
 	var receive []entity.Receive
-	if err := entity.DB().Preload("Bill").Preload("Detergent.Brand").Preload("Softener.Brand").Preload("Employee").Raw("SELECT * FROM receives").Find(&receive).Error; err != nil {
+	if err := entity.DB().Preload("Bill").Preload("Detergent.Brand").Preload("Detergent.Size").Preload("Softener.Brand").Preload("Softener.Size").Preload("Employee").Raw("SELECT * FROM receives").Find(&receive).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
