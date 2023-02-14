@@ -122,11 +122,11 @@ type Stock struct {
 	SizeID      *uint
 	Size        Size `gorm:"references:id" valid:"-" `
 	Employee_ID *uint
-	Employee    Employee    `gorm:"references:id" valid:"-" `
-	Quantity    int         `valid:"ValuePositive~กรุณากรอกจำนวนเป็นจำนวนเต็มบวก ,required~กรุณากรอกจำนวน"`
-	Time        time.Time   `valid:"DateTimeNotPast~กรุณากรอกวันเวลาปัจจุบัน ไม่เป็นอดีต ,DateTimeNotFuture~กรุณากรอกวันเวลาปัจจุบัน ไม่เป็นอนาคต"`
-	Detergent   []Detergent `gorm:"foreignKey:Stock_ID"`
-	Softener    []Softener  `gorm:"foreignKey:Stock_ID"`
+	Employee    Employee  `gorm:"references:id" valid:"-" `
+	Quantity    int       `valid:"ValuePositive~กรุณากรอกจำนวนเป็นจำนวนเต็มบวก ,required~กรุณากรอกจำนวน"`
+	Time        time.Time `valid:"DateTimeNotPast~กรุณากรอกวันเวลาปัจจุบัน ไม่เป็นอดีต ,DateTimeNotFuture~กรุณากรอกวันเวลาปัจจุบัน ไม่เป็นอนาคต"`
+	Detergent   []Receive `gorm:"foreignKey:Detergent_ID"`
+	Softener    []Receive `gorm:"foreignKey:Softener_ID"`
 }
 
 //end
@@ -172,7 +172,7 @@ type Service struct {
 
 	Bill_status uint
 	Address     string `valid:"minstringlength(8)~โปรดระบุให้ละเอียด,alphabet~ที่อยู่เป็นตัวอักษรพิเศษหรือภาษาอังกฤษ,required~โปรดกรอกที่อยู่"`
-	Bill_Price  int    
+	Bill_Price  int
 	Bill        []Bill `gorm:"foreignKey:Service_ID"`
 }
 
@@ -274,33 +274,20 @@ type QuotaCode struct {
 /*                                   Receive                                  */
 /* -------------------------------------------------------------------------- */
 //ระบบรับรายการผ้า
-type Detergent struct {
-	gorm.Model
-	Stock_ID *uint
-	Stock    Stock     `gorm:"references:id"`
-	Receive  []Receive `gorm:"foreignKey:Detergent_ID"`
-}
-type Softener struct {
-	gorm.Model
-	Stock_ID *uint
-	Stock    Stock     `gorm:"references:id"`
-	Receive  []Receive `gorm:"foreignKey:Softener_ID"`
-}
 type Receive struct {
 	gorm.Model
-	Employee_ID  *uint     `valid:"-"`
-	Employee     Employee  `gorm:"references:id" valid:"-"`
-	Bill_ID      *uint     `valid:"-"`
-	Bill         Bill      `gorm:"references:id" valid:"-"`
-	Detergent_ID *uint     `valid:"-"`
-	Detergent    Detergent `gorm:"references:id" valid:"-"`
-	Softener_ID  *uint     `valid:"-"`
-	Softener     Softener  `gorm:"references:id" valid:"-"`
-	Det_Quantity int       `valid:"ValueNotNegative~จำนวนผงซักฟอกต้องไม่เป็นลบ"`
-	Sof_Quantity int       `valid:"ValueNotNegative~จำนวนน้ำยาปรับผ้านุ่มต้องไม่เป็นลบ"`
-	Time_Stamp   time.Time `valid:"DateTimeNotPast~เวลาห้ามเป็นอดีต, DateTimeNotFuture~เวลาห้ามเป็นอนาคต"`
-
-	Complete []Complete `gorm:"foreignKey:Receive_ID"`
+	Employee_ID  *uint      `valid:"-"`
+	Employee     Employee   `gorm:"references:id" valid:"-"`
+	Bill_ID      *uint      `valid:"-"`
+	Bill         Bill       `gorm:"references:id" valid:"-"`
+	Detergent_ID *uint      `valid:"-"`
+	Detergent    Stock      `gorm:"references:id" valid:"-"`
+	Softener_ID  *uint      `valid:"-"`
+	Softener     Stock      `gorm:"references:id" valid:"-"`
+	Det_Quantity int        `valid:"ValueNotNegative~จำนวนผงซักฟอกต้องไม่เป็นลบ"`
+	Sof_Quantity int        `valid:"ValueNotNegative~จำนวนน้ำยาปรับผ้านุ่มต้องไม่เป็นลบ"`
+	Time_Stamp   time.Time  `valid:"DateTimeNotPast~เวลาห้ามเป็นอดีต, DateTimeNotFuture~เวลาห้ามเป็นอนาคต"`
+	Complete     []Complete `gorm:"foreignKey:Receive_ID"`
 }
 
 /* -------------------------------------------------------------------------- */

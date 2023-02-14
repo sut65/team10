@@ -63,8 +63,6 @@ func SetupDatabase() {
 		&QuotaCode{},
 
 		//Receive
-		&Detergent{},
-		&Softener{},
 		&Receive{},
 
 		//Vehicle
@@ -508,22 +506,12 @@ func SetupDatabase() {
 	db.Model(&Bill{}).Where("id = ?", 1).Updates(&Bill11)
 
 	//receive//
-	Detergent1 := Detergent{
-		Stock: stock1,
-	}
-	db.Model(&Detergent{}).Create(&Detergent1)
-
-	Softener1 := Softener{
-		Stock: stock2,
-	}
-	db.Model(&Softener{}).Create(&Softener1)
-
 	Receive1 := Receive{
 		Employee:     E1,
 		Bill:         Bill1,
-		Detergent:    Detergent1,
+		Detergent:    stock1,
 		Det_Quantity: 2,
-		Softener:     Softener1,
+		Softener:     stock2,
 		Sof_Quantity: 1,
 		Time_Stamp:   time.Date(2022, 10, 16, 12, 30, 00, 00, time.Now().Local().Location()),
 	}
@@ -531,9 +519,9 @@ func SetupDatabase() {
 	Receive2 := Receive{
 		Employee:     E1,
 		Bill:         Bill1,
-		Detergent:    Detergent1,
+		Detergent:    stock1,
 		Det_Quantity: 2,
-		Softener:     Softener1,
+		Softener:     stock2,
 		Sof_Quantity: 1,
 		Time_Stamp:   time.Date(2022, 10, 16, 12, 30, 00, 00, time.Now().Local().Location()),
 	}
@@ -541,9 +529,9 @@ func SetupDatabase() {
 	Receive3 := Receive{
 		Employee:     E1,
 		Bill:         Bill1,
-		Detergent:    Detergent1,
+		Detergent:    stock1,
 		Det_Quantity: 2,
-		Softener:     Softener1,
+		Softener:     stock2,
 		Sof_Quantity: 1,
 		Time_Stamp:   time.Date(2022, 10, 16, 12, 30, 00, 00, time.Now().Local().Location()),
 	}
@@ -631,13 +619,13 @@ func SetupDatabase() {
 		FormType_name: "การบริการ",
 	}
 	db.Model(&FormType{}).Create(&FormType1)
-	
-		FormType2 := FormType{
+
+	FormType2 := FormType{
 		Model:         gorm.Model{},
 		FormType_name: "การขนส่ง",
 	}
 	db.Model(&FormType{}).Create(&FormType2)
-		FormType3 := FormType{
+	FormType3 := FormType{
 		Model:         gorm.Model{},
 		FormType_name: "ความสะอาดเรียบร้อย",
 	}
@@ -648,17 +636,17 @@ func SetupDatabase() {
 		Satisfaction_name: "พอใจมาก",
 	}
 	db.Model(&Satisfaction{}).Create(&Satisfaction1)
-		Satisfaction2 := Satisfaction{
+	Satisfaction2 := Satisfaction{
 		Model:             gorm.Model{},
 		Satisfaction_name: "พอใจ",
 	}
 	db.Model(&Satisfaction{}).Create(&Satisfaction2)
-		Satisfaction3 := Satisfaction{
+	Satisfaction3 := Satisfaction{
 		Model:             gorm.Model{},
 		Satisfaction_name: "ปรับปรุง",
 	}
 	db.Model(&Satisfaction{}).Create(&Satisfaction3)
-		Satisfaction4 := Satisfaction{
+	Satisfaction4 := Satisfaction{
 		Model:             gorm.Model{},
 		Satisfaction_name: "แก้ไข",
 	}
