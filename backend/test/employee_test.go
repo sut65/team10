@@ -8,8 +8,6 @@ import (
 	"github.com/sut65/team10/entity"
 )
 
-
-
 func TestEmployeePass(t *testing.T) {
 	g := NewGomegaWithT(t)
 
@@ -19,7 +17,7 @@ func TestEmployeePass(t *testing.T) {
 		Name:        "sura ggg",
 		Phonnumber:  "0912352558",
 		Address:     "มหาวิทยาลัยเทคโนโลยีสุรนารี",
-		Password:   "$2a$14$93vsLSMZQO6hKDuwIgT5YeaYlcjTOksmcA4N.0c61iRtPT/RakIhC", //12345678
+		Password:    "12345678", //12345678
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -33,7 +31,6 @@ func TestEmployeePass(t *testing.T) {
 
 }
 
-
 func TestEmployeePersonalIDNotPass(t *testing.T) {
 	g := NewGomegaWithT(t)
 
@@ -43,7 +40,7 @@ func TestEmployeePersonalIDNotPass(t *testing.T) {
 		Name:        "sura ggg",
 		Phonnumber:  "0912352558",
 		Address:     "มหาวิทยาลัยเทคโนโลยีสุรนารี",
-		Password:    "$2a$14$93vsLSMZQO6hKDuwIgT5YeaYlcjTOksmcA4N.0c61iRtPT/RakIhC", //12345678
+		Password:    "12345678", //12345678
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -67,7 +64,7 @@ func TestEmployeePersonalIDNotnull(t *testing.T) {
 		Name:        "sura ggg",
 		Phonnumber:  "0912352558",
 		Address:     "มหาวิทยาลัยเทคโนโลยีสุรนารี",
-		Password:    "$2a$14$93vsLSMZQO6hKDuwIgT5YeaYlcjTOksmcA4N.0c61iRtPT/RakIhC", //12345678 
+		Password:    "12345678", //12345678
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -92,7 +89,7 @@ func TestEmployeeUsernameNotPass(t *testing.T) {
 		Name:        "sura ggg",
 		Phonnumber:  "0912352558",
 		Address:     "มหาวิทยาลัยเทคโนโลยีสุรนารี",
-		Password:    "$2a$14$93vsLSMZQO6hKDuwIgT5YeaYlcjTOksmcA4N.0c61iRtPT/RakIhC", //12345678 
+		Password:    "12345678", //12345678
 	}
 	// ตรวจสอบด้วย govalidator
 	ok, err := govalidator.ValidateStruct(p)
@@ -115,7 +112,7 @@ func TestEmployeeUsernamemachNotPass(t *testing.T) {
 		Name:        "sura ggg",
 		Phonnumber:  "0912352558",
 		Address:     "มหาวิทยาลัยเทคโนโลยีสุรนารี",
-		Password:    "$2a$14$93vsLSMZQO6hKDuwIgT5YeaYlcjTOksmcA4N.0c61iRtPT/RakIhC", //12345678
+		Password:    "12345678", //12345678
 	}
 	// ตรวจสอบด้วย govalidator
 	ok, err := govalidator.ValidateStruct(p)
@@ -130,7 +127,6 @@ func TestEmployeeUsernamemachNotPass(t *testing.T) {
 	g.Expect(err.Error()).To(Equal("Username not special characters"))
 }
 
-
 func TestEmployeeNameNotPass(t *testing.T) {
 	g := NewGomegaWithT(t)
 
@@ -140,7 +136,7 @@ func TestEmployeeNameNotPass(t *testing.T) {
 		Name:        "",
 		Phonnumber:  "0912352558",
 		Address:     "มหาวิทยาลัยเทคโนโลยีสุรนารี",
-		Password:   "$2a$14$93vsLSMZQO6hKDuwIgT5YeaYlcjTOksmcA4N.0c61iRtPT/RakIhC", //12345678 
+		Password:    "12345678", //12345678
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -165,7 +161,7 @@ func TestEmployeePhonnumberNotPass(t *testing.T) {
 		Name:        "kk",
 		Phonnumber:  "045628255",
 		Address:     "มหาวิทยาลัยเทคโนโลยีสุรนารี",
-		Password:   "$2a$14$93vsLSMZQO6hKDuwIgT5YeaYlcjTOksmcA4N.0c61iRtPT/RakIhC", //12345678 
+		Password:    "12345678", //12345678
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -190,7 +186,7 @@ func TestEmployeePhonnumberNotnull(t *testing.T) {
 		Name:        "kk",
 		Phonnumber:  "",
 		Address:     "มหาวิทยาลัยเทคโนโลยีสุรนารี",
-		Password:    "$2a$14$93vsLSMZQO6hKDuwIgT5YeaYlcjTOksmcA4N.0c61iRtPT/RakIhC", //12345678 
+		Password:    "12345678", //12345678
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -206,7 +202,6 @@ func TestEmployeePhonnumberNotnull(t *testing.T) {
 	g.Expect(err.Error()).To(Equal("กรุณากรอกเบอร์โทร"))
 }
 
-
 func TestEmployeeAddressNotPass(t *testing.T) {
 	g := NewGomegaWithT(t)
 
@@ -216,7 +211,7 @@ func TestEmployeeAddressNotPass(t *testing.T) {
 		Name:        "kk",
 		Phonnumber:  "0912352558",
 		Address:     "",
-		Password:   "$2a$14$93vsLSMZQO6hKDuwIgT5YeaYlcjTOksmcA4N.0c61iRtPT/RakIhC", //12345678 
+		Password:    "12345678", //12345678
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -240,7 +235,7 @@ func TestEmployeePasswordNotPass(t *testing.T) {
 		Name:        "kk",
 		Phonnumber:  "0912352558",
 		Address:     "มทส",
-		Password:    "1232", 
+		Password:    "1232",
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -265,7 +260,7 @@ func TestEmployeePasswordNotnull(t *testing.T) {
 		Name:        "kk",
 		Phonnumber:  "0912352558",
 		Address:     "มทส",
-		Password:    "", 
+		Password:    "",
 	}
 
 	// ตรวจสอบด้วย govalidator
