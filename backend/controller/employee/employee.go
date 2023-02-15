@@ -53,7 +53,7 @@ func CreateEmployees(c *gin.Context) {
 
 	// 14: สร้าง  employee
 	emp := entity.Employee{
-		Model:         gorm.Model{ID: employee.ID},
+		Model:        gorm.Model{ID: employee.ID},
 		Personal_ID:  employee.Personal_ID,
 		Username:     employee.Username,
 		Name:         employee.Name,
@@ -62,7 +62,7 @@ func CreateEmployees(c *gin.Context) {
 		WorkShift_ID: employee.WorkShift_ID,
 		Phonnumber:   employee.Phonnumber,
 		Address:      employee.Address,
-		Password:     string(hashPassword),
+		Password:     employee.Password,
 	}
 
 	// ขั้นตอนการ validate ที่นำมาจาก unit test
@@ -70,6 +70,8 @@ func CreateEmployees(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	emp.Password = string(hashPassword)
 
 	if err := entity.DB().Create(&emp).Error; err != nil {
 
