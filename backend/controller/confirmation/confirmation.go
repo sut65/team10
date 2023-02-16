@@ -8,6 +8,7 @@ import (
 	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"github.com/sut65/team10/entity"
+	"gorm.io/gorm/clause"
 )
 
 // type TimeForCheck struct {
@@ -73,12 +74,12 @@ func CreateConfirmation(c *gin.Context) {
 
 	// 12: สร้าง Confirmation
 	con := entity.Confirmation{
-		Complete:    complete,
-		RecvType:    recvtype,                 // โยงความสัมพันธ์กับ Entity Confirmation_Type
-		RecvTime:    confirmation.RecvTime,    // เซ็ทฟิลด์ RecvTime จากตัวแปร time
-		RecvAddress: confirmation.RecvAddress, // โยงความสัมพันธ์กับ Entity Patient
-		Customer:    customer,                 // โยงความสัมพันธ์กับ Entity Employee
-		Note:        confirmation.Note,        // ตั้งค่าฟิลด์ Symptom
+		Complete:            complete,
+		RecvType:            recvtype,                         // โยงความสัมพันธ์กับ Entity Confirmation_Type
+		RecvTime:            confirmation.RecvTime,            // เซ็ทฟิลด์ RecvTime จากตัวแปร time
+		DeliveryInstruction: confirmation.DeliveryInstruction, // โยงความสัมพันธ์กับ Entity Patient
+		Customer:            customer,                         // โยงความสัมพันธ์กับ Entity Employee
+		Note:                confirmation.Note,                // ตั้งค่าฟิลด์ Symptom
 	}
 	/* -------------------------------------------------------------------------- */
 	/*                                  Prototype                                 */
@@ -131,7 +132,7 @@ func GetConfirmation(c *gin.Context) {
 func ListConfirmations(c *gin.Context) {
 	// Load confirmation table
 	var confirmations []entity.Confirmation
-	if err := entity.DB().Preload("RecvType").Preload("Customer").Preload("Complete").Find(&confirmations).Error; err != nil {
+	if err := entity.DB().Preload("RecvType").Preload("Customer").Preload("Complete.Receive.Bill.Service").Preload(clause.Associations).Find(&confirmations).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -208,10 +209,10 @@ func UpdateConfirmation(c *gin.Context) {
 	}
 
 	conf := entity.Confirmation{
-		RecvTime:    confirmation.RecvTime.Local(),
-		RecvAddress: confirmation.RecvAddress,
-		Note:        confirmation.Note,
-		RecvType_ID: confirmation.RecvType_ID,
+		RecvTime:            confirmation.RecvTime.Local(),
+		DeliveryInstruction: confirmation.DeliveryInstruction,
+		Note:                confirmation.Note,
+		RecvType_ID:         confirmation.RecvType_ID,
 	}
 
 	if _, err := govalidator.ValidateStruct(conf); err != nil {

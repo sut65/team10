@@ -148,10 +148,10 @@ function Confirmation() {
           setLastCompleteID(res.data[length - 1].ID);
         } else {
           Swal.fire({
-            icon: 'warning',
-            title: 'อุ๊ปส์...',
+            icon: "warning",
+            title: "อุ๊ปส์...",
             text: res.error,
-          })
+          });
           console.log("else");
         }
       });
@@ -199,7 +199,7 @@ function Confirmation() {
     let data = {
       Complete_ID: convertType(last_complete_id),
       RecvType_ID: convertType(confirmation.RecvType_ID),
-      RecvAddress: confirmation.RecvAddress,
+      DeliveryInstruction: confirmation.DeliveryInstruction,
       RecvTime: recvtime,
       Note: confirmation.Note,
       Customer_ID: Number(localStorage.getItem("uid")),
@@ -331,19 +331,19 @@ function Confirmation() {
                   <Box paddingBottom={2} paddingX={2}>
                     <Stack>
                       <div style={{ fontSize: "15px", fontWeight: "bold" }}>
-                        Receive Address
+                        Delivery Instruction
                       </div>
                       <FormControl fullWidth variant="outlined">
                         <TextField
-                          id="RecvAddress"
+                          id="DeliveryInstruction"
                           variant="outlined"
                           type="string"
                           size="medium"
                           multiline={true}
                           minRows={2}
                           maxRows={2}
-                          placeholder="Insert Address Details"
-                          value={confirmation.RecvAddress || ""}
+                          placeholder="Insert delivery instruction details"
+                          value={confirmation.DeliveryInstruction || ""}
                           onChange={handleInputChange}
                           sx={{ bgcolor: "#feefd1" }}
                         />
