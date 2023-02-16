@@ -43,7 +43,10 @@ function Delivery() {
   const [vehicle, setVehicle] = useState<VehicleInterface[]>([]);
 
   const [cust_name, setCustomerName] = useState<string | undefined>(undefined);
-  const [conf_recvAddress, setRecvAdress] = useState<string | undefined>(
+  const [address, setAddress] = useState<string | undefined>(
+    undefined
+  );
+  const [conf_deli_ins, setDeliveryInstruction] = useState<string | undefined>(
     undefined
   );
   const [conf_recvTime, setRecvTime] = useState<any | undefined>(undefined);
@@ -132,6 +135,7 @@ function Delivery() {
     fetch(`${apiUrl}/confirmations`, requestOptions)
       .then((response) => response.json())
       .then((res) => {
+        // console.log(res.data)
         if (res.data) {
           setConfirmation(res.data);
         } else {
@@ -248,14 +252,23 @@ function Delivery() {
                                 >
                                   &#8205;{cust_name}
                                 </div>
-                                <div>Receive Address</div>
+                                <div>Address</div>
                                 <div
                                   style={{
                                     background: "#feefd1",
                                     color: "#0081C9",
                                   }}
                                 >
-                                  &#8205;{conf_recvAddress}
+                                  &#8205;{address}
+                                </div>
+                                <div>Delivery Instruction</div>
+                                <div
+                                  style={{
+                                    background: "#feefd1",
+                                    color: "#0081C9",
+                                  }}
+                                >
+                                  &#8205;{conf_deli_ins}
                                 </div>
                                 <div>Receive Method</div>
                                 <div
@@ -303,10 +316,11 @@ function Delivery() {
                                 Confirmation_ID: value?.ID,
                               });
                               setCustomerName(value?.Customer.Customer_Name);
-                              setRecvAdress(value?.RecvAddress);
+                              setDeliveryInstruction(value?.DeliveryInstruction);
                               setRecvTime(value?.RecvTime);
                               setRecvType(value?.RecvType.Name);
                               setNote(value?.Note);
+                              setAddress(value?.Complete.Receive.Bill.Service.Address)
                               //Just Set ID to interface
                             }}
                             sx={{ bgcolor: "#feefd1" }}

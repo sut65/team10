@@ -350,16 +350,16 @@ type Complete struct {
 /* -------------------------------------------------------------------------- */
 type Confirmation struct {
 	gorm.Model
-	Complete_ID *uint     `valid:"-"` //prevent valid from this or upper entity
-	Complete    Complete  `gorm:"references:id" valid:"-"`
-	Customer_ID *uint     `valid:"-"` //prevent valid from this or upper entity
-	Customer    Customer  `gorm:"references:id" valid:"-"`
-	RecvTime    time.Time `valid:"required~ต้องใส่ข้อมูลเวลา,current_time_as_min~เวลาต้องไม่เป็นอดีต"`
-	RecvAddress string    `valid:"required~กรุณากรอกที่อยู่จัดส่ง"`
-	RecvType_ID *uint
-	RecvType    RecvType `gorm:"references:id"`
-	Note        string
-	Delivery    []Delivery `gorm:"foreignKey:Confirmation_ID"`
+	Complete_ID         *uint     `valid:"-"` //prevent valid from this or upper entity
+	Complete            Complete  `gorm:"references:id" valid:"-"`
+	Customer_ID         *uint     `valid:"-"` //prevent valid from this or upper entity
+	Customer            Customer  `gorm:"references:id" valid:"-"`
+	RecvTime            time.Time `valid:"required~ต้องใส่ข้อมูลเวลา,current_time_as_min~เวลาต้องไม่เป็นอดีต"`
+	DeliveryInstruction string    `valid:"required~กรุณากรอกขั้นตอนปฎิบัติของการจัดส่ง"`
+	RecvType_ID         *uint
+	RecvType            RecvType `gorm:"references:id"`
+	Note                string
+	Delivery            []Delivery `gorm:"foreignKey:Confirmation_ID"`
 }
 
 type RecvType struct {
