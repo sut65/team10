@@ -14,8 +14,8 @@ func TestConfTimeNotPast(t *testing.T) {
 	g := NewGomegaWithT(t)
 
 	conf := entity.Confirmation{
-		RecvTime:    time.Now().Local().Add(time.Second * -300), // ผิด time is in past
-		RecvAddress: "Some location",
+		RecvTime:            time.Now().Local().Add(time.Second * -300), // ผิด time is in past
+		DeliveryInstruction: "Some Instruction",
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -36,8 +36,8 @@ func TestConfTimeNotNull(t *testing.T) {
 	g := NewGomegaWithT(t)
 
 	conf := entity.Confirmation{
-		RecvTime:    time.Time{}, // ผิด RecvTime is Null
-		RecvAddress: "Some location",
+		RecvTime:            time.Time{}, // ผิด RecvTime is Null
+		DeliveryInstruction: "Some Instruction",
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -57,8 +57,8 @@ func TestRecvAddressNotNull(t *testing.T) {
 	g := NewGomegaWithT(t)
 
 	conf := entity.Confirmation{
-		RecvTime:    time.Now().Local().Add(time.Minute * 1),
-		RecvAddress: "",
+		RecvTime:            time.Now().Local().Add(time.Minute * 1),
+		DeliveryInstruction: "",
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -71,5 +71,5 @@ func TestRecvAddressNotNull(t *testing.T) {
 	g.Expect(err).ToNot(BeNil())
 
 	// err.Error ต้องมี error message แสดงออกมา
-	g.Expect(err.Error()).To(Equal("กรุณากรอกที่อยู่จัดส่ง"))
+	g.Expect(err.Error()).To(Equal("กรุณากรอกขั้นตอนปฎิบัติของการจัดส่ง"))
 }
