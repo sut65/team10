@@ -264,11 +264,11 @@ func TestCustomerPromptpay(t *testing.T) {
 func TestCustomerPassword(t *testing.T) {
 	g := NewGomegaWithT(t)
 
-	//ทำการตรวจสอบ Password ต้องมีตัวเลข 0-9 หรือ ตัวอักษร อย่างน้อย 6 ตัว
+	//ทำการตรวจสอบ Password ต้องมีตัวเลข 0-9 หรือ ตัวอักษร อย่างน้อย 8 ตัว
 	fixtures := []string{
-		"0000",  //ผิดเพราะเลขไม่ครบ 6
-		"cream", // ผิดเพราะตัวอักษรไม่ครบ 6
-		"cre6",  //ผิดเพราะไม่ครบ 6
+		"0000",  //ผิดเพราะเลขไม่ครบ 8
+		"cream", // ผิดเพราะตัวอักษรไม่ครบ 8
+		"cre6",  //ผิดเพราะไม่ครบ 8
 	}
 	for _, fixture := range fixtures {
 		customer := entity.Customer{
