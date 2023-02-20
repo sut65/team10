@@ -299,12 +299,12 @@ const ServiceCreate = () => {
     getTypeWashing();
     getWeight();
     getDelivery();
-
     // getServices();
   }, []);
 
   return (
     <div>
+      
       <Container maxWidth="md" sx={{ p: 3 }}>
         <div>
           <Snackbar
