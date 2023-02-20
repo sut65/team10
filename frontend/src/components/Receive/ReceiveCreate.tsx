@@ -35,8 +35,8 @@ function ReceiveCreate (){
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
   const [receive, setReceive] = React.useState<Partial<ReceiveInterface>>({});
   const [bill, setBill] = React.useState<BillInterface[]>([]);
-  const [detergent, setDetergent] = React.useState<DetergentInterface[]>([]);
-  const [softener, setSoftener] = React.useState<SoftenerInterface[]>([]);
+  const [detergent, setDetergent] = React.useState<ReceiveInterface[]>([]);
+  const [softener, setSoftener] = React.useState<ReceiveInterface[]>([]);
   const [det_quantity, setDet_Quantity] = React.useState<number | null>(null);
   const [sof_quantity, setSof_Quantity] = React.useState<number | null>(null);
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
@@ -267,7 +267,7 @@ return (
                         setReceive({ ...receive, Detergent_ID: value?.ID }); //Just Set ID to interface
                     }}
                     getOptionLabel={(option: any) =>
-                      `${option.Stock.Brand.Band_Name}`
+                      `${option.Brand.Band_Name} ${option.Size.Size_Name}`
                     } //filter value
                     renderInput={(params) => {
                       return (
@@ -284,7 +284,7 @@ return (
                           {...props}
                           value={`${option.ID}`}
                           key={`${option.ID}`}
-                        >{`${option.Stock.Brand.Band_Name}`}</li>
+                        >{`${option.Brand.Band_Name} ${option.Size.Size_Name}`}</li>
                       ); //display value
                     }}
                   />
@@ -332,7 +332,7 @@ return (
                         setReceive({ ...receive, Softener_ID: value?.ID }); //Just Set ID to interface
                     }}
                     getOptionLabel={(option: any) =>
-                      `${option.Stock.Brand.Band_Name}`
+                      `${option.Brand.Band_Name}  ${option.Size.Size_Name}`
                     } //filter value
                     renderInput={(params) => {
                       return (
@@ -349,7 +349,7 @@ return (
                           {...props}
                           value={`${option.ID}`}
                           key={`${option.ID}`}
-                        >{`${option.Stock.Brand.Band_Name}`}</li>
+                        >{`${option.Brand.Band_Name}  ${option.Size.Size_Name}`}</li>
                       ); //display value
                     }}
                   />

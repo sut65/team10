@@ -39,8 +39,8 @@ function ConfTable() {
   const columns: GridColDef[] = [
     { field: "ID", headerName: "ID", width: 50 },
     {
-      field: "RecvAddress",
-      headerName: "Receive Address",
+      field: "DeliveryInstruction",
+      headerName: "Delivery Instruction",
       width: 150,
       //   valueGetter: (params) => params.value.RecvAddress,
       //***valueFormatter*** value will remain same (Object object) and add it to DataGrid

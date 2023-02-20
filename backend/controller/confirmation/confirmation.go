@@ -33,19 +33,19 @@ func CreateConfirmation(c *gin.Context) {
 
 	// 9: ค้นหา recvtype ด้วย id
 	if tx := entity.DB().Where("id = ?", confirmation.RecvType_ID).First(&recvtype); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "recvtype not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Receive Method not found"})
 		return
 	}
 
-	// 10: ค้นหา disease ด้วย id
+	// 10: ค้นหา complete ด้วย id
 	if tx := entity.DB().Where("id = ?", confirmation.Complete_ID).First(&complete); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "complete not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Complete not found"})
 		return
 	}
 
 	// 10: ค้นหา disease ด้วย id
 	if tx := entity.DB().Where("id = ?", confirmation.Customer_ID).First(&customer); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "customer not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Customer not found"})
 		return
 	}
 
@@ -74,12 +74,12 @@ func CreateConfirmation(c *gin.Context) {
 
 	// 12: สร้าง Confirmation
 	con := entity.Confirmation{
-		Complete:    complete,
-		RecvType:    recvtype,                 // โยงความสัมพันธ์กับ Entity Confirmation_Type
-		RecvTime:    confirmation.RecvTime,    // เซ็ทฟิลด์ RecvTime จากตัวแปร time
-		RecvAddress: confirmation.RecvAddress, // โยงความสัมพันธ์กับ Entity Patient
-		Customer:    customer,                 // โยงความสัมพันธ์กับ Entity Employee
-		Note:        confirmation.Note,        // ตั้งค่าฟิลด์ Symptom
+		Complete:            complete,
+		RecvType:            recvtype,                         // โยงความสัมพันธ์กับ Entity Confirmation_Type
+		RecvTime:            confirmation.RecvTime,            // เซ็ทฟิลด์ RecvTime จากตัวแปร time
+		DeliveryInstruction: confirmation.DeliveryInstruction, // โยงความสัมพันธ์กับ Entity Patient
+		Customer:            customer,                         // โยงความสัมพันธ์กับ Entity Employee
+		Note:                confirmation.Note,                // ตั้งค่าฟิลด์ Symptom
 	}
 	/* -------------------------------------------------------------------------- */
 	/*                                  Prototype                                 */
@@ -132,7 +132,7 @@ func GetConfirmation(c *gin.Context) {
 func ListConfirmations(c *gin.Context) {
 	// Load confirmation table
 	var confirmations []entity.Confirmation
-	if err := entity.DB().Preload("RecvType").Preload("Customer").Preload("Complete").Find(&confirmations).Error; err != nil {
+	if err := entity.DB().Preload("RecvType").Preload("Customer").Preload("Complete.Receive.Bill.Service").Preload(clause.Associations).Find(&confirmations).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -209,10 +209,10 @@ func UpdateConfirmation(c *gin.Context) {
 	}
 
 	conf := entity.Confirmation{
-		RecvTime:    confirmation.RecvTime.Local(),
-		RecvAddress: confirmation.RecvAddress,
-		Note:        confirmation.Note,
-		RecvType_ID: confirmation.RecvType_ID,
+		RecvTime:            confirmation.RecvTime.Local(),
+		DeliveryInstruction: confirmation.DeliveryInstruction,
+		Note:                confirmation.Note,
+		RecvType_ID:         confirmation.RecvType_ID,
 	}
 
 	if _, err := govalidator.ValidateStruct(conf); err != nil {
@@ -229,19 +229,60 @@ func UpdateConfirmation(c *gin.Context) {
 
 }
 
+/* -------------------------------------------------------------------------- */
+/*                        List Complete by Customer_ID                        */
+/* -------------------------------------------------------------------------- */
+// List Complete by Customer_ID in with check if it yet in confirmation table
 // GET /c_completes/:id
 func ListComplete(c *gin.Context) {
 	var complete []entity.Complete
 	customer_id := c.Param("id")
-	// Preload ตัวแรก กำหนด ความลึกมากที่สุดที่ต้องการจะ Preload
-	// Preload ตัวที่ 2 สั่งให้ Preload สิ่งที่เกี่ยวข้องทั้งหมดกับความลึกที่ได้กำหนดไว้จากตัวแรก
-	if err := entity.DB().Preload("Receive.Bill.Service").Preload(clause.Associations).Raw("SELECT * FROM completes").Where("customer_id = ?", customer_id).Find(&complete).Error; err != nil {
+	// Join table trying to find match customer_id
+	if err := entity.DB().Raw("SELECT * FROM completes c "+
+		"JOIN receives r ON r.id = c.receive_id "+
+		"JOIN bills b ON b.id = r.bill_id "+
+		"JOIN services s ON s.id = b.service_id "+
+		"WHERE s.customer_id = ?", customer_id).Find(&complete).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": complete})
+	// Load confirmation table
+	var confirmations []entity.Confirmation
+	if err := entity.DB().Preload("Complete").Find(&confirmations).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// variable to map used complete_id "uint" to store id & "bool" to store true false
+	usedIDs := make(map[uint]bool)
+
+	// for loop to check complete_id not yet in confirmations table
+	for _, confirmation := range confirmations {
+		if confirmation.Complete_ID != nil {
+			usedIDs[*confirmation.Complete_ID] = true
+		}
+	}
+
+	// Create new variable that check usedId(complete_id) to prepare to send to http request
+	var newCompletes []entity.Complete
+	for _, complete := range complete {
+		if !usedIDs[complete.ID] {
+			newCompletes = append(newCompletes, complete)
+		}
+	}
+
+	if len(newCompletes) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ยังไม่มีรายการผ้าที่ซักเสร็จของคุณ กรุณาลองใหม่ในภายหลัง"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": newCompletes})
 }
+
+/* -------------------------------------------------------------------------- */
+/*                     End of List Complete by Customer_ID                    */
+/* -------------------------------------------------------------------------- */
 
 //	func RegisterCurrentTimeAsMin(v *validator.Validate) {
 //		v.RegisterValidation("current_time_as_min", func(fl validator.FieldLevel) bool {

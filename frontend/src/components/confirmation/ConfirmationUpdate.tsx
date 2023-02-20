@@ -47,7 +47,7 @@ function Confirmation() {
   const [confirmation_id, setConfirmation_ID] = useState<number | undefined>(
     undefined
   );
-  const [old_recv_address, setOldRecvAddress] = useState<string>("");
+  const [old_recv_ins, setOldDeliveryInstruction] = useState<string>("");
   const [old_note, setOldNote] = useState<string>("");
   const [old_recv_type, setOldRecvType] = useState<string | undefined>(
     undefined
@@ -146,7 +146,7 @@ function Confirmation() {
           setCustomerID(res.data.Customer.ID);
           setCustomerName(res.data.Customer.Customer_Name);
           setOldNote(res.data.Note);
-          setOldRecvAddress(res.data.RecvAddress);
+          setOldDeliveryInstruction(res.data.DeliveryInstruction);
           setOldRecvTime(res.data.RecvTime);
           setOldRecvType(res.data.RecvType.Name);
           setConfirmation_ID(res.data.ID);
@@ -175,7 +175,7 @@ function Confirmation() {
     let data = {
       ID: confirmation_id, //debug
       RecvType_ID: convertType(confirmation.RecvType_ID),
-      RecvAddress: confirmation.RecvAddress,
+      DeliveryInstruction: confirmation.DeliveryInstruction,
       RecvTime: recvtime,
       Note: confirmation.Note,
     };
@@ -300,9 +300,9 @@ function Confirmation() {
                 >
                   Saved Infomation
                 </div>
-                <div>Receive Address</div>
+                <div>Delivery Instruction</div>
                 <div style={{ background: "#feefd1", color: "#0081C9" }}>
-                  &#8205;{old_recv_address}
+                  &#8205;{old_recv_ins}
                 </div>
                 <div>Receive Method</div>
                 <div style={{ background: "#feefd1", color: "#0081C9" }}>
@@ -326,19 +326,19 @@ function Confirmation() {
               <Box paddingBottom={2} paddingX={2}>
                 <Stack>
                   <div style={{ fontSize: "15px", fontWeight: "bold" }}>
-                    New Receive Address
+                    New Delivery Instruction
                   </div>
                   <FormControl fullWidth variant="outlined">
                     <TextField
-                      id="RecvAddress"
+                      id="DeliveryInstruction"
                       variant="outlined"
                       type="string"
                       size="medium"
                       multiline={true}
                       minRows={2}
                       maxRows={2}
-                      placeholder={"Insert Address Detail"}
-                      value={confirmation.RecvAddress || ""}
+                      placeholder={"Insert delivery instruction details"}
+                      value={confirmation.DeliveryInstruction || ""}
                       onChange={handleInputChange}
                       sx={{ bgcolor: "#feefd1" }}
                     />
