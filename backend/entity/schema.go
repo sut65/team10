@@ -36,6 +36,7 @@ type Customer struct {
 	Customer_Promptpay string `valid:"matches((^[0][0-9]{9}$)|([0-9]{13}))~Promptpay is not valid,required~Promptpay not blank"`
 	Customer_Password  string `valid:"minstringlength(8)~Password must be more than or equal to 8 characters,required~Password not blank"`
 	Customer_Address   string `valid:"required~Address not blank"`
+	Customer_Datetime  time.Time
 
 	Gender_ID *uint  `valid:"-"`
 	Gender    Gender `gorm:"references:id" valid:"-"`
@@ -339,7 +340,7 @@ type Complete struct {
 	Receive_ID *uint   `valid:"-"`
 	Receive    Receive `gorm:"references:id" valid:"-"`
 
-	Packaging_ID *uint     `valid:"-"`
+	Packaging_ID *int     `valid:"-"`
 	Packaging    Packaging `gorm:"references:id" valid:"-"`
 
 	Confirmation []Confirmation `gorm:"foreignKey:Complete_ID"`
