@@ -174,6 +174,7 @@ type Service struct {
 	Bill_status uint
 	Address     string `valid:"minstringlength(8)~โปรดระบุให้ละเอียด,alphabet~ที่อยู่เป็นตัวอักษรพิเศษหรือภาษาอังกฤษ,required~โปรดกรอกที่อยู่"`
 	Bill_Price  int
+	Service_Time time.Time 
 	Bill        []Bill `gorm:"foreignKey:Service_ID"`
 }
 
@@ -205,6 +206,9 @@ type Form struct {
 
 	Customer_ID *uint    `valid:"-"`
 	Customer    Customer `gorm:"references:id" valid:"-"`
+
+	Form_Time time.Time
+
 }
 
 /* -------------------------------------------------------------------------- */

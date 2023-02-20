@@ -1,10 +1,13 @@
 package controller
 
 import (
+	"time"
+
 	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"github.com/sut65/team10/entity"
 	"gorm.io/gorm"
+
 	// "gorm.io/gorm/clause"
 
 	"net/http"
@@ -64,6 +67,7 @@ func CreateService(c *gin.Context) {
 		Address:      service.Address,
 		Bill_status:  0,
 		Customer:     customer,
+		Service_Time: time.Now(),
 		// ตั้งค่าฟิลด์ Address
 	}
 	if _, err := govalidator.ValidateStruct(sv); err != nil {

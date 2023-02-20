@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
@@ -55,6 +56,7 @@ func CreateForm(c *gin.Context) {
 		Satisfaction: satisfaction,
 		FormType:     formtype,
 		Customer:     customer,
+		Form_Time: time.Now(),
     }
 
 	if _, err := govalidator.ValidateStruct(fm); err != nil {
