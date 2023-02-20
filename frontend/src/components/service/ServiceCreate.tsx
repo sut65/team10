@@ -290,30 +290,12 @@ const ServiceCreate = () => {
       },
       body: JSON.stringify(data),
     };
-    // fetch(`${apiUrl}/services`, requestOptionsPost)
-    //   .then((response) => response.json())
-    //   .then((res) => {
-    //     console.log(res);
-    //     // if (res.data) {
-    //     //   setSuccess(true);
-    //     //   window.location.reload();
-
-    //     // } else {
-
-    //     //   setError(true);
-    //     // }
-    //     if (res.data) {
-    //       setSuccess(true);
-    //     } else {
-    //       setAlertMessage(res.error);
-    //       setError(true);
-    //     }
-    //   });
   }
 
   //================================================================================================================//
 
   useEffect(() => {
+
     getTypeWashing();
     getWeight();
     getDelivery();
