@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"time"
+
 	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"github.com/sut65/team10/entity"
@@ -50,6 +52,7 @@ func CreateCustomer(c *gin.Context) {
 		Customer_Promptpay: customers.Customer_Promptpay,
 		Customer_Password:  customers.Customer_Password,
 		Customer_Address:   customers.Customer_Address,
+		Customer_Datetime:  time.Now(),
 	}
 	if _, err := govalidator.ValidateStruct(cus); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
