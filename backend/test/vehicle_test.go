@@ -9,6 +9,27 @@ import (
 	"github.com/sut65/team10/entity"
 )
 
+// Vehicle ถูกทั้งหมด
+func TestVehicleALLPass(t *testing.T) {
+	g := NewGomegaWithT(t)
+
+	vehicle := entity.Vehicle{
+		ListModel:      "Scoopyi",
+		Registration:   "กษ5336",
+		Date_Insulance: time.Now().Add(time.Second * 300),
+	}
+
+	// ตรวจสอบด้วย govalidator
+	ok, err := govalidator.ValidateStruct(vehicle)
+
+	//ถ้าข้อมูลถูก ok จะเป็น true
+	g.Expect(ok).To(BeTrue())
+
+	//ถ้าข้อมูลถูก err จะเป็น nil
+	g.Expect(err).To(BeNil())
+
+}
+
 // ตรวจสอบรุ่นของรถแล้วต้องเจอ Error
 func TestModelNotBlank(t *testing.T) {
 	g := NewGomegaWithT(t)

@@ -8,6 +8,26 @@ import (
 	"github.com/sut65/team10/entity"
 )
 
+// Delivery ถูกทั้งหมด
+func TestDeliveryALLPass(t *testing.T) {
+	g := NewGomegaWithT(t)
+
+	deli := entity.Delivery{
+		Score:   5,
+		Problem: "-",
+	}
+
+	// ตรวจสอบด้วย govalidator
+	ok, err := govalidator.ValidateStruct(deli)
+
+	//ถ้าข้อมูลถูก ok จะเป็น true
+	g.Expect(ok).To(BeTrue())
+
+	//ถ้าข้อมูลถูก err จะเป็น nil
+	g.Expect(err).To(BeNil())
+
+}
+
 func TestDeliveryScoreNotNull(t *testing.T) {
 	g := NewGomegaWithT(t)
 

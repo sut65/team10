@@ -9,6 +9,25 @@ import (
 	"github.com/sut65/team10/entity"
 )
 
+// Complete ถูกทั้งหมด
+func TestCompleteALLPass(t *testing.T) {
+	g := NewGomegaWithT(t)
+
+	complete := entity.Complete{
+		Complete_datetime: time.Now().Local().Add(time.Second * 200),
+	}
+
+	// ตรวจสอบด้วย govalidator
+	ok, err := govalidator.ValidateStruct(complete)
+
+	//ถ้าข้อมูลถูก ok จะเป็น true
+	g.Expect(ok).To(BeTrue())
+
+	//ถ้าข้อมูลถูก err จะเป็น nil
+	g.Expect(err).To(BeNil())
+
+}
+
 // ตรวจสอบเวลาแล้วต้องเจอ Error
 func TestTimeNotPast(t *testing.T) {
 	g := NewGomegaWithT(t)

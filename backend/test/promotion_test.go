@@ -9,6 +9,27 @@ import (
 	"github.com/sut65/team10/entity"
 )
 
+// Promotion ถูกทั้งหมด
+func TestPromotionALLPass(t *testing.T) {
+	g := NewGomegaWithT(t)
+
+	p := entity.Promotion{
+		Price:      1, // ผิด
+		Amount:     2,
+		Time_Stamp: time.Now().Local().Add(time.Second * 200),
+	}
+
+	// ตรวจสอบด้วย govalidator
+	ok, err := govalidator.ValidateStruct(p)
+
+	//ถ้าข้อมูลถูก ok จะเป็น true
+	g.Expect(ok).To(BeTrue())
+
+	//ถ้าข้อมูลถูก err จะเป็น nil
+	g.Expect(err).To(BeNil())
+
+}
+
 // ตรวจสอบจำนวนเงินห้ามเป็นค่าติดลบ
 func TestPriceNotNegative(t *testing.T) {
 	g := NewGomegaWithT(t)
@@ -16,7 +37,7 @@ func TestPriceNotNegative(t *testing.T) {
 	p := entity.Promotion{
 		Price:      -1, // ผิด
 		Amount:     2,
-		Time_Stamp: time.Now(),
+		Time_Stamp: time.Now().Local(),
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -39,7 +60,7 @@ func TestAmountNotNegative(t *testing.T) {
 	p := entity.Promotion{
 		Price:      2,
 		Amount:     -2, // ผิด
-		Time_Stamp: time.Now(),
+		Time_Stamp: time.Now().Local(),
 	}
 
 	// ตรวจสอบด้วย govalidator

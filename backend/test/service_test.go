@@ -8,6 +8,25 @@ import (
 	"github.com/sut65/team10/entity"
 )
 
+// Service ถูกทั้งหมด
+func TestServiceALLPass(t *testing.T) {
+	g := NewGomegaWithT(t)
+
+	service := entity.Service{
+		Address: "55 สุรนารี อ.เมือง จ.นครราชสีมา 30000",
+	}
+
+	// ตรวจสอบด้วย govalidator
+	ok, err := govalidator.ValidateStruct(service)
+
+	//ถ้าข้อมูลถูก ok จะเป็น true
+	g.Expect(ok).To(BeTrue())
+
+	//ถ้าข้อมูลถูก err จะเป็น nil
+	g.Expect(err).To(BeNil())
+
+}
+
 // ตรวจสอบค่าว่างของชื่อแล้วต้องเจอ Error
 func TestAddressNotBlank(t *testing.T) {
 	g := NewGomegaWithT(t)

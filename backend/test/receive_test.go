@@ -9,6 +9,27 @@ import (
 	"github.com/sut65/team10/entity"
 )
 
+// Receive ถูกทั้งหมด
+func TestReceiveALLPass(t *testing.T) {
+	g := NewGomegaWithT(t)
+
+	receive := entity.Receive{
+		Det_Quantity: 1,
+		Sof_Quantity: 1,
+		Time_Stamp:   time.Now(),
+	}
+
+	// ตรวจสอบด้วย govalidator
+	ok, err := govalidator.ValidateStruct(receive)
+
+	//ถ้าข้อมูลถูก ok จะเป็น true
+	g.Expect(ok).To(BeTrue())
+
+	//ถ้าข้อมูลถูก err จะเป็น nil
+	g.Expect(err).To(BeNil())
+
+}
+
 // ตรวจสอบจำนวนของผงซักฟอกแล้วต้องเจอ Error
 func TestDetQuantityNotNegative(t *testing.T) {
 	g := NewGomegaWithT(t)

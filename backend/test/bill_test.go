@@ -9,6 +9,26 @@ import (
 	"github.com/sut65/team10/entity"
 )
 
+// Bill ถูกทั้งหมด
+func TestBillALLPass(t *testing.T) {
+	g := NewGomegaWithT(t)
+
+	p := entity.Bill{
+		Bill_Price: 2,
+		Time_Stamp: time.Now().Local().Add(time.Second * 200),
+	}
+
+	// ตรวจสอบด้วย govalidator
+	ok, err := govalidator.ValidateStruct(p)
+
+	//ถ้าข้อมูลถูก ok จะเป็น true
+	g.Expect(ok).To(BeTrue())
+
+	//ถ้าข้อมูลถูก err จะเป็น nil
+	g.Expect(err).To(BeNil())
+
+}
+
 // ตรวจสอบเวลาห้ามเป็นอนาคตเกิน 5 นาที
 func TestBillDateTimeNotFuture(t *testing.T) {
 	g := NewGomegaWithT(t)

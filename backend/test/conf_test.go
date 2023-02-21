@@ -9,6 +9,26 @@ import (
 	"github.com/sut65/team10/entity"
 )
 
+// Confirmation ถูกทั้งหมด
+func TestConfirmationfALLPass(t *testing.T) {
+	g := NewGomegaWithT(t)
+
+	conf := entity.Confirmation{
+		RecvTime:            time.Now().Local().Add(time.Second * 200),
+		DeliveryInstruction: "Some Instruction",
+	}
+
+	// ตรวจสอบด้วย govalidator
+	ok, err := govalidator.ValidateStruct(conf)
+
+	//ถ้าข้อมูลถูก ok จะเป็น true
+	g.Expect(ok).To(BeTrue())
+
+	//ถ้าข้อมูลถูก err จะเป็น nil
+	g.Expect(err).To(BeNil())
+
+}
+
 // ตรวจสอบเวลาแล้วต้องเจอ Error
 func TestConfTimeNotPast(t *testing.T) {
 	g := NewGomegaWithT(t)
