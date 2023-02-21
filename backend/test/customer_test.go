@@ -2,7 +2,7 @@ package test
 
 import (
 	"testing"
-
+	"time"
 	"github.com/asaskevich/govalidator"
 	. "github.com/onsi/gomega"
 	"github.com/sut65/team10/entity"
@@ -19,6 +19,7 @@ func TestCustomerALLPass(t *testing.T) {
 		Customer_Promptpay: "0912345265",
 		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234 //On test Purpose
 		Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
+		Customer_Datetime:  time.Time{},
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -43,6 +44,7 @@ func TestNameNotBlank(t *testing.T) {
 		Customer_Promptpay: "0912345265",
 		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234 //On test Purpose
 		Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
+		Customer_Datetime:  time.Time{},
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -69,6 +71,7 @@ func TestUsernameNotBlank(t *testing.T) {
 		Customer_Promptpay: "0912345265",
 		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234 //On test Purpose
 		Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
+		Customer_Datetime:  time.Time{},
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -95,6 +98,7 @@ func TestPhoneNotBlank(t *testing.T) {
 		Customer_Promptpay: "0912345265",
 		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234 //On test Purpose
 		Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
+		Customer_Datetime:  time.Time{},
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -121,6 +125,7 @@ func TestPromptpayNotBlank(t *testing.T) {
 		Customer_Promptpay: "",                                                             //ผิด
 		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234 //On test Purpose
 		Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
+		Customer_Datetime:  time.Time{},
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -147,6 +152,7 @@ func TestPasswordNotBlank(t *testing.T) {
 		Customer_Promptpay: "0912345265",
 		Customer_Password:  "", //ผิด
 		Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
+		Customer_Datetime:  time.Time{},
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -172,7 +178,8 @@ func TestAddressdNotBlank(t *testing.T) {
 		Customer_Phone:     "0967436705",
 		Customer_Promptpay: "0912345265",
 		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234 //On test Purpose
-		Customer_Address:   "",                                                             //ผิด
+		Customer_Address:   "", 
+		Customer_Datetime:  time.Time{},                                                            //ผิด
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -193,7 +200,7 @@ func TestCustomerUsername(t *testing.T) {
 
 	//ทำการตรวจสอบ Username ห้ามเป็นอักษรพิเศษ
 	fixtures := []string{
-		"*rtyw7", //ขึ้นต้นไม่เป็นตัวอักษร
+		"*rtyw7", //มีตัวอักษรพิเศษ
 	}
 	for _, fixture := range fixtures {
 		customer := entity.Customer{
@@ -203,6 +210,7 @@ func TestCustomerUsername(t *testing.T) {
 			Customer_Promptpay: "0912345265",
 			Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234 //On test Purpose ,
 			Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
+			Customer_Datetime:  time.Time{},
 		}
 
 		ok, err := govalidator.ValidateStruct(customer)
@@ -233,6 +241,7 @@ func TestCustomerPhone(t *testing.T) {
 		Customer_Promptpay: "0912345265",
 		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234 //On test Purpose ,
 		Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
+		Customer_Datetime:  time.Time{},
 	}
 
 	ok, err := govalidator.ValidateStruct(customer)
@@ -274,6 +283,7 @@ func TestCustomerPromptpay(t *testing.T) {
 		Customer_Promptpay: "Cream_9",
 		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234 //On test Purpose ,
 		Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
+		Customer_Datetime:  time.Time{},
 	}
 
 	ok, err := govalidator.ValidateStruct(customer)
