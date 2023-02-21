@@ -9,6 +9,7 @@ import (
 )
 
 // validates token // เพื่อยืนยันว่ามี token จริง
+// เป็นแค่โปรแกรมตรวจสอบว่าฟังก์ชั่นมีอยู่จริงๆ ตรวจจากการ GET เป็นต้น ที่จะมีตัว Authorize Header กับ Bearer
 func Authorizes() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		clientToken := c.Request.Header.Get("Authorization")
@@ -38,7 +39,6 @@ func Authorizes() gin.HandlerFunc {
 			return
 
 		}
-
 		c.Set("username", claims.Username)
 		c.Next()
 	}

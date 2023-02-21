@@ -80,6 +80,7 @@ export default function EmployeeTable() {
 
   useEffect(() => {
     getEmployee();
+    localStorage.removeItem("eid_edit")
   }, []);
   useEffect(() => {
     getEmployee();

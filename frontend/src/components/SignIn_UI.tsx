@@ -15,6 +15,8 @@ import { SigninInterface } from "../models/ISignin";
 import Checkbox from "@mui/material/Checkbox/Checkbox";
 import { FormControlLabel, FormGroup } from "@mui/material";
 
+//import jwt_decode from "jwt-decode";
+
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
@@ -42,8 +44,6 @@ function SignIn() {
     } else {
       usertypeCheck = "E";
     }
-
-    console.log(data);
     const requestOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -52,11 +52,24 @@ function SignIn() {
     let res = await fetch(`${apiUrl}/${usertypeCheck}login`, requestOptions)
       .then((response) => response.json())
       .then((res) => {
+        //console.log(res.data);
         if (res.data) {
-          localStorage.setItem("token", res.data.token);
-          localStorage.setItem("uid", res.data.id);
-          localStorage.setItem("username", res.data.username);
-          localStorage.setItem("usertype", res.data.usertype);
+          if (usertypeCheck === "E") {
+            // employee
+            localStorage.setItem("token", res.data.token);
+            //console.log(jwt_decode(localStorage.getItem("token")));
+            localStorage.setItem("uid", res.data.id);
+            // localStorage.setItem("username", res.data.username);
+            // localStorage.setItem("usertype", res.data.usertype);
+            // localStorage.setItem("positionid", res.data.positionid);
+          } else {
+            // customer
+            localStorage.setItem("token", res.data.token);
+            localStorage.setItem("uid", res.data.id);
+            // localStorage.setItem("username", res.data.username);
+            // localStorage.setItem("usertype", res.data.usertype);
+          }
+
           return res.data;
         } else {
           return false;
@@ -131,7 +144,7 @@ function SignIn() {
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
           <Alert onClose={handleClose} severity="error">
-            {usertext} หรือ Password ผิด 
+            {usertext} หรือ Password ผิด
           </Alert>
         </Snackbar>
 

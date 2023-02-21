@@ -214,7 +214,7 @@ function EmployeeUpdate_UI() {
         <Paper>
           <Box paddingX={2}>
             <div style={{ paddingTop: 20, fontWeight: "bold" }}>
-              Employee Create
+              Employee Update
             </div>
             <Grid container>
               <Grid paddingX={2} paddingY={2}>
@@ -318,6 +318,9 @@ function EmployeeUpdate_UI() {
                 <Grid container justifyContent={"center"} paddingY={4}>
                   <Button
                     variant="contained"
+                    onClick={() => {
+                      localStorage.removeItem("eid_edit");
+                    }}
                     color="error"
                     href="/employee"
                     sx={{ marginX: 2 }}
