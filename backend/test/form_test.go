@@ -2,19 +2,39 @@ package test
 
 import (
 	"testing"
-	
+
 	"github.com/asaskevich/govalidator"
 	. "github.com/onsi/gomega"
+
 	// "github.com/sut65/team10/controller/form"
 	"github.com/sut65/team10/entity"
 )
+
+// Form ถูกทั้งหมด
+func TestFormALLPass(t *testing.T) {
+	g := NewGomegaWithT(t)
+
+	form := entity.Form{
+		Comment: "เยี่ยมจริงๆ",
+	}
+
+	// ตรวจสอบด้วย govalidator
+	ok, err := govalidator.ValidateStruct(form)
+
+	//ถ้าข้อมูลถูก ok จะเป็น true
+	g.Expect(ok).To(BeTrue())
+
+	//ถ้าข้อมูลถูก err จะเป็น nil
+	g.Expect(err).To(BeNil())
+
+}
 
 // ตรวจสอบค่าว่างของชื่อแล้วต้องเจอ Error
 func TestCommentNotBlank(t *testing.T) {
 	g := NewGomegaWithT(t)
 
 	form := entity.Form{
-		Comment:"", // ผิด
+		Comment: "", // ผิด
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -35,7 +55,7 @@ func TestCommentSpecialCharacter(t *testing.T) {
 	entity.SetSpecialCharactersValidation()
 
 	form := entity.Form{
-		Comment:"%$&^*", // ผิด
+		Comment: "%$&^*", // ผิด
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -51,12 +71,11 @@ func TestCommentSpecialCharacter(t *testing.T) {
 	g.Expect(err.Error()).To(Equal("ห้ามใช้ตัวอักษรพิเศษ"))
 }
 
-
 func TestMaxComment(t *testing.T) {
 	g := NewGomegaWithT(t)
 
 	form := entity.Form{
-		Comment:"00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", // ผิด
+		Comment: "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", // ผิด
 	}
 
 	// ตรวจสอบด้วย govalidator
@@ -89,6 +108,3 @@ func TestMaxComment(t *testing.T) {
 // 	// err.Error() ต้องมี message แสดงออกมา
 // 	g.Expect(err.Error()).To(Equal("หัวข้อการประเมินซ้ำกัน"))
 // }
-
-
-

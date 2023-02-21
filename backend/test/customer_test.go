@@ -8,6 +8,30 @@ import (
 	"github.com/sut65/team10/entity"
 )
 
+// Customer ถูกทั้งหมด
+func TestCustomerALLPass(t *testing.T) {
+	g := NewGomegaWithT(t)
+
+	Customer := entity.Customer{
+		Customer_Name:      "Cream",
+		Customer_Username:  "Cream_9",
+		Customer_Phone:     "0967436705",
+		Customer_Promptpay: "0912345265",
+		Customer_Password:  "$2a$12$T1UMkc8oWw4HdgeOYmGhfOyvPHG.ELvd9VCcYk9sdfeJ2eW2oUTiK", //1234 //On test Purpose
+		Customer_Address:   "มหาวิทยาลัยเทคโนโลยีสุรนารี หอพักสุรนิเวศ1",
+	}
+
+	// ตรวจสอบด้วย govalidator
+	ok, err := govalidator.ValidateStruct(Customer)
+
+	//ถ้าข้อมูลถูก ok จะเป็น true
+	g.Expect(ok).To(BeTrue())
+
+	//ถ้าข้อมูลถูก err จะเป็น nil
+	g.Expect(err).To(BeNil())
+
+}
+
 // Name ห้ามว่าง
 func TestNameNotBlank(t *testing.T) {
 	g := NewGomegaWithT(t)
