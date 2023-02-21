@@ -27,6 +27,10 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { Link as RouterLink } from "react-router-dom";
 import Grid from "@material-ui/core/Grid/Grid";
 import { Person } from "@material-ui/icons";
+import { TokenInterface } from "../models/IToken";
+
+import jwt_decode from "jwt-decode";
+import { Paper } from "@mui/material";
 
 const useStyles = makeStyles({
   drawer: {
@@ -47,12 +51,27 @@ function AppBarPrivate() {
     setAnchorEl(event.currentTarget);
   };
 
+  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+  const classes = useStyles();
+
   const handleClose = () => {
     setAnchorEl(null);
   };
 
-  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
-  const classes = useStyles();
+  const handleButtonClick = () => {
+    handleClose();
+    window.localStorage.setItem("eid_edit", jwt_decode<TokenInterface>(token!).ID);
+  };
+
+
+  /* -------------------------- Get info inside token ------------------------- */
+  // const [posid, setPosid] = React.useState<Number>(0);
+  const token = String(localStorage.getItem("token"));
+  let posid = 0;
+  if (token) {
+    //console.log(jwt_decode<TokenInterface>(token))
+    posid = parseInt(jwt_decode<TokenInterface>(token).PositionID);
+  }
 
   return (
     <Box>
@@ -91,62 +110,93 @@ function AppBarPrivate() {
           </Grid>
 
           <Drawer open={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
-            {" "}
-            {/* Tab Menu */}
-            <List className={classes.drawer} sx={{ margin: 0, padding: 1 }}>
-              <ListItem component={RouterLink} to="/">
-                {" "}
-                <HomeIcon color="primary" />
-                <ListItemText primary="หน้าแรก" sx={{ padding: 1 }} />
-              </ListItem>
+            <div
+              style={{
+                background: "rgba(255,201,60,1)",
+                height: "100%",
+                width: "100%",
+                margin: 0,
+                padding: 0,
+              }}
+            >
+              {" "}
+              {/* Tab Menu */}
+              <List className={classes.drawer} sx={{ margin: 0, padding: 2 }}>
+                <Paper sx={{ marginBottom: 1 }}>
+                  <ListItem component={RouterLink} to="/">
+                    {" "}
+                    <HomeIcon color="primary" />
+                    <ListItemText primary="หน้าแรก" sx={{ padding: 1 }} />
+                  </ListItem>
+                </Paper>
 
-              <ListItem component={RouterLink} to="/employee">
-                {" "}
-                <BadgeIcon color="primary" />
-                <ListItemText
-                  primary="จัดการข้อมูลพนักงาน"
-                  sx={{ padding: 1 }}
-                />
-              </ListItem>
-
-              <ListItem component={RouterLink} to="/promotion/">
-                {" "}
-                <LocalOfferIcon color="primary" />
-                <ListItemText primary="โปรโมชั่น" sx={{ padding: 1 }} />
-              </ListItem>
-
-              <ListItem component={RouterLink} to="/receive">
-                {" "}
-                <CheckroomIcon color="primary" />
-                <ListItemText primary="รับรายการผ้า" sx={{ padding: 1 }} />
-              </ListItem>
-
-              <ListItem component={RouterLink} to="/complete/info">
-                {" "}
-                <IronIcon color="primary" />
-                <ListItemText
-                  primary="ยืนยันการผ้าซักเสร็จ"
-                  sx={{ padding: 1 }}
-                />
-              </ListItem>
-
-              <ListItem component={RouterLink} to="/vehicle">
-                {" "}
-                <DirectionsCarIcon color="primary" />
-                <ListItemText primary="จัดการรถขนส่ง" sx={{ padding: 1 }} />
-              </ListItem>
-
-              <ListItem component={RouterLink} to="/stock">
-                {" "}
-                <InventoryIcon color="primary" />
-                <ListItemText primary="Stock" sx={{ padding: 1 }} />
-              </ListItem>
-              <ListItem component={RouterLink} to="/delivery/create">
-                {" "}
-                <CarRentalIcon color="primary" />
-                <ListItemText primary="บันทึกการขนส่ง" sx={{ padding: 1 }} />
-              </ListItem>
-            </List>
+                {/* check if user is manager (posid 1 = manager) */}
+                {/* if yes render these below menu */}
+                {posid == 1 && (
+                  <>
+                    <Paper sx={{ marginBottom: 1 }}>
+                      <ListItem component={RouterLink} to="/employee">
+                        {" "}
+                        <BadgeIcon color="primary" />
+                        <ListItemText
+                          primary="จัดการข้อมูลพนักงาน"
+                          sx={{ padding: 1 }}
+                        />
+                      </ListItem>
+                    </Paper>
+                    <Paper sx={{ marginBottom: 1 }}>
+                      <ListItem component={RouterLink} to="/promotion/">
+                        {" "}
+                        <LocalOfferIcon color="primary" />
+                        <ListItemText primary="โปรโมชั่น" sx={{ padding: 1 }} />
+                      </ListItem>
+                    </Paper>
+                  </>
+                )}
+                {/* end of check if user is manager */}
+                <Paper sx={{ marginBottom: 1 }}>
+                  <ListItem component={RouterLink} to="/receive">
+                    {" "}
+                    <CheckroomIcon color="primary" />
+                    <ListItemText primary="รับรายการผ้า" sx={{ padding: 1 }} />
+                  </ListItem>
+                </Paper>
+                <Paper sx={{ marginBottom: 1 }}>
+                  <ListItem component={RouterLink} to="/complete/info">
+                    {" "}
+                    <IronIcon color="primary" />
+                    <ListItemText
+                      primary="ยืนยันการผ้าซักเสร็จ"
+                      sx={{ padding: 1 }}
+                    />
+                  </ListItem>
+                </Paper>
+                <Paper sx={{ marginBottom: 1 }}>
+                  <ListItem component={RouterLink} to="/vehicle">
+                    {" "}
+                    <DirectionsCarIcon color="primary" />
+                    <ListItemText primary="จัดการรถขนส่ง" sx={{ padding: 1 }} />
+                  </ListItem>
+                </Paper>
+                <Paper sx={{ marginBottom: 1 }}>
+                  <ListItem component={RouterLink} to="/stock">
+                    {" "}
+                    <InventoryIcon color="primary" />
+                    <ListItemText primary="Stock" sx={{ padding: 1 }} />
+                  </ListItem>
+                </Paper>
+                <Paper sx={{ marginBottom: 1 }}>
+                  <ListItem component={RouterLink} to="/delivery/create">
+                    {" "}
+                    <CarRentalIcon color="primary" />
+                    <ListItemText
+                      primary="บันทึกการขนส่ง"
+                      sx={{ padding: 1 }}
+                    />
+                  </ListItem>
+                </Paper>
+              </List>
+            </div>
           </Drawer>
           {auth /* รูป Icon Profild */ && (
             <div>
@@ -176,12 +226,12 @@ function AppBarPrivate() {
                 onClose={handleClose}
               >
                 <MenuItem
-                  onClick={handleClose}
+                  onClick={handleButtonClick}
                   component={RouterLink}
                   to="/employee/update"
                 >
                   <Person />
-                  <div>&nbsp;{localStorage.getItem("username")}</div>
+                  <div>&nbsp;{jwt_decode<TokenInterface>(token).Username}</div>
                 </MenuItem>{" "}
                 <MenuItem onClick={signout} component={RouterLink} to="/">
                   <ExitToAppIcon />
