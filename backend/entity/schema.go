@@ -171,11 +171,11 @@ type Service struct {
 	Customer_ID *uint    `valid:"-"`
 	Customer    Customer `gorm:"references:id" valid:"-"`
 
-	Bill_status uint
-	Address     string `valid:"minstringlength(8)~โปรดระบุให้ละเอียด,alphabet~ที่อยู่เป็นตัวอักษรพิเศษหรือภาษาอังกฤษ,required~โปรดกรอกที่อยู่"`
-	Bill_Price  int
-	Service_Time time.Time 
-	Bill        []Bill `gorm:"foreignKey:Service_ID"`
+	Bill_status  uint
+	Address      string `valid:"minstringlength(8)~โปรดระบุให้ละเอียด,alphabet~ที่อยู่เป็นตัวอักษรพิเศษหรือภาษาอังกฤษ,required~โปรดกรอกที่อยู่"`
+	Bill_Price   int
+	Service_Time time.Time
+	Bill         []Bill `gorm:"foreignKey:Service_ID"`
 }
 
 /* -------------------------------------------------------------------------- */
@@ -208,7 +208,6 @@ type Form struct {
 	Customer    Customer `gorm:"references:id" valid:"-"`
 
 	Form_Time time.Time
-
 }
 
 /* -------------------------------------------------------------------------- */
@@ -229,7 +228,7 @@ type Bill struct {
 	QuotaCode      *QuotaCode  `gorm:"references:id" valid:"-"`
 	Paymenttype_ID *uint       `valid:"-"`
 	Paymenttype    Paymenttype `gorm:"references:id" valid:"-"`
-	Bill_Price     uint        `valid:"-"`
+	Bill_Price     int         `valid:"-"`
 	Time_Stamp     time.Time   `valid:"required~กรุณาใส่เวลาให้ถูกต้อง, DateTimeNotFuture~เวลาห้ามเป็นอนาคต, DateTimeNotPast~เวลาห้ามเป็นอดีต"`
 	QuotaCode_FK   []QuotaCode `gorm:"foreignKey:Bill_ID"`
 	Receive        []Receive   `gorm:"foreignKey:Bill_ID"`
@@ -319,7 +318,7 @@ type Vehicle struct {
 	Engine_ID        *uint         `valid:"-"`
 	Engine           Engine        `gorm:"references:id" valid:"-"`
 	ListModel        string        `valid:"required~จำเป็นต้องกรอกรุ่นของรถ"`
-	Registration     string        `valid:"required~จำเป็นต้องกรอกทะเบียนรถ , maxstringlength(8)~กรอกทะเบียนรถได้สูงสุด 7 ตัว , alphabet1~ต้องมีตัวเลขอย่างน้อย 1 ตัว , alphabet2~ต้องมีตัวอักษรภาษาไทยอย่างน้อย 1 ตัว"`
+	Registration     string        `valid:"required~จำเป็นต้องกรอกทะเบียนรถ , maxstringlength(8)~กรอกทะเบียนรถได้สูงสุด 8 ตัว , alphabet1~ต้องมีตัวเลขอย่างน้อย 1 ตัว , alphabet2~ต้องมีตัวอักษรภาษาไทยอย่างน้อย 1 ตัว"`
 	Date_Insulance   time.Time     `valid:"DateNotPast~เวลาห้ามเป็นอดีต"`
 	Delivery         []Delivery    `gorm:"foreignKey:Vehicle_ID"`
 }
@@ -344,7 +343,7 @@ type Complete struct {
 	Receive_ID *uint   `valid:"-"`
 	Receive    Receive `gorm:"references:id" valid:"-"`
 
-	Packaging_ID *int     `valid:"-"`
+	Packaging_ID *int      `valid:"-"`
 	Packaging    Packaging `gorm:"references:id" valid:"-"`
 
 	Confirmation []Confirmation `gorm:"foreignKey:Complete_ID"`

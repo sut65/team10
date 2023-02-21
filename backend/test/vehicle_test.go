@@ -95,7 +95,7 @@ func TestRegistrationLength7(t *testing.T) {
 	g.Expect(err).ToNot(BeNil())
 
 	// err.Error ต้องมี error message แสดงออกมา
-	g.Expect(err.Error()).To(Equal("กรอกทะเบียนรถได้สูงสุด 7 ตัว"))
+	g.Expect(err.Error()).To(Equal("กรอกทะเบียนรถได้สูงสุด 8 ตัว"))
 }
 
 func TestRegistrationMustNumber(t *testing.T) {

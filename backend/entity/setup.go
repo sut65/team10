@@ -238,6 +238,15 @@ func SetupDatabase() {
 	db.Model(&Engine{}).Create(&Engine3)
 	db.Model(&Engine{}).Create(&Engine4)
 
+	Vehicle1 := Vehicle{
+		Employee:      E1,
+		Brand_Vehicle: Brand_Vehicle2,
+		Engine:        Engine1,
+		ListModel:     "Scoopyi",
+		Registration:  "1กษ5336",
+	}
+	db.Model(&Vehicle{}).Create(&Vehicle1)
+
 	//---------------------------------Customer-------------------------------------//
 	//Advertise
 	Advertise1 := Advertise{
