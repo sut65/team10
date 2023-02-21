@@ -18,10 +18,11 @@ type LoginPayload struct {
 
 // LoginResponse token response
 type LoginResponse struct {
-	Token    string `json:"token"`
-	ID       uint   `json:"id"`
-	Username string `json:"username"`
-	UserType string `json:"usertype"`
+	Token string `json:"token"`
+	ID    uint   `json:"id"`
+	// Username   string `json:"username"`
+	// UserType   string `json:"usertype"`
+	// PositionID uint   `json:"positionid"`
 }
 
 // POST /c_login
@@ -41,7 +42,7 @@ func CLogin(c *gin.Context) {
 	// ตรวจสอบรหัสผ่าน
 	err := bcrypt.CompareHashAndPassword([]byte(customer.Customer_Password), []byte(payload.Password))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "password is incerrect"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "password is incorrect"})
 		return
 	}
 
@@ -56,17 +57,20 @@ func CLogin(c *gin.Context) {
 		ExpirationHours: 24,
 	}
 
-	signedToken, err := jwtWrapper.GenerateToken(customer.Customer_Username)
+	signedToken, err := jwtWrapper.GenerateToken(customer.ID, customer.Customer_Username, "customer", 0)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "error signing token"})
 		return
 	}
 
+	// this one is just send this data via http
+	// the old method we send this and set localstorage
+	// Now we only send the token to prevent user edit
 	tokenResponse := LoginResponse{
-		Token:    signedToken,
-		ID:       customer.ID,
-		Username: customer.Customer_Username,
-		UserType: "customer",
+		Token: signedToken,
+		ID:    customer.ID,
+		// Username: customer.Customer_Username,
+		// UserType: "customer",
 	}
 
 	c.JSON(http.StatusOK, gin.H{"data": tokenResponse})
@@ -104,17 +108,22 @@ func ELogin(c *gin.Context) {
 		ExpirationHours: 24,
 	}
 
-	signedToken, err := jwtWrapper.GenerateToken(employee.Username)
+	// call from  package service authentication.go
+	signedToken, err := jwtWrapper.GenerateToken(employee.ID, employee.Username, "employee", *employee.Position_ID)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "error signing token"})
 		return
 	}
 
+	// this one is just send this data via http
+	// the old method we send this and set localstorage
+	// Now we only send the token to prevent user edit
 	tokenResponse := LoginResponse{
-		Token:    signedToken,
-		ID:       employee.ID,
-		Username: employee.Username,
-		UserType: "employee",
+		Token: signedToken,
+		ID:    employee.ID,
+		// Username:   employee.Username,
+		// UserType:   "employee",
+		// PositionID: *employee.Position_ID,
 	}
 
 	c.JSON(http.StatusOK, gin.H{"data": tokenResponse})

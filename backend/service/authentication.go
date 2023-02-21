@@ -16,14 +16,21 @@ type JwtWrapper struct {
 
 // JwtClaim adds email as a claim to the token
 type JwtClaim struct {
-	Username string
+	ID         uint
+	Username   string
+	Usertype   string
+	PositionID uint
 	jwt.StandardClaims
 }
 
 // Generate Token generates a jwt token
-func (j *JwtWrapper) GenerateToken(username string) (signedToken string, err error) {
+// It's required id username usertype and posid to generate token
+func (j *JwtWrapper) GenerateToken(id uint, username string, usertype string, posid uint) (signedToken string, err error) {
 	claims := &JwtClaim{
-		Username: username,
+		ID:         id,
+		Username:   username,
+		Usertype:   usertype,
+		PositionID: posid,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Local().Add(time.Hour * time.Duration(j.ExpirationHours)).Unix(),
 			Issuer:    j.Issuer,
@@ -56,7 +63,7 @@ func (j *JwtWrapper) ValidateToken(signedToken string) (claims *JwtClaim, err er
 
 	claims, ok := token.Claims.(*JwtClaim)
 	if !ok {
-		err = errors.New("Couldn't parse claims")
+		err = errors.New("couldn't parse claims")
 		return
 	}
 
