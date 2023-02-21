@@ -139,6 +139,7 @@ func UpdateCustomer(c *gin.Context) {
 		Customer_Promptpay: customer.Customer_Promptpay,
 		Customer_Password:  customer.Customer_Password,
 		Customer_Address:   customer.Customer_Address,
+		Customer_Datetime:  time.Now(),
 	}
 	// println(customer.Customer_Password)
 
