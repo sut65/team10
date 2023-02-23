@@ -1,9 +1,9 @@
 /* -------------------------------------------------------------------------- */
 /*                                Header Import                               */
 /* -------------------------------------------------------------------------- */
-import { Box, Container, FormControl, Grid, Paper } from "@material-ui/core";
+import { Box, Container, FormControl, Grid } from "@material-ui/core";
 import Autocomplete from "@mui/material/Autocomplete";
-import { Stack, TextField } from "@mui/material";
+import { Stack, TextField, Paper } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import * as React from "react";
@@ -28,7 +28,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
   ref
 ) {
-  return <MuiAlert elevation={6} ref={ref} variant="outlined" {...props} />;
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 /* -------------------------------------------------------------------------- */
 /*                                    React                                   */
@@ -43,9 +43,7 @@ function Delivery() {
   const [vehicle, setVehicle] = useState<VehicleInterface[]>([]);
 
   const [cust_name, setCustomerName] = useState<string | undefined>(undefined);
-  const [address, setAddress] = useState<string | undefined>(
-    undefined
-  );
+  const [address, setAddress] = useState<string | undefined>(undefined);
   const [conf_deli_ins, setDeliveryInstruction] = useState<string | undefined>(
     undefined
   );
@@ -316,11 +314,15 @@ function Delivery() {
                                 Confirmation_ID: value?.ID,
                               });
                               setCustomerName(value?.Customer.Customer_Name);
-                              setDeliveryInstruction(value?.DeliveryInstruction);
+                              setDeliveryInstruction(
+                                value?.DeliveryInstruction
+                              );
                               setRecvTime(value?.RecvTime);
                               setRecvType(value?.RecvType.Name);
                               setNote(value?.Note);
-                              setAddress(value?.Complete.Receive.Bill.Service.Address)
+                              setAddress(
+                                value?.Complete.Receive.Bill.Service.Address
+                              );
                               //Just Set ID to interface
                             }}
                             sx={{ bgcolor: "#feefd1" }}
@@ -478,8 +480,8 @@ function Delivery() {
             </Container>
           </Box>
         </Grid>
-        <Grid xs={5} style={{paddingTop: 20}}>
-          <DeliTable/>
+        <Grid xs={5} style={{ paddingTop: 20 }}>
+          <DeliTable />
         </Grid>
       </Grid>
     </Box>
