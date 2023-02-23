@@ -11,6 +11,10 @@ const AutoplaySlider = withAutoplay(AwesomeSlider);
 function Home() {
   const slideImages = [
     {
+      url: "https://images.unsplash.com/photo-1604335398549-1b80aadd00a8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80",
+      caption: "WashingMachine",
+    },
+    {
       url: "https://images.unsplash.com/photo-1545173168-9f1947eebb7f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80",
       caption: "WashingMachine",
     },
