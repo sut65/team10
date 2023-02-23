@@ -138,7 +138,8 @@ export default function FormTable() {
                   {/* <TableCell align="right">หัวข้อประเมิน</TableCell> */}
                   <TableCell align="right">ความพึงพอใจ</TableCell>
                   <TableCell align="right">Comment</TableCell>
-                  <TableCell align="right">Action</TableCell>
+                  <TableCell align="right">แก้ไข</TableCell>
+                  <TableCell align="center">ลบ</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
