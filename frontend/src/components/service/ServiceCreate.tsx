@@ -268,7 +268,7 @@ const ServiceCreate = () => {
                 title: "Saved!",
                 text: "บันทึกสำเร็จ",
               });
-              // window.location.href = "/bill/create";
+              window.location.href = "/bill/create";
               // setSuccess(true);
             } else {
               Swal.fire({
