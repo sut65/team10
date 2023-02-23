@@ -44,7 +44,6 @@ function BillTable_UI() {
 
   return (
     <React.Fragment>
-      <CssBaseline />
       <Container maxWidth="lg" sx={{ p: 2 }}>
         <Paper sx={{ p: 2 }}>
           <Box display="flex">

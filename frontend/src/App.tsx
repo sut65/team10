@@ -38,14 +38,22 @@ import VehicleTableUI from "./components/Vehicle/VehicleTableUI";
 
 import { TokenInterface } from "./models/IToken";
 import { Routes } from "react-router-dom/";
-
+import backgroundimage from "./image/background.txt";
 import jwt_decode from "jwt-decode";
 
 export default function App() {
+  const [backgroundlaundry, setbBackgroundlaundry] = React.useState(""); //set base64 to variable
   const [token, setToken] = React.useState<String>("");
   const [posid, setPosid] = React.useState<Number>(0);
   const [usertype, setUserType] = React.useState<String>("");
 
+  // fetch data in txt
+  fetch(backgroundimage)
+  .then(response => response.text())
+  .then(text => {
+    setbBackgroundlaundry(text)
+  });
+  ///////////////////////
   React.useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -82,10 +90,12 @@ export default function App() {
     return (
       <div
         style={{
-          background:
-            "linear-gradient(180deg, rgba(255,201,60,1) 0%, rgba(134,229,255,1) 80%, rgba(0,129,201,1) 100%)",
+          backgroundImage: `url(${backgroundlaundry})`,
+          backgroundColor:
+            "linear-gradient(180deg, rgba(255,201,60,0.5) 0%, rgba(134,229,255,0.5) 80%, rgba(0,129,201,0.5) 100%)",
           height: "100%",
           minHeight: "100vh",
+          backgroundBlendMode: "multiply",
         }}
       >
         <BrowserRouter>
@@ -119,7 +129,7 @@ export default function App() {
       return (
         <div
           style={{
-            backgroundImage: `url("https://images.unsplash.com/photo-1626806819282-2c1dc01a5e0c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80")`,
+            backgroundImage: `url(${backgroundlaundry})`,
             backgroundColor:
               "linear-gradient(180deg, rgba(255,201,60,0.5) 0%, rgba(134,229,255,0.5) 80%, rgba(0,129,201,0.5) 100%)",
             height: "100%",
@@ -173,10 +183,12 @@ export default function App() {
       return (
         <div
           style={{
-            background:
-              "linear-gradient(180deg, rgba(255,201,60,1) 0%, rgba(134,229,255,1) 80%, rgba(0,129,201,1) 100%)",
+            backgroundImage: `url(${backgroundlaundry})`,
+            backgroundColor:
+              "linear-gradient(180deg, rgba(255,201,60,0.5) 0%, rgba(134,229,255,0.5) 80%, rgba(0,129,201,0.5) 100%)",
             height: "100%",
             minHeight: "100vh",
+            backgroundBlendMode: "multiply",
           }}
         >
           <BrowserRouter>
