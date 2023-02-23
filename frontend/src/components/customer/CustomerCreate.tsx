@@ -167,6 +167,8 @@ function CustomerCreate() {
           setSuccess(true);
           //window.location.href = "/";
           // setErrorMessage("");
+          window.location.href = "/";
+
         } else {
           setAlertMessage(res.error);
           setError(true);
@@ -240,7 +242,7 @@ function CustomerCreate() {
                             Gender_ID: value?.ID,
                           }); //Just Set ID to interface
                         }}
-                        getOptionLabel={(option: any) => `${option.ID}`} //filter value
+                        getOptionLabel={(option: any) => `${option.Gender_Name}`} //filter value
                         renderInput={(params) => {
                           return (
                             <TextField
@@ -278,7 +280,7 @@ function CustomerCreate() {
                             Career_ID: value?.ID,
                           }); //Just Set ID to interface
                         }}
-                        getOptionLabel={(option: any) => `${option.ID}`} //filter value
+                        getOptionLabel={(option: any) => `${option.Career_Name}`} //filter value
                         renderInput={(params) => {
                           return (
                             <TextField
@@ -374,7 +376,7 @@ function CustomerCreate() {
                             Advertise_ID: value?.ID,
                           }); //Just Set ID to interface
                         }}
-                        getOptionLabel={(option: any) => `${option.ID}`} //filter value
+                        getOptionLabel={(option: any) => `${option.Advertise_Type}`} //filter value
                         renderInput={(params) => {
                           return (
                             <TextField

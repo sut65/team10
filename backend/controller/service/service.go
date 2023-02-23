@@ -154,26 +154,26 @@ func UpdateService(c *gin.Context) {
 	var upBill_Price = service.Bill_Price
 
 	if tx := entity.DB().Where("id = ?", service.TypeWashing_ID).First(&typewashing); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "typewashing not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Typewashing not found"})
 		return
 	}
 	if tx := entity.DB().Where("id = ?", service.Customer_ID).First(&customer); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "typewashing not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Customer not found"})
 		return
 	}
 
 	if tx := entity.DB().Where("id = ?", service.Weight_ID).First(&weight); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "typewashing not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Weight not found"})
 		return
 	}
 
 	if tx := entity.DB().Where("id = ?", service.DeliveryType_ID).First(&deliverytype); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "typewashing not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "DeliveryType not found"})
 		return
 	}
 
 	if tx := entity.DB().Where("id = ?", service.ID).First(&service); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "user not found"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Service not found"})
 		return
 	}
 
@@ -185,6 +185,7 @@ func UpdateService(c *gin.Context) {
 		Address:      upAddress,
 		Bill_Price: upBill_Price,
 		Customer:     customer,
+		Service_Time: time.Now(),
 		// ตั้งค่าฟิลด์ Address
 	}
 	if _, err := govalidator.ValidateStruct(up_sv); err != nil {

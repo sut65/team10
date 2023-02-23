@@ -184,7 +184,7 @@ function FormCreate() {
                                 title: "Saved!",
                                 text: "บันทึกสำเร็จ",
                             });
-                            //   window.location.href = "/forminfo";
+                              window.location.href = "/forminfo";
                             // setSuccess(true);
                         } else {
                             Swal.fire({
