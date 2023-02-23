@@ -33,7 +33,9 @@ function EmployeeUpdate_UI() {
   const [noAccess, setNoAccess] = React.useState(false);
 
   const [errorMessage, setErrorMessage] = useState("");
-
+//const เซ็ตค่าได้ครังเดียว
+//วาร์ ทะลุได้หมด
+//เรส แก้ได้แค่ในไฟล์นั้น
   const getEmployee = async () => {
     //ดึงข้อมูลพนักงาน
     const apiUrl = `http://localhost:8080/employees/${employee_id}`;
@@ -92,7 +94,7 @@ function EmployeeUpdate_UI() {
         }
       });
   };
-
+//คอนเทนไทป์ เป็น เจสัน มานี่
   const getPosition = async () => {
     //ดึงข้อมูล Position
     const apiUrl = "http://localhost:8080/positions";

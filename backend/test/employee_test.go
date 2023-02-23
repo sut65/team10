@@ -13,7 +13,7 @@ func TestEmployeePass(t *testing.T) {
 
 	p := entity.Employee{
 		Personal_ID: "1499900256321",
-		Username:    "NCT",
+		Username:    "NCT127",
 		Name:        "sura ggg",
 		Phonnumber:  "0912352558",
 		Address:     "มหาวิทยาลัยเทคโนโลยีสุรนารี",
@@ -31,7 +31,7 @@ func TestEmployeePass(t *testing.T) {
 
 }
 
-func TestEmployeePersonalIDNotPass(t *testing.T) {
+func TestEmployeePersonalIDNotmatch(t *testing.T) {
 	g := NewGomegaWithT(t)
 
 	p := entity.Employee{
@@ -80,7 +80,7 @@ func TestEmployeePersonalIDNotnull(t *testing.T) {
 	g.Expect(err.Error()).To(Equal("กรุณากรอกรหัสประจำตัวประชาชน"))
 }
 
-func TestEmployeeUsernameNotPass(t *testing.T) {
+func TestEmployeeUsernameNotnull(t *testing.T) {
 	g := NewGomegaWithT(t)
 
 	p := entity.Employee{
@@ -103,12 +103,12 @@ func TestEmployeeUsernameNotPass(t *testing.T) {
 	// err.Error ต้องมี error message แสดงออกมา
 	g.Expect(err.Error()).To(Equal("กรุณากรอก Username"))
 }
-func TestEmployeeUsernamemachNotPass(t *testing.T) {
+func TestEmployeeUsernameNotMatch(t *testing.T) {
 	g := NewGomegaWithT(t)
 
 	p := entity.Employee{
 		Personal_ID: "1499900256321",
-		Username:    "1 mm",
+		Username:    "1 mmกก",
 		Name:        "sura ggg",
 		Phonnumber:  "0912352558",
 		Address:     "มหาวิทยาลัยเทคโนโลยีสุรนารี",
@@ -159,7 +159,7 @@ func TestEmployeePhonnumberNotPass(t *testing.T) {
 		Personal_ID: "1499900256321",
 		Username:    "ll",
 		Name:        "kk",
-		Phonnumber:  "045628255",
+		Phonnumber:  "045628",
 		Address:     "มหาวิทยาลัยเทคโนโลยีสุรนารี",
 		Password:    "12345678", //12345678
 	}

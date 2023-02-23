@@ -17,6 +17,7 @@ import EmployeeCreate_UI from "./EmployeeCreate";
 
 
 export default function EmployeeTable() {
+  const uid = localStorage.getItem('uid')+""
   /* --------------------------------- Popover -------------------------------- */
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
@@ -73,7 +74,11 @@ export default function EmployeeTable() {
       .then((response) => response.json())
       .then((res) => {
         if (res.data) {
-          window.location.reload();
+          if (res.data == uid){
+            localStorage.clear()
+            window.location.reload();
+          }
+          getEmployee()
         }
       });
   };
@@ -172,6 +177,7 @@ export default function EmployeeTable() {
                         variant="outlined"
                         aria-lable="outlined button group"
                       >
+                        {/* /ใช้เช็คข้อมูลที่จะแก้ */}
                         <Button
                           onClick={() => {
                             window.localStorage.setItem(

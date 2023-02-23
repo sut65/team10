@@ -26,19 +26,19 @@ func CreateEmployees(c *gin.Context) {
 		return
 	}
 
-	// ค้นหา gender ด้วย id
+	// 9.ค้นหา gender ด้วย id
 	if tx := entity.DB().Where("id = ?", employee.Gender_ID).First(&gender); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "gender not found"})
 		return
 	}
 
-	// ค้นหา position ด้วย id
+	// 10.ค้นหา position ด้วย id
 	if tx := entity.DB().Where("id = ?", employee.Position_ID).First(&position); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "position not found"})
 		return
 	}
 
-	// ค้นหา workshift ด้วย id
+	// 11.ค้นหา workshift ด้วย id
 	if tx := entity.DB().Where("id = ?", employee.WorkShift_ID).First(&workshift); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "workshift not found"})
 		return
@@ -51,7 +51,7 @@ func CreateEmployees(c *gin.Context) {
 		return
 	}
 
-	// 14: สร้าง  employee
+	// 12: สร้าง  employee
 	emp := entity.Employee{
 		Model:        gorm.Model{ID: employee.ID},
 		Personal_ID:  employee.Personal_ID,
@@ -70,9 +70,9 @@ func CreateEmployees(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
+//แฮชนี้ป้องกันแม้แต่ช่องว่างก็เข้ารหัส
 	emp.Password = string(hashPassword)
-
+//13.บันทึก
 	if err := entity.DB().Create(&emp).Error; err != nil {
 
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -85,12 +85,13 @@ func CreateEmployees(c *gin.Context) {
 
 }
 
-// GET /employee/:id
+// GET /employee/:id 1คน
 func GetEmployee(c *gin.Context) {
 	var employee entity.Employee
 	id := c.Param("id")
 
-	if err := entity.DB().Preload("Gender").Preload("WorkShift").Preload("Position").Raw("SELECT * FROM employees WHERE id = ?", id).Find(&employee).Error; err != nil {
+	if err := entity.DB().Preload("Gender").Preload("WorkShift").Preload("Position").
+		Raw("SELECT * FROM employees WHERE id = ? and deleted_at is null", id).Find(&employee).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -98,11 +99,12 @@ func GetEmployee(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": employee})
 }
 
-// GET /employee
+// GET /employee empทุกตัวที่ยังไม่ลบมาแสดง --ตาราง
 func ListEmployees(c *gin.Context) {
 	var employees []entity.Employee
 
-	if err := entity.DB().Preload("Gender").Preload("WorkShift").Preload("Position").Raw("SELECT * FROM employees").Find(&employees).Error; err != nil {
+	if err := entity.DB().Preload("Gender").Preload("WorkShift").Preload("Position").
+		Raw("SELECT * FROM employees where deleted_at is null").Find(&employees).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -150,9 +152,18 @@ func UpdateEmployee(c *gin.Context) {
 
 }
 func DeleteEmployee(c *gin.Context) {
+	var employee entity.Employee
 	id := c.Param("id")
-	if tx := entity.DB().Exec("DELETE FROM employees WHERE id = ?", id); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "employees not found"})
+	// hard delete
+	// if tx := entity.DB().Exec("DELETE FROM employees WHERE id = ?", id); tx.RowsAffected == 0 {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "employees not found"})
+	// 	return
+	// }
+
+	// soft delete
+	// UPDATE employee SET deleted_at="now" WHERE id = ?;
+	if tx := entity.DB().Where("id = ?", id).Delete(&employee); tx.RowsAffected == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Booking not found"})
 		return
 	}
 

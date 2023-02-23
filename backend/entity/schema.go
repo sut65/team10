@@ -115,7 +115,7 @@ type Size struct {
 
 type Stock struct {
 	gorm.Model
-	List_Number string `gorm:"uniqueIndex" valid:"matches(^([1-9]{1})([0-9]{9}))~ListNumber is not valid ,required~กรุณากรอกรหัสรายการ"`
+	List_Number string `gorm:"uniqueIndex" valid:"matches(^([0-9]{10}))~ListNumber is not valid ,required~กรุณากรอกรหัสรายการ"`
 	TypeID      *uint
 	Type        Type `gorm:"references:id" valid:"-" `
 	BrandID     *uint

@@ -44,7 +44,7 @@ function Stock_UI() {
   }));
 
   const getType = async () => {
-    //ดึงข้อมูลประเภท
+    //6.ดึงข้อมูลประเภท
     const apiUrl = "http://localhost:8080/types";
     const requestOptions = {
       method: "GET",
@@ -64,7 +64,7 @@ function Stock_UI() {
   };
 
   const getBrand = async () => {
-    //ดึงข้อมูล brand
+    //5.ดึงข้อมูล brand
     const apiUrl = "http://localhost:8080/brands";
     const requestOptions = {
       method: "GET",
@@ -84,7 +84,7 @@ function Stock_UI() {
   };
 
   const getSize = async () => {
-    //ดึงข้อมูล Size
+    //7.ดึงข้อมูล Size
     const apiUrl = "http://localhost:8080/sizes";
     const requestOptions = {
       method: "GET",
@@ -104,7 +104,7 @@ function Stock_UI() {
   };
 
   const getEmployee = async () => {
-    //ดึงข้อมูล emp
+    //8.ดึงข้อมูล emp
     const apiUrl = "http://localhost:8080/employees";
     const requestOptions = {
       method: "GET",
@@ -143,7 +143,7 @@ function Stock_UI() {
 
   function submit() {
     let data = {
-      //ประกาศก้อนข้อมูล
+      //9.ประกาศก้อนข้อมูล
 
       List_Number: (List_Number)+"",
 

@@ -27,25 +27,25 @@ func CreateStocks(c *gin.Context) {
 		return
 	}
 
-	// ค้นหา Employee ด้วย id
+	// 13.ค้นหา Employee ด้วย id
 	if tx := entity.DB().Where("id = ?", stock.Employee_ID).First(&employee); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "employee not found"})
 		return
 	}
 
-	// ค้นหา type ด้วย id
+	// 11.ค้นหา type ด้วย id
 	if tx := entity.DB().Where("id = ?", stock.TypeID).First(&types); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "type not found"})
 		return
 	}
 
-	// ค้นหา brand ด้วย id
+	// 10.ค้นหา brand ด้วย id
 	if tx := entity.DB().Where("id = ?", stock.BrandID).First(&brand); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "brand not found"})
 		return
 	}
 
-	// ค้นหา size ด้วย id
+	// 12.ค้นหา size ด้วย id
 	if tx := entity.DB().Where("id = ?", stock.SizeID).First(&size); tx.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "size not found"})
 		return
@@ -68,7 +68,7 @@ func CreateStocks(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
+//15.บันทึก
 	if err := entity.DB().Create(&stc).Error; err != nil {
 
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -127,14 +127,14 @@ func UpdateStock(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"data": stc})
 }
-func AddStock(c *gin.Context) {
-	var stocks entity.Stock
-	id := c.Param("id")
+// func AddStock(c *gin.Context) {
+// 	var stocks entity.Stock
+// 	id := c.Param("id")
 
-	if err := entity.DB().Raw("UPDATE stocks SET quantity = add_number+quantity WHERE stocks.id", id).Scan(&stocks).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+// 	if err := entity.DB().Raw("UPDATE stocks SET quantity = add_number+quantity WHERE stocks.id", id).Scan(&stocks).Error; err != nil {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+// 		return
+// 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": stocks})
-}
+// 	c.JSON(http.StatusOK, gin.H{"data": stocks})
+// }

@@ -54,6 +54,7 @@ function SignIn() {
       .then((res) => {
         //console.log(res.data);
         if (res.data) {
+          //3.ค้นหาด้วยเลขบัตร
           if (usertypeCheck === "E") {
             // employee
             localStorage.setItem("token", res.data.token);

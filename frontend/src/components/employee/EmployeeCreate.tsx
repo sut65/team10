@@ -41,7 +41,7 @@ function EmployeeCreate_UI() {
   }));
 
   const getGender = async () => {
-    //ดึงข้อมูลเพศ
+    //5.ดึงข้อมูลเพศ
     const apiUrl = "http://localhost:8080/genders";
     const requestOptions = {
       method: "GET",
@@ -61,7 +61,7 @@ function EmployeeCreate_UI() {
   };
 
   const getWorkShift = async () => {
-    //ดึงข้อมูล WorkShift
+    //7.ดึงข้อมูล WorkShift
     const apiUrl = "http://localhost:8080/workshifts";
     const requestOptions = {
       method: "GET",
@@ -70,7 +70,7 @@ function EmployeeCreate_UI() {
         "Content-Type": "application/json",
       },
     };
-
+//การเรียกใช้ข้อมูล ทำให้ข้างบนเป็นจริง
     fetch(apiUrl, requestOptions)
       .then((response) => response.json())
       .then((res) => {
@@ -81,7 +81,7 @@ function EmployeeCreate_UI() {
   };
 
   const getPosition = async () => {
-    //ดึงข้อมูล Position
+    //6.ดึงข้อมูล Position
     const apiUrl = "http://localhost:8080/positions";
     const requestOptions = {
       method: "GET",
@@ -112,7 +112,7 @@ function EmployeeCreate_UI() {
     setError(false);
     setErrorMessage("")
   };
-
+//8.บันทึก
   async function create() {
     let data = {
       Personal_ID: Personal_ID,

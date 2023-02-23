@@ -241,3 +241,4 @@ func CORSMiddleware() gin.HandlerFunc {
 	}
 
 }
+//	p.ไม่ให้คนอืน ทำอะไรกับข้อมูลเรา
