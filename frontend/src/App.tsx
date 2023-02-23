@@ -111,9 +111,11 @@ export default function App() {
       </div>
     );
   }
+  //2.ตรวจสอบข้อมูลผู้ใช้
   if (usertype == "employee") {
     // posid 1 is manager (admin)
     if (posid == 1) {
+      //4.เตรียมข้อมูลให้หน้าจอ
       return (
         <div
           style={{

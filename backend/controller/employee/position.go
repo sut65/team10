@@ -7,7 +7,7 @@ import (
 	"github.com/sut65/team10/entity"
 )
 
-// GET /Position/:id //last ver
+// GET /Position/:id //__nil fomat select ผิด
 func ListPosition(c *gin.Context) {
 	var position []entity.Position
 	if err := entity.DB().Raw("SELECT * FROM positions").Scan(&position).Error; err != nil {

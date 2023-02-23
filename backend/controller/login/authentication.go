@@ -85,10 +85,11 @@ func ELogin(c *gin.Context) {
 		return
 	}
 	//** 3: ค้นหาด้วยเลขบัตรประชาชน(Personal_ID) */ // ตรวจสอบว่ามี Personal ID ที่กรอกมาหรือไม่
-	if err := entity.DB().Raw("SELECT * FROM employees WHERE username = ?", payload.Username).Scan(&employee).Error; err != nil {
+	if err := entity.DB().Raw("SELECT * FROM employees WHERE username = ? and deleted_at is null", payload.Username).Scan(&employee).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
 
 	// ตรวจสอบรหัสผ่าน
 	err := bcrypt.CompareHashAndPassword([]byte(employee.Password), []byte(payload.Password))

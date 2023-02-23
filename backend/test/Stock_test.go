@@ -94,6 +94,28 @@ func TestQuantityNotNegative(t *testing.T) {
 	g.Expect(err.Error()).To(Equal("กรุณากรอกจำนวนเป็นจำนวนเต็มบวก"))
 }
 
+func TestQuantityNotzero(t *testing.T) {
+	g := NewGomegaWithT(t)
+
+	p := entity.Stock{
+		List_Number: "1234567890",
+		Quantity:    0,
+		Time:        time.Now(),
+	}
+
+	// ตรวจสอบด้วย govalidator
+	ok, err := govalidator.ValidateStruct(p)
+
+	// ok ต้องไม่เป็นค่า true แปลว่าต้องจับ error ได้
+	g.Expect(ok).ToNot(BeTrue())
+
+	// err ต้องไม่เป็นค่า nil แปลว่าต้องจับ error ได้
+	g.Expect(err).ToNot(BeNil())
+
+	// err.Error ต้องมี error message แสดงออกมา
+	g.Expect(err.Error()).To(Equal("กรุณากรอกจำนวน"))
+}
+
 // วันเวลาห้ามเป็นอดีตเกิน5นาที
 func TestDateTimeNotinPass(t *testing.T) {
 	g := NewGomegaWithT(t)
