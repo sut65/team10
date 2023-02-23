@@ -228,7 +228,7 @@ type Bill struct {
 	QuotaCode      *QuotaCode  `gorm:"references:id" valid:"-"`
 	Paymenttype_ID *uint       `valid:"-"`
 	Paymenttype    Paymenttype `gorm:"references:id" valid:"-"`
-	Bill_Price     int         `valid:"-"`
+	Bill_Price     uint         `valid:"-"`
 	Time_Stamp     time.Time   `valid:"required~กรุณาใส่เวลาให้ถูกต้อง, DateTimeNotFuture~เวลาห้ามเป็นอนาคต, DateTimeNotPast~เวลาห้ามเป็นอดีต"`
 	QuotaCode_FK   []QuotaCode `gorm:"foreignKey:Bill_ID"`
 	Receive        []Receive   `gorm:"foreignKey:Bill_ID"`
