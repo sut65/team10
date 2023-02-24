@@ -28,15 +28,11 @@ import { TypeWashingInterface } from "../../models/service/IService";
 import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
 import {
   blue,
-  blueGrey,
-  green,
-  purple,
-  red,
-  yellow,
 } from "@mui/material/colors";
-import SaveIcon from '@mui/icons-material/Save';
+import SaveIcon from "@mui/icons-material/Save";
 import UndoIcon from "@mui/icons-material/Undo";
 import Swal from "sweetalert2";
+
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
   props,
@@ -50,9 +46,6 @@ const ServiceCreate = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [service, setService] = React.useState<Partial<ServiceInterface>>({
-    // TypeWashing_ID: 0,
-    // Weight_ID: 0,
-    // DeliveryType_ID: 0,
   });
   const [typewashing, setTypewashing] = React.useState<TypeWashingInterface[]>(
     []
@@ -68,7 +61,6 @@ const ServiceCreate = () => {
     React.useState<TypeWashingInterface>();
   const [weightdetail, setWeightdetail] = React.useState<WeightInterface>();
   const [delidetail, setDelidetail] = React.useState<DeliveryTypeInterface>();
-  // const [sumprice,setSumprice] = React.useState<number>(0);
   const [message, setAlertMessage] = React.useState("");
 
   //================================================================================================================//
@@ -235,7 +227,6 @@ const ServiceCreate = () => {
     }
   };
 
- 
   console.log(total);
   function submit() {
     let data = {
@@ -295,7 +286,6 @@ const ServiceCreate = () => {
   //================================================================================================================//
 
   useEffect(() => {
-
     getTypeWashing();
     getWeight();
     getDelivery();
@@ -304,7 +294,6 @@ const ServiceCreate = () => {
 
   return (
     <div>
-      
       <Container maxWidth="md" sx={{ p: 3 }}>
         <div>
           <Snackbar
@@ -329,10 +318,19 @@ const ServiceCreate = () => {
               <Paper
                 variant="elevation"
                 elevation={12}
+                sx={{borderRadius: "3%"}}
                 style={{
                   background:
-                    "linear-gradient(180deg, #AFEEEE 0%,#F0FFFF 100%, #F5DEB3 100%)",
+                    "linear-gradient(180deg, #FBEDDE 0%,#FBEDDE 100%, #F5DEB3 100%)",
                 }}
+                // elevation={5}
+                // sx={{
+                //   marginTop: 2,
+                //   padding: 4,
+                //   maxWidth: 600,
+                //   background: "rgba(255, 255, 255, 0.5)",
+                //   borderRadius: "10%",
+                // }}
               >
                 <Box
                   display="flex"
@@ -360,7 +358,6 @@ const ServiceCreate = () => {
                     <p>รูปแบบการซัก</p>
                     <FormControl fullWidth variant="outlined">
                       <Select
-                      
                         sx={{ width: 300 }}
                         value={service.TypeWashing_ID}
                         onChange={handleChange}
@@ -381,7 +378,6 @@ const ServiceCreate = () => {
                     <p>น้ำหนัก</p>
                     <FormControl fullWidth variant="outlined">
                       <Select
-              
                         sx={{ width: 300 }}
                         value={service.Weight_ID}
                         onChange={handleChange}
@@ -437,34 +433,6 @@ const ServiceCreate = () => {
                       </Select>
                     </FormControl>
                   </Grid>
-                  {/* 
-                  <Grid item xs={4}>
-                    <FormControl fullWidth variant="outlined">
-                      <p>ราคา</p>
-                      <TextField
-                        disabled
-                        color="warning"
-                        variant="outlined"
-                        type="string"
-                        size="medium"
-                        inputProps={{
-                          style: {
-                            width: 490,
-                          },
-                        }}
-                        value={add(
-                          typewashingdetail?.TypeWashing_Price,
-                          weightdetail?.Weight_price,
-                          delidetail?.DeliveryType_price
-                        )}
-                        sx={{ fontFamily: "Mitr-Regular" }}
-                        multiline
-                      >
-                        {typewashingdetail?.Description}
-                      </TextField>
-                    </FormControl>
-                  </Grid> */}
-
                   <Grid item xs={12}>
                     <Button
                       component={RouterLink}
@@ -494,16 +462,17 @@ const ServiceCreate = () => {
               <Paper
                 variant="elevation"
                 elevation={12}
+                sx={{borderRadius: "10%"}}
                 style={{
                   background:
-                    "linear-gradient(180deg, #AFEEEE 0%,#F0FFFF 100%, #F5DEB3 100%)",
+                  "linear-gradient(180deg, #FBEDDE 0%,#FBEDDE 100%, #F5DEB3 100%)",
                 }}
               >
                 <Card
                   sx={{ minWidth: 275 }}
                   style={{
                     background:
-                      "linear-gradient(180deg, #AFEEEE 0%,#F0FFFF 100%, #F5DEB3 100%)",
+                    "linear-gradient(180deg, #FBEDDE 0%,#FBEDDE 100%, #F5DEB3 100%)",
                   }}
                 >
                   <CardContent>
@@ -531,7 +500,7 @@ const ServiceCreate = () => {
                               marginLeft: 12,
                               p: 0,
                               pt: 0,
-                              color: purple["A400"],
+                              color: blue[900],
                             }}
                           >
                             {add(

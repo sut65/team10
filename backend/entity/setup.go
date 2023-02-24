@@ -467,8 +467,8 @@ func SetupDatabase() {
 	//-- Service
 	TypeWashing1 := TypeWashing{
 		Model:             gorm.Model{},
-		Type_washing:      "ซักรีดปกติ",
-		Description:       "ก็แค่ซักรีดโว้ยย",
+		Type_washing:      "บริการซัก อบ รีด พับ",
+		Description:       "ซัก อบ รีด และพับ",
 		TypeWashing_Price: 80,
 	}
 	db.Model(&TypeWashing{}).Create(&TypeWashing1)
@@ -482,7 +482,7 @@ func SetupDatabase() {
 
 	DeliveryType1 := DeliveryType{
 		Model:                gorm.Model{},
-		DeliveryType_service: "ส่งด่วน",
+		DeliveryType_service: "ส่งคืนภายใน 24 ชั่วโมง",
 		DeliveryType_price:   10,
 	}
 	db.Model(&DeliveryType{}).Create(&DeliveryType1)
@@ -552,8 +552,8 @@ func SetupDatabase() {
 
 	TypeWashing2 := TypeWashing{
 		Model:             gorm.Model{},
-		Type_washing:      "ซักรีดน้ำหอม",
-		Description:       "รีดเสร็จฉีดน้ำหอม",
+		Type_washing:      "บริการซักแห้ง",
+		Description:       "ซักแห้งเช่น สูท ผ้าไหม ชุดราตรีเป็นต้น",
 		TypeWashing_Price: 90,
 	}
 	db.Model(&TypeWashing{}).Create(&TypeWashing2)
@@ -589,11 +589,19 @@ func SetupDatabase() {
 
 	TypeWashing3 := TypeWashing{
 		Model:             gorm.Model{},
-		Type_washing:      "ซักอบ",
-		Description:       "ซักเสร็จ แล้วนำไปอบ",
+		Type_washing:      "บริการทำความสะอาด",
+		Description:       "ทำความสะอาด ทั้งกระเป๋าสตรงค์ กระเป๋าผ้า รองเท้าผ้าใบ และหมวก",
 		TypeWashing_Price: 100,
 	}
 	db.Model(&TypeWashing{}).Create(&TypeWashing3)
+
+	TypeWashing4 := TypeWashing{
+		Model:             gorm.Model{},
+		Type_washing:      "บริการซักผ้าม่าน",
+		Description:       "ซัก อบแห้ง และรีดผ้าม่าน",
+		TypeWashing_Price: 120,
+	}
+	db.Model(&TypeWashing{}).Create(&TypeWashing4)
 
 	Weight2 := Weight{
 		Model:        gorm.Model{},
@@ -611,14 +619,14 @@ func SetupDatabase() {
 
 	DeliveryType2 := DeliveryType{
 		Model:                gorm.Model{},
-		DeliveryType_service: "ส่งด่วนมาก",
+		DeliveryType_service: "ส่งคืนภายใน 12 ชั่วโมง",
 		DeliveryType_price:   20,
 	}
 	db.Model(&DeliveryType{}).Create(&DeliveryType2)
 
 	DeliveryType3 := DeliveryType{
 		Model:                gorm.Model{},
-		DeliveryType_service: "ส่งด่วนมากมากกกกกกกกกกก",
+		DeliveryType_service: "ส่งคืนภายใน 6 ชั่วโมง",
 		DeliveryType_price:   50,
 	}
 	db.Model(&DeliveryType{}).Create(&DeliveryType3)
