@@ -214,6 +214,8 @@ func UpdateReceive(c *gin.Context) {
 
 	var updateDet_Quantity = receive.Det_Quantity
 	var updateSof_Quantity = receive.Sof_Quantity
+	var stock entity.Stock
+	var stock2 entity.Stock
 
 	//12: สร้าง
 	u_rec := entity.Receive{
@@ -234,6 +236,39 @@ func UpdateReceive(c *gin.Context) {
 		return
 	}
 
+	//สร้าง ข้อมูลสำหรับใช้ในการอัปเดต Stock ของ detergent
+	d_u := entity.Stock{
+		Quantity: stock.Quantity - int(receive.Det_Quantity),
+	}
+
+	//สร้าง ข้อมูลสำหรับใช้ในการอัปเดต Stock ของ softener
+	s_u := entity.Stock{
+		Quantity: stock2.Quantity - int(receive.Sof_Quantity),
+	}
+
+	if d_u.Quantity < 0 {
+		//Alert ว่าผงซักซอกไม่เพียงพอ
+		c.JSON(http.StatusBadRequest, gin.H{"error": "ผงซักซอกไม่เพียงพอ"})
+		return
+	}
+
+	if s_u.Quantity < 0 {
+		//Alert ว่าน้ำยาปรับผ้านุ่มไม่เพียงพอ
+		c.JSON(http.StatusBadRequest, gin.H{"error": "น้ำยาปรับผ้านุ่มไม่เพียงพอ"})
+		return
+	}
+	if d_u.Quantity >= 0 && s_u.Quantity >= 0 {
+		//function สำหรับอัพเดท stock ของ detergent
+		if err := entity.DB().Where("id = ?", receive.Detergent_ID).Updates(&d_u).Error; err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		//function สำหรับอัพเดท stock ของ softener
+		if err := entity.DB().Where("id = ?", receive.Softener_ID).Updates(&s_u).Error; err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+	}
 	c.JSON(http.StatusOK, gin.H{"data": u_rec})
 
 }
