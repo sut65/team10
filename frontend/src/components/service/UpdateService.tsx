@@ -313,25 +313,6 @@ const ServiceUpdate = () => {
       },
       body: JSON.stringify(data),
     };
-    // fetch(`${apiUrl}/services`, requestOptionsPost)
-    //   .then((response) => response.json())
-    //   .then((res) => {
-    //     console.log(res);
-    //     // if (res.data) {
-    //     //   setSuccess(true);
-    //     //   window.location.reload();
-
-    //     // } else {
-
-    //     //   setError(true);
-    //     // }
-    //     if (res.data) {
-    //       setSuccess(true);
-    //     } else {
-    //       setAlertMessage(res.error);
-    //       setError(true);
-    //     }
-    //   });
   }
 
   //================================================================================================================//
@@ -371,9 +352,10 @@ const ServiceUpdate = () => {
               <Paper
                 variant="elevation"
                 elevation={12}
+                sx={{borderRadius: "3%"}}
                 style={{
                   background:
-                    "linear-gradient(180deg, #AFEEEE 0%,#F0FFFF 100%, #F5DEB3 100%)",
+                    "linear-gradient(180deg, #FBEDDE 0%,#FBEDDE 100%, #F5DEB3 100%)",
                 }}
               >
                 <Box
@@ -453,7 +435,7 @@ const ServiceUpdate = () => {
                             width: 450,
                           },
                         }}
-                        sx={{ fontFamily: "Mitr-Regular" }}
+                        sx={{ fontFamily: "Mitr-Regular", border: "1px solid"}}
                         multiline
                         value={service.Address}
                         onChange={handleInputChange}
@@ -481,33 +463,6 @@ const ServiceUpdate = () => {
                       </Select>
                     </FormControl>
                   </Grid>
-                  {/* 
-                  <Grid item xs={4}>
-                    <FormControl fullWidth variant="outlined">
-                      <p>ราคา</p>
-                      <TextField
-                        disabled
-                        color="warning"
-                        variant="outlined"
-                        type="string"
-                        size="medium"
-                        inputProps={{
-                          style: {
-                            width: 490,
-                          },
-                        }}
-                        value={add(
-                          typewashingdetail?.TypeWashing_Price,
-                          weightdetail?.Weight_price,
-                          delidetail?.DeliveryType_price
-                        )}
-                        sx={{ fontFamily: "Mitr-Regular" }}
-                        multiline
-                      >
-                        {typewashingdetail?.Description}
-                      </TextField>
-                    </FormControl>
-                  </Grid> */}
 
                   <Grid item xs={12}>
                     <Button
@@ -540,14 +495,14 @@ const ServiceUpdate = () => {
                 elevation={12}
                 style={{
                   background:
-                    "linear-gradient(180deg, #AFEEEE 0%,#F0FFFF 100%, #F5DEB3 100%)",
+                  "linear-gradient(180deg, #FBEDDE 0%,#FBEDDE 100%, #F5DEB3 100%)",
                 }}
               >
                 <Card
                   sx={{ minWidth: 275 }}
                   style={{
                     background:
-                      "linear-gradient(180deg, #AFEEEE 0%,#F0FFFF 100%, #F5DEB3 100%)",
+                    "linear-gradient(180deg, #FBEDDE 0%,#FBEDDE 100%, #F5DEB3 100%)",
                   }}
                 >
                   <CardContent>
@@ -555,65 +510,11 @@ const ServiceUpdate = () => {
                       <Typography>
                         <h3>ราคา: </h3>
                         <Divider />
-                        {/* <p>
-                          ประเภท {typewashingdetail?.Type_washing}:{" "}
-                          {typewashingdetail?.Description}
-                        </p> */}
-                        {/* <Grid container sx={{}}>
-                        <Box flexGrow={1} sx={{ wordWrap: "break-word", width: 0.3, fontSize: 15, }}>ประเภท: {service?.TypeWashing?.Type_washing}</Box>
-                        </Grid>
-                        <Grid container sx={{}}>
-                        <Box flexGrow={1} sx={{ wordWrap: "break-word", width: 0.3, fontSize: 15, }}>น้ำหนัก: {service?.Type_washing}</Box> */}
-                        {/* <p>น้ำหนัก: {weightdetail?.Weight_net}</p>
-                        <p>การจัดส่ง: {delidetail?.DeliveryType_service}</p> */}
-                          {/* <Grid container sx={{}}>
-                            <Box flexGrow={1} sx={{ wordWrap: "break-word", width: 0.3, fontSize: 15, }}>การจัดส่ง: {service?.Type_washing}</Box>
-                          </Grid>
-                        </Grid> */}
                         <Divider />
                         <Grid item xs={1}>
-                          {/* <p >
-                            <h3>ราคา: </h3>
-                          </p> */}
                         </Grid>
                         <Grid container sx={{}}>
-                          <Box flexGrow={1} sx={{ wordWrap: "break-word", width: 0.3, fontSize: 100, textAlign: "right", color: purple["A400"], }}>{service?.Bill_Price}</Box>
-                          {/* <Typography
-                            align="right"
-                            variant="h1"
-                            sx={{
-                              marginLeft: 12,
-                              p: 0,
-                              pt: 0,
-                              color: purple["A400"],
-                            }}
-                          >
-                            {add(
-                                typewashingdetail?.TypeWashing_Price,
-                                weightdetail?.Weight_price,
-                                delidetail?.DeliveryType_price
-                              ) + ""} */}
-                        {/* <FormControl fullWidth variant="outlined">
-                          <p>ที่อยู่</p>
-                          <TextField
-                            id="Bill_Price"
-                            variant="outlined"
-                            type="string"
-                            size="medium"
-                            inputProps={{
-                              name: "Bill_Price",
-                              style: {
-                                height: 200,
-                                width: 450,
-                              },
-                            }}
-                            sx={{ fontFamily: "Mitr-Regular" }}
-                            multiline
-                            value={service.Bill_Price}
-                            onChange={handleInputChange}
-                          />
-                        </FormControl> */}
-                          {/* </Typography> */}
+                          <Box flexGrow={1} sx={{ wordWrap: "break-word", width: 0.3, fontSize: 100, textAlign: "right", color: blue[900], }}>{service?.Bill_Price}</Box>
                         </Grid>
                       </Typography>
                     </FormControl>
