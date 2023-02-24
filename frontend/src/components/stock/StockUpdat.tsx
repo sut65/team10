@@ -235,15 +235,15 @@ function StockUpdate_UI() {
         <Paper>
           <Box paddingX={2}>
             <div style={{ paddingTop: 20, fontWeight: "bold" }}>
-               Stock Update
+               Stock Edit
             </div>
             <Grid container>
               <Grid paddingX={2} paddingY={2}>
                 <Stack>
                   List number
                   <TextField
-                    disabled
-                    value={Stock.List_Number+""}
+                    // disabled
+                    // value={Stock.List_Number+""}
                     fullWidth
                     id="List_number"
                     type="string"

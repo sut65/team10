@@ -216,7 +216,7 @@ function EmployeeUpdate_UI() {
         <Paper>
           <Box paddingX={2}>
             <div style={{ paddingTop: 20, fontWeight: "bold" }}>
-              Employee Update
+              Employee Edit
             </div>
             <Grid container>
               <Grid paddingX={2} paddingY={2}>
