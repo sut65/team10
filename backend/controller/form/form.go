@@ -63,10 +63,10 @@ func CreateForm(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	if _, err := Validatecheckformtype(fm); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	// if _, err := Validatecheckformtype(fm); err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	// 	return
+	// }
 
 	if err := entity.DB().Create(&fm).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -204,11 +204,11 @@ func ListFormByUID(c *gin.Context) {
 
 }
 
-func Validatecheckformtype(formtype entity.Form) (bool, error) {
-	var form []entity.Form
-	database := entity.DB()
-	if tx := database.Where("id = ? AND id = ?", formtype.FormType.ID, formtype.Customer.ID).Find(&form); tx.RowsAffected >= 1 {
-		return false, formtypeError{"หัวข้อการประเมินซ้ำกัน"}
-	}
-	return true, nil
-}
+// func Validatecheckformtype(formtype entity.Form) (bool, error) {
+// 	var form []entity.Form
+// 	database := entity.DB()
+// 	if tx := database.Where("id = ? AND id = ?", formtype.FormType.ID, formtype.Customer.ID).Find(&form); tx.RowsAffected >= 1 {
+// 		return false, formtypeError{"หัวข้อการประเมินซ้ำกัน"}
+// 	}
+// 	return true, nil
+// }
